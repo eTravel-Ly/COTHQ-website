@@ -358,7 +358,7 @@ const LoginRegister = () => {
                   className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                   <option value=""> اختر نوع الحساب </option>
-                  <option value=" INTERNAL_STUDENT">طالب داخلي</option>
+                  <option value="INTERNAL_STUDENT">طالب داخلي</option>
                   <option value="EXTERNAL_STUDENT">طالب خارجي</option>
                   <option value="PUBLIC">عام</option>
                   <option value="INSTRUCTOR">مدرب</option>
