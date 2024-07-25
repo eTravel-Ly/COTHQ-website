@@ -16,6 +16,7 @@ function Home() {
       </header>
       <main className="p-20 flex flex-col items-center">
         <HeroSection/>
+        <div> </div>
         <SecondSection/>
         <ThirdSection/>
         <PromoSection/>
