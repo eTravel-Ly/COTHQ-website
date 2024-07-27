@@ -5,6 +5,7 @@ import MyBookButton from "../component/MyBookButton";
 import WishlistButton from "../component/WishlistBookButton";
 import ArchiveButton from "../component/ArchiveBookButton";
 
+
 function MyBooks() {
   const [selectedSection, setSelectedSection] = useState("myBooks");
 
@@ -32,9 +33,9 @@ function MyBooks() {
             <h4 className="text-l  font-bold text-gray-500">مواصلـــة  قراءة الكــتــب</h4>
 
             <div className="flex mt-4">
-              <button
-                className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l  font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                  selectedSection === "myCourses" ? "bg-custom-orange" : ""
+            <button
+                className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l  font-bold text-gray-900  hover:bg-custom-orange hover:text-blue focus:outline-none ${
+                  selectedSection === "myBooks" ? "bg-custom-orange" : ""
                 }`}
                 onClick={showMyBooks}
               >
