@@ -5,10 +5,10 @@ import { FaStar, FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { IoIosTimer } from "react-icons/io";
 import { PiUsersThreeLight } from "react-icons/pi";
-import CourseImage from "../assets/images/ContinueWatchingSection1.png"; // Replace with actual path to course images
+import CourseImage from "../assets/images/cover.png"; // Replace with actual path to course images
 import BookImage from "../assets/images/Books-1.png";
-import {  FaBook } from "react-icons/fa";
-import { IoIosInformationCircle } from "react-icons/io";
+import { FaPlayCircle } from "react-icons/fa";
+
 const courses = [
   {
     title: "شرح متن الآجرومية",
@@ -51,6 +51,7 @@ function ShoppingCart() {
         className="h-30 w-24  rounded mb-2 ml-4"
         style={{ fontFamily: "Tajwal, sans-serif" }}
       />
+         
       <div className="flex-grow">
         <div className="flex items-center justify-between mb-2">
           <h3
@@ -62,6 +63,7 @@ function ShoppingCart() {
         </div>
         {type === "course" && (
           <>
+            
             <p
               className="text-gray-600 text-xs"
               style={{
@@ -142,20 +144,20 @@ function ShoppingCart() {
             <div className="flex text-gray-700 mt-1 text-sm justify-between">
               <div className="flex items-center ">
              
-                <span className="font-bold mx-2">دار النشر</span>
-                <span>{item.publisher}</span>
+                <span className="font-bold mx-2"     style={{ fontFamily: "Tajwal, sans-serif" }} >دار النشر</span>
+                <span     style={{ fontFamily: "Tajwal, sans-serif" }} >{item.publisher}</span>
               </div>
               <div className="flex items-center">
-                <span className="font-bold  mx-2">الطبعة</span>
-                <span>{item.edition}</span>
+                <span className="font-bold  mx-2"     style={{ fontFamily: "Tajwal, sans-serif" }}>الطبعة</span>
+                <span     style={{ fontFamily: "Tajwal, sans-serif" }} >{item.edition}</span>
               </div>
             </div>
           </>
         )}
       </div>
       <div className="flex flex-col items-end mr-10 text-right">
-        <button className="text-custom-orange mb-2">إزالة</button>
-        <p className="text-lg font-bold text-custom-orange">{item.price}</p>
+        <button className="text-custom-orange mb-2"     style={{ fontFamily: "Tajwal, sans-serif" }} >إزالة</button>
+        <p className="text-lg font-bold text-custom-orange"     style={{ fontFamily: "Tajwal, sans-serif" }} >{item.price}</p>
       </div>
     </div>
   );
@@ -168,12 +170,12 @@ function ShoppingCart() {
         <div className="border-t"></div>
         <div className="flex flex-col lg:flex-row justify-between container mx-auto mt-10 rtl">
           <div className="lg:w-1/3 rounded-lg p-6 mt-6 lg:mt-0">
-            <h2 className="text-2xl font-bold mb-4 text-right">الإجمالي</h2>
+            <h2 className="text-2xl font-bold mb-4 text-right"     style={{ fontFamily: "Tajwal, sans-serif" }} >الإجمالي</h2>
             <div className="flex justify-between mb-4">
-              <p className="font-bold text-lg">47.98 دينار</p>
-              <p className="font-bold text-lg">الإجمالي</p>
+              <p className="font-bold text-lg"     style={{ fontFamily: "Tajwal, sans-serif" }} >47.98 دينار</p>
+              <p className="font-bold text-lg"     style={{ fontFamily: "Tajwal, sans-serif" }}>الإجمالي</p>
             </div>
-            <button className="bg-custom-orange text-white w-full py-2 rounded">
+            <button className="bg-custom-orange text-white w-full py-2 rounded" style={{ fontFamily: "Tajwal, sans-serif" }}>
               إتمام الشراء
             </button>
           </div>

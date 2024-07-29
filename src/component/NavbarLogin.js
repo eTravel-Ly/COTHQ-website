@@ -18,9 +18,6 @@ const NavbarLogin = () => {
         <BsBell className="text-gray-700 text-xl mr-4"  />
         {showNotifications && <Notifications/>}
         </button>
-        <CiShoppingCart className="text-gray-700 text-2xl mr-4" />
-
-        <BsBell className="text-gray-700 text-xl mr-4" />
         <Link to="/ShoppingCart">
           <CiShoppingCart className="text-gray-700 text-2xl mr-4" />
         </Link>
