@@ -12,6 +12,7 @@ const NavbarLogin = () => {
 
   return (
     <div className="flex items-center justify-between bg-white p-4 w-full">
+      
       <div className="flex items-center">
         <button onClick={() => setShowNotifications(!showNotifications)}  >
           <BsBell className="text-gray-700 text-xl mr-4"  />
