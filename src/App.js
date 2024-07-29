@@ -12,6 +12,7 @@ import {
   BookDetails,
   ReadBooks,
   Showcourse,
+  ShoppingCart,
   CoursesDetails
 } from "./page/index";
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/BookDetails" element={<BookDetails />} />
           <Route path="/ReadBooks" element={<ReadBooks />} />
           <Route path="/Showcourse" element={<Showcourse />} />
+          <Route path="/ShoppingCart" element={<ShoppingCart />} />
           <Route path="/CoursesDetails" element={<CoursesDetails />} />
 
         </Routes>
