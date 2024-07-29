@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import CourseImage from "../assets/images/ContinueWatchingSection1.png"; // Replace with your actual image import
 import { FaStar, FaRegUserCircle } from "react-icons/fa"; // Import the star icon from react-icons
 import { MdOutlineLibraryBooks } from "react-icons/md";
@@ -6,69 +6,78 @@ import { IoIosTimer } from "react-icons/io";
 import { PiUsersThreeLight } from "react-icons/pi";
 import { useNavigate } from 'react-router-dom';
 const courses = [
-  {
-    title: "شرح متن الآجرومية",
-    instructor: "شامي بن مطاعن آل شيبة القرشي",
-    price: "14.99 دينار",
-    rating: 4.5,
-    description:
-      "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
-    lessons: 23,
-    duration: "32 س",
-    students: 2949,
-    image: CourseImage,
-  },
-  {
-    title: "شرح متن الآجرومية",
-    instructor: "شامي بن مطاعن آل شيبة القرشي",
-    price: "14.99 دينار",
-    rating: 4.5,
-    description:
-      "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
-    lessons: 23,
-    duration: "32 س",
-    students: 2949,
-    image: CourseImage,
-  },
-  {
-    title: "شرح متن الآجرومية",
-    instructor: "شامي بن مطاعن آل شيبة القرشي",
-    price: "14.99 دينار",
-    rating: 4.5,
-    description:
-      "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
-    lessons: 23,
-    duration: "32 س",
-    students: 2949,
-    image: CourseImage,
-  },
-  {
-    title: "شرح متن الآجرومية",
-    instructor: "شامي بن مطاعن آل شيبة القرشي",
-    price: "14.99 دينار",
-    rating: 4.5,
-    description:
-      "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
-    lessons: 23,
-    duration: "32 س",
-    students: 2949,
-    image: CourseImage,
-  },
-  // Add more courses if needed
-];
+    {
+      title: "شرح متن الآجرومية",
+      instructor: "شامي بن مطاعن آل شيبة القرشي",
+      price: "14.99 دينار",
+      rating: 4.5,
+      description:
+        "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
+      lessons: 23,
+      duration: "32 س",
+      students: 2949,
+      image: CourseImage,
+    },
+    {
+      title: "شرح متن الآجرومية",
+      instructor: "شامي بن مطاعن آل شيبة القرشي",
+      price: "14.99 دينار",
+      rating: 4.5,
+      description:
+        "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
+      lessons: 23,
+      duration: "32 س",
+      students: 2949,
+      image: CourseImage,
+    },
+    {
+      title: "شرح متن الآجرومية",
+      instructor: "شامي بن مطاعن آل شيبة القرشي",
+      price: "14.99 دينار",
+      rating: 4.5,
+      description:
+        "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
+      lessons: 23,
+      duration: "32 س",
+      students: 2949,
+      image: CourseImage,
+    },
+    {
+      title: "شرح متن الآجرومية",
+      instructor: "شامي بن مطاعن آل شيبة القرشي",
+      price: "14.99 دينار",
+      rating: 4.5,
+      description:
+        "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
+      lessons: 23,
+      duration: "32 س",
+      students: 2949,
+      image: CourseImage,
+    },
+    // Add more courses if needed
+  ];
 
-const WishlistButton = () => {
-  const rows = [];
-  for (let i = 0; i < courses.length; i += 4) {
-    rows.push(courses.slice(i, i + 4));
-  }
-  const navigate = useNavigate();
-  const openCoursesDetails = () => {
-    navigate('/CoursesDetails');
-  };
+
+export default function AllCourses() {
+    const rows = [];
+    for (let i = 0; i < courses.length; i += 4) {
+      rows.push(courses.slice(i, i + 4));
+    }
+    const navigate = useNavigate();
+    const openCoursesDetails = () => {
+      navigate('/CoursesDetails');
+    };
+
+
+
+
   return (
-    <div className="p-2">
-      {rows.map((row, index) => (
+    <>
+      <div className="flex h-screen">
+          <div>
+
+            <div className="p-4">
+            {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((course, idx) => (
             <div key={idx} className="w-1/4 p-2">
@@ -119,8 +128,12 @@ const WishlistButton = () => {
           ))}
         </div>
       ))}
-    </div>
-  );
-};
+            </div>
 
-export default WishlistButton;
+
+          </div>
+    
+      </div>
+    </>
+  );
+}

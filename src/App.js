@@ -11,7 +11,8 @@ import {
   Shop,
   BookDetails,
   ReadBooks,
-  Showcourse
+  Showcourse,
+  CoursesDetails
 } from "./page/index";
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/BookDetails" element={<BookDetails />} />
           <Route path="/ReadBooks" element={<ReadBooks />} />
           <Route path="/Showcourse" element={<Showcourse />} />
+          <Route path="/CoursesDetails" element={<CoursesDetails />} />
 
         </Routes>
       </BrowserRouter>

@@ -9,6 +9,7 @@ export { default as MyBooks } from "./MyBooks";
 export { default as Shop } from "./Shop";
 export { default as ReadBooks } from "./ReadBooks";
 export { default as BookDetails } from "./BookDetails";
+export { default as CoursesDetails } from "./CoursesDetails";
 export { default as Showcourse } from "./Showcourse";
 
 
