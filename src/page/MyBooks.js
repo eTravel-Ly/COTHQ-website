@@ -59,7 +59,7 @@ function MyBooks() {
               </button>
             </div>
 
-            {selectedSection === "myBooks" && <MyBookButton />}
+            {selectedSection === "myBooks" && <MyBookButton/>}
             {selectedSection === "wishlist" && <WishlistButton />}
             {selectedSection === "archive" && <ArchiveButton />}
           </div>

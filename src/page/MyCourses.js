@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import MyCoursesButton from "../component/MyCoursesButton";
 import WishlistButton from "../component/WishlistButton";
 import ArchiveButton from "../component/ArchiveButton";
-import { baseurl } from "../helper/Baseurl";
+
 
 function MyCourses() {
   const [selectedSection, setSelectedSection] = useState("myCourses");
