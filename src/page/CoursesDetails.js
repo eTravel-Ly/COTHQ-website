@@ -145,7 +145,7 @@ const CoursesDetails = () => {
               </tr>
               <tr className="border-b">
                 <td className="p-4 font-tajwal font-bold">عدد الساعات</td>
-                <td className="p-4 font-tajwal">32 سلعة </td>
+                <td className="p-4 font-tajwal">32 ساعة </td>
               </tr>
               <tr className="border-b">
                 <td className="p-4 font-tajwal font-bold">عدد الفيديوهات </td>
