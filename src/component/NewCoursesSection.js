@@ -173,6 +173,7 @@ const NewCoursesSection = () => {
                   >
                     {course.students}
                   </p>
+                  
                 </div>
               </div>
             </div>

@@ -133,14 +133,14 @@ const Sidebar = () => {
             <FiAlertCircle className="mr-2 ml-2 text-sm" />
             مركز المساعدة
           </a>
-          <a
-            href="#"
+          <Link
+            to="/settings"
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <IoSettingsOutline className="mr-2 ml-2 text-sm" />
             الإعدادات
-          </a>
+          </Link>
         </nav>
 
         <div className="flex flex-col items-center mt-auto p-2 mb-16">

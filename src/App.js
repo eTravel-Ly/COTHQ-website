@@ -13,7 +13,8 @@ import {
   ReadBooks,
   Showcourse,
   ShoppingCart,
-  CoursesDetails
+  CoursesDetails,
+  Settings
 } from "./page/index";
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/Showcourse" element={<Showcourse />} />
           <Route path="/ShoppingCart" element={<ShoppingCart />} />
           <Route path="/CoursesDetails" element={<CoursesDetails />} />
+          <Route path="/settings" element={<Settings />} />
 
         </Routes>
       </BrowserRouter>
