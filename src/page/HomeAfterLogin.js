@@ -5,7 +5,6 @@ import ContinueReadingSection from "../component/ContinueReadingSection";
 import ContinueWatchingSection from "../component/ContinueWatchingSection";
 import NewCoursesSection from "../component/NewCoursesSection";
 
-import { useNavigate } from 'react-router-dom';
 
 function HomeAfterLogin() {
   return (
