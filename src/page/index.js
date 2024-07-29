@@ -13,4 +13,7 @@ export { default as CoursesDetails } from "./CoursesDetails";
 export { default as Showcourse } from "./Showcourse";
 export { default as ShoppingCart } from "../component/ShoppingCart";
 export { default as Settings } from "./Settings";
+export { default as Profile } from "./Profile";
+
+
 export {};

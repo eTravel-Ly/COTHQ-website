@@ -14,7 +14,8 @@ import {
   Showcourse,
   ShoppingCart,
   CoursesDetails,
-  Settings
+  Settings,
+  Profile
 } from "./page/index";
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
           <Route path="/ShoppingCart" element={<ShoppingCart />} />
           <Route path="/CoursesDetails" element={<CoursesDetails />} />
           <Route path="/settings" element={<Settings />} />
-
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </>
