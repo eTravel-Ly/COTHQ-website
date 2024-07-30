@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
-import user from "../assets/images/4EyBa.png"; // قم بتحديث المسار إلى صورة الشعار
+import user from "../assets/images/user.png"; // قم بتحديث المسار إلى صورة الشعار
 import MyCoursesButton from "../component/MyCoursesButton";
 import MyBookButton from "../component/MyBookButton";
 import { baseurl } from "../helper/Baseurl";
@@ -17,7 +17,7 @@ const Profile = () => {
  });
 
  useEffect(() => {
-   // جلب البيانات من API عند تحميل المكون
+  
    axios
      .get(baseurl + "my-profile", {
        headers: {

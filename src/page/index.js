@@ -14,6 +14,8 @@ export { default as Showcourse } from "./Showcourse";
 export { default as ShoppingCart } from "../component/ShoppingCart";
 export { default as Settings } from "./Settings";
 export { default as Profile } from "./Profile";
+export { default as OrderHistory } from "./OrderHistory";
+export { default as AllNotify } from "./AllNotify";
 
 
 export {};

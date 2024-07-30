@@ -15,7 +15,9 @@ import {
   ShoppingCart,
   CoursesDetails,
   Settings,
-  Profile
+  Profile,
+  OrderHistory,
+  AllNotify,
 } from "./page/index";
 function App() {
   return (
@@ -28,7 +30,7 @@ function App() {
           <Route path="/HomeAfterLogin" element={<HomeAfterLogin />} />
           <Route path="/NavbarLogin" element={<NavbarLogin />} />
           <Route path="/MyCourses" element={<MyCourses />} />
-          <Route path="/Shop" element={<Shop/>} />
+          <Route path="/Shop" element={<Shop />} />
           <Route path="/MyBooks" element={<MyBooks />} />
           <Route path="/BookDetails" element={<BookDetails />} />
           <Route path="/ReadBooks" element={<ReadBooks />} />
@@ -37,6 +39,8 @@ function App() {
           <Route path="/CoursesDetails" element={<CoursesDetails />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/AllNotify" element={<AllNotify />} />
+          <Route path="/OrderHistory" element={<OrderHistory />} />
         </Routes>
       </BrowserRouter>
     </>
