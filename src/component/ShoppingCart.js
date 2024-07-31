@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import { FaStar, FaRegUserCircle, FaPlayCircle } from "react-icons/fa";
@@ -7,7 +7,8 @@ import { IoIosTimer } from "react-icons/io";
 import { PiUsersThreeLight } from "react-icons/pi";
 import CourseImage from "../assets/images/cover.png"; // Replace with actual path to course images
 import BookImage from "../assets/images/Books-1.png";
-
+import { baseurl } from '../helper/Baseurl';
+import axios from 'axios';
 const courses = [
   {
     title: "شرح متن الآجرومية",
@@ -37,200 +38,260 @@ const books = [
   // Add more books as needed
 ];
 
+// Helper function to fetch image URL for books
+const showpicbooks = (fileName) => {
+  try {
+    // Ensure `fileName` is valid and correct path is used
+    const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
+    console.log("Fetched book image URL:", imageUrl);
+    return imageUrl;
+  } catch (error) {
+    console.error('Error fetching book image:', error);
+    return null;
+  }
+};
+
+// Helper function to fetch image URL for courses
+const showpiccourses = (fileName) => {
+  try {
+    // Ensure `fileName` is valid and correct path is used
+    const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
+    console.log("Fetched course image URL:", imageUrl);
+    return imageUrl;
+  } catch (error) {
+    console.error('Error fetching course image:', error);
+    return null;
+  }
+};
+
+
 function ShoppingCart() {
+
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get('http://160.19.99.6:8989/api/my-cart', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+  
+        console.log("API Response:", response.data); // Debugging line
+        
+        const items = response.data[0]; // Extracting items array
+        console.log("Extracted Items:", items); // Debugging line
+  
+        const total = items.reduce((sum, item) => {
+          // Initialize itemPrice to 0
+          let itemPricebook = 0;
+          let itemPricecourse = 0;
+
+          // Check if the item has a book or a course and get the price accordingly
+          if (item.book) {
+            itemPricebook = item.book.price;
+          } 
+          
+         if (item.course) {
+          itemPricecourse = item.course.price;
+          }
+  
+          // Calculate the total price
+          return sum + itemPricecourse +itemPricebook * item.quantity;
+        }, 0);
+        
+        console.log("totalPrice Items:", total); // Debugging line
+  
+        setCartItems(items);
+        setTotalPrice(total);
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+  
+    fetchCartItems();
+  }, []);
+  
+
   const renderItem = (item, type) => (
     <div
-      key={item.title}
-      className="bg-white shadow-lg rounded-lg p-4 my-1 flex items-center text-right relative"
-      style={{ direction: "rtl" }}
-    >
-      <div className="relative">
-        <img
-          src={item.image}
-          alt={item.title}
-          className="h-30 w-24 rounded mb-2 ml-4"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
-        />
-        {type === "course" && (
-          <FaPlayCircle className="absolute  ml-2  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-300 text-3xl" />
-        )}
-      </div>
-      <div className="flex-grow">
-        <div className="flex items-center justify-between mb-2">
+    key={item.title}
+    className="bg-white  shadow-md rounded-lg p-4 my-1 flex"
+    style={{ direction: "rtl" }}
+  >
+  
+    {type === "course" && item.course && (
+      <div className="flex flex-row items-center w-full">
+        <div className="relative flex-shrink-0 ml-12">
+          <img
+            src={showpiccourses(item.course.coverImageUrl)}
+            alt={item.course.title}
+            className="h-30 w-24 rounded"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          />
+          <FaPlayCircle className="absolute ml-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-300 text-3xl" />
+        </div>
+        <div className="flex-grow ml-4 w-2/3">
           <h3
-            className="text-md font-bold mr-2"
+            className="text-md font-bold mb-2"
             style={{ fontFamily: "Tajwal, sans-serif" }}
           >
-            {item.title}
+            {item.course.title}
           </h3>
+          <p
+            className="text-gray-600 text-xs mb-2"
+            style={{
+              fontFamily: "Tajwal, sans-serif",
+              textAlign: "justify",
+              lineHeight: "1.5",
+            }}
+          >
+            {item.course.description}
+          </p>   
+       
         </div>
-        {type === "course" && (
-          <>
+        <div className="flex flex-col items-start mt-4">
             <p
-              className="text-gray-600 text-xs"
-              style={{
-                fontFamily: "Tajwal, sans-serif",
-                textAlign: "justify",
-                lineHeight: "1.5",
-                marginBottom: "8px",
-              }}
+              className="text-lg font-bold text-custom-orange mb-2"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
             >
-              {item.description}
+              {item.course.price} دينار
             </p>
-            <div className="flex items-center mt-2 mb-2">
+            <button
+              className="text-custom-orange"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+            >
+              إزالة
+            </button>
+          </div>
+      </div>
+    )}
+  
+    {type === "book" && item.book && (
+      <div className="flex flex-row items-center w-full">
+        <div className="relative flex-shrink-0  ml-12">
+          <img
+            src={showpicbooks(item.book.coverImageUrl)}
+            alt={item.book.title}
+            className="h-30 w-24 rounded"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          />
+        </div>
+        <div className="flex-grow ml-4 w-2/3">
+          <h3
+            className="text-md font-bold mb-2"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
+            {item.book.title}
+          </h3>
+          <div className="flex text-gray-700 mt-1 text-sm mb-2">
+            <div className="flex items-center">
               <FaRegUserCircle
-                className="text-gray-600"
-                style={{ marginRight: "4px" }}
+                className="text-gray-600 mr-2"
               />
-              <p
-                className="text-xs mr-1 text-gray-600"
+              <span>{item.book.author}</span>
+            </div>
+          </div>
+          <div className="flex text-gray-700 text-sm mb-2">
+            <div className="flex items-center">
+              <span
+                className="font-bold mr-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                {item.instructor}
-              </p>
-              <p className="text-xs mr-10">{item.rating}</p>
-              <FaStar style={{ color: "#FFA500", marginRight: "4px" }} />
+                دار النشر
+              </span>
+              <span style={{ fontFamily: "Tajwal, sans-serif" }}>
+                {item.book.publisher}
+              </span>
             </div>
-            <div className="flex items-center justify-between mt-2">
-              <div className="flex items-center">
-                <MdOutlineLibraryBooks
-                  className="text-gray-600"
-                  style={{ marginRight: "4px" }}
-                />
-                <p
-                  className="text-xs mr-1 text-gray-600"
-                  style={{ fontFamily: "Tajwal, sans-serif" }}
-                >
-                  {item.lessons}
-                </p>
-              </div>
-              <div className="flex items-center">
-                <IoIosTimer
-                  className="text-gray-600"
-                  style={{ marginRight: "4px" }}
-                />
-                <p
-                  className="text-xs mr-1 text-gray-600"
-                  style={{ fontFamily: "Tajwal, sans-serif" }}
-                >
-                  {item.duration}
-                </p>
-              </div>
-              <div className="flex items-center">
-                <PiUsersThreeLight
-                  className="text-gray-600"
-                  style={{ marginRight: "4px" }}
-                />
-                <p
-                  className="text-xs mr-1 text-gray-600"
-                  style={{ fontFamily: "Tajwal, sans-serif" }}
-                >
-                  {item.students}
-                </p>
-              </div>
-            </div>
-          </>
-        )}
-        {type === "book" && (
-          <>
-            <div className="flex text-gray-700 mt-1 text-sm">
-              <div className="flex items-center font-tajwal">
-                <FaRegUserCircle
-                  className="text-gray-600 ml-2"
-                  style={{ marginRight: "4px" }}
-                />
-                <span>{item.author}</span>
-              </div>
-            </div>
-            <div className="flex text-gray-700 mt-1 text-sm justify-between">
-              <div className="flex items-center">
-                <span
-                  className="font-bold mx-2"
-                  style={{ fontFamily: "Tajwal, sans-serif" }}
-                >
-                  دار النشر
-                </span>
-                <span style={{ fontFamily: "Tajwal, sans-serif" }}>
-                  {item.publisher}
-                </span>
-              </div>
-              <div className="flex items-center">
-                <span
-                  className="font-bold mx-2"
-                  style={{ fontFamily: "Tajwal, sans-serif" }}
-                >
-                  الطبعة
-                </span>
-                <span style={{ fontFamily: "Tajwal, sans-serif" }}>
-                  {item.edition}
-                </span>
-              </div>
-            </div>
-          </>
-        )}
+          </div>
+        
+        </div>
+        <div className="flex flex-col items-start mt-4">
+            <p
+              className="text-lg font-bold text-custom-orange mb-2"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+            >
+              {item.book.price} دينار
+            </p>
+            <button
+              className="text-custom-orange"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+            >
+              إزالة
+            </button>
+          </div>
       </div>
-      <div className="flex flex-col items-end mr-10 text-right">
-        <button
-          className="text-custom-orange mb-2"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
-        >
-          إزالة
-        </button>
-        <p
-          className="text-lg font-bold text-custom-orange"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
-        >
-          {item.price}
-        </p>
-      </div>
-    </div>
+    )}
+  </div>
+  
+  
   );
+ 
 
   return (
     <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
-        <div className="border-t"></div>
-        <div className="flex flex-col lg:flex-row justify-between container mx-auto mt-10 rtl">
-          <div className="lg:w-1/3 rounded-lg p-6 mt-6 lg:mt-0">
-            <h2
-              className="text-2xl font-bold mb-4 text-right"
+    <Sidebar />
+    <div className="flex flex-col w-[80%] mt-2 ml-1">
+      <NavbarLogin />
+      <div className="border-t"></div>
+      <div className="flex flex-col lg:flex-row justify-between container mx-auto mt-10 rtl">
+        <div className="lg:w-1/3 rounded-lg p-6 mt-6 lg:mt-0">
+          <h2
+            className="text-2xl font-bold mb-4 text-right"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
+            الإجمالي
+          </h2>
+          <div className="flex justify-between mb-4">
+            <p
+              className="font-bold text-lg"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+            >
+              {totalPrice.toFixed(2)} دينار
+            </p>
+            <p
+              className="font-bold text-lg"
               style={{ fontFamily: "Tajwal, sans-serif" }}
             >
               الإجمالي
-            </h2>
-            <div className="flex justify-between mb-4">
-              <p
-                className="font-bold text-lg"
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                47.98 دينار
-              </p>
-              <p
-                className="font-bold text-lg"
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                الإجمالي
-              </p>
+            </p>
+          </div>
+          <button
+            className="bg-custom-orange text-white w-full py-2 rounded"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
+            إتمام الشراء
+          </button>
+        </div>
+        <div className="lg:w-2/3 p-6">
+          <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
+            عربة الشراء
+          </h1>
+          {cartItems.length > 0 ? (
+            <div>
+              {cartItems.map((item) => (
+                <React.Fragment key={item.id}>
+                  {item.book && renderItem(item, "book")}
+                  {item.course && renderItem(item, "course")}
+                </React.Fragment>
+              ))}
+              
             </div>
-            <button
-              className="bg-custom-orange text-white w-full py-2 rounded"
+          ) : (
+            <p
+              className="text-center text-gray-500"
               style={{ fontFamily: "Tajwal, sans-serif" }}
             >
-              إتمام الشراء
-            </button>
-          </div>
-          <div className="lg:w-2/3 p-6">
-            <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
-              عربة الشراء
-            </h1>
-            {courses.map((course) => renderItem(course, "course"))}
-            {books.map((book) => renderItem(book, "book"))}
-          </div>
+              سلتك فارغة
+            </p>
+          )}
         </div>
       </div>
     </div>
+  </div>
   );
 }
 

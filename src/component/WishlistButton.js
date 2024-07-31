@@ -1,71 +1,75 @@
-import React from "react";
-import CourseImage from "../assets/images/ContinueWatchingSection1.png"; // Replace with your actual image import
-import { FaStar, FaRegUserCircle } from "react-icons/fa"; // Import the star icon from react-icons
-import { MdOutlineLibraryBooks } from "react-icons/md";
-import { IoIosTimer } from "react-icons/io";
-import { PiUsersThreeLight } from "react-icons/pi";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-const courses = [
-  {
-    title: "شرح متن الآجرومية",
-    instructor: "شامي بن مطاعن آل شيبة القرشي",
-    price: "14.99 دينار",
-    rating: 4.5,
-    description:
-      "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
-    lessons: 23,
-    duration: "32 س",
-    students: 2949,
-    image: CourseImage,
-  },
-  {
-    title: "شرح متن الآجرومية",
-    instructor: "شامي بن مطاعن آل شيبة القرشي",
-    price: "14.99 دينار",
-    rating: 4.5,
-    description:
-      "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
-    lessons: 23,
-    duration: "32 س",
-    students: 2949,
-    image: CourseImage,
-  },
-  {
-    title: "شرح متن الآجرومية",
-    instructor: "شامي بن مطاعن آل شيبة القرشي",
-    price: "14.99 دينار",
-    rating: 4.5,
-    description:
-      "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
-    lessons: 23,
-    duration: "32 س",
-    students: 2949,
-    image: CourseImage,
-  },
-  {
-    title: "شرح متن الآجرومية",
-    instructor: "شامي بن مطاعن آل شيبة القرشي",
-    price: "14.99 دينار",
-    rating: 4.5,
-    description:
-      "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...",
-    lessons: 23,
-    duration: "32 س",
-    students: 2949,
-    image: CourseImage,
-  },
-  // Add more courses if needed
-];
-
+import { FcMoneyTransfer } from "react-icons/fc";
+import { baseurl } from '../helper/Baseurl';
 const WishlistButton = () => {
+  const [courses, setCourses] = useState([]);
+  const [likedBooks, setLikedBooks] = useState({});
+  const navigate = useNavigate();
+
+  const showMyCourses = async () => {
+    try {
+      const response = await axios.get(
+        `${baseurl}my-favorites`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.data) {
+        const coursesData = response.data[0].map(favorite => favorite.course);
+        console.log("Fetched courses data:", coursesData);
+        return coursesData;
+      }
+    } catch (error) {
+      console.error('Error fetching my courses:', error);
+      return [];
+    }
+  };
+
+  const showPicCourses = async (fileName) => {
+    try {
+      const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
+      console.log("Fetched image URL:", imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const coursesData = await showMyCourses();
+      if (coursesData.length === 0) return;
+
+      const updatedCourses = await Promise.all(coursesData.map(async (course) => {
+        const imageUrl = await showPicCourses(course.coverImageUrl);
+        return { 
+          title: course.title,
+          description: course.description,
+          price: course.price,
+          coverImageUrl: imageUrl 
+        };
+      }));
+
+      console.log("Updated courses with images:", updatedCourses);
+      setCourses(updatedCourses);
+    };
+    fetchData();
+  }, []);
+
   const rows = [];
   for (let i = 0; i < courses.length; i += 4) {
     rows.push(courses.slice(i, i + 4));
   }
-  const navigate = useNavigate();
+
   const openCoursesDetails = () => {
     navigate('/CoursesDetails');
   };
+
   return (
     <div className="p-2">
       {rows.map((row, index) => (
@@ -74,45 +78,45 @@ const WishlistButton = () => {
             <div key={idx} className="w-1/4 p-2">
               <div className="bg-white rounded-lg shadow-md p-3">
                 <img
-                  src={course.image}
+                  src={course.coverImageUrl }
                   alt={course.title}
                   className="w-full h-32 object-cover rounded-lg mb-3"
                 />
                 <h3 className="text-md font-semibold mb-1">{course.title}</h3>
-
                 <p className="text-xs text-gray-500 mb-2">{course.description}</p>
                 <div className="flex items-center mt-1 mb-2">
-                  <FaRegUserCircle
-                    className="text-gray-600 ml-2"
-                  />
+                  <FcMoneyTransfer className="text-gray-600 ml-2" />
                   <p className="text-xs text-gray-600" style={{ fontFamily: "Tajwal, sans-serif" }}>
-                    {course.instructor}
+                    {course.price} دينار
                   </p>
                 </div>
-                <div className="flex items-center mb-2">
-                  <FaStar className="text-yellow-500 mr-1" />
-                  <p className="text-xs mr-1">{course.rating}</p>
-                </div>
                 <div className="flex items-center text-xs text-gray-600 justify-between" style={{ fontFamily: "Tajwal, sans-serif" }}>
-                  <div className="flex items-center ml-2">
-                    <MdOutlineLibraryBooks className="text-gray-600 ml-2" />
-                    <p>{course.lessons}</p>
-                  </div>
-                  <div className="flex items-center ml-2">
-                    <IoIosTimer className="text-gray-600 ml-2" />
-                    <p>{course.duration}</p>
-                  </div>
-                  <div className="flex items-center">
-                    <PiUsersThreeLight className="text-gray-600 ml-2" />
-                    <p>{course.students}</p>
+                  <div
+                    className={`text-gray-600 cursor-pointer ${likedBooks[idx] ? '#ff3f52' : ''}`}
+                    onClick={() => setLikedBooks({ ...likedBooks, [idx]: !likedBooks[idx] })}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill={likedBooks[idx] ? '#ff3f52' : 'none'}
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                      />
+                    </svg>
                   </div>
                   <button
-                      className="bg-custom-orange text-white px-4 py-2 rounded-3xl"
-                      style={{ fontFamily: "Tajwal, sans-serif" }}
-                      onClick={openCoursesDetails}
-                    >
-                      اشتر الآن
-                    </button>
+                    className="bg-custom-orange text-white px-4 py-2 rounded-3xl"
+                    style={{ fontFamily: "Tajwal, sans-serif" }}
+                    onClick={openCoursesDetails}
+                  >
+                    اشتر الآن
+                  </button>
                 </div>
               </div>
             </div>
