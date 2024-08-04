@@ -10,7 +10,7 @@ const MyCoursesButton = () => {
 
   // Function to generate image URL
   const generateImageUrl = (coverImageUrl) => {
-    const baseImageUrl = "http://160.19.99.6:8989/api/uploads/file/download/";
+    const baseImageUrl = `${baseurl}uploads/file/download/`;
     return coverImageUrl
       ? `${baseImageUrl}${coverImageUrl}`
       : "default-image-path"; // Replace with a path to a default image if necessary
