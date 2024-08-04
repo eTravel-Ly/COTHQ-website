@@ -10,22 +10,21 @@ const WishlistButton = () => {
 
   const showMyCourses = async () => {
     try {
-      const response = await axios.get(
-        `${baseurl}my-favorites`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const response = await axios.get(`${baseurl}my-favorites`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (response.data) {
-        const coursesData = response.data[0].map(favorite => favorite.course);
+        const booksData = response.data.books;
+        const coursesData = response.data.courses;
+        console.log("Fetched books data:", booksData);
         console.log("Fetched courses data:", coursesData);
-        return coursesData;
+        return { books: booksData, courses: coursesData };
       }
     } catch (error) {
-      console.error('Error fetching my courses:', error);
-      return [];
+      console.error("Error fetching my favorites:", error);
+      return { books: [], courses: [] };
     }
   };
 
@@ -42,10 +41,10 @@ const WishlistButton = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const coursesData = await showMyCourses();
-      if (coursesData.length === 0) return;
+      const {courses} = await showMyCourses();
+      if (courses.length === 0) return;
 
-      const updatedCourses = await Promise.all(coursesData.map(async (course) => {
+      const updatedCourses = await Promise.all(courses.map(async (course) => {
         const imageUrl = await showPicCourses(course.coverImageUrl);
         return { 
           title: course.title,
