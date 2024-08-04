@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import { FaStar, FaRegUserCircle, FaPlayCircle } from "react-icons/fa";
-import { MdOutlineLibraryBooks } from "react-icons/md";
-import { IoIosTimer } from "react-icons/io";
-import { PiUsersThreeLight } from "react-icons/pi";
-import axios from 'axios';
-import { baseurl } from '../helper/Baseurl';
+import axios from "axios";
+import { baseurl } from "../helper/Baseurl";
+import AddToCartImage from "../assets/images/AddtoCart.png"; 
 
 // Helper function to fetch image URL for books
 const showpicbooks = (fileName) => {
@@ -15,19 +13,19 @@ const showpicbooks = (fileName) => {
     console.log("Fetched book image URL:", imageUrl);
     return imageUrl;
   } catch (error) {
-    console.error('Error fetching book image:', error);
+    console.error("Error fetching book image:", error);
     return null;
   }
 };
 
-// Helper function to fetch image URL for courses
+
 const showpiccourses = (fileName) => {
   try {
     const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
     console.log("Fetched course image URL:", imageUrl);
     return imageUrl;
   } catch (error) {
-    console.error('Error fetching course image:', error);
+    console.error("Error fetching course image:", error);
     return null;
   }
 };
@@ -53,7 +51,7 @@ function ShoppingCart() {
         setCartItems([...books, ...courses]);
         setTotalPrice(total);
       } catch (error) {
-        console.error('Error fetching cart items:', error);
+        console.error("Error fetching cart items:", error);
       }
     };
 
@@ -210,16 +208,25 @@ function ShoppingCart() {
             {cartItems.length > 0 ? (
               <div>
                 {cartItems.map((item) =>
-                  item.author ? renderItem(item, "book") : renderItem(item, "course")
+                  item.author
+                    ? renderItem(item, "book")
+                    : renderItem(item, "course")
                 )}
               </div>
             ) : (
-              <p
-                className="text-center text-gray-500"
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                سلتك فارغة
-              </p>
+              <div className="flex flex-col items-center  h-full">
+                <img
+                  src={AddToCartImage}
+                  alt="Add to Cart"
+                  className=" h-[50%] mb-4"
+                />
+                <p
+                  className="text-center text-gray-500 font-bold text-2xl mb-4"
+                  style={{ fontFamily: "Tajwal, sans-serif" }}
+                >
+                  سلتك فارغة
+                </p>
+              </div>
             )}
           </div>
         </div>
