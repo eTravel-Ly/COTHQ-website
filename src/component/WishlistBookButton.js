@@ -17,8 +17,8 @@ const WishlistBookButton = () => {
         },
       });
       if (response.data) {
-        const booksData = response.data.map((favorite) => favorite.book);
-        const coursesData = response.data.map((favorite) => favorite.course);
+        const booksData = response.data.books;
+        const coursesData = response.data.courses;
         console.log("Fetched books data:", booksData);
         console.log("Fetched courses data:", coursesData);
         return { books: booksData, courses: coursesData };
@@ -52,6 +52,7 @@ const WishlistBookButton = () => {
             title: book.title,
             author: book.author,
             price: book.price,
+            genre: book.genre,
             coverImageUrl: imageUrl,
           };
         })
