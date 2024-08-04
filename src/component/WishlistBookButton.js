@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { baseurl } from '../helper/Baseurl';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { baseurl } from "../helper/Baseurl";
+import axios from "axios";
 
 const WishlistBookButton = () => {
   const navigate = useNavigate();
@@ -9,24 +9,23 @@ const WishlistBookButton = () => {
   const [likedBooks, setLikedBooks] = useState({});
   const [selectedType, setSelectedType] = useState("all");
 
-  const showMyBooks = async () => {
+  const showMyFavorites = async () => {
     try {
-      const response = await axios.get(
-        `${baseurl}my-favorites`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const response = await axios.get(`${baseurl}my-favorites`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (response.data) {
-        const booksData = response.data[0].map(favorite => favorite.book);
+        const booksData = response.data.map((favorite) => favorite.book);
+        const coursesData = response.data.map((favorite) => favorite.course);
         console.log("Fetched books data:", booksData);
-        return booksData;
+        console.log("Fetched courses data:", coursesData);
+        return { books: booksData, courses: coursesData };
       }
     } catch (error) {
-      console.error('Error fetching my books:', error);
-      return [];
+      console.error("Error fetching my favorites:", error);
+      return { books: [], courses: [] };
     }
   };
 
@@ -36,25 +35,27 @@ const WishlistBookButton = () => {
       console.log("Fetched image URL:", imageUrl);
       return imageUrl;
     } catch (error) {
-      console.error('Error fetching image:', error);
+      console.error("Error fetching image:", error);
       return null;
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const booksData = await showMyBooks();
-      if (booksData.length === 0) return;
+      const { books } = await showMyFavorites();
+      if (books.length === 0) return;
 
-      const updatedBooks = await Promise.all(booksData.map(async (book) => {
-        const imageUrl = await showpicbooks(book.coverImageUrl);
-        return { 
-          title: book.title,
-          author: book.author,
-          price: book.price,
-          coverImageUrl: imageUrl 
-        };
-      }));
+      const updatedBooks = await Promise.all(
+        books.map(async (book) => {
+          const imageUrl = await showpicbooks(book.coverImageUrl);
+          return {
+            title: book.title,
+            author: book.author,
+            price: book.price,
+            coverImageUrl: imageUrl,
+          };
+        })
+      );
 
       console.log("Updated books with images:", updatedBooks);
       setMyBooks(updatedBooks);
@@ -74,10 +75,13 @@ const WishlistBookButton = () => {
   };
 
   const openBookDetails = () => {
-    navigate('/BookDetails');
+    navigate("/BookDetails");
   };
 
-  const filteredBooks = selectedType === "all" ? mybooks : mybooks.filter(book => book.genre === selectedType);
+  const filteredBooks =
+    selectedType === "all"
+      ? mybooks
+      : mybooks.filter((book) => book.genre === selectedType);
 
   const rows = [];
   for (let i = 0; i < filteredBooks.length; i += 4) {
@@ -117,7 +121,10 @@ const WishlistBookButton = () => {
                     >
                       {book.title}
                     </h3>
-                    <div className="text-sm mb-2 text-gray-600 font-bold" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                    <div
+                      className="text-sm mb-2 text-gray-600 font-bold"
+                      style={{ fontFamily: "Tajwal, sans-serif" }}
+                    >
                       {book.author}
                     </div>
                     <div className="text-lg font-bold mb-2">
@@ -133,12 +140,14 @@ const WishlistBookButton = () => {
                       اشترِ الآن
                     </button>
                     <div
-                      className={`text-gray-600 cursor-pointer ${likedBooks[index] ? '#ff3f52' : ''}`}
+                      className={`text-gray-600 cursor-pointer ${
+                        likedBooks[index] ? "#ff3f52" : ""
+                      }`}
                       onClick={() => handleHeartClick(index)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill={likedBooks[index] ? '#ff3f52' : 'none'}
+                        fill={likedBooks[index] ? "#ff3f52" : "none"}
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
