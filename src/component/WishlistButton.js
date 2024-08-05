@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { FcMoneyTransfer } from "react-icons/fc";
-import { baseurl } from '../helper/Baseurl';
+import { baseurl } from "../helper/Baseurl";
+
 const WishlistButton = () => {
   const [courses, setCourses] = useState([]);
-  const [likedBooks, setLikedBooks] = useState({});
   const navigate = useNavigate();
 
   const showMyCourses = async () => {
@@ -34,25 +34,50 @@ const WishlistButton = () => {
       console.log("Fetched image URL:", imageUrl);
       return imageUrl;
     } catch (error) {
-      console.error('Error fetching image:', error);
+      console.error("Error fetching image:", error);
+      return null;
+    }
+  };
+
+  const toggleFavorite = async (id) => {
+    try {
+      const response = await axios.post(
+        `${baseurl}toggle-favorite`,
+        {
+          type: "COURSE",
+          id: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      return response.data.isFavorite;
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
       return null;
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const {courses} = await showMyCourses();
+      const { courses } = await showMyCourses();
       if (courses.length === 0) return;
 
-      const updatedCourses = await Promise.all(courses.map(async (course) => {
-        const imageUrl = await showPicCourses(course.coverImageUrl);
-        return { 
-          title: course.title,
-          description: course.description,
-          price: course.price,
-          coverImageUrl: imageUrl 
-        };
-      }));
+      const updatedCourses = await Promise.all(
+        courses.map(async (course) => {
+          const imageUrl = await showPicCourses(course.coverImageUrl);
+          return {
+            id: course.id,
+            title: course.title,
+            description: course.description,
+            price: course.price,
+            coverImageUrl: imageUrl,
+            isFavorite: true, // Assuming all fetched courses are favorites initially
+          };
+        })
+      );
 
       console.log("Updated courses with images:", updatedCourses);
       setCourses(updatedCourses);
@@ -66,7 +91,15 @@ const WishlistButton = () => {
   }
 
   const openCoursesDetails = () => {
-    navigate('/CoursesDetails');
+    navigate("/CoursesDetails");
+  };
+
+  const handleHeartClick = async (idx, courseId) => {
+    const isFavorite = await toggleFavorite(courseId);
+    if (isFavorite === false) {
+      const updatedCourses = courses.filter((course, index) => index !== idx);
+      setCourses(updatedCourses);
+    }
   };
 
   return (
@@ -77,29 +110,37 @@ const WishlistButton = () => {
             <div key={idx} className="w-1/4 p-2">
               <div className="bg-white rounded-lg shadow-md p-3">
                 <img
-                  src={course.coverImageUrl }
+                  src={course.coverImageUrl}
                   alt={course.title}
                   className="w-full h-32 object-cover rounded-lg mb-3"
                 />
                 <h3 className="text-md font-semibold mb-1">{course.title}</h3>
-                <p className="text-xs text-gray-500 mb-2">{course.description}</p>
+                <p className="text-xs text-gray-500 mb-2">
+                  {course.description}
+                </p>
                 <div className="flex items-center mt-1 mb-2">
                   <FcMoneyTransfer className="text-gray-600 ml-2" />
-                  <p className="text-xs text-gray-600" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                  <p
+                    className="text-xs text-gray-600"
+                    style={{ fontFamily: "Tajwal, sans-serif" }}
+                  >
                     {course.price} دينار
                   </p>
                 </div>
-                <div className="flex items-center text-xs text-gray-600 justify-between" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                <div
+                  className="flex items-center text-xs text-gray-600 justify-between"
+                  style={{ fontFamily: "Tajwal, sans-serif" }}
+                >
                   <div
-                    className={`text-gray-600 cursor-pointer ${likedBooks[idx] ? '#ff3f52' : ''}`}
-                    onClick={() => setLikedBooks({ ...likedBooks, [idx]: !likedBooks[idx] })}
+                    className=" cursor-pointer"
+                    onClick={() => handleHeartClick(idx, course.id)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      fill={likedBooks[idx] ? '#ff3f52' : 'none'}
+                      fill={course.isFavorite ? "#ff3f52" : "none"}
                       viewBox="0 0 24 24"
                       strokeWidth="1.5"
-                      stroke="currentColor"
+                      stroke="#ff3f52"
                       className="w-6 h-6"
                     >
                       <path
