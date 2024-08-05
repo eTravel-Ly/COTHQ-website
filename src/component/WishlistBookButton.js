@@ -6,7 +6,6 @@ import axios from "axios";
 const WishlistBookButton = () => {
   const navigate = useNavigate();
   const [mybooks, setMyBooks] = useState([]);
-  const [likedBooks, setLikedBooks] = useState({});
   const [selectedType, setSelectedType] = useState("all");
 
   const showMyFavorites = async () => {
@@ -26,6 +25,36 @@ const WishlistBookButton = () => {
     } catch (error) {
       console.error("Error fetching my favorites:", error);
       return { books: [], courses: [] };
+    }
+  };
+
+  const toggleFavorite = async (id) => {
+    try {
+      const response = await axios.post(
+        `${baseurl}toggle-favorite`,
+        {
+          type:"BOOK",
+          id: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      return response.data.isFavorite;
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      return null;
+    }
+  };
+
+  const handleHeartClick = async (idx, bookId) => {
+    const isFavorite = await toggleFavorite(bookId);
+    console.log(isFavorite)
+    if (isFavorite === false) {
+      const updatedbook = mybooks.filter((mybooks, index) => index !== idx);
+      setMyBooks(updatedbook);
     }
   };
 
@@ -49,11 +78,14 @@ const WishlistBookButton = () => {
         books.map(async (book) => {
           const imageUrl = await showpicbooks(book.coverImageUrl);
           return {
+            id: book.id,
             title: book.title,
             author: book.author,
             price: book.price,
             genre: book.genre,
             coverImageUrl: imageUrl,
+            isFavorite: true, // Assuming all fetched courses are favorites initially
+
           };
         })
       );
@@ -63,13 +95,6 @@ const WishlistBookButton = () => {
     };
     fetchData();
   }, []);
-
-  const handleHeartClick = (index) => {
-    setLikedBooks((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
-  };
 
   const handleTypeChange = (event) => {
     setSelectedType(event.target.value);
@@ -104,10 +129,10 @@ const WishlistBookButton = () => {
           {/* يمكنك إضافة المزيد من الخيارات هنا بناءً على الأنواع المتاحة */}
         </select>
       </div>
-      {rows.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex flex-wrap mb-4">
-          {row.map((book, index) => (
-            <div key={index} className="w-1/4 p-2">
+      {rows.map((row, index) => (
+        <div key={index} className="flex flex-wrap mb-4">
+          {row.map((book, idx) => (
+            <div key={idx} className="w-1/4 p-2">
               <div className="bg-white rounded-lg shadow-md p-4 flex items-center">
                 <img
                   src={book.coverImageUrl}
@@ -141,17 +166,15 @@ const WishlistBookButton = () => {
                       اشترِ الآن
                     </button>
                     <div
-                      className={`text-gray-600 cursor-pointer ${
-                        likedBooks[index] ? "#ff3f52" : ""
-                      }`}
-                      onClick={() => handleHeartClick(index)}
+                      className="cursor-pointer"
+                      onClick={() => handleHeartClick(idx, book.id)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill={likedBooks[index] ? "#ff3f52" : "none"}
+                        fill={book.isFavorite ? "#ff3f52" : "none"}
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
-                        stroke="currentColor"
+                        stroke="#ff3f52"
                         className="w-6 h-6"
                       >
                         <path

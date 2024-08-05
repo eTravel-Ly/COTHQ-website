@@ -144,7 +144,7 @@ const Sidebar = () => {
         </nav>
 
         <div className="flex flex-col items-center mt-auto p-2 mb-16">
-          <div className="p-2 bg-blue rounded-lg w-full text-center">
+          <div className="p-2 bg-blues rounded-lg w-full text-center">
             <h2 className="text-sm font-bold mb-1 font-tajwal">
               ندوة عبر الإنترنت
             </h2>

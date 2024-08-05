@@ -1,71 +1,132 @@
-import React, { useState } from 'react';
-import ContinueReadingSection1 from "../assets/images/2.png";
-import ContinueReadingSection2 from "../assets/images/3.png";
-import ContinueReadingSection3 from "../assets/images/Books-1.png";
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { baseurl } from '../helper/Baseurl';
 
-const allBooks = [
-  { id: 1, title: "شرح متن الآجرومية", instructor: "الفقه", image: ContinueReadingSection1, price: "14.99 دينار", type: "الفقه" },
-  { id: 2, title: "شرح متن الآجرومية", instructor: "الفقه", image: ContinueReadingSection2, price: "14.99 دينار", type: "دين" },
-  { id: 3, title: "شرح متن الآجرومية", instructor: "الفقه", image: ContinueReadingSection3, price: "14.99 دينار", type: "الفقه" },
-  { id: 4, title: "شرح متن الآجرومية", instructor: "الفقه", image: ContinueReadingSection2, price: "14.99 دينار", type: "دين" },
-  { id: 5, title: "شرح متن الآجرومية", instructor: "الفقه", image: ContinueReadingSection3, price: "14.99 دينار", type: "الفقه" },
-  { id: 6, title: "شرح متن الآجرومية", instructor: "الفقه", image: ContinueReadingSection1, price: "14.99 دينار", type: "الفقه" },
-  { id: 7, title: "شرح متن الآجرومية", instructor: "الفقه", image: ContinueReadingSection2, price: "14.99 دينار", type: "دين" },
-];
-
-export default function Allbooks() {
+const Allbooks = () => {
+  const [books, setBooks] = useState([]);
   const [selectedType, setSelectedType] = useState('كل الأنواع');
   const [likedBooks, setLikedBooks] = useState({});
   const navigate = useNavigate();
-  const openBookDetails = () => {
-    navigate('/BookDetails');
+  const handleLikeClick = async (id) => {
+    try {
+      const response = await axios.post(
+        `${baseurl}toggle-favorite`,
+        {
+          type: "BOOK",
+          id: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.isFavorite !== undefined) {
+        setLikedBooks((prev) => ({
+          ...prev,
+          [id]: response.data.isFavorite,
+        }));
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
   };
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get(baseurl + 'all-books', {
+          headers: {
+            'accept': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        });
+        const booksData = response.data.map(async (book) => {
+          const imageUrl = await showpicbooks(book.coverImageUrl);
+          return { ...book, imageUrl };
+        });
+        const booksWithImages = await Promise.all(booksData);
+        setBooks(booksWithImages);
+      } catch (error) {
+        console.error('Error fetching books:', error);
+      }
+    };
+    fetchBooks();
+  }, []);
+
+  const showpicbooks = async (fileName) => {
+    try {
+      const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
+      console.log("Fetched image URL:", imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error("Error fetching image:", error);
+      return null;
+    }
+  };
+
+  const openBookDetails = (bookId) => {
+    navigate(`/BookDetails/${bookId}`);
+  };
+
   const filteredBooks = selectedType === 'كل الأنواع'
-    ? allBooks
-    : allBooks.filter(book => book.type === selectedType);
+    ? books
+    : books.filter(book => book.genre === selectedType);
 
   const rows = [];
   for (let i = 0; i < filteredBooks.length; i += 4) {
     rows.push(filteredBooks.slice(i, i + 4));
   }
 
-  const handleLikeClick = (bookId) => {
-    setLikedBooks(prevState => ({
-      ...prevState,
-      [bookId]: !prevState[bookId]
-    }));
+  
+  const getAvailabilityStyle = (availability) => {
+    switch (availability) {
+      case 'AVAILABLE_BOTH':
+        return { text: 'متاح', bgColor: 'bg-green-600', btnText: 'اشترِ الآن', btnDisabled: false };
+      case 'AVAILABLE_LIBRARY_ONLY':
+        return { text: 'متوفر في المكتبة فقط', bgColor: 'bg-blue-500', btnText: 'استعر الآن', btnDisabled: false };
+      case 'AVAILABLE_ONLINE_ONLY':
+        return { text: 'متوفر بالانترنت', bgColor: 'bg-blue-500', btnText: 'اشترِ الآن', btnDisabled: false };
+      case 'RESERVED':
+        return { text: 'محجوز', bgColor: 'bg-yellow-500', btnText: 'استعر الآن', btnDisabled: true };
+      case 'UNAVAILABLE':
+        return { text: 'غير متاح', bgColor: 'bg-red-500', btnText: 'اشترِ الآن', btnDisabled: true };
+      default:
+        return { text: '', bgColor: '', btnText: '', btnDisabled: true };
+    }
   };
 
   return (
     <>
       <div className="flex h-screen">
-          <div>
-            <div className="mb-4">
-              <select
-                id="book-type"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="border p-2 rounded w-60"
-                style={{ fontFamily: "Tajwal, sans-serif" ,
-                  marginRight:"1235px"
-     
-                }}
-              >
-                <option value="كل الأنواع">كل الأنواع</option>
-                <option value="الفقه">الفقه</option>
-                <option value="دين">دين</option>
-              </select>
-            </div>
+        <div>
+          <div className="mb-4">
+            <select
+              id="book-type"
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="border p-2 rounded w-60"
+              style={{ fontFamily: "Tajwal, sans-serif", marginRight: "1235px" }}
+            >
+              <option value="كل الأنواع">كل الأنواع</option>
+              <option value="الفقه">الفقه</option>
+              <option value="دين">دين</option>
+            </select>
+          </div>
 
-            <div className="p-4">
-              {rows.map((row, index) => (
-                <div key={index} className="flex flex-wrap -mx-2 mb-4">
-                  {row.map((book) => (
+          <div className="p-4">
+            {rows.map((row, index) => (
+              <div key={index} className="flex flex-wrap -mx-2 mb-4">
+                {row.map((book) => {
+                  const availabilityStyle = getAvailabilityStyle(book.bookAvailability);
+                  return (
                     <div key={book.id} className="w-1/4 px-2">
                       <div className="bg-white rounded-lg shadow-md p-4 flex items-center">
                         <img
-                          src={book.image}
+                          src={book.imageUrl}
                           alt={book.title}
                           className="w-1/3 h-30 ml-4 object-cover rounded-lg"
                         />
@@ -77,20 +138,25 @@ export default function Allbooks() {
                             >
                               {book.title}
                             </h3>
-                            <div className="text-sm mb-2 text-gray-600" style={{ fontFamily: "Tajwal, sans-serif" }}>
-                              {book.type}
-                            </div>
+                            <div
+                            className={`text-sm mb-2 text-white px-2 py-1 rounded-lg inline-block ${availabilityStyle.bgColor}`}
+                            style={{ fontFamily: "Tajwal, sans-serif" }}
+                          >
+                            {availabilityStyle.text}
+                          </div>
+
                             <div className="text-lg font-bold mb-2">
-                              {book.price}
+                              {book.price} دينار
                             </div>
                           </div>
                           <div className="flex justify-between items-center">
                             <button
-                              className="bg-custom-orange text-white px-4 py-2 rounded-3xl"
-                              onClick={openBookDetails}
+                              className={`bg-custom-orange text-white px-4 py-2 rounded-3xl ${availabilityStyle.btnDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                              onClick={() => openBookDetails(book.id)}
                               style={{ fontFamily: "Tajwal, sans-serif" }}
+                              disabled={availabilityStyle.btnDisabled}
                             >
-                              اشترِ الآن
+                              {availabilityStyle.btnText}
                             </button>
                             <div className="text-gray-600">
                               <svg
@@ -113,15 +179,15 @@ export default function Allbooks() {
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-
-
+                  );
+                })}
+              </div>
+            ))}
           </div>
-    
+        </div>
       </div>
     </>
   );
 }
+
+export default Allbooks;
