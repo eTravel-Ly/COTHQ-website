@@ -13,7 +13,7 @@ const Login = () => {
   const handleClick = async (event) => {
     navigate('/HomeAfterLogin');
    event.preventDefault(); // منع إعادة تحميل الصفحة
- /*   if (!validate()) {
+  if (!validate()) {
       return;
     }
     try {
@@ -30,7 +30,7 @@ const Login = () => {
       } else {
         toast.error('حدث خطأ أثناء الادخال. الرجاء المحاولة مرة أخرى.');
       }
-    }*/
+    }
   };
 
   const [values, setValues] = useState({
