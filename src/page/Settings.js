@@ -14,7 +14,6 @@ const Settings = () => {
     newPassword: "",
     confirmPassword: "",
   });
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -34,12 +33,24 @@ const Settings = () => {
   };
 
   const handleSubmit = async () => {
-    if (passwords.newPassword !== passwords.confirmPassword) {
-      toast.warning(
-        "كلمة المرور الجديدة وتأكيد كلمة المرور الجديدة غير متطابقين.");
+    // Check if any field is empty
+    if (
+      !passwords.currentPassword ||
+      !passwords.newPassword ||
+      !passwords.confirmPassword
+    ) {
+      toast.warning("الرجاء ملء جميع الحقول.");
       return;
     }
-
+  
+    // Check if newPassword and confirmPassword match
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      toast.warning(
+        "كلمة المرور الجديدة وتأكيد كلمة المرور الجديدة غير متطابقين."
+      );
+      return;
+    }
+  
     try {
       const response = await axios.post(
         baseurl + "account/change-password",
@@ -53,10 +64,9 @@ const Settings = () => {
           },
         }
       );
-
+  
       if (response.status === 200) {
-      
-         toast.success("تم تغيير كلمة المرور بنجاح.");
+        toast.success("تم تغيير كلمة المرور بنجاح.");
       }
     } catch (error) {
       console.error(error);
@@ -190,7 +200,7 @@ const Settings = () => {
                         />
                       </div>
                       <input
-                        type="text"
+                        type="password"
                         placeholder={"ادخل كلمة المرور القديمة"}
                         name="currentPassword"
                         value={passwords.currentPassword}
@@ -202,7 +212,7 @@ const Settings = () => {
                         className="bg-gray-100 h-10 p-2 rounded-2xl items-center mb-2 mx-10 text-custom-blue outline-none text-l"
                       />
                       <input
-                        type="text"
+                        type="password"
                         placeholder={"ادخل كلمة المرور الجديدة"}
                         name="newPassword"
                         value={passwords.newPassword}
@@ -214,7 +224,7 @@ const Settings = () => {
                         className="bg-gray-100 h-10 p-2 rounded-2xl items-center mb-2 mx-10 text-custom-blue outline-none text-l"
                       />
                       <input
-                        type="text"
+                        type="password"
                         placeholder={"تأكيد كلمة المرور الجديدة"}
                         name="confirmPassword"
                         value={passwords.confirmPassword}
@@ -249,7 +259,7 @@ const Settings = () => {
             </div>
 
         </div>
-    );
+    
 
             <ToastContainer
               className={"toast-container"}

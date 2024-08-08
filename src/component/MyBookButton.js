@@ -69,7 +69,7 @@ const MyBookButton = () => {
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
             <div key={idx} className="w-1/4 p-2">
-              <div className="bg-white shadow-lg rounded-lg p-4 flex-shrink-0 flex items-center text-right">
+              <div className="bg-white shadow-lg rounded-lg p-3 w-80 flex-shrink-0 flex items-center text-right">
                 <img
                   src={book.coverImageUrl} 
                   alt={book.title}
