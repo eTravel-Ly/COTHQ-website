@@ -59,8 +59,8 @@ const MyBookButton = () => {
 
   // تقسيم الكتب إلى صفوف من 4
   const rows = [];
-  for (let i = 0; i < mybooks.length; i += 4) {
-    rows.push(mybooks.slice(i, i + 4));
+  for (let i = 0; i < mybooks.length; i += 3) {
+    rows.push(mybooks.slice(i, i + 3));
   }
 
   return (
@@ -68,7 +68,7 @@ const MyBookButton = () => {
       {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
-            <div key={idx} className="w-1/4 p-2">
+            <div key={idx} className="w-1/3 p-2">
               <div className="bg-white shadow-lg rounded-lg p-3 w-80 flex-shrink-0 flex items-center text-right">
                 <img
                   src={book.coverImageUrl} 

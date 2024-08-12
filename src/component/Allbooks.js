@@ -77,8 +77,8 @@ const Allbooks = () => {
     : books.filter(book => book.genre === selectedType);
 
   const rows = [];
-  for (let i = 0; i < filteredBooks.length; i += 4) {
-    rows.push(filteredBooks.slice(i, i + 4));
+  for (let i = 0; i < filteredBooks.length; i += 3) {
+    rows.push(filteredBooks.slice(i, i + 3));
   }
 
   
@@ -101,7 +101,7 @@ const Allbooks = () => {
 
   return (
     <>
-      <div className="flex h-screen">
+      <div>
         <div>
           <div className="mb-4">
             <select
@@ -119,18 +119,18 @@ const Allbooks = () => {
 
           <div className="p-4">
             {rows.map((row, index) => (
-              <div key={index} className="flex flex-wrap -mx-2 mb-4">
+              <div key={index} className="flex flex-wrap mb-4">
                 {row.map((book) => {
                   const availabilityStyle = getAvailabilityStyle(book.bookAvailability);
                   return (
-                    <div key={book.id} className="w-1/4 px-2">
-                      <div className="bg-white rounded-lg shadow-md p-4 flex items-center">
+                    <div key={book.id} className="w-1/3 p-2">
+                      <div className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex items-center text-right ">
                         <img
                           src={book.imageUrl}
                           alt={book.title}
-                          className="w-1/3 h-30 ml-4 object-cover rounded-lg"
+                         className="h-32 object-cover rounded-lg ml-4"
                         />
-                        <div className="w-2/3 pl-4 flex flex-col justify-between">
+                        <div className="w-3/4 pl-4 flex flex-col justify-between">
                           <div>
                             <h3
                               className="text-lg font-bold mb-2 text-custom-orange"

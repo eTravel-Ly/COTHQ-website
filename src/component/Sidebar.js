@@ -3,13 +3,13 @@ import logo from "../assets/images/logo.png";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoLibraryOutline } from "react-icons/io5";
 import { CiLaptop } from "react-icons/ci";
-import { SiGoogleclassroom } from "react-icons/si";
 import { CiShop } from "react-icons/ci";
-import { PiGraduationCapThin } from "react-icons/pi";
 import { FiAlertCircle } from "react-icons/fi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { GiTargetPrize } from "react-icons/gi";
+import { FaPeopleLine } from "react-icons/fa6";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -105,16 +105,16 @@ const Sidebar = () => {
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
-            <SiGoogleclassroom className="mr-2 ml-2 text-sm" />
-            الفصول الدراسية
+            <GiTargetPrize className="mr-2 ml-2 text-sm" />
+          المسابقـــات
           </a>
           <a
             href="#"
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
-            <PiGraduationCapThin className="mr-2 ml-2 text-sm" />
-            الموجهون
+            <FaPeopleLine className="mr-2 ml-2 text-sm" />
+            الندوات
           </a>
           <Link
             to="/Shop"

@@ -54,8 +54,8 @@ const books = [
 
 const ArchiveBookButton = () => {
   const rows = [];
-  for (let i = 0; i < books.length; i += 4) {
-    rows.push(books.slice(i, i + 4));
+  for (let i = 0; i < books.length; i += 3) {
+    rows.push(books.slice(i, i + 3));
   }
 
   return (
@@ -63,8 +63,8 @@ const ArchiveBookButton = () => {
       {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
-            <div key={idx} className="w-1/4 p-2"> {/* Changed from w-1/3 to w-1/4 */}
-              <div className="bg-white shadow-lg rounded-lg p-3 w-80 flex-shrink-0 flex items-center text-right"> {/* Adjusted padding and width */}
+            <div key={idx} className="w-1/3 p-2"> {/* Changed from w-1/3 to w-1/4 */}
+              <div className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex items-center text-right ">
                 <img
                   src={book.image}
                   alt={book.title}

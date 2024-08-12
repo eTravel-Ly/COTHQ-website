@@ -110,8 +110,8 @@ const WishlistBookButton = () => {
       : mybooks.filter((book) => book.genre === selectedType);
 
   const rows = [];
-  for (let i = 0; i < filteredBooks.length; i += 4) {
-    rows.push(filteredBooks.slice(i, i + 4));
+  for (let i = 0; i < filteredBooks.length; i += 3) {
+    rows.push(filteredBooks.slice(i, i + 3));
   }
 
   return (
@@ -132,12 +132,12 @@ const WishlistBookButton = () => {
       {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
-            <div key={idx} className="w-1/4 p-2">
-              <div className="bg-white rounded-lg shadow-md p-4 flex items-center">
+            <div key={idx} className="w-1/3 p-2">
+              <div  className="bg-white shadow-lg rounded-lg p-3  flex-shrink-0 flex items-center text-right ">
                 <img
                   src={book.coverImageUrl}
                   alt={book.title}
-                  className="w-1/4 h-30 ml-4 rounded-lg"
+                  className="h-32 object-cover rounded-lg ml-4"
                 />
                 <div className="w-3/4 pl-4 flex flex-col justify-between">
                   <div>
