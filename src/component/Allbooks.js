@@ -8,6 +8,7 @@ const Allbooks = () => {
   const [selectedType, setSelectedType] = useState('كل الأنواع');
   const [likedBooks, setLikedBooks] = useState({});
   const navigate = useNavigate();
+
   const handleLikeClick = async (id) => {
     try {
       const response = await axios.post(
@@ -44,12 +45,20 @@ const Allbooks = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           }
         });
+        
         const booksData = response.data.map(async (book) => {
           const imageUrl = await showpicbooks(book.coverImageUrl);
           return { ...book, imageUrl };
         });
         const booksWithImages = await Promise.all(booksData);
+
         setBooks(booksWithImages);
+
+        const initialLikedBooks = response.data.reduce((acc, book) => {
+          acc[book.id] = book.isFavorite;
+          return acc;
+        }, {});
+        setLikedBooks(initialLikedBooks);
       } catch (error) {
         console.error('Error fetching books:', error);
       }
@@ -81,7 +90,6 @@ const Allbooks = () => {
     rows.push(filteredBooks.slice(i, i + 3));
   }
 
-  
   const getAvailabilityStyle = (availability) => {
     switch (availability) {
       case 'AVAILABLE_BOTH':

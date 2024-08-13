@@ -91,12 +91,12 @@ const MyCoursesButton = () => {
                 </div>
                 <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
                   <span>تقدم الدورة</span>
-                  <span>{course.progress || 0}%</span>
+                  <span>{course.progressPercentage || 0}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
                   <div
                     className="bg-custom-orange h-2.5 rounded-full"
-                    style={{ width: `${course.progress || 0}%` }}
+                    style={{ width: `${course.progressPercentage || 0}%` }}
                   ></div>
                 </div>
               </div>

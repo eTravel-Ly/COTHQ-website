@@ -11,7 +11,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleClick = async (event) => {
-    navigate('/HomeAfterLogin');
    event.preventDefault(); // منع إعادة تحميل الصفحة
   if (!validate()) {
       return;

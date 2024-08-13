@@ -1,30 +1,48 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
-import ContinueWatchingSection1 from "../assets/images/ContinueWatchingSection1.png";
+import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { baseurl } from "../helper/Baseurl";
 
 const ContinueWatchingSection = () => {
-  const shows = [
-    {
-      title: "شرح متن الآجرومية",
-      description:
-        "متن مشهور في النحو لأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بـابن آجروم؛ وقد تلقاها العلماء بالقبول، وقد جرت عادة العلماء في شتَّى البلاد على الاعتناء بها؛ شرحاً وحفظاً وتحفيظاً",
-      image: ContinueWatchingSection1,
-      progress: 80,
-    },
-    {
-      title: "شرح متن الآجرومية",
-      description:
-        "متن مشهور في النحو لأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بـابن آجروم؛ وقد تلقاها العلماء بالقبول، وقد جرت عادة العلماء في شتَّى البلاد على الاعتناء بها؛ شرحاً وحفظاً وتحفيظاً",
-      image: ContinueWatchingSection1,
-      progress: 60,
-    },
-    // يمكن إضافة المزيد من الدورات إذا لزم الأمر
-  ];
+  const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
-  const openShowcourse = () => {
-    navigate('/Showcourse');
+
+  // Function to generate image URL
+  const generateImageUrl = (coverImageUrl) => {
+    const baseImageUrl = `${baseurl}uploads/file/download/`;
+    return coverImageUrl
+      ? `${baseImageUrl}${coverImageUrl}`
+      : "default-image-path"; // Replace with a path to a default image if necessary
   };
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(baseurl + "my-courses", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const validCourses = response.data.filter(
+        (course) => course && course.coverImageUrl
+      );
+
+      const updatedCourses = validCourses.map((course) => ({
+        ...course,
+        imageUrl: generateImageUrl(course.coverImageUrl),
+      }));
+
+      setCourses(updatedCourses);
+    } catch (error) {
+      console.error("Error fetching courses data", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
   const scrollContainerRef = useRef(null);
 
   const scrollLeft = () => {
@@ -50,6 +68,10 @@ const ContinueWatchingSection = () => {
     onSwipedRight: () => scrollLeft(),
   });
 
+  const openShowcourse = () => {
+    navigate('/Showcourse');
+  };
+
   return (
     <div className="p-4" {...handlers}>
       <h2
@@ -70,7 +92,7 @@ const ContinueWatchingSection = () => {
           textAlign: "right",
         }}
       >
-        استمر في مشاهدة الدورات الذي بدأت قراءتها بالفعل
+        استمر في مشاهدة الدورات التي بدأت مشاهدتها بالفعل
       </h4>
       <div className="relative">
         <button
@@ -85,7 +107,7 @@ const ContinueWatchingSection = () => {
           className="flex overflow-x-auto space-x-4 scrollbar-hide justify-end mx-5"
           style={{ scrollBehavior: "smooth", height: "280px" }}
         >
-          {shows.map((show, index) => (
+          {courses.map((course, index) => (
             <div
               key={index}
               className="bg-white shadow-lg rounded-lg p-3 w-60 flex-shrink-0 text-right"
@@ -93,35 +115,34 @@ const ContinueWatchingSection = () => {
               onClick={openShowcourse}
             >
               <img
-                src={show.image}
-                alt={show.title}
-                className="h-24 object-cover rounded"
+                src={course.imageUrl}
+                alt={course.title}
+                className="h-24 w-auto object-cover rounded"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               />
               <h3
                 className="text-md font-bold mt-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                {show.title}
+                {course.title}
               </h3>
               <p
-              className="text-gray-600 text-xs"
-              style={{
-                fontFamily: "Tajwal, sans-serif",
-                textAlign: "justify", // توزيع النص لتملأ العرض
-                lineHeight: "1.5", // لضبط المسافة بين الأسطر
-                marginBottom: "8px" // المسافة بين الفقرات
-              }}
-            >
-              {show.description}
-            </p>
-
+                className="text-gray-600 text-xs"
+                style={{
+                  fontFamily: "Tajwal, sans-serif",
+                  textAlign: "justify",
+                  lineHeight: "1.5",
+                  marginBottom: "8px",
+                }}
+              >
+                {course.description}
+              </p>
               <div className="mt-2 relative">
                 <div
                   className="absolute left-0 text-xs text-gray-700"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
-                  {show.progress}%
+                  {course.progressPercentage}%
                 </div>
                 <div
                   className="absolute right-0 text-xs text-gray-700"
@@ -133,7 +154,7 @@ const ContinueWatchingSection = () => {
               <div className="w-full bg-gray-200 rounded-full h-2 mt-6">
                 <div
                   className="bg-custom-orange h-2 rounded-full"
-                  style={{ width: `${show.progress}%` }}
+                  style={{ width: `${course.progressPercentage}%` }}
                 ></div>
               </div>
             </div>

@@ -8,18 +8,19 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 
-const showPicCourses = async (fileName) => {
-  try {
-    const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
-    console.log("Fetched image URL:", imageUrl);
-    return imageUrl;
-  } catch (error) {
-    console.error("Error fetching image:", error);
-    return null;
-  }
-};
+
 
 export default function AllCourses() {
+  const showPicCourses = async (fileName) => {
+    try {
+      const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
+      console.log("Fetched image URL:", imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error("Error fetching image:", error);
+      return null;
+    }
+  };
   const [courses, setCourses] = useState([]);
   const [likedCourses, setLikedCourses] = useState({});
   const navigate = useNavigate();

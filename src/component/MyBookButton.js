@@ -85,13 +85,13 @@ const MyBookButton = () => {
                   <div className="flex justify-between mt-2">
                     <p className="text-sm text-gray-500">نسبة التقدم</p>
                     <p className="text-sm text-custom-orange font-bold">
-                      {book.progress || 0}%
+                      {book.progressPercentage || 0}%
                     </p>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
                     <div
                       className="bg-custom-orange h-2.5 rounded-full"
-                      style={{ width: `${book.progress || 0}%` }}
+                      style={{ width: `${book.progressPercentage || 0}%` }}
                     ></div>
                   </div>
 
