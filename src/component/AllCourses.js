@@ -80,8 +80,8 @@ export default function AllCourses() {
     rows.push(courses.slice(i, i + 4));
   }
 
-  const openCoursesDetails = () => {
-    navigate("/CoursesDetails");
+  const openCoursesDetails = (courseId) => {
+    navigate(`/CoursesDetails/${courseId}`);
   };
 
   return (
@@ -157,7 +157,8 @@ export default function AllCourses() {
                       <button
                         className="bg-custom-orange text-white px-4 py-2 rounded-3xl"
                         style={{ fontFamily: "Tajwal, sans-serif" }}
-                        onClick={openCoursesDetails}
+                        
+                        onClick={() => openCoursesDetails(course.id)}
                       >
                         اشتر الآن
                       </button>

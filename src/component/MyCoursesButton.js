@@ -43,8 +43,8 @@ const MyCoursesButton = () => {
     fetchCourses();
   }, []);
 
-  const openShowcourse = () => {
-    navigate("/Showcourse");
+  const openShowcourse = (courseId) => {
+    navigate(`/Showcourse/${courseId}`);
   };
 
   // Split courses into rows of 4
@@ -54,11 +54,15 @@ const MyCoursesButton = () => {
   }
 
   return (
-    <div className="p-4" onClick={openShowcourse}>
+    <div className="p-4">
       {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((course, idx) => (
-            <div key={idx} className="w-1/4 p-2">
+            <div
+              key={idx}
+              className="w-1/4 p-2"
+              onClick={() => openShowcourse(course.id)}
+            >
               <div className="bg-white rounded-lg shadow-md p-4">
                 <img
                   src={course.imageUrl}

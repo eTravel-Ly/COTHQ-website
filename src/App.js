@@ -34,9 +34,12 @@ function App() {
           <Route path="/MyBooks" element={<MyBooks />} />
           <Route path="/BookDetails/:bookId" element={<BookDetails />} />
           <Route path="/ReadBooks" element={<ReadBooks />} />
-          <Route path="/Showcourse" element={<Showcourse />} />
+          <Route path="/Showcourse/:courseId" element={<Showcourse />} />
           <Route path="/ShoppingCart" element={<ShoppingCart />} />
-          <Route path="/CoursesDetails" element={<CoursesDetails />} />
+          <Route
+            path="/CoursesDetails/:courseId"
+            element={<CoursesDetails />}
+          />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/AllNotify" element={<AllNotify />} />
