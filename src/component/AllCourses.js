@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
 import CourseImage from "../assets/images/ContinueWatchingSection1.png"; // Replace with your actual image import
-import { FaStar, FaRegUserCircle } from "react-icons/fa"; // Import the star icon from react-icons
-import { MdOutlineLibraryBooks } from "react-icons/md";
-import { IoIosTimer } from "react-icons/io";
-import { PiUsersThreeLight } from "react-icons/pi";
+import { FaRegUserCircle } from "react-icons/fa"; // Import the star icon from react-icons
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
-
-
 
 export default function AllCourses() {
   const showPicCourses = async (fileName) => {
@@ -21,6 +16,7 @@ export default function AllCourses() {
       return null;
     }
   };
+
   const [courses, setCourses] = useState([]);
   const [likedCourses, setLikedCourses] = useState({});
   const navigate = useNavigate();
@@ -113,36 +109,15 @@ export default function AllCourses() {
                         {course.createdBy}
                       </p>
                     </div>
-                    {/* <div className="flex items-center mb-2">
-                      <FaStar className="text-yellow-500 mr-1" />
-                      <p className="text-xs mr-1">{course.rating}</p>
-                    </div>
-                    <div
-                      className="flex items-center text-xs text-gray-600 justify-between"
-                      style={{ fontFamily: "Tajwal, sans-serif" }}
-                    >
-                      <div className="flex items-center ml-2">
-                        <MdOutlineLibraryBooks className="text-gray-600 ml-2" />
-                        <p>{course.lessons}</p>
-                      </div>
-                      <div className="flex items-center ml-2">
-                        <IoIosTimer className="text-gray-600 ml-2" />
-                        <p>{course.duration}</p>
-                      </div>
-                      <div className="flex items-center">
-                        <PiUsersThreeLight className="text-gray-600 ml-2" />
-                        <p>{course.students}</p>
-                      </div>
-                    </div> */}
                     <div className="flex items-center justify-between mt-2">
                       <div className="text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          fill={likedCourses[course.id] ? "#ff3f52" : "none"}
+                          fill={course.isFavorite ? "#ff3f52" : "none"}
                           viewBox="0 0 24 24"
                           strokeWidth="1.5"
                           stroke={
-                            likedCourses[course.id] ? "#ff3f52" : "currentColor"
+                            course.isFavorite ? "#ff3f52" : "currentColor"
                           }
                           className="w-6 h-6 cursor-pointer"
                           onClick={() => handleLikeClick(course.id)}
@@ -157,7 +132,6 @@ export default function AllCourses() {
                       <button
                         className="bg-custom-orange text-white px-4 py-2 rounded-3xl"
                         style={{ fontFamily: "Tajwal, sans-serif" }}
-                        
                         onClick={() => openCoursesDetails(course.id)}
                       >
                         اشتر الآن
