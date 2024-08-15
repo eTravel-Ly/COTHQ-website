@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import pdf from "../assets/images/Noor-Book.pdf";
 import { FaShareAlt, FaCheck } from 'react-icons/fa';
 import { IoIosArrowForward } from "react-icons/io";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 import user from "../assets/images/4EyBa.png";
 import { CiFacebook } from "react-icons/ci";
 import { CiTwitter } from "react-icons/ci";
 import { PiInstagramLogoLight } from "react-icons/pi";
-
+import { baseurl } from "../helper/Baseurl";
+import axios from "axios";
 const ReadBooks = () => {
     const navigate = useNavigate();
     const backpage = () => {
@@ -16,7 +17,6 @@ const ReadBooks = () => {
     const [note, setNote] = useState('');
 
     const handleSave = () => {
-      // Implement your save logic here
       console.log('Note saved:', note);
     };
   
@@ -25,8 +25,38 @@ const ReadBooks = () => {
     };
 
     const [activeButton, setActiveButton] = useState('نظرة عامة');
+    const [book, setBook] = useState(null);
+    const { bookId } = useParams();
 
-
+    
+    useEffect(() => {
+        // Fetch course data from the API
+        const fetchbook = async () => {
+          try {
+            console.log(bookId);
+            const response = await axios.get(`${baseurl}book/${bookId}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            });
+            console.log("bookId data fetched successfully:", response.data);
+            setBook(response.data);
+          } catch (error) {
+            console.error("Error fetching course data:", error);
+          }
+        };
+    
+        fetchbook();
+      }, [bookId]);
+   
+    
+      if (!book) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+              <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+            </div>
+          );
+      }
     return (
         <div className="bg-white font-tajwal min-h-screen" dir="rtl">
             {/* Navbar */}
@@ -43,9 +73,9 @@ const ReadBooks = () => {
                 <div className="flex items-center">
                     <span className="text-gray-700 ml-2">تقدم القراءة</span>
                     <div className="w-48 bg-gray-200 rounded-full h-2 relative">
-                        <div className="bg-custom-orange h-full rounded-full" style={{ width: '70%' }}></div>
+                        <div className="bg-custom-orange h-full rounded-full" style={{ width: `${book.progressPercentage}%` }}></div>
                     </div>
-                    <span className="ml-2 text-gray-700">70%</span>
+                    <span className="ml-2 text-gray-700">  {book.progressPercentage}%</span>
                 </div>
             </nav>
 
@@ -117,18 +147,7 @@ const ReadBooks = () => {
                         lineHeight: "1.5", // لضبط المسافة بين الأسطر
                         marginBottom: "8px" // المسافة بين الفقرات
                         }}>
-                    "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم.
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم..."
-                    "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم.
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم..."
-                    "متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم.
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم...
-                    متن مشهور في النحو للأبي عبدالله محمد بن محمد بن داود الصنهاجي المعروف بابن آجروم..."
+                   {book.description}
                 </p>
 
 
@@ -137,8 +156,8 @@ const ReadBooks = () => {
                     <div className="flex items-center p-4 border border-gray-300 rounded-lg w-72 h-24">
                         <img src={user} alt="Author" className="w-12 h-12 rounded-full mr-1" />
                         <div className="flex-1 mr-5">
-                        <h5 className="text-sm font-semibold">أحمد السيد</h5>
-                        <p className="text-gray-600 text-sm">أصول الفقه</p>
+                        <h5 className="text-sm font-semibold">{book.author}</h5>
+                        <p className="text-gray-600 text-sm">{book.genre}</p>
                         <div className="flex space-x-2 mt-2">
                             <CiFacebook className=" text-gray-600"/>
                             <CiTwitter className=" text-gray-600"/>
@@ -156,10 +175,17 @@ const ReadBooks = () => {
                     {/* Header for Reviews */}
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center">
-                        <span className="text-gray-700 font-semibold">المراجعات (145)</span>
+                        <span className="text-gray-700 font-semibold">المراجعات ({book.comments.length})</span>
                         <div className="flex items-center ml-4">
                             <span className="text-yellow-500">⭐</span>
-                            <span className="ml-1 text-gray-700">4.5</span>
+                            <span className="ml-1 text-gray-700">
+                            {(
+                            book.comments.reduce(
+                              (acc, comment) => acc + comment.rating,
+                              0
+                            ) / book.comments.length
+                          ).toFixed(1)}
+                            </span>
                         </div>
                         </div>
                         <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
@@ -188,88 +214,46 @@ const ReadBooks = () => {
 
                     {/* Comments Container */}
                     <div className="max-h-60 overflow-y-auto">
-                        {/* Single Comment */}
-                        <div className="flex items-start mb-4 p-4 border-b">
-                        <img
+                        {/* Single Comment  */}
+                       
+                        {book.comments.length > 0 ? (
+                      book.comments.map((comment) => (
+                        <div
+                          key={comment.id}
+                          className="flex items-start mb-4 p-4 border-b"
+                        >
+                          <img
                             src={user}
                             alt="User"
                             className="w-12 h-12 rounded-full mr-4"
-                        />
-                        <div className="flex-1">
+                          />
+                          <div className="flex-1">
                             <div className="flex items-center mb-2">
-                            <span className="font-semibold mr-2">اروى ابوزقية </span>
-                            <div className="flex items-center">
+                              <span className="font-semibold mr-2">
+                                {comment.learner.firstName}{" "}
+                                {comment.learner.lastName}
+                              </span>
+                              <div className="flex items-center">
                                 <span className="text-yellow-500">⭐</span>
-                                <span className="ml-1 text-gray-700">4.0</span>
+                                <span className="ml-1 text-gray-700">
+                                  {comment.rating}
+                                </span>
+                              </div>
                             </div>
+                            <p className="text-gray-700">{comment.details}</p>
+                            <div className="flex items-center mt-2 text-gray-600">
+                              <span className="mr-2">
+                                👍 {comment.likesCount}
+                              </span>
+                              <span>👎 {comment.dislikesCount}</span>
                             </div>
-                            <p className="text-gray-700">
-                            هذا هو نص التعليق. يمكن أن يكون طويلًا قليلاً ولكن سيتم اقتصاصه تلقائيًا إذا كان هناك الكثير من النص.
-                            </p>
+                          </div>
                         </div>
-
-                        </div>
-                        <div className="flex items-start mb-4 p-4 border-b">
-                        <img
-                            src={user}
-                            alt="User"
-                            className="w-12 h-12 rounded-full mr-4"
-                        />
-                        <div className="flex-1">
-                            <div className="flex items-center mb-2">
-                            <span className="font-semibold mr-2">اروى ابوزقية </span>
-                            <div className="flex items-center">
-                                <span className="text-yellow-500">⭐</span>
-                                <span className="ml-1 text-gray-700">4.0</span>
-                            </div>
-                            </div>
-                            <p className="text-gray-700">
-                            هذا هو نص التعليق. يمكن أن يكون طويلًا قليلاً ولكن سيتم اقتصاصه تلقائيًا إذا كان هناك الكثير من النص.
-                            </p>
-                        </div>
-                        
-                        </div>
-                        <div className="flex items-start mb-4 p-4 border-b">
-                        <img
-                            src={user}
-                            alt="User"
-                            className="w-12 h-12 rounded-full mr-4"
-                        />
-                        <div className="flex-1">
-                            <div className="flex items-center mb-2">
-                            <span className="font-semibold mr-2">اروى ابوزقية </span>
-                            <div className="flex items-center">
-                                <span className="text-yellow-500">⭐</span>
-                                <span className="ml-1 text-gray-700">4.0</span>
-                            </div>
-                            </div>
-                            <p className="text-gray-700">
-                            هذا هو نص التعليق. يمكن أن يكون طويلًا قليلاً ولكن سيتم اقتصاصه تلقائيًا إذا كان هناك الكثير من النص.
-                            </p>
-                        </div>
-                        
-                        </div>
-                        <div className="flex items-start mb-4 p-4 border-b">
-                        <img
-                            src={user}
-                            alt="User"
-                            className="w-12 h-12 rounded-full mr-4"
-                        />
-                        <div className="flex-1">
-                            <div className="flex items-center mb-2">
-                            <span className="font-semibold mr-2">اروى ابوزقية </span>
-                            <div className="flex items-center">
-                                <span className="text-yellow-500">⭐</span>
-                                <span className="ml-1 text-gray-700">4.0</span>
-                            </div>
-                            </div>
-                            <p className="text-gray-700">
-                            هذا هو نص التعليق. يمكن أن يكون طويلًا قليلاً ولكن سيتم اقتصاصه تلقائيًا إذا كان هناك الكثير من النص.
-                            </p>
-                        </div>
-                        
-                        </div>
-                        {/* Repeat the comment block for each review */}
+                      ))
+                    ) : (
+                      <p className="text-gray-700">لا توجد مراجعات متاحة</p>
+                    )}
+                       
                     </div>
                     </div>
                     </div>

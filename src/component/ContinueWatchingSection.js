@@ -117,7 +117,7 @@ const ContinueWatchingSection = () => {
               <img
                 src={course.imageUrl}
                 alt={course.title}
-                className="h-24 w-auto object-cover rounded"
+                className="h-24 w-96 object-cover rounded"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               />
               <h3

@@ -140,7 +140,7 @@ const NewCoursesSection = () => {
               <img
                 src={course.imageUrl}
                 alt={course.title}
-                className="h-24 object-cover rounded mb-2"
+                className="h-24  w-96  object-cover rounded mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               />
               <div className="flex items-center mb-2">

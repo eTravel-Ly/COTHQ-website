@@ -9,7 +9,10 @@ const ContinueReadingSection = () => {
   const [mybooks, setMyBooks] = useState([]);
   const navigate = useNavigate();
 
-
+  const openBook = (bookId) => {
+    navigate(`/ReadBooks/${bookId}`);
+  };
+   
   const showMyBooks = async () => {
     try {
       const response = await axios.get(
@@ -81,9 +84,7 @@ const ContinueReadingSection = () => {
     onSwipedRight: () => scrollLeft(),
   });
 
-  const openBook = () => {
-    navigate('/ReadBooks');
-  };
+ 
 
   return (
     <div className="p-4 rounded-md" {...handlers}>
@@ -125,7 +126,7 @@ const ContinueReadingSection = () => {
               key={index}
               className="bg-white shadow-lg rounded-lg p-2 w-80 flex-shrink-0 flex items-center text-right"
               style={{ direction: "rtl" }}
-              onClick={openBook}
+              onClick={() => openBook(book.id)}
             >
               <img
                 src={book.coverImageUrl}

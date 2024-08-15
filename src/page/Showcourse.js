@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaShareAlt, FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
-
 import video1 from "../assets/images/1.mp4";
 import user from "../assets/images/4EyBa.png";
 import { CiFacebook } from "react-icons/ci";
@@ -61,7 +60,11 @@ const Showcourse = () => {
   };
 
   if (!course) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
   }
   return (
     <div className="bg-white font-tajwal min-h-screen" dir="rtl">

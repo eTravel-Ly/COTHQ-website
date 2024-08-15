@@ -5,8 +5,9 @@ import axios from 'axios';
 
 const MyBookButton = () => {
   const navigate = useNavigate();
-  const openBook = () => {
-    navigate('/ReadBooks');
+
+  const openBook = (bookId) => {
+    navigate(`/ReadBooks/${bookId}`);
   };
 
   const [mybooks, setMyBooks] = useState([]);
@@ -64,11 +65,11 @@ const MyBookButton = () => {
   }
 
   return (
-    <div className="p-4" onClick={openBook}>
+    <div className="p-4" >
       {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
-            <div key={idx} className="w-1/3 p-2">
+            <div key={idx} className="w-1/3 p-2" onClick={() => openBook(book.id)}>
               <div className="bg-white shadow-lg rounded-lg p-3 w-80 flex-shrink-0 flex items-center text-right">
                 <img
                   src={book.coverImageUrl} 
