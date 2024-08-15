@@ -67,6 +67,8 @@ const NewCoursesSection = () => {
       }
     };
     fetchCourses();
+
+    
   }, []);
 
   const scrollLeft = () => {

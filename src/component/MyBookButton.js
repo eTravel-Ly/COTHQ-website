@@ -63,10 +63,10 @@ const MyBookButton = () => {
   for (let i = 0; i < mybooks.length; i += 3) {
     rows.push(mybooks.slice(i, i + 3));
   }
-
+ 
   return (
     <div className="p-4" >
-      {rows.map((row, index) => (
+      {rows.map((row, index) => ( 
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
             <div key={idx} className="w-1/3 p-2" onClick={() => openBook(book.id)}>

@@ -20,6 +20,7 @@ const ContinueWatchingSection = () => {
     try {
       const response = await axios.get(baseurl + "my-courses", {
         headers: {
+          
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
