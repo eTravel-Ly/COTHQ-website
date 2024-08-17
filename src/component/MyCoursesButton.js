@@ -63,7 +63,7 @@ const MyCoursesButton = () => {
               className="w-1/4 p-2"
               onClick={() => openShowcourse(course.id)}
             >
-              <div className="bg-white rounded-lg shadow-md p-4">
+              <div className="bg-white rounded-lg shadow-md p-3">
                 <img
                   src={course.imageUrl}
                   alt={course.title}
@@ -71,7 +71,7 @@ const MyCoursesButton = () => {
                 />
                 <h3 className="text-lg font-semibold mb-2">{course.title}</h3>
                 <p
-                  className="text-sm text-gray-500 mb-2"
+                  className="text-xs text-gray-500 mb-2"
                   style={{
                     fontFamily: "Tajwal, sans-serif",
                     textAlign: "justify",
@@ -87,7 +87,7 @@ const MyCoursesButton = () => {
                     style={{ marginRight: "4px" }}
                   />
                   <p
-                    className="text-sm text-gray-600"
+                    className="text-xs text-gray-600"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
                     {course.instructor || "Unknown Instructor"}
