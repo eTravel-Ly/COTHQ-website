@@ -100,8 +100,9 @@ const WishlistBookButton = () => {
     setSelectedType(event.target.value);
   };
 
-  const openBookDetails = () => {
-    navigate("/BookDetails");
+
+  const openBookDetails = (bookId) => {
+    navigate(`/BookDetails/${bookId}`);
   };
 
   const filteredBooks =
@@ -161,7 +162,7 @@ const WishlistBookButton = () => {
                     <button
                       className="bg-custom-orange text-white px-4 py-2 rounded-3xl"
                       style={{ fontFamily: "Tajwal, sans-serif" }}
-                      onClick={openBookDetails}
+                      onClick={() => openBookDetails(book.id)}
                     >
                       اشترِ الآن
                     </button>
