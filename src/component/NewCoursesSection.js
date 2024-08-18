@@ -94,9 +94,9 @@ const NewCoursesSection = () => {
     onSwipedRight: () => scrollLeft(),
   });
 
-  const openCoursesDetails = () => {
-    navigate("/CoursesDetails");
-  };
+   const openCoursesDetails = (courseId) => {
+     navigate(`/CoursesDetails/${courseId}`);
+   };
 
   return (
     <div className="p-4" {...handlers}>
@@ -170,29 +170,27 @@ const NewCoursesSection = () => {
               >
                 {course.description}
               </p>
-              
-              <div className="flex items-center justify-between mt-2">
-               
 
-                             <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill={likedCourses[course.id] ? "#ff3f52" : "none"}
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke={likedCourses[course.id] ? "#ff3f52" : "currentColor"}
-                                className="w-6 h-6 cursor-pointer"
-                                onClick={() => handleLikeClick(course.id)}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                                />
-                              </svg>
+              <div className="flex items-center justify-between mt-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill={likedCourses[course.id] ? "#ff3f52" : "none"}
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke={likedCourses[course.id] ? "#ff3f52" : "currentColor"}
+                  className="w-6 h-6 cursor-pointer"
+                  onClick={() => handleLikeClick(course.id)}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  />
+                </svg>
                 <button
                   className="bg-custom-orange text-white px-3 py-1.5 rounded-3xl text-sm"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
-                  onClick={openCoursesDetails}
+                  onClick={() => openCoursesDetails(course.id)}
                 >
                   اشتر الآن
                 </button>

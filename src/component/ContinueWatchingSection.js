@@ -69,9 +69,9 @@ const ContinueWatchingSection = () => {
     onSwipedRight: () => scrollLeft(),
   });
 
-  const openShowcourse = () => {
-    navigate('/Showcourse');
-  };
+   const openShowcourse = (courseId) => {
+     navigate(`/Showcourse/${courseId}`);
+   };
 
   return (
     <div className="p-4" {...handlers}>
@@ -113,7 +113,7 @@ const ContinueWatchingSection = () => {
               key={index}
               className="bg-white shadow-lg rounded-lg p-3 w-60 flex-shrink-0 text-right"
               style={{ direction: "rtl", height: "100%" }}
-              onClick={openShowcourse}
+              onClick={() => openShowcourse(course.id)}
             >
               <img
                 src={course.imageUrl}

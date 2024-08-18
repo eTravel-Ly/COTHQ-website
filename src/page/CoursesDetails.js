@@ -93,9 +93,9 @@ const CoursesDetails = () => {
               <img
                 src={courseData.coverImageUrl || "default-image.png"}
                 alt="Course"
-                className="w-70"
+                className="  w-full h-60 rounded-md"
               />
-              <FaPlayCircle className="absolute top-24 left-36 m-2 text-gray-300 text-7xl" />
+              <FaPlayCircle className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-300 text-7xl" />
             </div>
 
             {/* Course Information */}
