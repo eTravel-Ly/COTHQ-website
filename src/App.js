@@ -18,6 +18,8 @@ import {
   Profile,
   OrderHistory,
   AllNotify,
+  BorrowsHistory,
+  Myborrow
 } from "./page/index";
 function App() {
   return (
@@ -44,6 +46,10 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/AllNotify" element={<AllNotify />} />
           <Route path="/OrderHistory" element={<OrderHistory />} />
+          <Route path="/BorrowsHistory" element={<BorrowsHistory />} />
+          <Route path="/Myborrow" element={<Myborrow />} />
+
+          
         </Routes>
       </BrowserRouter>
     </>

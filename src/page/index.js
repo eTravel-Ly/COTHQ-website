@@ -16,6 +16,8 @@ export { default as Settings } from "./Settings";
 export { default as Profile } from "./Profile";
 export { default as OrderHistory } from "./OrderHistory";
 export { default as AllNotify } from "./AllNotify";
+export { default as BorrowsHistory } from "./BorrowsHistory";
+export { default as Myborrow } from "./Myborrow";
 
 
 export {};

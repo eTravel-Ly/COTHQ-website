@@ -55,20 +55,20 @@ const Sidebar = () => {
             </button>
             {isLibraryOpen && (
               <div className="flex flex-col bg-white pl-12">
-                <a
-                  href="#"
+                <Link
+                  to="/MyBooks"
                   className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
                   style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
                 >
                   مكتبة رقمية
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/Myborrow"
                   className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
                   style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
                 >
                   مكتبة محلية
-                </a>
+                </Link>
               </div>
             )}
           </div>

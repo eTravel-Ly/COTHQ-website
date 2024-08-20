@@ -6,6 +6,7 @@ import { FiUser } from "react-icons/fi";
 import Notifications from './Notifications';
 import { Link } from "react-router-dom";
 import { GrUnorderedList } from "react-icons/gr";
+import { CiViewList } from "react-icons/ci";
 
 const NavbarLogin = () => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -51,6 +52,14 @@ const NavbarLogin = () => {
               >
                 <span>قائمة الطلبات </span>
                 <GrUnorderedList className="ml-2" />
+              </Link>
+              <Link
+                to="/borrowsHistory"
+                className=" px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
+                style={{ fontFamily: "Tajwal, sans-serif" }}
+              >
+                <span>طلبات الاستعارة </span>
+                <CiViewList className="ml-2" />
               </Link>
               <button
                 className=" w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"

@@ -59,6 +59,24 @@ const ReadBooks = () => {
             
           );
       }
+
+      ///////////////////////////////////////////////////////////
+   /* const [lastPage, setLastPage] = useState(1); // افتراضياً يبدأ من الصفحة 1
+
+      // حفظ رقم الصفحة عند تغيير الصفحة
+      const savePage = (page) => {
+        setLastPage(page);
+        localStorage.setItem('lastPage', page); // حفظها في localStorage
+        // هنا يمكنك إرسالها إلى الـ backend أيضاً إن كنت ترغب
+      };
+    
+      useEffect(() => {
+        // استرجاع آخر صفحة محفوظة من localStorage عند تحميل الصفحة
+        const savedPage = localStorage.getItem('lastPage');
+        if (savedPage) {
+          setLastPage(parseInt(savedPage, 10));
+        }
+      }, [bookId]);*/   
     return (
         <div className="bg-white font-tajwal min-h-screen" dir="rtl">
             {/* Navbar */}
@@ -84,13 +102,14 @@ const ReadBooks = () => {
             {/* Main Content */}
             <main className="p-4 pt-20">
                 <div className="pdf-container mb-4 bg-white shadow-md" style={{ height: '800px' }}>
-                    <embed
-                        src={pdf}
-                        type="application/pdf"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none' }}
-                    />
+                <embed
+                //  src={`${pdf}#page=${lastPage}`}
+                  type="application/pdf"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 'none' }}
+             //     onLoad={() => savePage(lastPage)} // تخزين الصفحة الحالية
+                />
                 </div>
         
                 <div className="flex justify-between items-center mt-4">
