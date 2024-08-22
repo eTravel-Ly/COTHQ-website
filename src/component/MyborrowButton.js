@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { baseurl } from '../helper/Baseurl';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { baseurl } from "../helper/Baseurl";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyborrowButton = () => {
   const navigate = useNavigate();
-
-
   const [mybooks, setMyBooks] = useState([]);
+  const [notificationShown, setNotificationShown] = useState(false);
 
   const showMyBooks = async () => {
     try {
-      const response = await axios.get(
-        baseurl+ 'my-book-borrows',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const response = await axios.get(baseurl + "my-book-borrows", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (response.data && Array.isArray(response.data[0])) {
         return response.data[0]; // Return the books array
       }
     } catch (error) {
-      console.error('Error fetching my books:', error);
+      console.error("Error fetching my books:", error);
       return [];
     }
   };
@@ -33,7 +31,7 @@ const MyborrowButton = () => {
       const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
       return imageUrl;
     } catch (error) {
-      console.error('Error fetching image:', error);
+      console.error("Error fetching image:", error);
       return null;
     }
   };
@@ -43,13 +41,16 @@ const MyborrowButton = () => {
       const booksData = await showMyBooks();
       if (!booksData || booksData.length === 0) return;
 
-      const updatedBooks = await Promise.all(booksData.map(async (order) => {
-        const imageUrl = await showpicbooks(order.book.coverImageUrl);
-        return {
-          ...order.book,
-          coverImageUrl: imageUrl,
-        };
-      }));
+      const updatedBooks = await Promise.all(
+        booksData.map(async (order) => {
+          const imageUrl = await showpicbooks(order.book.coverImageUrl);
+          return {
+            ...order.book,
+            returnDate: order.returnDate, // Ensure returnDate is included
+            coverImageUrl: imageUrl,
+          };
+        })
+      );
 
       console.log("Updated books with images:", updatedBooks);
       setMyBooks(updatedBooks);
@@ -57,7 +58,44 @@ const MyborrowButton = () => {
     fetchData();
   }, []);
 
-  // تقسيم الكتب إلى صفوف من 3
+  // Format date
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateString).toLocaleDateString("en-GB", options);
+  };
+
+  // Check if date is past
+  const isDatePast = (dateString) => {
+    return new Date(dateString) < new Date();
+  };
+
+  // Notify if return date is past
+  const notifyPastReturnDate = () => {
+    toast.warning("لديك كتب مستعارة يجب ارجاعها", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  useEffect(() => {
+    // Notify if any book's return date is past, but only once
+    if (!notificationShown) {
+      const hasOverdueBooks = mybooks.some((book) =>
+        isDatePast(book.returnDate)
+      );
+      if (hasOverdueBooks) {
+        notifyPastReturnDate();
+        setNotificationShown(true); // Set the flag to true after showing notification
+      }
+    }
+  }, [mybooks, notificationShown]);
+
+  // Split books into rows of 3
   const rows = [];
   for (let i = 0; i < mybooks.length; i += 3) {
     rows.push(mybooks.slice(i, i + 3));
@@ -65,6 +103,7 @@ const MyborrowButton = () => {
 
   return (
     <div className="p-4">
+      <ToastContainer />
       {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
@@ -80,10 +119,19 @@ const MyborrowButton = () => {
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
                   <h3 className="text-lg font-bold mb-2">{book.title}</h3>
-                  <p className="text-sm text-gray-500">{book.description}</p>
-
-                  
-
+                  <p className="text-sm text-gray-500 mb-2">
+                    {book.description}
+                  </p>
+                  {/* Add formatted return date */}
+                  <p
+                    className={`text-sm font-bold ${
+                      isDatePast(book.returnDate)
+                        ? "text-red-500"
+                        : "text-gray-700"
+                    }`}
+                  >
+                    تاريخ الإرجاع: {formatDate(book.returnDate)}
+                  </p>
                 </div>
               </div>
             </div>

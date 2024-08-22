@@ -1,19 +1,76 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import Forgotpassword from "../assets/images/Forgotpassword.png";
-import {  ToastContainer, toast  } from 'react-toastify'; 
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseurl } from "../helper/Baseurl";
+
 const Settings = () => {
+  const [profileData, setProfileData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobileNo: "",
+    learnerType: "",
+    studentId: "",
+  });
   const [profileImage, setProfileImage] = useState(null);
   const [passwords, setPasswords] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(baseurl + "my-profile", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        if (response.status === 200) {
+          setProfileData(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+        toast.error("حدث خطأ أثناء جلب بيانات المستخدم.");
+      }
+    };
+    fetchProfile();
+  }, []);
+const handleProfileSubmit = async () => {
+  try {
+    const response = await axios.post(
+      baseurl + "update-my-profile",
+      {
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+        email: profileData.email,
+        mobileNo: profileData.mobileNo,
+        learnerType: profileData.learnerType,
+        studentId: profileData.studentId,
+        // Add other fields as necessary
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 201) {
+      toast.success("تم حفظ التغييرات بنجاح.");
+    }
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    toast.error("حدث خطأ أثناء حفظ التغييرات.");
+  }
+};
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -32,6 +89,11 @@ const Settings = () => {
     setPasswords({ ...passwords, [name]: value });
   };
 
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData({ ...profileData, [name]: value });
+  };
+
   const handleSubmit = async () => {
     // Check if any field is empty
     if (
@@ -42,7 +104,7 @@ const Settings = () => {
       toast.warning("الرجاء ملء جميع الحقول.");
       return;
     }
-  
+
     // Check if newPassword and confirmPassword match
     if (passwords.newPassword !== passwords.confirmPassword) {
       toast.warning(
@@ -50,7 +112,7 @@ const Settings = () => {
       );
       return;
     }
-  
+
     try {
       const response = await axios.post(
         baseurl + "account/change-password",
@@ -64,7 +126,7 @@ const Settings = () => {
           },
         }
       );
-  
+
       if (response.status === 200) {
         toast.success("تم تغيير كلمة المرور بنجاح.");
       }
@@ -122,9 +184,38 @@ const Settings = () => {
                           onChange={handleImageChange}
                         />
                       </div>
+                      <div className="flex justify-between mb-3 mx-10">
+                        <input
+                          type="text"
+                          placeholder={"ادخل اللقب"}
+                          name="lastName"
+                          value={profileData.lastName}
+                          onChange={handleProfileChange}
+                          style={{
+                            fontFamily: "Tajwal, sans-serif",
+                            direction: "rtl",
+                          }}
+                          className="bg-gray-100 h-10 p-2 rounded-2xl w-1/2 text-custom-blue outline-none text-l ml-2"
+                        />
+                        <input
+                          type="text"
+                          placeholder={"ادخل الاسم الأول"}
+                          name="firstName"
+                          value={profileData.firstName}
+                          onChange={handleProfileChange}
+                          style={{
+                            fontFamily: "Tajwal, sans-serif",
+                            direction: "rtl",
+                          }}
+                          className="bg-gray-100 h-10 p-2 rounded-2xl w-1/2 text-custom-blue outline-none text-l"
+                        />
+                      </div>
                       <input
                         type="text"
                         placeholder={"ادخل رقم الهاتف"}
+                        name="mobileNo"
+                        value={profileData.mobileNo}
+                        onChange={handleProfileChange}
                         style={{
                           fontFamily: "Tajwal, sans-serif",
                           direction: "rtl",
@@ -134,15 +225,9 @@ const Settings = () => {
                       <input
                         type="text"
                         placeholder={"رقم القيد "}
-                        style={{
-                          fontFamily: "Tajwal, sans-serif",
-                          direction: "rtl",
-                        }}
-                        className="bg-gray-100 h-10 p-2 rounded-2xl items-center mb-2 mx-10 text-custom-blue outline-none text-l"
-                      />
-                      <input
-                        type="text"
-                        placeholder={"ادخل اسم المستخدم"}
+                        name="studentId"
+                        value={profileData.studentId}
+                        onChange={handleProfileChange}
                         style={{
                           fontFamily: "Tajwal, sans-serif",
                           direction: "rtl",
@@ -152,6 +237,9 @@ const Settings = () => {
                       <input
                         type="email"
                         placeholder={"ادخل البريد الالكترونى"}
+                        name="email"
+                        value={profileData.email}
+                        onChange={handleProfileChange}
                         style={{
                           fontFamily: "Tajwal, sans-serif",
                           direction: "rtl",
@@ -162,6 +250,7 @@ const Settings = () => {
                     <div className="flex flex-col mt-2 mb-1">
                       <div className="mt-1 px-20 text-center flex justify-center">
                         <button
+                          onClick={handleProfileSubmit} // Attach the save function here
                           className="bg-custom-orange text-white rounded-lg w-32 h-10 text-xl"
                           style={{
                             borderRadius: "10px",
@@ -225,7 +314,7 @@ const Settings = () => {
                       />
                       <input
                         type="password"
-                        placeholder={"تأكيد كلمة المرور الجديدة"}
+                        placeholder={"ادخل تأكيد كلمة المرور الجديدة"}
                         name="confirmPassword"
                         value={passwords.confirmPassword}
                         onChange={handleChange}
@@ -239,6 +328,7 @@ const Settings = () => {
                     <div className="flex flex-col mt-2 mb-1">
                       <div className="mt-1 px-20 text-center flex justify-center">
                         <button
+                          onClick={handleProfileSubmit}
                           className="bg-custom-orange text-white rounded-lg w-32 h-10 text-xl"
                           style={{
                             borderRadius: "10px",
@@ -247,7 +337,6 @@ const Settings = () => {
                             fontWeight: "bold",
                             fontFamily: "Tajwal, sans-serif",
                           }}
-                          onClick={handleSubmit}
                         >
                           حـــفــــظ
                         </button>
@@ -257,18 +346,12 @@ const Settings = () => {
                 </div>
               </div>
             </div>
-
-        </div>
-    
-
-            <ToastContainer
-              className={"toast-container"}
-              position="bottom-left"
-            />
           </div>
+          <ToastContainer />
         </div>
       </div>
-    
+    </div>
   );
 };
+
 export default Settings;
