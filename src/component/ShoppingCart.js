@@ -5,6 +5,7 @@ import { FaStar, FaRegUserCircle, FaPlayCircle } from "react-icons/fa";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import AddToCartImage from "../assets/images/AddtoCart.png"; 
+import { useNavigate } from 'react-router-dom';
 
 // Helper function to fetch image URL for books
 const showpicbooks = (fileName) => {
@@ -33,7 +34,7 @@ const showpiccourses = (fileName) => {
 function ShoppingCart() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -197,6 +198,9 @@ function ShoppingCart() {
             <button
               className="bg-custom-orange text-white w-full py-2 rounded"
               style={{ fontFamily: "Tajwal, sans-serif" }}
+                onClick={()=>{
+                  navigate('/OrderConfirmation');
+                }}
             >
               إتمام الشراء
             </button>

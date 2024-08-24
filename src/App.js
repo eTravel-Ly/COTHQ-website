@@ -19,7 +19,8 @@ import {
   OrderHistory,
   AllNotify,
   BorrowsHistory,
-  Myborrow
+  Myborrow,
+  OrderConfirmation
 } from "./page/index";
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
           <Route path="/OrderHistory" element={<OrderHistory />} />
           <Route path="/BorrowsHistory" element={<BorrowsHistory />} />
           <Route path="/Myborrow" element={<Myborrow />} />
+          <Route path="/OrderConfirmation" element={<OrderConfirmation/>} />
 
           
         </Routes>

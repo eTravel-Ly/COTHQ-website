@@ -5,11 +5,17 @@ import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Modal from 'react-modal'; // استيراد المودال
 import { useNavigate } from 'react-router-dom';
+
+Modal.setAppElement('#root'); // لتفادي تحذير عند استخدام المودال
 
 function BorrowsHistory() {
   const [orders, setOrders] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get(baseurl + "my-book-borrows", {
@@ -42,7 +48,6 @@ function BorrowsHistory() {
   };
 
   const handleCancelOrder = (orderId) => {
-    // Implement the logic for cancelling the order here
     axios
       .delete(`${baseurl}cancel-book-borrow/${orderId}`, {
         headers: {
@@ -52,12 +57,29 @@ function BorrowsHistory() {
       .then((response) => {
         toast.success('تم الغاء طلب الاستعارة بنجاح');
         setTimeout(() => {
-            navigate('/BorrowsHistory');
-          }, 3000);
+          navigate('/BorrowsHistory');
+        }, 3000);
       })
       .catch((error) => {
         toast.warning('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
       });
+  };
+
+  const openModal = (orderId) => {
+    setSelectedOrderId(orderId);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedOrderId(null);
+  };
+
+  const confirmCancelOrder = () => {
+    if (selectedOrderId) {
+      handleCancelOrder(selectedOrderId);
+    }
+    closeModal();
   };
 
   return (
@@ -92,7 +114,7 @@ function BorrowsHistory() {
               {/* Conditionally render the button */}
               {order.bookBorrowRequestStatus === 'PENDING' && (
                 <button
-                  onClick={() => handleCancelOrder(order.id)}
+                  onClick={() => openModal(order.id)}
                   className="bg-custom-orange text-white px-2 py-2 text-sm rounded mt-4"
                 >
                   إلغاء الطلب
@@ -102,10 +124,54 @@ function BorrowsHistory() {
           ))}
         </div>
       </div>
-      
-      
-      <ToastContainer />
 
+      {/* Confirmation Modal */}
+      <Modal
+  isOpen={isModalOpen}
+  onRequestClose={closeModal}
+  className="modal"
+  style={{
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      display: 'flex', // لضمان أن المودال يتمركز
+      justifyContent: 'center', // لضمان أن المودال يتمركز
+      alignItems: 'center', // لضمان أن المودال يتمركز
+    },
+    content: {
+      backgroundColor: 'white', // إضافة خلفية بيضاء
+      width: '400px', // تحديد العرض المناسب
+      height: '150px', // تحديد الارتفاع المناسب
+      padding: '20px',
+      borderRadius: '8px', // إضافة زوايا مستديرة للمربع
+      margin: 'auto',
+      textAlign: 'right',
+      direction: 'rtl',
+      fontFamily: 'Tajwal, sans-serif',
+      position: 'relative', // لضمان أن المودال في المنتصف
+    },
+  }}
+>
+  <div className="p-6 text-center">
+    <h2 className="text-lg font-bold mb-4">هل أنت متأكد من إلغاء طلب الاستعارة؟</h2>
+    <div className="flex justify-center space-x-4">
+      <button
+        onClick={confirmCancelOrder}
+        className="bg-red-600 text-white px-4 py-2 rounded ml-2"
+      >
+        نعم
+      </button>
+      <button
+        onClick={closeModal}
+        className="bg-gray-300 text-black px-4 py-2 rounded"
+      >
+        لا
+      </button>
+    </div>
+  </div>
+</Modal>
+
+
+      <ToastContainer />
     </div>
   );
 }

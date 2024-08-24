@@ -162,6 +162,7 @@ const Allbooks = () => {
       <div>
         <div>
           <div className="mb-4">
+          {/*
             <select
               id="book-type"
               value={selectedType}
@@ -173,6 +174,7 @@ const Allbooks = () => {
               <option value="الفقه">الفقه</option>
               <option value="دين">دين</option>
             </select>
+          */}
           </div>
 
           <div className="p-4">

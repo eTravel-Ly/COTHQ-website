@@ -118,6 +118,7 @@ const WishlistBookButton = () => {
   return (
     <div className="p-4">
       <div className="mb-4">
+      {/*
         <select
           value={selectedType}
           onChange={handleTypeChange}
@@ -127,8 +128,9 @@ const WishlistBookButton = () => {
           <option value="all">كل الأنواع</option>
           <option value="RELIGIOUS">دين</option>
           <option value="FIQH">الفقه</option>
-          {/* يمكنك إضافة المزيد من الخيارات هنا بناءً على الأنواع المتاحة */}
+         
         </select>
+      */}
       </div>
       {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">

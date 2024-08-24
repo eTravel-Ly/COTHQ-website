@@ -122,13 +122,13 @@ const BookDetails = () => {
                   <span className="flex items-center ml-60 font-bold font-tajwal">
                     <FaRegUserCircle className="ml-1" /> كتب بواسطة
                   </span>
-                  <span className="flex items-center ml-40 font-bold font-tajwal">دار النشر</span>
-                  <span className="flex items-center mr-20 font-bold font-tajwal">تاريخ النشر</span>
+                  <span className="flex items-center ml-10 font-bold font-tajwal">دار النشر</span>
+                  <span className="flex items-center mr-28 font-bold font-tajwal">تاريخ النشر</span>
                 </div>
                 <div className="flex text-gray-700 mt-1">
-                  <span className="flex items-center ml-72 font-tajwal">{bookData.author}</span>
-                  <span className="flex items-center -mr-5 ml-44 font-tajwal">{bookData.publisher}</span>
-                  <span className="flex items-center mr-14 font-tajwal">{bookData.publicationDate}</span>
+                  <span className="flex items-center ml-64 font-tajwal">{bookData.author}</span>
+                  <span className="flex items-center  ml-14 font-tajwal">{bookData.publisher}</span>
+                  <span className="flex items-center mr-28 font-tajwal">{bookData.publicationDate}</span>
                 </div>
               </div>
 
@@ -208,7 +208,7 @@ const BookDetails = () => {
                 </tbody>
               </table>
             </div>
-            <div className="md:w-1/4">
+            <div className="md:w-1/3">
               <div>
                 <h2 className="text-xl font-bold mb-2 font-tajwal">الكتب ذات الصلة</h2>
                 <div className="flex flex-col space-y-4">

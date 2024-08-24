@@ -91,11 +91,11 @@ const CoursesDetails = () => {
             {/* Course Image */}
             <div className="md:w-1/4 p-4 relative">
               <img
-                src={courseData.coverImageUrl || "default-image.png"}
+                src={courseData.coverImageUrl}
                 alt="Course"
-                className="  w-full h-60 rounded-md"
+                className="  rounded-md"
               />
-              <FaPlayCircle className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-300 text-7xl" />
+            
             </div>
 
             {/* Course Information */}
@@ -268,7 +268,7 @@ const CoursesDetails = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          مشاهدة الفيديو
+                        أضف إلى سلة التسوق
                         </a>
                         <CiShoppingCart className="mr-2 ml-3" />
                       </button>
