@@ -4,54 +4,80 @@ import NavbarLogin from "../component/NavbarLogin";
 import { FaRegUserCircle } from "react-icons/fa";
 import cover from "../assets/images/test1.png";
 import { CiCalendarDate } from "react-icons/ci";
+import cover1 from "../assets/images/test2.png";
 
-// بيانات الندوات
+// بيانات الندوات والمؤتمرات
 const seminarsData = [
   {
     imageSrc: cover,
     title: "ندوة عن الأخلاق الحميدة",
     startDate: "01/09/2024",
     speaker: "أروى أبوزقية",
+    type: "seminar",
   },
   {
     imageSrc: cover,
     title: "ندوة عن التنمية الذاتية",
     startDate: "05/09/2024",
     speaker: "علي الصغير",
+    type: "seminar",
   },
   {
     imageSrc: cover,
     title: "ندوة عن التكنولوجيا الحديثة",
     startDate: "10/09/2024",
     speaker: "فاطمة عبد الله",
+    type: "seminar",
   },
   {
     imageSrc: cover,
     title: "ندوة عن الصحة النفسية",
     startDate: "15/09/2024",
     speaker: "محمد الأحمد",
+    type: "seminar",
+  },
+];
+
+const conferencesData = [
+  {
+    imageSrc: cover1,
+    title: "مؤتمر عن الذكاء الاصطناعي",
+    startDate: "20/09/2024",
+    speaker: "سارة حسين",
+    type: "conference",
+  },
+  {
+    imageSrc: cover1,
+    title: "مؤتمر عن التغير المناخي",
+    startDate: "25/09/2024",
+    speaker: "أحمد علي",
+    type: "conference",
+  },
+  {
+    imageSrc: cover1,
+    title: "مؤتمر عن التطوير التكنولوجي",
+    startDate: "30/09/2024",
+    speaker: "ليلى عبد الرحمن",
+    type: "conference",
   },
 ];
 
 const Seminars = () => {
-  // حالة لتخزين الندوات المعروضة
-  const [displayedSeminars, setDisplayedSeminars] = useState(seminarsData);
+  // حالة لتخزين البيانات المعروضة
+  const [displayedData, setDisplayedData] = useState(seminarsData);
   // حالة لتخزين الزر النشط
   const [activeButton, setActiveButton] = useState("all");
 
-  // دالة لتصفية الندوات بناءً على تاريخ اليوم
-  const handleTodaySeminars = () => {
-    const today = new Date().toISOString().split('T')[0]; // الحصول على تاريخ اليوم بصيغة YYYY-MM-DD
-    setDisplayedSeminars(
-      seminarsData.filter(seminar => seminar.startDate === today)
-    );
-    setActiveButton("today");
-  };
-
   // دالة لعرض جميع الندوات
   const handleAllSeminars = () => {
-    setDisplayedSeminars(seminarsData);
+    setDisplayedData(seminarsData);
     setActiveButton("all");
+  };
+
+  // دالة لعرض جميع المؤتمرات
+  const handleAllConferences = () => {
+    setDisplayedData(conferencesData);
+    setActiveButton("conferences");
   };
 
   return (
@@ -69,7 +95,7 @@ const Seminars = () => {
         >
           <h2 className="text-xl font-bold mb-1">ندواتي</h2>
           <h4 className="text-l font-bold text-gray-500">
-            مواصلة مشاهدة الندوات
+            مواصلة مشاهدة الندوات والمؤتمرات
           </h4>
 
           {/* أزرار التصفية */}
@@ -80,25 +106,26 @@ const Seminars = () => {
             >
               عرض جميع الندوات
             </button>
+
             <button
-              className={`py-2 px-4 rounded ${activeButton === "today" ? "bg-custom-green text-white" : "bg-gray-400 text-white hover:bg-custom-green"}`}
-              onClick={handleTodaySeminars}
+              className={`py-2 px-4 rounded ${activeButton === "conferences" ? "bg-custom-green text-white" : "bg-gray-400 text-white hover:bg-custom-green"}`}
+              onClick={handleAllConferences}
             >
-              عرض جميع المؤتمرات 
+              عرض جميع المؤتمرات
             </button>
           </div>
 
           {/* استخدام grid لعرض العناصر في أربعة أعمدة */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {displayedSeminars.map((seminar, index) => (
+            {displayedData.map((item, index) => (
               <div key={index} className="p-2">
                 <div className="bg-white rounded-lg shadow-md p-3 flex flex-col">
                   <img
-                    src={seminar.imageSrc}
-                    alt={seminar.title}
-                    className=" object-cover rounded-lg mb-4"
+                    src={item.imageSrc}
+                    alt={item.title}
+                    className="object-cover rounded-lg mb-4"
                   />
-                  <h3 className="text-lg font-semibold mb-2 text-right">{seminar.title}</h3>
+                  <h3 className="text-lg font-semibold mb-2 text-right">{item.title}</h3>
                   <div className="flex items-center mb-2">
                     <CiCalendarDate className="text-gray-600 mr-2 ml-2" />
                     <p
@@ -110,23 +137,30 @@ const Seminars = () => {
                         marginBottom: "8px",
                       }}
                     >
-                      تاريخ بدء الندوة: {seminar.startDate}
+                      تاريخ بدء: {item.startDate}
                     </p>
                   </div>
-                 
+
                   <div className="flex items-center mb-2">
                     <FaRegUserCircle className="text-gray-600 mr-2 ml-2" />
                     <p
                       className="text-xs text-gray-600 text-right"
                       style={{ fontFamily: "Tajwal, sans-serif" }}
                     >
-                      ملقي الندوة: {seminar.speaker}
+                      المتحدث: {item.speaker}
                     </p>
                   </div>
+                  
                   <div className="flex justify-end items-center text-sm text-gray-600">
-                    <button className="bg-custom-green text-white py-2 px-4 rounded ">
-                      تفاصيل الندوة
-                    </button>
+                    {item.type === "seminar" ? (
+                      <button className="bg-custom-green text-white py-2 px-4 rounded">
+                        تفاصيل الندوة
+                      </button>
+                    ) : (
+                      <button className="bg-custom-green text-white py-2 px-4 rounded">
+                        تسجيل في المؤتمر
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
