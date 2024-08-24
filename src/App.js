@@ -20,7 +20,8 @@ import {
   AllNotify,
   BorrowsHistory,
   Myborrow,
-  OrderConfirmation
+  OrderConfirmation,
+  Seminars
 } from "./page/index";
 function App() {
   return (
@@ -50,8 +51,7 @@ function App() {
           <Route path="/BorrowsHistory" element={<BorrowsHistory />} />
           <Route path="/Myborrow" element={<Myborrow />} />
           <Route path="/OrderConfirmation" element={<OrderConfirmation/>} />
-
-          
+          <Route path="/Seminars" element={<Seminars/>} />       
         </Routes>
       </BrowserRouter>
     </>

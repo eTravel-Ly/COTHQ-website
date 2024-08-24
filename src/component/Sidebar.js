@@ -108,14 +108,14 @@ const Sidebar = () => {
             <GiTargetPrize className="mr-2 ml-2 text-sm" />
           المسابقـــات
           </a>
-          <a
-            href="#"
+          <Link
+            to="/Seminars"
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <FaPeopleLine className="mr-2 ml-2 text-sm" />
             الندوات
-          </a>
+          </Link>
           <Link
             to="/Shop"
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
