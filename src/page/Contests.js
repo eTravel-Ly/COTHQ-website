@@ -26,7 +26,7 @@ const Contests = () => {
           <div className="flex mt-4">
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                selectedSection === "allContests" ? "bg-custom-orange" : ""
+                selectedSection === "allContests" ? "bg-custom-orange text-white" : ""
               }`}
               onClick={showContests}
             >
@@ -35,7 +35,7 @@ const Contests = () => {
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
                 selectedSection === "Currentcompetitions"
-                  ? "bg-custom-orange"
+                  ? "bg-custom-orange text-white"
                   : ""
               }`}
               onClick={showCurrentcompetitions}

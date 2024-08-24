@@ -29,7 +29,7 @@ function OrderConfirmation() {
 
           <div className="flex flex-col gap-4 sm:gap-6">
             {/* Order Summary Section */}
-            <div className="bg-blues p-4 sm:p-6 rounded-lg shadow">
+            <div className="bg-gray-100 p-4 sm:p-6 rounded-lg shadow">
               <h3 className="text-md sm:text-lg font-semibold mb-3 sm:mb-4">
                 ملخص الطلب
               </h3>
