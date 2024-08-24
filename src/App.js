@@ -1,4 +1,4 @@
-import './App.css';
+import "./App.css";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import {
   Home,
@@ -21,7 +21,8 @@ import {
   BorrowsHistory,
   Myborrow,
   OrderConfirmation,
-  Seminars
+  Seminars,
+  Contests,
 } from "./page/index";
 function App() {
   return (
@@ -44,14 +45,16 @@ function App() {
             path="/CoursesDetails/:courseId"
             element={<CoursesDetails />}
           />
+          <Route path="/Contests" element={<Contests />} />
+
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/AllNotify" element={<AllNotify />} />
           <Route path="/OrderHistory" element={<OrderHistory />} />
           <Route path="/BorrowsHistory" element={<BorrowsHistory />} />
           <Route path="/Myborrow" element={<Myborrow />} />
-          <Route path="/OrderConfirmation" element={<OrderConfirmation/>} />
-          <Route path="/Seminars" element={<Seminars/>} />       
+          <Route path="/OrderConfirmation" element={<OrderConfirmation />} />
+          <Route path="/Seminars" element={<Seminars />} />
         </Routes>
       </BrowserRouter>
     </>
