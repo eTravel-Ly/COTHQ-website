@@ -5,11 +5,16 @@ import { IoLibraryOutline } from "react-icons/io5";
 import { CiLaptop } from "react-icons/ci";
 import { CiShop } from "react-icons/ci";
 import { FiAlertCircle } from "react-icons/fi";
-import { IoSettingsOutline } from "react-icons/io5";
+import {
+  IoSettingsOutline,
+  IoChevronDownOutline,
+  IoChevronForwardOutline,
+} from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { GiTargetPrize } from "react-icons/gi";
 import { FaPeopleLine } from "react-icons/fa6";
+
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -45,69 +50,93 @@ const Sidebar = () => {
           </Link>
 
           <div>
-            <button
-              onClick={toggleLibraryMenu}
-              className="flex items-center p-3 text-sm text-gray-700 w-full hover:bg-blue hover:rounded-lg"
-              style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-            >
-              <IoLibraryOutline className="mr-2 ml-2 text-sm" />
-              المكتبة
-            </button>
-            {isLibraryOpen && (
-              <div className="flex flex-col bg-white pl-12">
-                <Link
-                  to="/MyBooks"
-                  className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
-                  style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-                >
-                  مكتبة رقمية
-                </Link>
-                <Link
-                  to="/Myborrow"
-                  className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
-                  style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-                >
-                  مكتبة محلية
-                </Link>
-              </div>
-            )}
+            <div>
+              <button
+                onClick={toggleLibraryMenu}
+                className="flex items-center p-3 text-sm text-gray-700 w-full hover:bg-blue hover:rounded-lg"
+                style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+              >
+                <IoLibraryOutline className="mr-2 ml-2 text-sm" />
+                المكتبة
+                {isLibraryOpen ? (
+                  <IoChevronDownOutline className="mr-auto text-sm" />
+                ) : (
+                  <IoChevronForwardOutline className="mr-auto text-sm" />
+                )}
+              </button>
+              {isLibraryOpen && (
+                <div className="flex flex-col bg-white pl-12">
+                  <Link
+                    to="/MyBooks"
+                    className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
+                    style={{
+                      fontFamily: "Tajwal, sans-serif",
+                      direction: "rtl",
+                    }}
+                  >
+                    مكتبة رقمية
+                  </Link>
+                  <Link
+                    to="/Myborrow"
+                    className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
+                    style={{
+                      fontFamily: "Tajwal, sans-serif",
+                      direction: "rtl",
+                    }}
+                  >
+                    مكتبة محلية
+                  </Link>
+                </div>
+              )}
+            </div>
+            <div>
+              <button
+                onClick={toggleCoursesMenu}
+                className="flex items-center p-3 text-sm text-gray-700 w-full hover:bg-blue hover:rounded-lg"
+                style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+              >
+                <CiLaptop className="mr-2 ml-2 text-sm" />
+                الدورات
+                {isCoursesOpen ? (
+                  <IoChevronDownOutline className="mr-auto text-sm" />
+                ) : (
+                  <IoChevronForwardOutline className="mr-auto text-sm" />
+                )}
+              </button>
+              {isCoursesOpen && (
+                <div className="flex flex-col bg-white pl-12">
+                  <a
+                    href="#"
+                    className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
+                    style={{
+                      fontFamily: "Tajwal, sans-serif",
+                      direction: "rtl",
+                    }}
+                  >
+                    محاضرات مسجلة
+                  </a>
+                  <a
+                    href="#"
+                    className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
+                    style={{
+                      fontFamily: "Tajwal, sans-serif",
+                      direction: "rtl",
+                    }}
+                  >
+                    محاضرات مغلقة
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
-          <div>
-            <button
-              onClick={toggleCoursesMenu}
-              className="flex items-center p-3 text-sm text-gray-700 w-full hover:bg-blue hover:rounded-lg"
-              style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-            >
-              <CiLaptop className="mr-2 ml-2 text-sm" />
-              الدورات
-            </button>
-            {isCoursesOpen && (
-              <div className="flex flex-col bg-white pl-12">
-                <a
-                  href="#"
-                  className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
-                  style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-                >
-                  محاضرات مسجلة
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
-                  style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-                >
-                  محاضرات مغلقة
-                </a>
-              </div>
-            )}
-          </div>
-          <a
-            href="#"
+          <Link
+            to="/Contests"
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <GiTargetPrize className="mr-2 ml-2 text-sm" />
-          المسابقـــات
-          </a>
+            المسابقـــات
+          </Link>
           <Link
             to="/Seminars"
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
