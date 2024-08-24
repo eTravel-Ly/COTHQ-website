@@ -84,7 +84,7 @@ const Seminars = () => {
               className={`py-2 px-4 rounded ${activeButton === "today" ? "bg-custom-green text-white" : "bg-gray-400 text-white hover:bg-custom-green"}`}
               onClick={handleTodaySeminars}
             >
-              عرض ندوات اليوم
+              عرض جميع المؤتمرات 
             </button>
           </div>
 
@@ -125,7 +125,7 @@ const Seminars = () => {
                   </div>
                   <div className="flex justify-end items-center text-sm text-gray-600">
                     <button className="bg-custom-green text-white py-2 px-4 rounded ">
-                      مشاهدة الندوة
+                      تفاصيل الندوة
                     </button>
                   </div>
                 </div>

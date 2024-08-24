@@ -135,7 +135,7 @@ const Sidebar = () => {
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <GiTargetPrize className="mr-2 ml-2 text-sm" />
-            المسابقـــات
+            المسابقـــات و دورات تدريبية 
           </Link>
           <Link
             to="/Seminars"
@@ -143,7 +143,7 @@ const Sidebar = () => {
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <FaPeopleLine className="mr-2 ml-2 text-sm" />
-            الندوات
+            الندوات و مؤتمرات
           </Link>
           <Link
             to="/Shop"
