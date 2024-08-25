@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
-import { FaStar, FaRegUserCircle, FaPlayCircle } from "react-icons/fa";
+import {  FaRegUserCircle, FaPlayCircle } from "react-icons/fa";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import AddToCartImage from "../assets/images/AddtoCart.png"; 
