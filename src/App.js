@@ -23,7 +23,8 @@ import {
   OrderConfirmation,
   Seminars,
   Contests,
-  SeminarsDetails
+  SeminarsDetails,
+  CompetitionsDetails
 } from "./page/index";
 function App() {
   return (
@@ -47,6 +48,10 @@ function App() {
             element={<CoursesDetails />}
           />
           <Route path="/Contests" element={<Contests />} />
+          <Route
+            path="/CompetitionsDetails"
+            element={<CompetitionsDetails />}
+          />
 
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
@@ -60,7 +65,6 @@ function App() {
           />
           <Route path="/Seminars" element={<Seminars />} />
           <Route path="/SeminarsDetails/:Id" element={<SeminarsDetails />} />
-
         </Routes>
       </BrowserRouter>
     </>
