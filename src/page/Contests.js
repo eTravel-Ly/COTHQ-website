@@ -41,7 +41,7 @@ const Contests = () => {
               }`}
               onClick={showTrainingCourses}
             >
-              المسابقات الحالية
+              جميع الدروات التدريبية
             </button>
           </div>
           {selectedSection === "allContests" && <AllContests />}

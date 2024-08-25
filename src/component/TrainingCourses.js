@@ -1,6 +1,8 @@
 import React from "react";
 import cover from "../assets/images/cover.png"
 // Sample data for courses with image URL
+import { useNavigate } from 'react-router-dom';
+
 const courses = [
   {
     id: 1,
@@ -27,6 +29,11 @@ const courses = [
 
 
 const TrainingCourses = () => {
+  const navigate = useNavigate();
+
+  const openTrainingDetails = () => {
+    navigate(`/CompetitionsDetails`);
+  };
   return (
     <div className="p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -48,7 +55,9 @@ const TrainingCourses = () => {
               <p className="text-sm text-gray-500 mb-4">
                 تاريخ الدورة: {course.date}
               </p>
-              <button className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base">
+              <button className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base" onClick={()=>
+                      openTrainingDetails()
+                  }>
                 بدء الدورة
               </button>
             </div>

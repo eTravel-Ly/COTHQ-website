@@ -104,6 +104,7 @@ const BookDetails = () => {
         }
       );
       if (response.status === 201) {
+        window.dispatchEvent(new Event('cartUpdated'));
         toast.success('تم إضافة الكتاب إلى سلة التسوق بنجاح');
       }
     } catch (error) {
