@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { IoSearchOutline } from "react-icons/io5";
 import { CiShoppingCart, CiLogout, CiSettings } from "react-icons/ci";
 import { BsBell } from "react-icons/bs";
@@ -11,6 +12,35 @@ import { CiViewList } from "react-icons/ci";
 const NavbarLogin = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCartItemCount = async () => {
+      try {
+        const response = await axios.get('http://172.22.11.9:8080/api/my-cart', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setCartItemCount(response.data.books.length + response.data.courses.length);
+      } catch (error) {
+        console.error('Error fetching cart item count:', error);
+      }
+    };
+
+    fetchCartItemCount();
+
+    // استماع لحدث تحديث سلة التسوق
+    const handleCartUpdated = () => {
+      fetchCartItemCount();
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdated);
+
+    return () => {
+      window.removeEventListener('cartUpdated', handleCartUpdated);
+    };
+  }, []);
 
   return (
     <div className="flex items-center justify-between bg-white p-4 w-full">
@@ -19,8 +49,13 @@ const NavbarLogin = () => {
           <BsBell className="text-gray-700 text-xl mr-4" />
           {showNotifications && <Notifications />}
         </button>
-        <Link to="/ShoppingCart">
+        <Link to="/ShoppingCart" className="relative">
           <CiShoppingCart className="text-gray-700 text-2xl mr-4" />
+          {cartItemCount > 0 && (
+            <span className="absolute top-[-3px] right-[14px] bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              {cartItemCount}
+            </span>
+          )}
         </Link>
         <div className="relative">
           <FiUser

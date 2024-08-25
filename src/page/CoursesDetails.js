@@ -88,6 +88,7 @@ const navigate = useNavigate();
           }
         );
         if (response.status === 201) {
+          window.dispatchEvent(new Event('cartUpdated'));
           toast.success("تم إضافة الدورة إلى سلة التسوق بنجاح");
         } else {
           toast.error("حدث خطأ أثناء إضافة الدورة إلى سلة التسوق");
@@ -102,7 +103,11 @@ const navigate = useNavigate();
  };
   if (!courseData) {
     // Display a loading state or placeholder while fetching data
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   const originalPrice = courseData.price;
