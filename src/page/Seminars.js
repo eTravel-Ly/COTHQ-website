@@ -125,7 +125,7 @@ const Seminars = () => {
                     alt={item.title}
                     className="object-cover rounded-lg mb-4"
                   />
-                  <h3 className="text-lg font-semibold mb-2 text-right">{item.title}</h3>
+                  <h2 className="text-sm font-bold mb-2 text-right">{item.title}</h2>
                   <div className="flex items-center mb-2">
                     <CiCalendarDate className="text-gray-600 mr-2 ml-2" />
                     <p
