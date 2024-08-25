@@ -6,7 +6,8 @@ import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import AddToCartImage from "../assets/images/AddtoCart.png"; 
 import { useNavigate } from 'react-router-dom';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Helper function to fetch image URL for books
 const showpicbooks = (fileName) => {
   try {
@@ -59,6 +60,58 @@ function ShoppingCart() {
     fetchCartItems();
   }, []);
 
+  const clearCart = async () => {
+    try {
+      const response = await axios.delete(baseurl + 'clear-my-cart', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      if (response.status === 200) {
+        toast.success('تم مسح جميع عناصر العربة بنجاح');
+        
+        // تأخير إعادة تحميل الصفحة لمدة 2 ثانية (2000 ميلي ثانية)
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+  
+      } else {
+        toast.warning('فشل في مسح عناصر العربة');
+      }
+    } catch (error) {
+      toast.warning('حدث خطأ أثناء مسح عناصر العربة:', error);
+    }
+  };
+  
+  const removeFromCart = async (id, type) => {
+    try {
+      const response = await axios.delete( baseurl+'remove-from-cart', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          'Content-Type': 'application/json',
+        },
+        data: {
+          type: type,// Ensure type is in uppercase as API expects
+          id: id,
+          quantity: 1 // Assuming default quantity to remove is 1
+        }
+      });
+  
+      if (response.status === 200) {
+        toast.success('تم إزالة العنصر من السلة بنجاح');
+        // يمكن إضافة كود لإعادة تحميل السلة أو تحديث الواجهة هنا إذا لزم الأمر
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+  
+      } else {
+        toast.warning('فشل في إزالة العنصر من السلة');
+      }
+    } catch (error) {
+      toast.error('حدث خطأ أثناء إزالة العنصر من السلة');
+    }
+  };
   const renderItem = (item, type) => (
     <div
       key={item.id}
@@ -102,11 +155,12 @@ function ShoppingCart() {
               {item.price} دينار
             </p>
             <button
-              className="text-custom-orange"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              إزالة
-            </button>
+            className="text-red-500"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+            onClick={() => removeFromCart(item.id, 'COURSE')} // تمرير id وtype المناسبين هنا
+          >
+            إزالة
+          </button>
           </div>
         </div>
       )}
@@ -155,12 +209,13 @@ function ShoppingCart() {
             >
               {item.price} دينار
             </p>
-            <button
-              className="text-custom-orange"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              إزالة
-            </button>
+           <button
+                className="text-red-500"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+            onClick={() => removeFromCart(item.id, 'BOOK')} // تمرير id وtype المناسبين هنا
+          >
+            إزالة
+          </button>
           </div>
         </div>
       )}
@@ -209,6 +264,7 @@ function ShoppingCart() {
             <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
               عربة الشراء
             </h1>
+            <h6 className="font-tajwal text-red-500 underline cursor-pointer" onClick={clearCart}>(حذف كل العناصر)</h6>
             {cartItems.length > 0 ? (
               <div>
                 {cartItems.map((item) =>
@@ -235,6 +291,7 @@ function ShoppingCart() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

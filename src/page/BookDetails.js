@@ -7,12 +7,16 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { CiShoppingCart } from "react-icons/ci";
 import { FaRegHeart, FaPlus, FaMinus } from "react-icons/fa6";
 import { baseurl } from '../helper/Baseurl';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const BookDetails = () => {
   const { bookId } = useParams();
   const [bookData, setBookData] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [books, setBooks] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBookData = async () => {
@@ -69,11 +73,11 @@ const BookDetails = () => {
   }, []);
 
   const handleIncrement = () => {
-    setQuantity(prevQuantity => prevQuantity + 1);
+ ///   setQuantity(prevQuantity => prevQuantity + 1);
   };
 
   const handleDecrement = () => {
-    setQuantity(prevQuantity => Math.max(prevQuantity - 1, 1));
+  //  setQuantity(prevQuantity => Math.max(prevQuantity - 1, 1));
   };
 
   if (!bookData) {
@@ -83,6 +87,30 @@ const BookDetails = () => {
       </div>
     );
   }
+  const handleAddToCart = async () => {
+    try {
+      const response = await axios.post(
+      baseurl + 'add-to-cart',
+        {
+          type: "BOOK",
+          id:bookId,
+          quantity: quantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 201) {
+        toast.success('تم إضافة الكتاب إلى سلة التسوق بنجاح');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast.warning('حدث خطأ أثناء إضافة الكتاب إلى السلة. حاول مرة أخرى.');
+    }
+  };
 
   // Process relatedBooks
   const relatedBooks = books
@@ -90,6 +118,10 @@ const BookDetails = () => {
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 3);
 
+
+   const openBookDetails = (bookId) => {
+      navigate(`/BookDetails/${bookId}`);
+    };
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -169,7 +201,7 @@ const BookDetails = () => {
                       <FaPlus size={12} className='text-custom-orange' />
                     </button>
                   </div>
-                  <button className="bg-custom-orange text-white mr-2 font-tajwal px-4 py-2 rounded ml-4 flex items-center">
+                  <button  onClick={handleAddToCart} className="bg-custom-orange text-white mr-2 font-tajwal px-4 py-2 rounded ml-4 flex items-center">
                     <CiShoppingCart className="mr-2 ml-3" />
                     أضف إلى سلة التسوق
                   </button>
@@ -218,8 +250,10 @@ const BookDetails = () => {
                       <div className="ml-4">
                         <h3 className="font-bold font-tajwal">{book.title}</h3>
                         <p className='font-tajwal'>{book.studentsPrice} دينار</p>
-                        <button className="bg-white text-black px-2 py-1 flex rounded mt-2 font-tajwal border border-custom-orange">
-                          أضف إلى سلة التسوق
+                        <button className="bg-white text-black px-2 py-1 flex rounded mt-2 font-tajwal border border-custom-orange" onClick={
+                          () => openBookDetails(book.id)
+                        }>
+                         تـــفــاصـــيــل الكــتاب
                           <CiShoppingCart className="mr-2 ml-3" />
                         </button>
                       </div>
@@ -234,6 +268,8 @@ const BookDetails = () => {
           </div>
         </div>
       </div> 
+      <ToastContainer />
+
     </div>
   );
 };
