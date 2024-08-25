@@ -103,7 +103,7 @@ const MyborrowButton = () => {
 
   return (
     <div className="p-4">
-      <ToastContainer />
+      <ToastContainer position="bottom-left" />
       {rows.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (

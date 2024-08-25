@@ -9,15 +9,14 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"; // Assuming you're using react-toastify for notifications
+
 const CoursesDetails = () => {
   const [courseData, setCourseData] = useState(null);
   const [relatedVideos, setRelatedVideos] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const { courseId } = useParams();
-const navigate = useNavigate();
+
   const showpicbooks = (fileName) => {
     try {
       const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -72,34 +71,33 @@ const navigate = useNavigate();
   const handleDecrement = () => {
     setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
   };
-    const handleAddToCart = async () => {
-      try {
-        const response = await axios.post(
-          `${baseurl}add-to-cart`,
-          {
-            type: "COURSE",
-            id: courseData.id,
-            quantity: quantity,
+
+  const handleAddToCart = async () => {
+    try {
+      const response = await axios.post(
+        `${baseurl}add-to-cart`,
+        {
+          type: "COURSE",
+          id: courseData.id,
+          quantity: quantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        if (response.status === 201) {
-          toast.success("تم إضافة الدورة إلى سلة التسوق بنجاح");
-        } else {
-          toast.error("حدث خطأ أثناء إضافة الدورة إلى سلة التسوق");
         }
-      } catch (error) {
-        console.error("Error adding course to cart:", error);
+      );
+      if (response.status === 201) {
+        toast.success("تم إضافة الدورة إلى سلة التسوق بنجاح");
+      } else {
         toast.error("حدث خطأ أثناء إضافة الدورة إلى سلة التسوق");
       }
-    };
- const openCoursesDetails = (courseId) => {
-   navigate(`/CoursesDetails/${courseId}`);
- };
+    } catch (error) {
+      console.error("Error adding course to cart:", error);
+      toast.error("حدث خطأ أثناء إضافة الدورة إلى سلة التسوق");
+    }
+  };
+
   if (!courseData) {
     // Display a loading state or placeholder while fetching data
     return <div>Loading...</div>;
@@ -122,7 +120,7 @@ const navigate = useNavigate();
               <img
                 src={courseData.coverImageUrl}
                 alt="Course"
-                className="  rounded-md"
+                className="rounded-md"
               />
             </div>
 
@@ -210,111 +208,70 @@ const navigate = useNavigate();
                       className="px-4 py-2 border-r border-gray-300 bg-white text-gray-700 font-tajwal"
                       onClick={handleDecrement}
                     >
-                      <FaMinus size={12} className="text-custom-orange" />
+                      <FaMinus />
                     </button>
-                    <input
-                      type="text"
-                      className="border-0 p-2 w-8 text-center font-tajwal"
-                      value={quantity}
-                      readOnly
-                    />
+                    <span className="px-4 py-2 text-gray-700 font-tajwal">
+                      {quantity}
+                    </span>
                     <button
-                      className="px-4 py-2 border-l border-gray-300 font-tajwal bg-white text-gray-700"
+                      className="px-4 py-2 border-l border-gray-300 bg-white text-gray-700 font-tajwal"
                       onClick={handleIncrement}
                     >
-                      <FaPlus size={12} className="text-custom-orange" />
+                      <FaPlus />
                     </button>
                   </div>
-                  <button
-                    className="bg-custom-orange text-white mr-2 font-tajwal px-4 py-2 rounded ml-4 flex items-center"
-                    onClick={handleAddToCart}
-                  >
-                    <CiShoppingCart className="mr-2 ml-3" />
-                    أضف إلى سلة التسوق
-                  </button>
-
-                  <button className="bg-white border border-gray-300 rounded p-2 ml-2 flex items-center justify-center">
-                    <FaRegHeart size={19} className="text-custom-orange" />
-                  </button>
                 </div>
+              </div>
+
+              <div className="flex justify-between">
+                <button
+                  className="flex items-center bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 font-tajwal"
+                  onClick={handleAddToCart}
+                >
+                  <CiShoppingCart className="ml-1" />
+                  أضف إلى سلة التسوق
+                </button>
+
+                <button className="flex items-center bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 font-tajwal">
+                  <FaRegHeart className="ml-1" />
+                  أضف إلى قائمة الرغبات
+                </button>
               </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
-            {/* Product Details */}
-            <div className="md:w-2/3">
-              <table className="w-full border">
-                <tbody className="space-y-2">
-                  <tr className="border-t border-b">
-                    <td className="p-4 font-tajwal font-bold">
-                      عنوان الدورة التدريبية
-                    </td>
-                    <td className="p-4 font-tajwal">{courseData.title}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">الاستاذ</td>
-                    <td className="p-4 font-tajwal">
-                      {courseData.comments[0]?.learner.firstName}{" "}
-                      {courseData.comments[0]?.learner.lastName}
-                    </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">عدد الساعات</td>
-                    <td className="p-4 font-tajwal">
-                      {courseData.comments[0]?.course.durationInSeconds / 3600}{" "}
-                      ساعة
-                    </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">
-                      عدد الفيديوهات
-                    </td>
-                    <td className="p-4 font-tajwal">
-                      {courseData.videos.length} فيديو
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
 
-            {/* Related Videos */}
-            <div className="md:w-1/3">
-              <h2 className="text-xl font-bold mb-2 font-tajwal">
-                الفيديوهات ذات الصلة
-              </h2>
-              <div className="flex flex-col space-y-4">
-                {relatedVideos.map((video) => (
-                  <div key={video.id} className="flex items-center p-2 border">
-                    <img
-                      src={video.coverImageUrl}
-                      alt={video.title}
-                      className="w-16 h-25 ml-10"
-                    />
-                    <div className="ml-4">
-                      <h3 className="font-bold font-tajwal">{video.title}</h3>
-                      <p className="font-tajwal">{video.price} دينار</p>
-                      <button
-                        className="bg-white text-black px-2 py-1 flex rounded mt-2 font-tajwal border border-custom-orange"
-                        onClick={() => openCoursesDetails(video.id)}
-                      >
-                        <a
-                          href={video.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          اشتري الان{" "}
-                        </a>
-                        <CiShoppingCart className="mr-2 ml-3" />
-                      </button>
-                    </div>
+          {/* Related Videos Section */}
+          <div className="mt-8">
+            <h2 className="text-lg font-bold mb-4 font-tajwal">
+              فيديوهات ذات صلة
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {relatedVideos.map((video) => (
+                <div
+                  key={video.id}
+                  className="bg-white p-4 rounded-lg shadow-md"
+                >
+                  <img
+                    src={video.coverImageUrl}
+                    alt="Related Video"
+                    className="rounded-md mb-2"
+                  />
+                  <h3 className="text-md font-bold mb-2 font-tajwal">
+                    {video.title}
+                  </h3>
+                  <div className="flex items-center text-gray-600 mb-2">
+                    <FaPlayCircle className="ml-1" />
+                    <span className="font-tajwal">{video.overallRating}</span>
                   </div>
-                ))}
-              </div>
+                  <button className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 font-tajwal">
+                    إشترك الآن
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-      <ToastContainer position="bottom-left" />
     </div>
   );
 };

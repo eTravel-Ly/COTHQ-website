@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
-import cashIcon from '../assets/images/cash.png'; // استبدل بمسار الصورة الحقيقية
-import walletIcon from '../assets/images/wallet.png'; // استبدل بمسار الصورة الحقيقية
-import yusrIcon from '../assets/images/yusr.png'; // استبدل بمسار الصورة الحقيقية
-import unnamed from '../assets/images/unnamed.png'; // استبدل بمسار الصورة الحقيقية
+import cashIcon from "../assets/images/cash.png"; // استبدل بمسار الصورة الحقيقية
+import walletIcon from "../assets/images/wallet.png"; // استبدل بمسار الصورة الحقيقية
+import yusrIcon from "../assets/images/yusr.png"; // استبدل بمسار الصورة الحقيقية
+import unnamed from "../assets/images/unnamed.png"; // استبدل بمسار الصورة الحقيقية
+import { useParams, useLocation } from "react-router-dom";
+import { baseurl } from "../helper/Baseurl";
+import axios from "axios";
 
 function OrderConfirmation() {
-  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [userData, setUserData] = useState(null);
+  const { cartItems } = useParams();
+  const location = useLocation();
+  const { totalPrice } = location.state || { totalPrice: 0 };
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+                const response = await axios.get(`${baseurl}my-profile`, {
+
+       
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handlePaymentChange = (event) => {
     setPaymentMethod(event.target.value);
@@ -35,9 +62,14 @@ function OrderConfirmation() {
               </h3>
               <div className="flex justify-between items-center border-b pb-2 mb-3 sm:mb-4">
                 <span className="text-gray-700 text-sm sm:text-base">
-                  3 عناصر
+                  {cartItems === 0
+                    ? "لا يوجد عناصر"
+                    : `${cartItems} ${cartItems === 1 ? "عنصر واحد" : "عناصر"}`}
                 </span>
-                <span className="font-bold text-md sm:text-lg">32.5 د.ل</span>
+
+                <span className="font-bold text-md sm:text-lg">
+                  {totalPrice.toFixed(2)} د.ل
+                </span>
               </div>
               <div className="mb-3 sm:mb-4">
                 <h4 className="font-medium text-gray-600 text-sm sm:text-base">
@@ -45,9 +77,19 @@ function OrderConfirmation() {
                 </h4>
                 <div className="flex justify-between items-center mt-2">
                   <div className="text-sm sm:text-base">
-                    <p>البيت, طرابلس</p>
-                    <p>أروي عبدالرحمن أبوزقية</p>
-                    <p>911120701</p>
+                    {userData ? (
+                      <>
+                        <p>
+                          {userData.address}, {userData.city}
+                        </p>
+                        <p>
+                          {userData.firstName} {userData.lastName}
+                        </p>
+                        <p>{userData.mobileNo}</p>
+                      </>
+                    ) : (
+                      <p>جاري تحميل معلومات التوصيل...</p>
+                    )}
                   </div>
                 </div>
               </div>

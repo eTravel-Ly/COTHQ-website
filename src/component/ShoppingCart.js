@@ -199,7 +199,12 @@ function ShoppingCart() {
               className="bg-custom-orange text-white w-full py-2 rounded"
               style={{ fontFamily: "Tajwal, sans-serif" }}
                 onClick={()=>{
-                  navigate('/OrderConfirmation');
+             navigate(`/OrderConfirmation/${cartItems.length}`, {
+               state: { totalPrice },
+             });
+
+              
+
                 }}
             >
               إتمام الشراء

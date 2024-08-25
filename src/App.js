@@ -53,7 +53,10 @@ function App() {
           <Route path="/OrderHistory" element={<OrderHistory />} />
           <Route path="/BorrowsHistory" element={<BorrowsHistory />} />
           <Route path="/Myborrow" element={<Myborrow />} />
-          <Route path="/OrderConfirmation" element={<OrderConfirmation />} />
+          <Route
+            path="/OrderConfirmation/:cartItems"
+            element={<OrderConfirmation />}
+          />
           <Route path="/Seminars" element={<Seminars />} />
         </Routes>
       </BrowserRouter>
