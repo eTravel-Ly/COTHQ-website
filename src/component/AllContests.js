@@ -2,29 +2,29 @@ import React from "react";
 import allContests from "../assets/images/allContests.jpg";
 
 const AllContests = () => {
-  const contests = [
-    {
-      id: 1,
-      title: "مسابقة البرمجة",
-      description: "اختبر مهاراتك في البرمجة مع هذه المسابقة.",
-      date: "2024-09-01",
-      image: allContests,
-    },
-    {
-      id: 2,
-      title: "مسابقة التصميم",
-      description: "عرض أفضل تصاميمك في هذه المسابقة.",
-      date: "2024-09-15",
-      image: allContests,
-    },
-    {
-      id: 3,
-      title: "مسابقة الرياضيات",
-      description: "حل المعادلات والتحديات الرياضية.",
-      date: "2024-09-30",
-      image: allContests,
-    },
-  ];
+const contests = [
+  {
+    id: 1,
+    title: "مسابقة حفظ القرآن الكريم",
+    description: "تنافس في حفظ أجزاء من القرآن الكريم وتقديمها.",
+    date: "2024-10-01",
+    image: allContests,
+  },
+  {
+    id: 2,
+    title: "مسابقة السيرة النبوية",
+    description: "اختبر معلوماتك حول حياة النبي محمد صلى الله عليه وسلم.",
+    date: "2024-10-15",
+    image: allContests,
+  },
+  {
+    id: 3,
+    title: "مسابقة الفقه الإسلامي",
+    description: "تنافس في فهم وتطبيق قواعد الفقه الإسلامي.",
+    date: "2024-11-01",
+    image: allContests,
+  },
+];
 
   return (
     <div className="p-4">

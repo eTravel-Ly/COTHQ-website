@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import AllContests from "../component/AllContests";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
-import Currentcompetitions from "../component/Currentcompetitions";
+import TrainingCourses from "../component/TrainingCourses";
 
 const Contests = () => {
   const [selectedSection, setSelectedSection] = useState("allContests");
 
   const showContests = () => setSelectedSection("allContests");
-  const showCurrentcompetitions = () =>
-    setSelectedSection("Currentcompetitions");
+  const showTrainingCourses = () => setSelectedSection("TrainingCourses");
 
   return (
     <div className="flex h-screen font-tajwal">
@@ -26,7 +25,9 @@ const Contests = () => {
           <div className="flex mt-4">
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                selectedSection === "allContests" ? "bg-custom-orange text-white" : ""
+                selectedSection === "allContests"
+                  ? "bg-custom-orange text-white"
+                  : ""
               }`}
               onClick={showContests}
             >
@@ -34,19 +35,17 @@ const Contests = () => {
             </button>
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                selectedSection === "Currentcompetitions"
+                selectedSection === "TrainingCourses"
                   ? "bg-custom-orange text-white"
                   : ""
               }`}
-              onClick={showCurrentcompetitions}
+              onClick={showTrainingCourses}
             >
               المسابقات الحالية
             </button>
           </div>
           {selectedSection === "allContests" && <AllContests />}
-          {selectedSection === "Currentcompetitions" && (
-            <Currentcompetitions />
-          )}
+          {selectedSection === "TrainingCourses" && <TrainingCourses />}
         </div>
       </div>
     </div>
