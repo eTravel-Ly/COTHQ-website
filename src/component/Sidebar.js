@@ -131,7 +131,7 @@ const Sidebar = () => {
             </div>
           </div>
           <Link
-            to="/Shop"
+            to="/MyActivity"
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
@@ -144,7 +144,7 @@ const Sidebar = () => {
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <GiTargetPrize className="mr-2 ml-2 text-sm" />
-            المسابقـــات و دورات تدريبية 
+            المسابقـــات و دورات تدريبية
           </Link>
           <Link
             to="/Seminars"
@@ -162,8 +162,7 @@ const Sidebar = () => {
             <CiShop className="mr-2 ml-2 text-sm" />
             المتجر
           </Link>
-         
-       
+
           <div className="flex flex-col items-center mt-auto p-1 bg-white w-full justify-center border-t"></div>
           <a
             href="#"

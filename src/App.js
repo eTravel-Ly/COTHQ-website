@@ -24,7 +24,8 @@ import {
   Seminars,
   Contests,
   SeminarsDetails,
-  CompetitionsDetails
+  CompetitionsDetails,
+  MyActivity,
 } from "./page/index";
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
           <Route path="/NavbarLogin" element={<NavbarLogin />} />
           <Route path="/MyCourses" element={<MyCourses />} />
           <Route path="/Shop" element={<Shop />} />
+
+          <Route path="/MyActivity" element={<MyActivity />} />
           <Route path="/MyBooks" element={<MyBooks />} />
           <Route path="/BookDetails/:bookId" element={<BookDetails />} />
           <Route path="/ReadBooks/:bookId" element={<ReadBooks />} />
