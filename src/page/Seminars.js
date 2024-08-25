@@ -6,6 +6,7 @@ import cover from "../assets/images/test1.png";
 import { CiCalendarDate } from "react-icons/ci";
 import cover1 from "../assets/images/test2.png";
 import { useNavigate } from 'react-router-dom';
+import Modal from 'react-modal';
 
 // بيانات الندوات والمؤتمرات
 const seminarsData = [
@@ -83,6 +84,24 @@ const Seminars = () => {
   const handleAllConferences = () => {
     setDisplayedData(conferencesData);
     setActiveButton("conferences");
+  };
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedConference, setSelectedConference] = useState(null);
+  const openConferenceModal = (conference) => {
+    setSelectedConference(conference);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedConference(null);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    alert('تم التسجيل بنجاح!');
+    closeModal();
   };
 
   return (
@@ -164,7 +183,7 @@ const Seminars = () => {
                         تفاصيل الندوة
                       </button>
                     ) : (
-                      <button className="bg-custom-green text-white py-2 px-4 rounded">
+                      <button className="bg-custom-green text-white py-2 px-4 rounded" onClick={() => openConferenceModal(item)}>
                         تسجيل في المؤتمر
                       </button>
                     )}
@@ -174,7 +193,91 @@ const Seminars = () => {
             ))}
           </div>
         </div>
+        <Modal
+  isOpen={modalIsOpen}
+  onRequestClose={closeModal}
+  className="bg-white rounded-lg p-8 w-[90vw] max-w-md mx-auto"
+  overlayClassName="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
+  style={{ direction: 'rtl', fontFamily: 'Tajwal, sans-serif' }}
+>
+  <h2 className="text-xl font-bold mb-4 text-center" style={{ fontFamily: "Tajwal, sans-serif" }}>
+    تسجيل في المؤتمر
+  </h2>
+  <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex flex-col items-end">
+      <label htmlFor="name" className="block text-sm font-medium mb-1" style={{ fontFamily: "Tajwal, sans-serif" }}>
+        اسمك
+      </label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        required
+        className="block w-full p-2 border border-gray-300 rounded"
+      />
+    </div>
+    <div className="flex flex-col items-end">
+      <label htmlFor="address" className="block text-sm font-medium mb-1" style={{ fontFamily: "Tajwal, sans-serif" }}>
+        العنوان
+      </label>
+      <input
+        type="text"
+        id="address"
+        name="address"
+        required
+        className="block w-full p-2 border border-gray-300 rounded"
+      />
+    </div>
+    <div className="flex flex-col items-end">
+      <label htmlFor="email" className="block text-sm font-medium mb-1" style={{ fontFamily: "Tajwal, sans-serif" }}>
+        البريد الإلكتروني
+      </label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        className="block w-full p-2 border border-gray-300 rounded"
+      />
+    </div>
+    <div className="flex flex-col items-end">
+      <label htmlFor="phone" className="block text-sm font-medium mb-1" style={{ fontFamily: "Tajwal, sans-serif" }}>
+        رقم الهاتف
+      </label>
+      <input
+        type="text"
+        id="phone"
+        name="phone"
+        required
+        className="block w-full p-2 border border-gray-300 rounded"
+      />
+    </div>
+    <div className="flex flex-col-reverse mt-4 gap-2">
+    <button
+        onClick={closeModal}
+        className="bg-gray-300 text-gray-700 py-2 px-4 rounded w-full"
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+      >
+        إلغاء
+      </button>
+      <button
+        type="submit"
+        className="bg-custom-green text-white py-2 px-4 rounded w-full"
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+      >
+        تأكيد التسجيل
+      </button>
+   
+    </div>
+  </form>
+</Modal>
+
+
+
       </div>
+ 
+
+
     </div>
   );
 };
