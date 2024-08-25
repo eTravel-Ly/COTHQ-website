@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { GiTargetPrize } from "react-icons/gi";
 import { FaPeopleLine } from "react-icons/fa6";
+import { MdOutlineLocalActivity } from "react-icons/md";
 
 
 const Sidebar = () => {
@@ -130,6 +131,14 @@ const Sidebar = () => {
             </div>
           </div>
           <Link
+            to="/Shop"
+            className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
+            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+          >
+            <MdOutlineLocalActivity className="mr-2 ml-2 text-sm" />
+            نشاطاتى
+          </Link>
+          <Link
             to="/Contests"
             className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
@@ -153,6 +162,8 @@ const Sidebar = () => {
             <CiShop className="mr-2 ml-2 text-sm" />
             المتجر
           </Link>
+         
+       
           <div className="flex flex-col items-center mt-auto p-1 bg-white w-full justify-center border-t"></div>
           <a
             href="#"
