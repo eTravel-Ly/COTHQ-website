@@ -23,6 +23,7 @@ import {
   OrderConfirmation,
   Seminars,
   Contests,
+  SeminarsDetails
 } from "./page/index";
 function App() {
   return (
@@ -58,6 +59,8 @@ function App() {
             element={<OrderConfirmation />}
           />
           <Route path="/Seminars" element={<Seminars />} />
+          <Route path="/SeminarsDetails/:Id" element={<SeminarsDetails />} />
+
         </Routes>
       </BrowserRouter>
     </>

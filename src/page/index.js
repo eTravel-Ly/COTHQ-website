@@ -21,6 +21,7 @@ export { default as Myborrow } from "./Myborrow";
 export { default as OrderConfirmation } from "./OrderConfirmation";
 export { default as Seminars } from "./Seminars";
 export { default as Contests } from "./Contests";
+export { default as SeminarsDetails } from "./SeminarsDetails";
 
 
 export {};
