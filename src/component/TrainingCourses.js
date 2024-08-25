@@ -1,5 +1,5 @@
 import React from "react";
-import cover from "../assets/images/cover.png"
+import cover from "../assets/images/cover.png";
 // Sample data for courses with image URL
 import { useNavigate } from 'react-router-dom';
 
@@ -25,8 +25,14 @@ const courses = [
     date: "2024-12-01",
     imageUrl: cover,
   },
+  {
+    id: 4,
+    title: "دورة أصول الدين",
+    description: "تعرف على أصول الدين وعقيدة الإسلام.",
+    date: "2025-01-01",
+    imageUrl: cover,
+  },
 ];
-
 
 const TrainingCourses = () => {
   const navigate = useNavigate();
@@ -34,13 +40,14 @@ const TrainingCourses = () => {
   const openTrainingDetails = () => {
     navigate(`/CompetitionsDetails`);
   };
+
   return (
     <div className="p-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {courses.map((course) => (
           <div
             key={course.id}
-            className="bg-gray-100 shadow-lg rounded-lg p-6 mb-6 flex flex-col items-center"
+            className="bg-gray-100 shadow-lg rounded-lg p-6 flex flex-col items-center"
           >
             <img
               src={course.imageUrl}
@@ -55,9 +62,10 @@ const TrainingCourses = () => {
               <p className="text-sm text-gray-500 mb-4">
                 تاريخ الدورة: {course.date}
               </p>
-              <button className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base" onClick={()=>
-                      openTrainingDetails()
-                  }>
+              <button
+                className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base"
+                onClick={openTrainingDetails}
+              >
                 بدء الدورة
               </button>
             </div>

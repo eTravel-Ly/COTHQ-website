@@ -26,6 +26,7 @@ import {
   SeminarsDetails,
   CompetitionsDetails,
   MyActivity,
+  Allactivity
 } from "./page/index";
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
             path="/OrderConfirmation/:cartItems"
             element={<OrderConfirmation />}
           />
+          <Route path="/Allactivity" element={<Allactivity />} />
           <Route path="/Seminars" element={<Seminars />} />
           <Route path="/SeminarsDetails/:Id" element={<SeminarsDetails />} />
         </Routes>

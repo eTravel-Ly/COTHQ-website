@@ -2,8 +2,13 @@
 
 import React from 'react';
 import Banner from '../assets/images/Banner.png';
+import { useNavigate } from 'react-router-dom';
 
 const PromoSection = () => {
+  const navigate = useNavigate();
+  const handleAllactivity = () => {
+    navigate('/Allactivity');
+  };
   return (
     <section
       className="relative bg-cover bg-center top-10 text-white rounded-lg flex justify-center items-center"
@@ -21,7 +26,7 @@ const PromoSection = () => {
           className="text-3xl font-bold mb-4" 
           style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}
         >
-          اكتشف دورتك المثالية الآن!
+          اكتشف دورتك و ندواتك والمؤتمرات المثالية الآن!
         </h2>
         <p 
           className="mb-6" 
@@ -38,8 +43,9 @@ const PromoSection = () => {
         <button 
           className="bg-custom-orange text-white px-6 py-3 rounded-full" 
           style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}
+          onClick={handleAllactivity}
         >
-          سجل الآن
+          شاهد الان 
         </button>
       </div>
     </section>
