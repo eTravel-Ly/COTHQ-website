@@ -5,6 +5,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import cover from "../assets/images/test1.png";
 import { CiCalendarDate } from "react-icons/ci";
 import cover1 from "../assets/images/test2.png";
+import { useNavigate } from 'react-router-dom';
 
 // بيانات الندوات والمؤتمرات
 const seminarsData = [
@@ -63,6 +64,8 @@ const conferencesData = [
 ];
 
 const Seminars = () => {
+  const navigate = useNavigate();
+
   // حالة لتخزين البيانات المعروضة
   const [displayedData, setDisplayedData] = useState(seminarsData);
   // حالة لتخزين الزر النشط
@@ -73,7 +76,9 @@ const Seminars = () => {
     setDisplayedData(seminarsData);
     setActiveButton("all");
   };
-
+  const openSeminarsDetails = (Id) => {
+    navigate(`/SeminarsDetails/${Id}`);
+  };
   // دالة لعرض جميع المؤتمرات
   const handleAllConferences = () => {
     setDisplayedData(conferencesData);
@@ -153,7 +158,9 @@ const Seminars = () => {
                   
                   <div className="flex justify-end items-center text-sm text-gray-600">
                     {item.type === "seminar" ? (
-                      <button className="bg-custom-green text-white py-2 px-4 rounded">
+                      <button className="bg-custom-green text-white py-2 px-4 rounded" onClick={()=>
+                        openSeminarsDetails(1)
+                      }>
                         تفاصيل الندوة
                       </button>
                     ) : (
