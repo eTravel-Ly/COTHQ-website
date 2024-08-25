@@ -183,7 +183,7 @@ function ShoppingCart() {
               {item.title}
             </h3>
             <div className="flex text-gray-700 mt-1 text-sm mb-2">
-              <div className="flex items-center">
+              <div className="flex items-center  font-tajwal">
                 <FaRegUserCircle className="text-gray-600 mr-2" />
                 <span>{item.author}</span>
               </div>
