@@ -1,39 +1,60 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
-import cashIcon from "../assets/images/cash.png"; // استبدل بمسار الصورة الحقيقية
-import walletIcon from "../assets/images/wallet.png"; // استبدل بمسار الصورة الحقيقية
-import yusrIcon from "../assets/images/yusr.png"; // استبدل بمسار الصورة الحقيقية
-import unnamed from "../assets/images/unnamed.png"; // استبدل بمسار الصورة الحقيقية
 import { useParams, useLocation } from "react-router-dom";
-import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
+import { baseurl } from "../helper/Baseurl";
 
 function OrderConfirmation() {
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [userData, setUserData] = useState(null);
+  const [paymentMethods, setPaymentMethods] = useState([]);
   const { cartItems } = useParams();
   const location = useLocation();
   const { totalPrice } = location.state || { totalPrice: 0 };
 
+  const showPicPayment = async (fileName) => {
+    try {
+      const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
+      console.log("Fetched image URL:", imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error("Error fetching image:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-                const response = await axios.get(`${baseurl}my-profile`, {
-
-       
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const response = await axios.get(`${baseurl}my-profile`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         setUserData(response.data);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
     };
 
+    const fetchPaymentMethods = async () => {
+      try {
+        const response = await axios.get(`${baseurl}public/payment-methods`);
+        const paymentMethodsWithImages = await Promise.all(
+          response.data.map(async (method) => {
+            const imageUrl = await showPicPayment(method.imageFileUrl);
+            return { ...method, imageUrl };
+          })
+        );
+        setPaymentMethods(paymentMethodsWithImages);
+      } catch (error) {
+        console.error("Error fetching payment methods:", error);
+      }
+    };
+
     fetchUserProfile();
+    fetchPaymentMethods();
   }, []);
 
   const handlePaymentChange = (event) => {
@@ -101,109 +122,40 @@ function OrderConfirmation() {
                 طريقة الدفع
               </h3>
               <div className="space-y-3 sm:space-y-4">
-                {/* Payment Option Item */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="cash"
-                      name="payment-method"
-                      value="cash"
-                      checked={paymentMethod === "cash"}
-                      onChange={handlePaymentChange}
-                      className="form-radio h-4 w-4 sm:h-5 sm:w-5 text-green-600"
-                    />
-                    <label
-                      htmlFor="cash"
-                      className="mr-3 flex items-center text-sm sm:text-base"
-                    >
-                      <img
-                        src={cashIcon}
-                        alt="Cash"
-                        className="ml-2 h-6 w-6 sm:h-8 sm:w-8"
+                {paymentMethods.map((method) => (
+                  <div
+                    key={method.id}
+                    className="flex items-center justify-between"
+                  >
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        id={`payment-${method.id}`}
+                        name="payment-method"
+                        value={method.paymentType}
+                        checked={paymentMethod === method.paymentType}
+                        onChange={handlePaymentChange}
+                        className="form-radio h-4 w-4 sm:h-5 sm:w-5"
                       />
-                      نقداً
-                    </label>
+                      <label
+                        htmlFor={`payment-${method.id}`}
+                        className="mr-3 flex items-center text-sm sm:text-base"
+                      >
+                        <img
+                          src={method.imageUrl}
+                          alt={method.nameEn}
+                          className="ml-2 h-6 w-6 sm:h-8 sm:w-8"
+                        />
+                        {method.nameAr}
+                      </label>
+                    </div>
+                    {method.paymentType === "MOAMALAT" && (
+                      <span className="text-gray-500 text-xs sm:text-sm">
+                        {method.details}
+                      </span>
+                    )}
                   </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="wallet"
-                      name="payment-method"
-                      value="wallet"
-                      checked={paymentMethod === "wallet"}
-                      onChange={handlePaymentChange}
-                      className="form-radio h-4 w-4 sm:h-5 sm:w-5 text-blue-600"
-                    />
-                    <label
-                      htmlFor="wallet"
-                      className="mr-3 flex items-center text-sm sm:text-base"
-                    >
-                      <img
-                        src={walletIcon}
-                        alt="Wallet"
-                        className="ml-2 h-6 w-6 sm:h-8 sm:w-8"
-                      />
-                      محفظة
-                    </label>
-                  </div>
-                  <span className="text-gray-500 text-xs sm:text-sm">
-                    رصيد المحفظة: 0.5 د.ل
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="yusr-online"
-                      name="payment-method"
-                      value="yusr-online"
-                      checked={paymentMethod === "yusr-online"}
-                      onChange={handlePaymentChange}
-                      className="form-radio h-4 w-4 sm:h-5 sm:w-5 text-blue-600"
-                    />
-                    <label
-                      htmlFor="yusr-online"
-                      className="mr-3 flex items-center text-sm sm:text-base"
-                    >
-                      <img
-                        src={yusrIcon}
-                        alt="Yusr Online"
-                        className="ml-2 h-6 w-6 sm:h-8 sm:w-8"
-                      />
-                      السداد
-                    </label>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="mobicash"
-                      name="payment-method"
-                      value="unnamed"
-                      checked={paymentMethod === "unnamed"}
-                      onChange={handlePaymentChange}
-                      className="form-radio h-4 w-4 sm:h-5 sm:w-5 text-blue-600"
-                    />
-                    <label
-                      htmlFor="mobicash"
-                      className="mr-3 flex items-center text-sm sm:text-base"
-                    >
-                      <img
-                        src={unnamed}
-                        alt="MobiCash"
-                        className="ml-2 h-6 w-6 sm:h-8 sm:w-8"
-                      />
-                      موبي كاش
-                    </label>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
