@@ -80,7 +80,18 @@ const ConferencesAll = () => {
       [name]: type === "file" ? files[0] : value,
     }));
   };
-
+  const initialFormData = {
+    fullName: "",
+    gender: "MALE",
+    birthDate: "",
+    email: "",
+    mobileNo: "",
+    city: "",
+    nationalityCode: "",
+    subscriberNotes: "",
+    attachmentFile: null,
+    eventId: 0,
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -101,6 +112,8 @@ const ConferencesAll = () => {
             },
           });
           toast.success('تم التسجيل بنجاح!');
+          setFormData(initialFormData); // Reset the form data
+
           closeModal();
         } catch (error) {
           console.error('Error submitting form:', error);
@@ -119,6 +132,8 @@ const ConferencesAll = () => {
           },
         });
         toast.success('تم التسجيل بنجاح!');
+        setFormData(initialFormData); // Reset the form data
+
         closeModal();
       } catch (error) {
         console.error('Error submitting form:', error);

@@ -6,6 +6,8 @@ import allContests from "../assets/images/allContests.jpg";
 import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
+
 Modal.setAppElement("#root");
 
 const AllContests = () => {
@@ -25,6 +27,7 @@ const AllContests = () => {
     attachmentFile: null,
     eventId: 0,
   });
+  const [loading, setLoading] = useState(false); // حالة التحميل
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -70,11 +73,68 @@ const AllContests = () => {
       [name]: type === "file" ? files[0] : value,
     }));
   };
-
-  const handleSubmit = (e) => {
+  const initialFormData = {
+    fullName: "",
+    gender: "MALE",
+    birthDate: "",
+    email: "",
+    mobileNo: "",
+    city: "",
+    nationalityCode: "",
+    subscriberNotes: "",
+    attachmentFile: null,
+    eventId: 0,
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    closeModal();
+    setLoading(true);
+    
+    // Create an object to send in JSON format
+    const dataToSend = { ...formData };
+    if (dataToSend.attachmentFile) {
+      // Convert file to base64 if needed for JSON
+      const reader = new FileReader();
+      reader.readAsDataURL(dataToSend.attachmentFile);
+      reader.onloadend = async () => {
+        dataToSend.attachmentFile = reader.result;
+        try {
+          await axios.post(baseurl+'public/event/register', dataToSend, {
+            headers: {
+              'accept': 'application/json',
+              'Content-Type': 'application/json', // Use application/json
+            },
+          });
+          toast.success('تم التسجيل بنجاح!');
+          setFormData(initialFormData); // Reset the form data
+
+          closeModal();
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+        } finally {
+          setLoading(false);
+        }
+      };
+    } else {
+      // No file to send
+      try {
+        await axios.post(baseurl+'public/event/register', dataToSend, {
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+        toast.success('تم التسجيل بنجاح!');
+        setFormData(initialFormData); // Reset the form data
+
+        closeModal();
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      } finally {
+        setLoading(false);
+      }
+    }
   };
   const openContestsDetails = (id) => {
     navigate(`/ContestsDetails/${id}`);
@@ -121,7 +181,6 @@ const AllContests = () => {
           </div>
         ))}
       </div>
-
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -136,6 +195,7 @@ const AllContests = () => {
           تسجيل في المسابقة
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-wrap -mx-2 justify-end items-end">
           <div className="flex flex-wrap -mx-2 justify-end items-end">
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
               <label
@@ -152,7 +212,7 @@ const AllContests = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+               className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -170,7 +230,7 @@ const AllContests = () => {
                 value={formData.nationalityCode}
                 onChange={handleChange}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+              className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -187,12 +247,12 @@ const AllContests = () => {
                 value={formData.gender}
                 onChange={handleChange}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+                  className="block w-full p-1.5 border border-gray-300 rounded"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                <option value="">اختر</option>
-                <option value="MALE">ذكر</option>
-                <option value="FEMALE">أنثى</option>
+                >
+                  <option value="">اختر</option>
+                  <option value="MALE">ذكر</option>
+                  <option value="FEMALE">أنثى</option>
               </select>
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -204,13 +264,14 @@ const AllContests = () => {
                 تاريخ الميلاد
               </label>
               <input
-                type="date"
+                  type="date"
                 id="birthDate"
                 name="birthDate"
                 value={formData.birthDate}
                 onChange={handleChange}
+                style={{ fontFamily: "Tajwal, sans-serif" }}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+              className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
 
@@ -229,7 +290,7 @@ const AllContests = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+               className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
 
@@ -266,7 +327,7 @@ const AllContests = () => {
                 name="attachmentFile"
                 onChange={handleChange}
                 className="block w-full p-1 border border-gray-300 rounded cursor-pointer file:cursor-pointer file:bg-custom-green file:text-white file:px-2 file:py-1 file:border-0 file:mr-2 file:rounded file:text-sm"
-              />
+                />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
               <label
@@ -300,27 +361,28 @@ const AllContests = () => {
                 value={formData.subscriberNotes}
                 onChange={handleChange}
                 className="block w-full p-2 border border-gray-300 rounded"
-              />
+                />
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-custom-green text-white py-2 px-4 rounded w-full"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              إرسال
-            </button>
+          
           </div>
+          <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
+            disabled={loading}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
+            {loading ? (
+              <FaSpinner className="animate-spin text-lg" />
+            ) : (
+              'تسجيل'
+            )}
+          </button>
+        </div>
+
         </form>
-        <button
-          onClick={closeModal}
-          className="absolute top-2 left-2 text-white"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
-        >
-          إغلاق
-        </button>
       </Modal>
       <ToastContainer position="bottom-left" />
     </div>
