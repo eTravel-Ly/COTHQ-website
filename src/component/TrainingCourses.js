@@ -107,12 +107,21 @@ const TrainingCourses = () => {
               <p className="text-sm text-gray-500 mb-4">
                 تاريخ الدورة: {course.date}
               </p>
-              <button
-                className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base"
-                onClick={openModal}
-              >
-                بدء الدورة
-              </button>
+            
+              <div className="flex justify-between ">
+                <button
+                  onClick={openModal}
+                  className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base"
+                >
+                  التسجيل في الدورة
+                </button>
+                <button
+                
+                  className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base"
+                >
+                  تفاصيل الدورة
+                </button>
+              </div>
             </div>
           </div>
         ))}
