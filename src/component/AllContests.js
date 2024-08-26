@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Modal from "react-modal";
 import allContests from "../assets/images/allContests.jpg";
-
-Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
+import { baseurl } from "../helper/Baseurl";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+Modal.setAppElement("#root");
 
 const AllContests = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedContest, setSelectedContest] = useState(null);
+  const [contests, setContests] = useState([]);
   const [formData, setFormData] = useState({
     fullName: "",
     gender: "MALE",
@@ -20,30 +24,29 @@ const AllContests = () => {
     eventId: 0,
   });
 
-  const contests = [
-    {
-      id: 1,
-      title: "مسابقة حفظ القرآن الكريم",
-      description: "تنافس في حفظ أجزاء من القرآن الكريم وتقديمها.",
-      date: "2024-10-01",
-      image: allContests,
-    },
-    {
-      id: 2,
-      title: "مسابقة السيرة النبوية",
-      description: "اختبر معلوماتك حول حياة النبي محمد صلى الله عليه وسلم.",
-      date: "2024-10-15",
-      image: allContests,
-    },
-    {
-      id: 3,
-      title: "مسابقة الفقه الإسلامي",
-      description: "تنافس في فهم وتطبيق قواعد الفقه الإسلامي.",
-      date: "2024-11-01",
-      image: allContests,
-    },
-  ];
+  useEffect(() => {
+    const fetchContests = async () => {
+      try {
+          const response = await axios.get(
+            baseurl + "public/events/active",
+            {}
+          );
+        const competitions = response.data.COMPETITION.map((contest) => ({
+          id: contest.id,
+          title: contest.title,
+          description: contest.description,
+          date: contest.eventStartDate,
+          image: allContests, // Placeholder image for all contests
+        }));
+        setContests(competitions);
+      } catch (error) {
+        console.error("Error fetching contests:", error);
+        toast.error("حدث خطأ أثناء جلب بيانات المسابقات."); // عرض رسالة خطأ باستخدام التوست
+      }
+    };
 
+    fetchContests();
+  }, []);
   const openModal = (contest) => {
     setSelectedContest(contest);
     setFormData((prevData) => ({
@@ -68,11 +71,9 @@ const AllContests = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // منطق إرسال البيانات هنا
     console.log(formData);
     closeModal();
   };
-
   return (
     <div className="p-4">
       <div className="flex flex-wrap -mx-4">
@@ -96,16 +97,16 @@ const AllContests = () => {
                     تاريخ المسابقة: {contest.date}
                   </p>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center text-sm text-gray-600 space-x-4 space-x-reverse">
                   <button
                     onClick={() => openModal(contest)}
-                    className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base"
+                    className="bg-custom-orange  text-white py-2 px-4 rounded"
                   >
                     التسجيل في المسابقة
                   </button>
                   <button
                     onClick={() => openModal(contest)}
-                    className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base"
+                    className="bg-custom-orange  text-white py-2 px-4 rounded"
                   >
                     تفاصيل المسابقة
                   </button>
@@ -316,6 +317,7 @@ const AllContests = () => {
           إغلاق
         </button>
       </Modal>
+      <ToastContainer position="bottom-left" />
     </div>
   );
 };

@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import cover from "../assets/images/cover.png";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { baseurl } from "../helper/Baseurl";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
 
 const courses = [
@@ -36,11 +40,29 @@ const courses = [
 ];
 
 const TrainingCourses = () => {
+  const [course, setcourse] = useState([]);
   const navigate = useNavigate();
+ useEffect(() => {
+   const fetchContests = async () => {
+     try {
+       const response = await axios.get(baseurl + "public/events/active", {});
+       const Course = response.data.COURSE.map((course) => ({
+         id: course.id,
+         title: course.title,
+         description: course.description,
+         date: course.eventStartDate,
+         image: cover, // Placeholder image for all contests
+       }));
+       setcourse(Course);
+     } catch (error) {
+       console.error("Error fetching contests:", error);
+       toast.error("حدث خطأ أثناء جلب بيانات المسابقات."); // عرض رسالة خطأ باستخدام التوست
+     }
+   };
 
-  const openTrainingDetails = () => {
-    navigate(`/CompetitionsDetails`);
-  };
+   fetchContests();
+ }, []);
+  
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedContest, setSelectedContest] = useState(null);
   const [formData, setFormData] = useState({
@@ -89,13 +111,13 @@ const TrainingCourses = () => {
   return (
     <div className="p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {courses.map((course) => (
+        {course.map((course) => (
           <div
             key={course.id}
             className="bg-gray-100 shadow-lg rounded-lg p-6 flex flex-col items-center"
           >
             <img
-              src={course.imageUrl}
+              src={course.image}
               alt={course.title}
               className="w-full h-50 object-cover rounded-lg mb-4"
             />
@@ -107,18 +129,15 @@ const TrainingCourses = () => {
               <p className="text-sm text-gray-500 mb-4">
                 تاريخ الدورة: {course.date}
               </p>
-            
-              <div className="flex justify-between ">
+
+              <div className="flex justify-between items-center text-sm text-gray-600 space-x-4 space-x-reverse">
                 <button
                   onClick={openModal}
-                  className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base"
+                  className="bg-custom-orange  text-white py-2 px-4 rounded"
                 >
                   التسجيل في الدورة
                 </button>
-                <button
-                
-                  className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base"
-                >
+                <button className="bg-custom-orange  text-white py-2 px-4 rounded">
                   تفاصيل الدورة
                 </button>
               </div>
