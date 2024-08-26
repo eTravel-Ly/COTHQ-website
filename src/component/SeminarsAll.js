@@ -118,12 +118,12 @@ const SeminarsAll = () => {
 <Modal
   isOpen={modalIsOpen}
   onRequestClose={closeModal}
-  className="bg-white rounded-lg p-6 w-[98vw] max-w-xl mx-auto"
+  className="bg-white rounded-lg p-4 w-[98vw] max-w-xl mx-auto"
   overlayClassName="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
   style={{ direction: "rtl", fontFamily: "Tajwal, sans-serif" }}
 >
   <h2
-    className="text-xl font-bold mb-4 text-center"
+    className="text-lg font-bold mb-3 text-center"
     style={{ fontFamily: "Tajwal, sans-serif" }}
   >
     تسجيل في الندوة
@@ -142,7 +142,7 @@ const SeminarsAll = () => {
         id="nationalId"
         name="nationalId"
         required
-        className="block w-full p-2 border border-gray-300 rounded"
+        className="block w-full p-1.5 border border-gray-300 rounded"
       />
     </div>
     {/* الاسم الكامل والنوع */}
@@ -159,7 +159,7 @@ const SeminarsAll = () => {
           id="gender"
           name="gender"
           required
-          className="block w-full p-1.5 border border-gray-300 rounded"
+          className="block w-full p-1 border border-gray-300 rounded"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
           <option value="">اختر</option>
@@ -180,7 +180,7 @@ const SeminarsAll = () => {
           id="fullName"
           name="fullName"
           required
-          className="block w-full p-1.5 border border-gray-300 rounded"
+          className="block w-full p-1 border border-gray-300 rounded"
         />
       </div>
     </div>
@@ -199,7 +199,7 @@ const SeminarsAll = () => {
           id="birthDate"
           name="birthDate"
           required
-          className="block w-full p-1.5 border border-gray-300 rounded"
+          className="block w-full p-1 border border-gray-300 rounded"
         />
       </div>
       <div className="flex flex-col items-end w-1/2">
@@ -215,7 +215,7 @@ const SeminarsAll = () => {
           id="email"
           name="email"
           required
-          className="block w-full p-1.5 border border-gray-300 rounded"
+          className="block w-full p-1 border border-gray-300 rounded"
         />
       </div>
     </div>
@@ -234,7 +234,7 @@ const SeminarsAll = () => {
           id="mobileNo"
           name="mobileNo"
           required
-          className="block w-full p-1.5 border border-gray-300 rounded"
+          className="block w-full p-1 border border-gray-300 rounded"
         />
       </div>
       <div className="flex flex-col items-end w-1/2">
@@ -250,28 +250,25 @@ const SeminarsAll = () => {
           id="city"
           name="city"
           required
-          className="block w-full p-1.5 border border-gray-300 rounded"
+          className="block w-full p-1 border border-gray-300 rounded"
         />
       </div>
     </div>
     {/* الجنسية وتحميل الملف */}
-    <div >
-     
-      <div className="flex flex-col items-end">
-        <label
-          htmlFor="attachmentFile"
-          className="block text-sm font-medium mb-1"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
-        >
-          تحميل الملف
-        </label>
-        <input
-          type="file"
-          id="attachmentFile"
-          name="attachmentFile"
-          className="block w-full p-1 border border-gray-300 rounded cursor-pointer file:cursor-pointer file:bg-custom-green file:text-white file:px-3 file:py-1.5 file:border-0 file:mr-2 file:rounded file:text-sm"
-/>
-      </div>
+    <div className="flex flex-col items-end">
+      <label
+        htmlFor="attachmentFile"
+        className="block text-sm font-medium mb-1"
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+      >
+        تحميل الملف
+      </label>
+      <input
+        type="file"
+        id="attachmentFile"
+        name="attachmentFile"
+        className="block w-full p-1 border border-gray-300 rounded cursor-pointer file:cursor-pointer file:bg-custom-green file:text-white file:px-2 file:py-1 file:border-0 file:mr-2 file:rounded file:text-sm"
+      />
     </div>
     {/* ملاحظات */}
     <div className="flex flex-col items-end">
@@ -306,6 +303,7 @@ const SeminarsAll = () => {
     إغلاق
   </button>
 </Modal>
+
 
 
 
