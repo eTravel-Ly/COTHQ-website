@@ -1,52 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import cover1 from "../assets/images/test2.png";
 import { CiCalendarDate } from "react-icons/ci";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { baseurl } from '../helper/Baseurl';
+import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+Modal.setAppElement("#root");
 
-Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
-
-// بيانات المؤتمرات
-const conferencesData = [
-  {
-    id: 1,
-    imageSrc: cover1,
-    title: "مؤتمر عن الذكاء الاصطناعي",
-    startDate: "20/09/2024",
-    speaker: "سارة حسين",
-    type: "conference",
-  },
-  {
-    id: 1,
-    imageSrc: cover1,
-    title: "مؤتمر عن التغير المناخي",
-    startDate: "25/09/2024",
-    speaker: "أحمد علي",
-    type: "conference",
-  },
-  {
-    id: 1,
-    imageSrc: cover1,
-    title: "مؤتمر عن التغير المناخي",
-    startDate: "25/09/2024",
-    speaker: "أحمد علي",
-    type: "conference",
-  },
-  {
-    id: 1,
-    imageSrc: cover1,
-    title: "مؤتمر عن التغير المناخي",
-    startDate: "25/09/2024",
-    speaker: "أحمد علي",
-    type: "conference",
-  },
-  // أضف المزيد من المؤتمرات هنا
-];
+// Function to generate image URL
+const getImageUrl = (fileName) => {
+ 
+  return fileName ? `${baseurl}uploads/file/download/${fileName}` : cover1;
+};
 
 const ConferencesAll = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedContest, setSelectedContest] = useState(null);
+  const [selectedConference, setSelectedConference] = useState(null);
   const [formData, setFormData] = useState({
     fullName: "",
     gender: "MALE",
@@ -59,23 +32,45 @@ const ConferencesAll = () => {
     attachmentFile: null,
     eventId: 0,
   });
+  const [conferences, setConferences] = useState([]);
+  const [loading, setLoading] = useState(false); // حالة التحميل
+
   const navigate = useNavigate();
 
-  const openSeminarsDetails = (Id) => {
-    navigate(`/SeminarsDetails/${Id}`);
+  useEffect(() => {
+    // Fetch conferences from API
+    const fetchConferences = async () => {
+      try {
+        const response = await axios.get(
+          baseurl+ "public/events/active",
+          { headers: { accept: "application/json" } }
+        );
+        const data = response.data.CONFERENCE || [];
+        setConferences(data);
+      } catch (error) {
+        console.error("Error fetching conferences:", error);
+      }
+    };
+
+    fetchConferences();
+  }, []);
+
+  const openConferenceDetails = (id) => {
+    navigate(`/SeminarsDetails/${id}`);
   };
-  const openModal = (conferencesData) => {
-    setSelectedContest(conferencesData);
+
+  const openModal = (conference) => {
+    setSelectedConference(conference);
     setFormData((prevData) => ({
       ...prevData,
-      eventId: conferencesData.id,
+      eventId: conference.id,
     }));
     setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
-    setSelectedContest(null);
+    setSelectedConference(null);
   };
 
   const handleChange = (e) => {
@@ -86,22 +81,66 @@ const ConferencesAll = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // منطق إرسال البيانات هنا
-    console.log(formData);
-    closeModal();
+    setLoading(true);
+    
+    // Create an object to send in JSON format
+    const dataToSend = { ...formData };
+    if (dataToSend.attachmentFile) {
+      // Convert file to base64 if needed for JSON
+      const reader = new FileReader();
+      reader.readAsDataURL(dataToSend.attachmentFile);
+      reader.onloadend = async () => {
+        dataToSend.attachmentFile = reader.result;
+        try {
+          await axios.post(baseurl+'public/event/register', dataToSend, {
+            headers: {
+              'accept': 'application/json',
+              'Content-Type': 'application/json', // Use application/json
+            },
+          });
+          toast.success('تم التسجيل بنجاح!');
+          closeModal();
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+        } finally {
+          setLoading(false);
+        }
+      };
+    } else {
+      // No file to send
+      try {
+        await axios.post(baseurl+'public/event/register', dataToSend, {
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+        toast.success('تم التسجيل بنجاح!');
+        closeModal();
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      } finally {
+        setLoading(false);
+      }
+    }
   };
-
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {conferencesData.map((item, index) => (
-          <div key={index} className="p-2">
-            <div className="bg-white rounded-lg shadow-md p-3 flex flex-col">
+        {conferences.map((item) => (
+          <div key={item.id} className="p-2">
+            <div
+              className={`bg-white rounded-lg shadow-md p-3 flex flex-col ${
+                item.isActive ? "shadow-sm shadow-green-500" : "shadow-md"
+              }`}
+            >
               <img
-                src={item.imageSrc}
+                src={getImageUrl(item.coverImageFile)}
                 alt={item.title}
                 className="object-cover rounded-lg mb-4"
               />
@@ -117,7 +156,7 @@ const ConferencesAll = () => {
                     marginBottom: "8px",
                   }}
                 >
-                  تاريخ بدء: {item.startDate}
+                  تاريخ بدء: {item.eventStartDate}
                 </p>
               </div>
               <div className="flex items-center mb-2">
@@ -126,24 +165,23 @@ const ConferencesAll = () => {
                   className="text-xs text-gray-600 text-right"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
-                  المتحدث: {item.speaker}
+                  المتحدث: {item.organizer}
                 </p>
               </div>
               <div className="flex justify-center items-center text-sm text-gray-600 space-x-4 space-x-reverse">
-              <button
-                className="bg-custom-green text-white py-2 px-4 rounded"
-                onClick={() => openSeminarsDetails(1)}
-              >
-                تفاصيل 
-              </button>
-              <button
-                className="bg-custom-green text-white py-2 px-4 rounded"
-                onClick={() => openModal(conferencesData)}
+                <button
+                  className="bg-custom-green text-white py-2 px-4 rounded"
+                  onClick={() => openConferenceDetails(item.id)}
                 >
-                سجل الآن
-              </button>
-            </div>
-
+                  تفاصيل المؤتمر
+                </button>
+                <button
+                  className="bg-custom-green text-white py-2 px-4 rounded"
+                  onClick={() => openModal(item)}
+                >
+                  سجل الآن
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -164,6 +202,7 @@ const ConferencesAll = () => {
           تسجيل في المؤتمر
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-wrap -mx-2 justify-end items-end">
           <div className="flex flex-wrap -mx-2 justify-end items-end">
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
               <label
@@ -333,24 +372,26 @@ const ConferencesAll = () => {
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-custom-green text-white py-2 px-4 rounded w-full"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              إرسال
-            </button>
+          
           </div>
+          <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
+            disabled={loading}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
+            {loading ? (
+              <FaSpinner className="animate-spin text-lg" />
+            ) : (
+              'تسجيل'
+            )}
+          </button>
+        </div>
+
         </form>
-        <button
-        onClick={closeModal}
-        className="absolute top-2 left-2 text-white"
-        style={{ fontFamily: "Tajwal, sans-serif" }}
-      >
-        إغلاق
-      </button>
       </Modal>
+      <ToastContainer />
 
     </>
   );

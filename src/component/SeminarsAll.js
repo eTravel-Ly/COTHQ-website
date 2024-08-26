@@ -6,7 +6,9 @@ import axios from "axios";
 import Modal from "react-modal";
 import cover from "../assets/images/test1.png";
 import { baseurl } from '../helper/Baseurl';
-
+import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const SeminarsAll = () => {
   const navigate = useNavigate();
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -24,11 +26,12 @@ const SeminarsAll = () => {
     eventId: 0,
   });
   const [seminarsData, setSeminarsData] = useState([]);
+  const [loading, setLoading] = useState(false); // حالة التحميل
 
   useEffect(() => {
     const fetchSeminars = async () => {
       try {
-        const response = await axios.get(baseurl+'public/events/active');
+        const response = await axios.get(baseurl + 'public/events/active');
         setSeminarsData(response.data.SEMINAR);
       } catch (error) {
         console.error('Error fetching seminars:', error);
@@ -53,6 +56,18 @@ const SeminarsAll = () => {
   const closeModal = () => {
     setModalIsOpen(false);
     setSelectedSeminar(null);
+    setFormData({
+      fullName: "",
+      gender: "MALE",
+      birthDate: "",
+      email: "",
+      mobileNo: "",
+      city: "",
+      nationalityCode: "",
+      subscriberNotes: "",
+      attachmentFile: null,
+      eventId: 0,
+    });
   };
 
   const handleChange = (e) => {
@@ -63,15 +78,55 @@ const SeminarsAll = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // منطق إرسال البيانات هنا
-    console.log(formData);
-    closeModal();
+    setLoading(true);
+    
+    // Create an object to send in JSON format
+    const dataToSend = { ...formData };
+    if (dataToSend.attachmentFile) {
+      // Convert file to base64 if needed for JSON
+      const reader = new FileReader();
+      reader.readAsDataURL(dataToSend.attachmentFile);
+      reader.onloadend = async () => {
+        dataToSend.attachmentFile = reader.result;
+        try {
+          await axios.post(baseurl+'public/event/register', dataToSend, {
+            headers: {
+              'accept': 'application/json',
+              'Content-Type': 'application/json', // Use application/json
+            },
+          });
+          toast.success('تم التسجيل بنجاح!');
+          closeModal();
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+        } finally {
+          setLoading(false);
+        }
+      };
+    } else {
+      // No file to send
+      try {
+        await axios.post(baseurl+'public/event/register', dataToSend, {
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+        toast.success('تم التسجيل بنجاح!');
+        closeModal();
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   const getImageUrl = (fileName) => {
-    
     return fileName ? `${baseurl}uploads/file/download/${fileName}` : cover;
   };
 
@@ -79,7 +134,11 @@ const SeminarsAll = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {seminarsData.map((item, index) => (
         <div key={index} className="p-2">
-          <div className="bg-white rounded-lg shadow-md p-3 flex flex-col">
+          <div
+            className={`bg-white rounded-lg p-3 flex flex-col ${
+              item.isActive ? 'shadow-sm shadow-green-400' : 'shadow-md'
+            }`}
+          >
             <img
               src={getImageUrl(item.coverImageFile)}
               alt={item.title}
@@ -126,7 +185,7 @@ const SeminarsAll = () => {
           </div>
         </div>
       ))}
-           <Modal
+      <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         className="bg-white rounded-lg p-4 w-[98vw] max-w-xl mx-auto"
@@ -140,6 +199,7 @@ const SeminarsAll = () => {
           تسجيل في الندوة
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-wrap -mx-2 justify-end items-end">
           <div className="flex flex-wrap -mx-2 justify-end items-end">
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
               <label
@@ -309,24 +369,27 @@ const SeminarsAll = () => {
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-custom-green text-white py-2 px-4 rounded w-full"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              إرسال
-            </button>
+          
           </div>
+          <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
+            disabled={loading}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
+            {loading ? (
+              <FaSpinner className="animate-spin text-lg" />
+            ) : (
+              'تسجيل'
+            )}
+          </button>
+        </div>
+
         </form>
-        <button
-        onClick={closeModal}
-        className="absolute top-2 left-2 text-white"
-        style={{ fontFamily: "Tajwal, sans-serif" }}
-      >
-        إغلاق
-      </button>
       </Modal>
+      <ToastContainer />
+
     </div>
   );
 };
