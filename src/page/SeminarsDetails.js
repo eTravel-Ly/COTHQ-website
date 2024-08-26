@@ -87,7 +87,7 @@ const SeminarsDetails = () => {
                         تاريخ البدء: {event.eventStartDate}
                       </p>
                     </div>
-                    <p className="mb-2 text-center">عدد الأشخاص المسجلين: {event.participantsCount || 'غير محدد'}</p>
+                    <p className="mb-2 text-center">عدد الأشخاص المسجلين: {event.subscriberCount || 'غير محدد'}</p>
                     <p className="mb-2 text-center">المنظم: {event.organizer}</p>
                   </div>
                 </div>

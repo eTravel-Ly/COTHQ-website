@@ -6,15 +6,27 @@ import { baseurl } from '../helper/Baseurl';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaSpinner } from 'react-icons/fa'; // Import the spinner icon
 
 const Login = () => {
   const navigate = useNavigate();
+  const [values, setValues] = useState({
+    username: '',
+    password: ''
+  });
+  const [errors, setErrors] = useState({
+    username: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleClick = async (event) => {
-   event.preventDefault(); // منع إعادة تحميل الصفحة
-  if (!validate()) {
+    event.preventDefault(); // Prevent page reload
+    if (!validate()) {
       return;
     }
+
+    setLoading(true); // Set loading to true when request starts
     try {
       const response = await axios.post(baseurl + 'authenticate', values);
       if (response.status === 200 && response.data.id_token) {
@@ -23,38 +35,15 @@ const Login = () => {
         toast.success('مرحبا');
       }
     } catch (error) {
-      
       if (error.response.status === 401) {
         toast.warning('كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.');
       } else {
         toast.error('حدث خطأ أثناء الادخال. الرجاء المحاولة مرة أخرى.');
       }
+    } finally {
+      setLoading(false); // Set loading to false after request completes
     }
   };
-
-  const [values, setValues] = useState({
-    username: '',
-    password: ''
-  });
-
-  const [errors, setErrors] = useState({
-    username: '',
-    password: ''
-  });
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      handleClick(event); // تمرير الحدث إلى handleClick
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [values]);
 
   const validate = () => {
     let valid = true;
@@ -90,9 +79,25 @@ const Login = () => {
       [name]: ''
     }));
   };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleClick(event); // Pass event to handleClick
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [values]);
+
   const handleRegisterRedirect = () => {
     navigate('/LoginRegister');
   };
+
   return (
     <div className="flex h-screen">
       {/* Left side image */}
@@ -162,9 +167,17 @@ const Login = () => {
             <div className="w-full text-right mb-8">
               <button
                 onClick={handleClick}
-                className="bg-custom-orange w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+                disabled={loading} // Disable button while loading
+                className={`bg-custom-orange w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                تسجيل
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* Spinner icon */}
+                  
+                  </div>
+                ) : (
+                  'تسجيل'
+                )}
               </button>
               <p className="text-custom-orange text-center mt-2 font-tajwal">
                 {" "}

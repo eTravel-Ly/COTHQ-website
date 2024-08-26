@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { FaSpinner } from 'react-icons/fa'; // Import the spinner icon
 
 const LoginRegister = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const LoginRegister = () => {
     otp:''
   });
 
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const [showOTP, setShowOTP] = useState(false);
   const handleVerifyClick  = async (event) => {
@@ -54,10 +56,9 @@ const LoginRegister = () => {
     if (!isValid) {
       return;
     }
-
+  
     const year = values.birthYear.substring(0, 4); 
     const dataToSend = { ...values, birthYear: year };
-    console.log(dataToSend)
     try {
       const response = await axios.post(baseurl + 'public/learner/register', dataToSend);
       if (response.status === 201) {
@@ -67,9 +68,13 @@ const LoginRegister = () => {
         }, 3000);
       }
     } catch (error) {
-      toast.error('حدث خطأ أثناء الإدخال. الرجاء المحاولة مرة أخرى.');
+      // التحقق من رسالة الخطأ من استجابة الـ API
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      } 
     }
   };
+  
   
   const [errors, setErrors] = useState({
     firstName: '',
@@ -462,10 +467,18 @@ const LoginRegister = () => {
             {!showOTP ? (
         <button
           type="button"
+          disabled={loading} // Disable button while loading
           className="bg-custom-orange w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
           onClick={handleVerifyClick}
         >
-          تحقق
+            {loading ? (
+                  <div className="flex justify-center items-center">
+                    <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* Spinner icon */}
+                  
+                  </div>
+                ) : (
+                  'تحقق'
+                )}
         </button>
       ) : (
        
@@ -488,10 +501,18 @@ const LoginRegister = () => {
 
           <button
             type="submit"
+            disabled={loading} // Disable button while loading
             className="bg-custom-orange mt-4 w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
             onClick={handleSubmit}
           >
-            تسجيل
+             {loading ? (
+                  <div className="flex justify-center items-center">
+                    <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* Spinner icon */}
+                  
+                  </div>
+                ) : (
+                  'تسجيل'
+                )}
           </button>
         </div>
       )}

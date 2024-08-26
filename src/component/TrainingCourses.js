@@ -6,10 +6,9 @@ import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MyCourses from './../page/MyCourses';
+import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
+
 Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
-
-
 const TrainingCourses = () => {
   const [course, setcourse] = useState([]);
   const navigate = useNavigate();
@@ -358,17 +357,29 @@ const TrainingCourses = () => {
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-custom-green text-white py-2 px-4 rounded w-full"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              إرسال
-            </button>
-          </div>
+          <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
+            disabled={loading}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
+            {loading ? (
+              <FaSpinner className="animate-spin text-lg" />
+            ) : (
+              'تسجيل'
+            )}
+          </button>
+        </div>
         </form>
       </Modal>
+      <button
+        onClick={closeModal}
+        className="absolute top-2 left-2 text-white"
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+      >
+        إغلاق
+      </button>
       <ToastContainer />
     </div>
   );
