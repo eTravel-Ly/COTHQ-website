@@ -134,7 +134,7 @@ const ConferencesAll = () => {
                 className="bg-custom-green text-white py-2 px-4 rounded"
                 onClick={() => openSeminarsDetails(1)}
               >
-                تفاصيل المؤتمر
+                تفاصيل 
               </button>
               <button
                 className="bg-custom-green text-white py-2 px-4 rounded"
@@ -237,6 +237,7 @@ const ConferencesAll = () => {
                 name="birthDate"
                 value={formData.birthDate}
                 onChange={handleChange}
+                style={{ fontFamily: "Tajwal, sans-serif" }}
                 required
               className="block w-full p-1.5 border border-gray-300 rounded"
               />
