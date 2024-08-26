@@ -347,7 +347,7 @@ const handleProfileSubmit = async () => {
               </div>
             </div>
           </div>
-          <ToastContainer />
+          <ToastContainer position="bottom-left" />
         </div>
       </div>
     </div>

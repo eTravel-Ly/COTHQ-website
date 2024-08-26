@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Modal from "react-modal";
 import allContests from "../assets/images/allContests.jpg";
-
-Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
+import { baseurl } from "../helper/Baseurl";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+Modal.setAppElement("#root");
 
 const AllContests = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedContest, setSelectedContest] = useState(null);
+  const [contests, setContests] = useState([]);
   const [formData, setFormData] = useState({
     fullName: "",
     gender: "MALE",
@@ -20,30 +24,29 @@ const AllContests = () => {
     eventId: 0,
   });
 
-  const contests = [
-    {
-      id: 1,
-      title: "مسابقة حفظ القرآن الكريم",
-      description: "تنافس في حفظ أجزاء من القرآن الكريم وتقديمها.",
-      date: "2024-10-01",
-      image: allContests,
-    },
-    {
-      id: 2,
-      title: "مسابقة السيرة النبوية",
-      description: "اختبر معلوماتك حول حياة النبي محمد صلى الله عليه وسلم.",
-      date: "2024-10-15",
-      image: allContests,
-    },
-    {
-      id: 3,
-      title: "مسابقة الفقه الإسلامي",
-      description: "تنافس في فهم وتطبيق قواعد الفقه الإسلامي.",
-      date: "2024-11-01",
-      image: allContests,
-    },
-  ];
+  useEffect(() => {
+    const fetchContests = async () => {
+      try {
+          const response = await axios.get(
+            baseurl + "public/events/active",
+            {}
+          );
+        const competitions = response.data.COMPETITION.map((contest) => ({
+          id: contest.id,
+          title: contest.title,
+          description: contest.description,
+          date: contest.eventStartDate,
+          image: allContests, // Placeholder image for all contests
+        }));
+        setContests(competitions);
+      } catch (error) {
+        console.error("Error fetching contests:", error);
+        toast.error("حدث خطأ أثناء جلب بيانات المسابقات."); // عرض رسالة خطأ باستخدام التوست
+      }
+    };
 
+    fetchContests();
+  }, []);
   const openModal = (contest) => {
     setSelectedContest(contest);
     setFormData((prevData) => ({
@@ -68,11 +71,9 @@ const AllContests = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // منطق إرسال البيانات هنا
     console.log(formData);
     closeModal();
   };
-
   return (
     <div className="p-4">
       <div className="flex flex-wrap -mx-4">
@@ -96,12 +97,20 @@ const AllContests = () => {
                     تاريخ المسابقة: {contest.date}
                   </p>
                 </div>
-                <button
-                  onClick={() => openModal(contest)}
-                  className="bg-custom-orange text-white py-2 px-4 rounded-full font-semibold text-base self-start"
-                >
-                  بدء المسابقة
-                </button>
+                <div className="flex justify-between items-center text-sm text-gray-600 space-x-4 space-x-reverse">
+                  <button
+                    onClick={() => openModal(contest)}
+                    className="bg-custom-orange  text-white py-2 px-4 rounded"
+                  >
+                    التسجيل في المسابقة
+                  </button>
+                  <button
+                    onClick={() => openModal(contest)}
+                    className="bg-custom-orange  text-white py-2 px-4 rounded"
+                  >
+                    تفاصيل المسابقة
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -111,7 +120,7 @@ const AllContests = () => {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-         className="bg-white rounded-lg p-4 w-[98vw] max-w-xl mx-auto"
+        className="bg-white rounded-lg p-4 w-[98vw] max-w-xl mx-auto"
         overlayClassName="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
         style={{ direction: "rtl", fontFamily: "Tajwal, sans-serif" }}
       >
@@ -138,7 +147,7 @@ const AllContests = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 required
-               className="block w-full p-1.5 border border-gray-300 rounded"
+                className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -156,7 +165,7 @@ const AllContests = () => {
                 value={formData.nationalityCode}
                 onChange={handleChange}
                 required
-              className="block w-full p-1.5 border border-gray-300 rounded"
+                className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -173,12 +182,12 @@ const AllContests = () => {
                 value={formData.gender}
                 onChange={handleChange}
                 required
-                  className="block w-full p-1.5 border border-gray-300 rounded"
+                className="block w-full p-1.5 border border-gray-300 rounded"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
-                >
-                  <option value="">اختر</option>
-                  <option value="MALE">ذكر</option>
-                  <option value="FEMALE">أنثى</option>
+              >
+                <option value="">اختر</option>
+                <option value="MALE">ذكر</option>
+                <option value="FEMALE">أنثى</option>
               </select>
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -190,13 +199,13 @@ const AllContests = () => {
                 تاريخ الميلاد
               </label>
               <input
-                  type="date"
+                type="date"
                 id="birthDate"
                 name="birthDate"
                 value={formData.birthDate}
                 onChange={handleChange}
                 required
-              className="block w-full p-1.5 border border-gray-300 rounded"
+                className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
 
@@ -215,7 +224,7 @@ const AllContests = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-               className="block w-full p-1.5 border border-gray-300 rounded"
+                className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
 
@@ -252,7 +261,7 @@ const AllContests = () => {
                 name="attachmentFile"
                 onChange={handleChange}
                 className="block w-full p-1 border border-gray-300 rounded cursor-pointer file:cursor-pointer file:bg-custom-green file:text-white file:px-2 file:py-1 file:border-0 file:mr-2 file:rounded file:text-sm"
-                />
+              />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
               <label
@@ -286,7 +295,7 @@ const AllContests = () => {
                 value={formData.subscriberNotes}
                 onChange={handleChange}
                 className="block w-full p-2 border border-gray-300 rounded"
-                />
+              />
             </div>
           </div>
 
@@ -301,13 +310,14 @@ const AllContests = () => {
           </div>
         </form>
         <button
-        onClick={closeModal}
-        className="absolute top-2 left-2 text-white"
-        style={{ fontFamily: "Tajwal, sans-serif" }}
-      >
-        إغلاق
-      </button>
+          onClick={closeModal}
+          className="absolute top-2 left-2 text-white"
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+        >
+          إغلاق
+        </button>
       </Modal>
+      <ToastContainer position="bottom-left" />
     </div>
   );
 };
