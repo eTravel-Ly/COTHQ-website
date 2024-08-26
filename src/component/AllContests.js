@@ -300,6 +300,13 @@ const AllContests = () => {
             </button>
           </div>
         </form>
+        <button
+        onClick={closeModal}
+        className="absolute top-2 left-2 text-white"
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+      >
+        إغلاق
+      </button>
       </Modal>
     </div>
   );
