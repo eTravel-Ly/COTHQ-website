@@ -369,6 +369,7 @@ const TrainingCourses = () => {
           </div>
         </form>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };
