@@ -6,65 +6,37 @@ import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import MyCourses from './../page/MyCourses';
 Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
 
-const courses = [
-  {
-    id: 1,
-    title: "دورة تفسير القرآن الكريم",
-    description: "تعلم تفسير آيات القرآن الكريم وأحكامها.",
-    date: "2024-10-01",
-    imageUrl: cover,
-  },
-  {
-    id: 2,
-    title: "دورة السيرة النبوية",
-    description: "استكشاف حياة النبي محمد صلى الله عليه وسلم وأحداث السيرة.",
-    date: "2024-11-01",
-    imageUrl: cover,
-  },
-  {
-    id: 3,
-    title: "دورة الفقه الإسلامي",
-    description: "تعلم قواعد وأحكام الفقه الإسلامي وتطبيقاتها.",
-    date: "2024-12-01",
-    imageUrl: cover,
-  },
-  {
-    id: 4,
-    title: "دورة أصول الدين",
-    description: "تعرف على أصول الدين وعقيدة الإسلام.",
-    date: "2025-01-01",
-    imageUrl: cover,
-  },
-];
 
 const TrainingCourses = () => {
   const [course, setcourse] = useState([]);
   const navigate = useNavigate();
- useEffect(() => {
-   const fetchContests = async () => {
-     try {
-       const response = await axios.get(baseurl + "public/events/active", {});
-       const Course = response.data.COURSE.map((course) => ({
-         id: course.id,
-         title: course.title,
-         description: course.description,
-         date: course.eventStartDate,
-         image: cover, // Placeholder image for all contests
-       }));
-       setcourse(Course);
-     } catch (error) {
-       console.error("Error fetching contests:", error);
-       toast.error("حدث خطأ أثناء جلب بيانات المسابقات."); // عرض رسالة خطأ باستخدام التوست
-     }
-   };
+  useEffect(() => {
+    const fetchContests = async () => {
+      try {
+        const response = await axios.get(baseurl + "public/events/active", {});
+        const Course = response.data.COURSE.map((course) => ({
+          id: course.id,
+          title: course.title,
+          description: course.description,
+          date: course.eventStartDate,
+          image: cover, // Placeholder image for all contests
+        }));
+        setcourse(Course);
+      } catch (error) {
+        console.error("Error fetching contests:", error);
+        toast.error("حدث خطأ أثناء جلب بيانات المسابقات."); // عرض رسالة خطأ باستخدام التوست
+      }
+    };
 
-   fetchContests();
- }, []);
-  
+    fetchContests();
+  }, []);
+  const [loading, setLoading] = useState(false); // حالة التحميل
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedContest, setSelectedContest] = useState(null);
+  const [selectedSeminar, setSelectedSeminar] = useState(null);
   const [formData, setFormData] = useState({
     fullName: "",
     gender: "MALE",
@@ -75,22 +47,80 @@ const TrainingCourses = () => {
     nationalityCode: "",
     subscriberNotes: "",
     attachmentFile: null,
-    eventId: 0,
+    eventId: "",
   });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
+    // Create an object to send in JSON format
+    const dataToSend = { ...formData };
+    if (dataToSend.attachmentFile) {
+      // Convert file to base64 if needed for JSON
+      const reader = new FileReader();
+      reader.readAsDataURL(dataToSend.attachmentFile);
+      reader.onloadend = async () => {
+        dataToSend.attachmentFile = reader.result;
+        try {
+          await axios.post(baseurl + "public/event/register", dataToSend, {
+            headers: {
+              accept: "application/json",
+              "Content-Type": "application/json", // Use application/json
+            },
+          });
+          toast.success("تم التسجيل بنجاح!");
+          closeModal();
+        } catch (error) {
+          console.error("Error submitting form:", error);
+          toast.warning("فشل التسجيل. يرجى المحاولة مرة أخرى.");
+        } finally {
+          setLoading(false);
+        }
+      };
+    } else {
+      // No file to send
+      try {
+        await axios.post(baseurl + "public/event/register", dataToSend, {
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+        toast.success("تم التسجيل بنجاح!");
+        closeModal();
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        toast.warning("فشل التسجيل. يرجى المحاولة مرة أخرى.");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
-  const openModal = (contest) => {
-    setSelectedContest(contest);
+  const openModal = (Course) => {
+    setSelectedSeminar(Course);
     setFormData((prevData) => ({
       ...prevData,
-      eventId: contest.id,
+      eventId: course.id,
     }));
     setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
-    setSelectedContest(null);
+    setSelectedSeminar(null);
+    setFormData({
+      fullName: "",
+      gender: "MALE",
+      birthDate: "",
+      email: "",
+      mobileNo: "",
+      city: "",
+      nationalityCode: "",
+      subscriberNotes: "",
+      attachmentFile: null,
+      eventId: 0,
+    });
   };
 
   const handleChange = (e) => {
@@ -101,15 +131,9 @@ const TrainingCourses = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // منطق إرسال البيانات هنا
-    console.log(formData);
-    closeModal();
+  const opencourseDetails = (id) => {
+    navigate(`/TrainingCoursesDtails/${id}`);
   };
-    const opencourseDetails = (id) => {
-      navigate(`/TrainingCoursesDtails/${id}`);
-    };
 
   return (
     <div className="p-4">
@@ -135,7 +159,7 @@ const TrainingCourses = () => {
 
               <div className="flex justify-between items-center text-sm text-gray-600 space-x-4 space-x-reverse">
                 <button
-                  onClick={openModal}
+                  onClick={() => openModal(course)} // Pass the contest object to openModal
                   className="bg-custom-orange  text-white py-2 px-4 rounded"
                 >
                   سجل الان{" "}
