@@ -107,6 +107,9 @@ const TrainingCourses = () => {
     console.log(formData);
     closeModal();
   };
+    const opencourseDetails = (id) => {
+      navigate(`/TrainingCoursesDtails/${id}`);
+    };
 
   return (
     <div className="p-4">
@@ -135,8 +138,13 @@ const TrainingCourses = () => {
                   onClick={openModal}
                   className="bg-custom-orange  text-white py-2 px-4 rounded"
                 >
-سجل الان                </button>
-                <button className="bg-custom-orange  text-white py-2 px-4 rounded">
+                  سجل الان{" "}
+                </button>
+                <button
+                  course
+                  onClick={() => opencourseDetails(course.id)}
+                  className="bg-custom-orange  text-white py-2 px-4 rounded"
+                >
                   تفاصيل الدورة
                 </button>
               </div>

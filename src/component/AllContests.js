@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import allContests from "../assets/images/allContests.jpg";
 import { baseurl } from "../helper/Baseurl";
@@ -8,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 Modal.setAppElement("#root");
 
 const AllContests = () => {
+   const navigate = useNavigate();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedContest, setSelectedContest] = useState(null);
   const [contests, setContests] = useState([]);
@@ -74,6 +76,9 @@ const AllContests = () => {
     console.log(formData);
     closeModal();
   };
+  const openContestsDetails = (id) => {
+    navigate(`/ContestsDetails/${id}`);
+  };
   return (
     <div className="p-4">
       <div className="flex flex-wrap -mx-4">
@@ -105,7 +110,7 @@ const AllContests = () => {
                     التسجيل في المسابقة
                   </button>
                   <button
-                    onClick={() => openModal(contest)}
+                    onClick={() => openContestsDetails(contest.id)}
                     className="bg-custom-orange  text-white py-2 px-4 rounded"
                   >
                     تفاصيل المسابقة
