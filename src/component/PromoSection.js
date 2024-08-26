@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const PromoSection = () => {
   const navigate = useNavigate();
   const handleAllactivity = () => {
-    navigate('/Allactivity');
+    navigate('/Login');
   };
   return (
     <section
