@@ -135,8 +135,7 @@ const TrainingCourses = () => {
                   onClick={openModal}
                   className="bg-custom-orange  text-white py-2 px-4 rounded"
                 >
-                  التسجيل في الدورة
-                </button>
+سجل الان                </button>
                 <button className="bg-custom-orange  text-white py-2 px-4 rounded">
                   تفاصيل الدورة
                 </button>
