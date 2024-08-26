@@ -114,7 +114,7 @@ const SeminarsAll = () => {
                 className="bg-custom-green text-white py-2 px-4 rounded"
                 onClick={() => openSeminarsDetails(item.id)}
               >
-                التفاصيل الندوة
+                تفاصيل الندوة
               </button>
               <button
                 className="bg-custom-green text-white py-2 px-4 rounded"
