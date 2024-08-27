@@ -9,11 +9,13 @@ import { Link } from "react-router-dom";
 import { GrUnorderedList } from "react-icons/gr";
 import { CiViewList } from "react-icons/ci";
 import { baseurl } from "../helper/Baseurl";
+import { useNavigate } from "react-router-dom";
 
 const NavbarLogin = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCartItemCount = async () => {
@@ -42,7 +44,13 @@ const NavbarLogin = () => {
       window.removeEventListener('cartUpdated', handleCartUpdated);
     };
   }, []);
-
+  const handleLogout = () => {
+    // مسح التوكن من localStorage
+    localStorage.removeItem("token");
+    
+    // توجيه المستخدم إلى الصفحة الرئيسية
+    navigate("/");
+  };
   return (
     <div className="flex items-center justify-between bg-white p-4 w-full">
       <div className="flex items-center">
@@ -100,6 +108,7 @@ const NavbarLogin = () => {
               <button
                 className=" w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
+                onClick={handleLogout}
               >
                 <span>تسجيل خروج</span>
                 <CiLogout className="ml-2" />
