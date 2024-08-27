@@ -6,6 +6,7 @@ import Forgotpassword from "../assets/images/Forgotpassword.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseurl } from "../helper/Baseurl";
+import { FaSpinner } from "react-icons/fa"; // أيقونة لودينق
 
 const Settings = () => {
   const [profileData, setProfileData] = useState({
@@ -22,6 +23,7 @@ const Settings = () => {
     newPassword: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false); // حالة التحميل
 
   // Fetch user profile data
   useEffect(() => {
@@ -42,35 +44,38 @@ const Settings = () => {
     };
     fetchProfile();
   }, []);
-const handleProfileSubmit = async () => {
-  try {
-    const response = await axios.post(
-      baseurl + "update-my-profile",
-      {
-        firstName: profileData.firstName,
-        lastName: profileData.lastName,
-        email: profileData.email,
-        mobileNo: profileData.mobileNo,
-        learnerType: profileData.learnerType,
-        studentId: profileData.studentId,
-        // Add other fields as necessary
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
+  const handleProfileSubmit = async () => {
+    setLoading(true); // بدء عملية التحميل
+    try {
+      const response = await axios.post(
+        baseurl + "update-my-profile",
+        {
+          firstName: profileData.firstName,
+          lastName: profileData.lastName,
+          email: profileData.email,
+          mobileNo: profileData.mobileNo,
+          learnerType: profileData.learnerType,
+          studentId: profileData.studentId,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    if (response.status === 201) {
-      toast.success("تم حفظ التغييرات بنجاح.");
+      if (response.status === 201) {
+        toast.success("تم حفظ التغييرات بنجاح.");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("حدث خطأ أثناء حفظ التغييرات.");
+    } finally {
+      setLoading(false); // إيقاف عملية التحميل
     }
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    toast.error("حدث خطأ أثناء حفظ التغييرات.");
-  }
-};
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -94,8 +99,8 @@ const handleProfileSubmit = async () => {
     setProfileData({ ...profileData, [name]: value });
   };
 
+  
   const handleSubmit = async () => {
-    // Check if any field is empty
     if (
       !passwords.currentPassword ||
       !passwords.newPassword ||
@@ -105,14 +110,12 @@ const handleProfileSubmit = async () => {
       return;
     }
 
-    // Check if newPassword and confirmPassword match
     if (passwords.newPassword !== passwords.confirmPassword) {
-      toast.warning(
-        "كلمة المرور الجديدة وتأكيد كلمة المرور الجديدة غير متطابقين."
-      );
+      toast.warning("كلمة المرور الجديدة وتأكيد كلمة المرور الجديدة غير متطابقين.");
       return;
     }
 
+    setLoading(true); // بدء عملية التحميل
     try {
       const response = await axios.post(
         baseurl + "account/change-password",
@@ -133,9 +136,10 @@ const handleProfileSubmit = async () => {
     } catch (error) {
       console.error(error);
       toast.error("حدث خطأ أثناء تغيير كلمة المرور.");
+    } finally {
+      setLoading(false); // إيقاف عملية التحميل
     }
   };
-
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -249,9 +253,9 @@ const handleProfileSubmit = async () => {
                     </div>
                     <div className="flex flex-col mt-2 mb-1">
                       <div className="mt-1 px-20 text-center flex justify-center">
-                        <button
-                          onClick={handleProfileSubmit} // Attach the save function here
-                          className="bg-custom-orange text-white rounded-lg w-32 h-10 text-xl"
+                      <button
+                          onClick={handleProfileSubmit}
+                          disabled={loading}
                           style={{
                             borderRadius: "10px",
                             width: "80%",
@@ -259,8 +263,10 @@ const handleProfileSubmit = async () => {
                             fontWeight: "bold",
                             fontFamily: "Tajwal, sans-serif",
                           }}
+                          className={`w-1/2 bg-custom-orange  text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center ${loading && "cursor-not-allowed opacity-50"}`}
                         >
-                          حـــفــــظ
+                          {loading ? <FaSpinner className="animate-spin mr-2" /> : 'حـــفـــظ'}
+                          
                         </button>
                       </div>
                     </div>
@@ -328,8 +334,9 @@ const handleProfileSubmit = async () => {
                     <div className="flex flex-col mt-2 mb-1">
                       <div className="mt-1 px-20 text-center flex justify-center">
                         <button
-                          onClick={handleProfileSubmit}
-                          className="bg-custom-orange text-white rounded-lg w-32 h-10 text-xl"
+                          onClick={handleSubmit}
+                          disabled={loading}
+                          className={`w-1/2 bg-custom-orange  text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center ${loading && "cursor-not-allowed opacity-50"}`}
                           style={{
                             borderRadius: "10px",
                             width: "80%",
@@ -338,7 +345,8 @@ const handleProfileSubmit = async () => {
                             fontFamily: "Tajwal, sans-serif",
                           }}
                         >
-                          حـــفــــظ
+                            {loading ? <FaSpinner className="animate-spin mr-2" /> : 'حــــــفــــــــظ'}
+                            
                         </button>
                       </div>
                     </div>

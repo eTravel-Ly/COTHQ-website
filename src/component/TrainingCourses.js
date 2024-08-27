@@ -7,6 +7,7 @@ import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
+import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 
 Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
 const TrainingCourses = () => {
@@ -27,12 +28,15 @@ const TrainingCourses = () => {
       } catch (error) {
         console.error("Error fetching contests:", error);
         toast.error("حدث خطأ أثناء جلب بيانات المسابقات."); // عرض رسالة خطأ باستخدام التوست
+      }finally {
+        setLoading1(false); // تعيين حالة التحميل إلى false بعد الانتهاء
       }
     };
 
     fetchContests();
   }, []);
   const [loading, setLoading] = useState(false); // حالة التحميل
+  const [loading1, setLoading1] = useState(true); // حالة تحميل جديدة
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedSeminar, setSelectedSeminar] = useState(null);
@@ -133,9 +137,27 @@ const TrainingCourses = () => {
   const opencourseDetails = (id) => {
     navigate(`/TrainingCoursesDtails/${id}`);
   };
-
+  if (course.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        <img
+          src={noCoursesImage}
+          alt="No courses available"
+          className="w-60 h-60 object-cover "
+        />
+        <p className="text-lg text-gray-700 mt-0">
+         لا يوجد دورات تدريبية تمت اضافتها في الوقت الحالى ..
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="p-4">
+        {loading1 ? (
+        <div className="flex items-center justify-center h-screen">
+          <FaSpinner className="text-4xl animate-spin" />
+        </div>
+      ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {course.map((course) => (
           <div
@@ -175,6 +197,7 @@ const TrainingCourses = () => {
           </div>
         ))}
       </div>
+       )}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}

@@ -7,6 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal'; // استيراد المودال
 import { useNavigate } from 'react-router-dom';
+import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
+import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 
 Modal.setAppElement('#root'); // لتفادي تحذير عند استخدام المودال
 
@@ -14,6 +16,8 @@ function BorrowsHistory() {
   const [orders, setOrders] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,9 +29,13 @@ function BorrowsHistory() {
       })
       .then((response) => {
         setOrders(response.data[0]); // Adjusted based on API response structure
+        setLoading(false); // إيقاف اللودينق بعد جلب البيانات
+
       })
       .catch((error) => {
         console.error("Error fetching borrow requests:", error);
+        setLoading(false); // إيقاف اللودينق بعد جلب البيانات
+
       });
   }, []);
 
@@ -81,7 +89,14 @@ function BorrowsHistory() {
     }
     closeModal();
   };
-
+  if (loading) {
+    // عرض مكون اللودينق في حالة انتظار تحميل البيانات
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="text-4xl animate-spin" />
+      </div>
+    );
+  }
   return (
     <div className="flex h-screen font-tajwal">
       <Sidebar />
@@ -91,7 +106,20 @@ function BorrowsHistory() {
           <h1 className="text-xl font-bold mb-4 text-right font-tajwal">
             قائمة طلبات الاستعارة الخاصة بي
           </h1>
-          {orders.map((order) => (
+          {orders.length === 0 ? (
+            // عرض رسالة "لا يوجد طلبات" ضمن محتوى الصفحة
+            <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-5%]">
+              <img
+                src={noCoursesImage}
+                alt="No courses available"
+                className="w-60 h-60 object-cover"
+              />
+              <p className="text-lg text-gray-700 ">
+                لا يوجد طلبات استعارة في الوقت الحالي ..
+              </p>
+            </div>
+          ) : (
+          orders.map((order) => (
             <div key={order.id} className="border rounded-md p-4 mb-4">
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-bold">حالة الطلب:</h2>
@@ -121,7 +149,8 @@ function BorrowsHistory() {
                 </button>
               )}
             </div>
-          ))}
+          )
+        ))}
         </div>
       </div>
 

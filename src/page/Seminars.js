@@ -23,7 +23,7 @@ const Seminars = () => {
             textAlign: "right",
           }}
         >
-          <h2 className="text-xl font-bold mb-1">ندواتي</h2>
+          <h2 className="text-xl font-bold mb-1">الندوات والمؤتمرات</h2>
           <h4 className="text-l font-bold text-gray-500">
             مواصلة مشاهدة الندوات والمؤتمرات
           </h4>

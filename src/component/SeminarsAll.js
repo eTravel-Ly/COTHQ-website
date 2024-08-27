@@ -8,6 +8,7 @@ import cover from "../assets/images/test1.png";
 import { baseurl } from '../helper/Baseurl';
 import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 import { ToastContainer, toast } from 'react-toastify';
+import noCoursesImage from "../assets/images/search2.png"; // صورة تعبيرية عند عدم وجود دورات
 import 'react-toastify/dist/ReactToastify.css';
 const SeminarsAll = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const SeminarsAll = () => {
   });
   const [seminarsData, setSeminarsData] = useState([]);
   const [loading, setLoading] = useState(false); // حالة التحميل
+  const [loading1, setLoading1] = useState(true); // حالة تحميل جديدة
 
   useEffect(() => {
     const fetchSeminars = async () => {
@@ -35,6 +37,8 @@ const SeminarsAll = () => {
         setSeminarsData(response.data.SEMINAR);
       } catch (error) {
         console.error('Error fetching seminars:', error);
+      }finally {
+        setLoading1(false); // تعيين حالة التحميل إلى false بعد الانتهاء
       }
     };
     fetchSeminars();
@@ -140,14 +144,35 @@ const SeminarsAll = () => {
       }
     }
   };
-
+  if (!seminarsData || seminarsData.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        <img
+          src={noCoursesImage}
+          alt="No courses available"
+          className="w-60 h-60 object-cover"
+        />
+        <p className="text-lg text-gray-700 mt-0">
+          لا يوجد ندوات تمت اضافتها في الوقت الحالي..
+        </p>
+      </div>
+    );
+  }
+  
   const getImageUrl = (fileName) => {
     return fileName ? `${baseurl}uploads/file/download/${fileName}` : cover;
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {seminarsData.map((item, index) => (
+   
+    <div >
+       {loading1 ? (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="text-4xl animate-spin" />
+      </div>
+    ) : (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {seminarsData.map((item, index) => (
         <div key={index} className="p-2">
           <div
             className={`bg-white rounded-lg p-3 flex flex-col ${
@@ -200,6 +225,9 @@ const SeminarsAll = () => {
           </div>
         </div>
       ))}
+      </div>
+     
+    )}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -413,6 +441,7 @@ const SeminarsAll = () => {
       <ToastContainer />
 
     </div>
+ 
   );
 };
 

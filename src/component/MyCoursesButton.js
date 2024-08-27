@@ -3,9 +3,11 @@ import axios from "axios";
 import { FaRegUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { baseurl } from "../helper/Baseurl";
+import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 
 const MyCoursesButton = () => {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   // Function to generate image URL
@@ -19,14 +21,14 @@ const MyCoursesButton = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(baseurl + "my-courses", {
+        const response = await axios.get(`${baseurl}my-courses`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
 
         const validCourses = response.data.filter(
-          (course) => course && course.coverImageUrl
+          (course) => course && course.coverImageUrl && course.progressPercentage !== 100
         );
 
         const updatedCourses = validCourses.map((course) => ({
@@ -37,6 +39,8 @@ const MyCoursesButton = () => {
         setCourses(updatedCourses);
       } catch (error) {
         console.error("Error fetching courses data", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -51,6 +55,29 @@ const MyCoursesButton = () => {
   const rows = [];
   for (let i = 0; i < courses.length; i += 4) {
     rows.push(courses.slice(i, i + 4));
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (courses.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        <img
+          src={noCoursesImage}
+          alt="No courses available"
+          className="w-60 h-60 object-cover mb-10"
+        />
+        <p className="text-lg text-gray-700 mt-0">
+          لا يوجد دورات مسجل بها حاليا. قم بالاشتراك في الدورات
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -90,7 +117,7 @@ const MyCoursesButton = () => {
                     className="text-xs text-gray-600"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
-                    {course.instructor || "Unknown Instructor"}
+                    {course.createdBy}
                   </p>
                 </div>
                 <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
@@ -108,7 +135,6 @@ const MyCoursesButton = () => {
           ))}
         </div>
       ))}
-    
     </div>
   );
 };

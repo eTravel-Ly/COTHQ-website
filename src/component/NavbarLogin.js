@@ -8,6 +8,7 @@ import Notifications from './Notifications';
 import { Link } from "react-router-dom";
 import { GrUnorderedList } from "react-icons/gr";
 import { CiViewList } from "react-icons/ci";
+import { baseurl } from "../helper/Baseurl";
 
 const NavbarLogin = () => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -17,7 +18,7 @@ const NavbarLogin = () => {
   useEffect(() => {
     const fetchCartItemCount = async () => {
       try {
-        const response = await axios.get('http://172.22.11.9:8080/api/my-cart', {
+        const response = await axios.get(baseurl+'my-cart', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

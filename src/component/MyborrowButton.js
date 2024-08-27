@@ -4,11 +4,13 @@ import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 
 const MyborrowButton = () => {
   const navigate = useNavigate();
   const [mybooks, setMyBooks] = useState([]);
   const [notificationShown, setNotificationShown] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const showMyBooks = async () => {
     try {
@@ -38,6 +40,7 @@ const MyborrowButton = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      try {
       const booksData = await showMyBooks();
       if (!booksData || booksData.length === 0) return;
 
@@ -54,6 +57,11 @@ const MyborrowButton = () => {
 
       console.log("Updated books with images:", updatedBooks);
       setMyBooks(updatedBooks);
+    } catch (error) {
+      console.error("Error fetching  data", error);
+    } finally {
+      setLoading(false);
+    }
     };
     fetchData();
   }, []);
@@ -101,6 +109,28 @@ const MyborrowButton = () => {
     rows.push(mybooks.slice(i, i + 3));
   }
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (mybooks.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        <img
+          src={noCoursesImage}
+          alt="No courses available"
+          className="w-60 h-60 object-cover mb-10"
+        />
+        <p className="text-lg text-gray-700 mt-0">
+لا يوجد كتب قمت بأستعارتها من المكتبة ..
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="p-4">
       <ToastContainer position="bottom-left" />

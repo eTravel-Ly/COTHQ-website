@@ -20,7 +20,7 @@ const Contests = () => {
           style={{ direction: "rtl" }}
         >
           <div className="text-right border-b pb-4 mb-4">
-            <h2 className="text-lg sm:text-xl font-bold"> المسابقات</h2>
+            <h2 className="text-lg sm:text-xl font-bold"> المسابقات و الدورات التدريبية</h2>
           </div>
           <div className="flex mt-4">
             <button

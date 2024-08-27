@@ -48,21 +48,41 @@ const LoginRegister = () => {
     }
   };
 
+  const [otpError, setOtpError] = useState(false);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const isValid = validate(); 
+    const isValid = validate();
     if (!isValid) {
       return;
     }
   
-    const year = values.birthYear.substring(0, 4); 
+    // تعيين حالة التحميل إلى true عند بدء التسجيل
+    setLoading(true);
+  
+    const year = values.birthYear.substring(0, 4);
     const dataToSend = { ...values, birthYear: year };
+  
     try {
       const response = await axios.post(baseurl + 'public/learner/register', dataToSend);
       if (response.status === 201) {
         toast.success('تم تسجيلك بنجاح يمكنك الدخول للنظام الآن.');
+  
+        // تفريغ القيم بعد التسجيل الناجح
+        setValues({
+          lastName: '',
+          firstName: '',
+          learnerType: '',
+          birthYear: '',
+          mobileNo: '',
+          studentId: '',
+          password: '',
+          email: '',
+          otp: ''
+        });
+  
+        // الانتقال إلى صفحة تسجيل الدخول بعد التأخير
         setTimeout(() => {
           navigate('/Login');
         }, 3000);
@@ -70,8 +90,28 @@ const LoginRegister = () => {
     } catch (error) {
       // التحقق من رسالة الخطأ من استجابة الـ API
       if (error.response && error.response.data && error.response.data.message) {
-        toast.error(error.response.data.message);
-      } 
+        const errorMessage = error.response.data.message;
+  
+        // التعامل مع الأخطاء المحددة
+        if (errorMessage === 'OTP_ALREADY_USED') {
+          setOtpError(true); // إظهار زر إعادة الإرسال
+          toast.error('الرمز مستخدم بالفعل قم بالضغط على زر اعادة ارسال');
+
+        } else if (errorMessage === 'Login name already used!') {
+          toast.error('هذا المستخدم مسجل بالفعل في النظام.');
+        } else if(errorMessage === 'INVALID_OTP') {
+          setOtpError(true); // إظهار زر إعادة الإرسال
+          toast.error('الرمز   انتهت صلاحيته قم بالضغط على زر اعادة ارسال');
+        }else {
+          toast.error(errorMessage);
+
+        }
+
+        
+      }
+    } finally {
+      // تعيين حالة التحميل إلى false بعد إتمام العملية
+      setLoading(false);
     }
   };
   
@@ -151,13 +191,13 @@ const LoginRegister = () => {
       newErrors.learnerType = 'الرجاء اختيار نوع الحساب  ';
       valid = false;
     } 
-    if (!values.studentId) {
+   /* if (!values.studentId) {
       newErrors.studentId = 'الرجاء إدخال رقم الطالب';
       valid = false;
     } else if (!idRegex.test(values.studentId)) {
       newErrors.studentId = 'رقم الطالب يجب أن يحتوي على أرقام فقط';
       valid = false;
-    }
+    }*/
 
     if (!values.password) {
       newErrors.password = 'الرجاء إدخال كلمة المرور';
@@ -235,13 +275,13 @@ const LoginRegister = () => {
       newErrors.learnerType = 'الرجاء اختيار نوع الحساب  ';
       valid = false;
     } 
-    if (!values.studentId) {
+/*    if (!values.studentId) {
       newErrors.studentId = 'الرجاء إدخال رقم الطالب';
       valid = false;
     } else if (!idRegex.test(values.studentId)) {
       newErrors.studentId = 'رقم الطالب يجب أن يحتوي على أرقام فقط';
       valid = false;
-    }
+    }*/
 
     if (!values.password) {
       newErrors.password = 'الرجاء إدخال كلمة المرور';
@@ -265,8 +305,8 @@ const LoginRegister = () => {
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
-    if (name === 'mobileNo' && !/^\d*$/.test(value) || name === 'otp' && !/^\d*$/.test(value)  || name === 'studentId' && !/^\d*$/.test(value) ) {
-      return; // Prevent non-numeric input
+    if (name === 'mobileNo' && !/^\d*$/.test(value) || name === 'otp' && !/^\d*$/.test(value)  ) {
+      return; // Prevent non-numeric input  || name === 'studentId' && !/^\d*$/.test(value)
     }
 
     setValues((prevValues) => ({
@@ -472,10 +512,9 @@ const LoginRegister = () => {
           onClick={handleVerifyClick}
         >
             {loading ? (
-                  <div className="flex justify-center items-center">
-                    <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* Spinner icon */}
-                  
-                  </div>
+                   <div className="flex justify-center items-center">
+                   <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* أيقونة التحميل */}
+                 </div>
                 ) : (
                   'تحقق'
                 )}
@@ -483,37 +522,57 @@ const LoginRegister = () => {
       ) : (
        
         <div>
-            <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="otp"
-                >
-                 رمز التحقق
-                </label>
+           <label
+            className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
+            htmlFor="otp"
+          >
+            رمز التحقق
+          </label>
+          <div className="flex items-center">
             <input
-            type="text"
-            name="otp"
-            value={values.otp}
-            onChange={handleChange}
-            className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="قم بأدخال رمز التحقق الخاص بك"
-          />
-          {errors.otp && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.otp}</p>}
+              type="text"
+              name="otp"
+              value={values.otp}
+              onChange={handleChange}
+              className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="قم بأدخال رمز التحقق الخاص بك"
+            />
+            {errors.otp && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.otp}</p>}
+
+            {otpError && (
+              <button
+                onClick={handleVerifyClick}
+                className="ml-2 bg-custom-green text-white font-bold py-1 px-3 rounded text-sm"
+                style={{ fontFamily: 'Tajwal, sans-serif' }}
+              >
+              {loading ? (
+              <div className="flex justify-center items-center">
+                <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* أيقونة التحميل */}
+              </div>
+            ) : (
+              '  إعادة إرسال'
+            )}
+              
+              </button>
+            )}
+          </div>
+
 
           <button
             type="submit"
-            disabled={loading} // Disable button while loading
+            disabled={loading} // تعطيل الزر أثناء التحميل
             className="bg-custom-orange mt-4 w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
             onClick={handleSubmit}
           >
-             {loading ? (
-                  <div className="flex justify-center items-center">
-                    <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* Spinner icon */}
-                  
-                  </div>
-                ) : (
-                  'تسجيل'
-                )}
+            {loading ? (
+              <div className="flex justify-center items-center">
+                <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* أيقونة التحميل */}
+              </div>
+            ) : (
+              'تسجيل'
+            )}
           </button>
+
         </div>
       )}
           </form>

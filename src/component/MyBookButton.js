@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { baseurl } from '../helper/Baseurl';
 import axios from 'axios';
+import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 
 const MyBookButton = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   const openBook = (bookId) => {
     navigate(`/ReadBooks/${bookId}`);
@@ -44,19 +46,29 @@ const MyBookButton = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const booksData = await showMyBooks();
-      if (booksData.length === 0) return; 
-
-      const updatedBooks = await Promise.all(booksData.map(async (book) => {
-        const imageUrl = await showpicbooks(book.coverImageUrl); 
-        return { ...book, coverImageUrl: imageUrl };
-      }));
-
-      console.log("Updated books with images:", updatedBooks);
-      setMyBooks(updatedBooks);
+      try {
+        const booksData = await showMyBooks();
+        if (booksData.length === 0) return; 
+  
+        // Filter books where progressPercentage is not 100
+        const filteredBooks = booksData.filter((book) => book.progressPercentage !== 100);
+  
+        const updatedBooks = await Promise.all(filteredBooks.map(async (book) => {
+          const imageUrl = await showpicbooks(book.coverImageUrl); 
+          return { ...book, coverImageUrl: imageUrl };
+        }));
+  
+        console.log("Updated books with images:", updatedBooks);
+        setMyBooks(updatedBooks);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
+  
 
   // تقسيم الكتب إلى صفوف من 4
   const rows = [];
@@ -64,6 +76,28 @@ const MyBookButton = () => {
     rows.push(mybooks.slice(i, i + 3));
   }
  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (mybooks.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        <img
+          src={noCoursesImage}
+          alt="No courses available"
+          className="w-60 h-60 object-cover mb-10"
+        />
+        <p className="text-lg text-gray-700 mt-0"   style={{ fontFamily: "Tajwal, sans-serif" }}>
+        لا يوجد كتب قمت بشراءها .. قم بالاشراء الان
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="p-4" >
       {rows.map((row, index) => ( 

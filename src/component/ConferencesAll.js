@@ -9,6 +9,8 @@ import { baseurl } from '../helper/Baseurl';
 import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import noCoursesImage from "../assets/images/search2.png"; // صورة تعبيرية عند عدم وجود دورات
+
 Modal.setAppElement("#root");
 
 // Function to generate image URL
@@ -34,6 +36,7 @@ const ConferencesAll = () => {
   });
   const [conferences, setConferences] = useState([]);
   const [loading, setLoading] = useState(false); // حالة التحميل
+  const [loading1, setLoading1] = useState(true); // حالة تحميل جديدة
 
   const navigate = useNavigate();
 
@@ -49,6 +52,8 @@ const ConferencesAll = () => {
         setConferences(data);
       } catch (error) {
         console.error("Error fetching conferences:", error);
+      }finally {
+        setLoading1(false); // تعيين حالة التحميل إلى false بعد الانتهاء
       }
     };
 
@@ -143,9 +148,27 @@ const ConferencesAll = () => {
       }
     }
   };
-
+  if (conferences.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        <img
+          src={noCoursesImage}
+          alt="No courses available"
+          className="w-60 h-60 object-cover "
+        />
+        <p className="text-lg text-gray-700 mt-0">
+         لا يوجد مؤتمرات  تمت اضافتها في الوقت الحالى ..
+        </p>
+      </div>
+    );
+  }
   return (
     <>
+      {loading1 ? (
+        <div className="flex items-center justify-center h-screen">
+          <FaSpinner className="text-4xl animate-spin" />
+        </div>
+      ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {conferences.map((item) => (
           <div key={item.id} className="p-2">
@@ -201,7 +224,7 @@ const ConferencesAll = () => {
           </div>
         ))}
       </div>
-
+)}
 
       <Modal
         isOpen={modalIsOpen}
@@ -414,7 +437,7 @@ const ConferencesAll = () => {
       </button>
       </Modal>
       <ToastContainer />
-
+    
     </>
   );
 };

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
+import noCoursesImage from "../assets/images/favorites.png"; // صورة تعبيرية عند عدم وجود دورات
 
 const WishlistBookButton = () => {
   const navigate = useNavigate();
   const [mybooks, setMyBooks] = useState([]);
   const [selectedType, setSelectedType] = useState("all");
+  const [loading, setLoading] = useState(true);
 
   const showMyFavorites = async () => {
     try {
@@ -71,6 +73,7 @@ const WishlistBookButton = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      try {
       const { books } = await showMyFavorites();
       if (books.length === 0) return;
 
@@ -92,6 +95,11 @@ const WishlistBookButton = () => {
 
       console.log("Updated books with images:", updatedBooks);
       setMyBooks(updatedBooks);
+    } catch (error) {
+      console.error("Error fetching  data", error);
+    } finally {
+      setLoading(false);
+    }
     };
     fetchData();
   }, []);
@@ -114,7 +122,28 @@ const WishlistBookButton = () => {
   for (let i = 0; i < filteredBooks.length; i += 3) {
     rows.push(filteredBooks.slice(i, i + 3));
   }
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
+  if (mybooks.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        <img
+          src={noCoursesImage}
+          alt="No courses available"
+          className="w-60 h-60 object-cover mb-10"
+        />
+        <p className="text-lg text-gray-700 mt-0">
+        لا يوجد كتب قمت بالاعجاب بها .. 
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="p-4">
       <div className="mb-4">

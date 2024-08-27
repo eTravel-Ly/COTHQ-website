@@ -1,38 +1,52 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
-import user from "../assets/images/user.png"; // قم بتحديث المسار إلى صورة الشعار
+import user from "../assets/images/user.png";
 import MyCoursesButton from "../component/MyCoursesButton";
 import MyBookButton from "../component/MyBookButton";
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
+import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
+
 const Profile = () => {
   const [selectedSection, setSelectedSection] = useState("MyBookButton");
- const [profileData, setProfileData] = useState({
-   firstName: "",
-   lastName: "",
-   email: "",
-   mobileNo: "",
-   learnerType: "",
- });
+  const [profileData, setProfileData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobileNo: "",
+    learnerType: "",
+  });
+  const [loading, setLoading] = useState(true);
 
- useEffect(() => {
-  
-   axios
-     .get(baseurl + "my-profile", {
-       headers: {
-         Authorization: `Bearer ${localStorage.getItem("token")}`,
-       },
-     })
-     .then((response) => {
-       setProfileData(response.data);
-     })
-     .catch((error) => {
-       console.error("Error fetching profile data:", error);
-     });
- }, []);
+  useEffect(() => {
+    axios
+      .get(baseurl + "my-profile", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        setProfileData(response.data);
+        setLoading(false); // إيقاف اللودينق بعد جلب البيانات
+      })
+      .catch((error) => {
+        console.error("Error fetching profile data:", error);
+        setLoading(false); // إيقاف اللودينق في حالة حدوث خطأ
+      });
+  }, []);
+
   const showbooks = () => setSelectedSection("MyBookButton");
   const showallCourses = () => setSelectedSection("MyCoursesButton");
+
+  if (loading) {
+    // عرض مكون اللودينق في حالة انتظار تحميل البيانات
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="text-4xl animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen">
@@ -54,20 +68,6 @@ const Profile = () => {
               />
             </div>
             <div className="mt-4 md:mt-0 md:ml-6 mr-24">
-              {/* <p
-                className="text-gray-700 font-bold"
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                رقم القيد:{" "}
-              </p>
-              <p
-                className="text-gray-700"
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                {" "}
-                217180057{" "}
-              </p> */}
-
               <p
                 className="text-gray-700 font-bold"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
@@ -121,7 +121,7 @@ const Profile = () => {
               </p>
             </div>
           </div>
-          {/* الحاوية الثانية */}
+
           <div className="flex flex-col bg-white p-6 rounded-md">
             <p
               className="text-gray-700 mb-4 font-bold text-2xl"

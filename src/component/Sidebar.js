@@ -1,49 +1,47 @@
 import React, { useState } from 'react';
 import logo from "../assets/images/logo.png";
-import { IoHomeOutline } from "react-icons/io5";
-import { IoLibraryOutline } from "react-icons/io5";
-import { CiLaptop } from "react-icons/ci";
-import { CiShop } from "react-icons/ci";
+import { IoHomeOutline, IoLibraryOutline, IoSettingsOutline, IoChevronDownOutline, IoChevronForwardOutline } from "react-icons/io5";
+import { CiLaptop, CiShop } from "react-icons/ci";
 import { FiAlertCircle } from "react-icons/fi";
-import {
-  IoSettingsOutline,
-  IoChevronDownOutline,
-  IoChevronForwardOutline,
-} from "react-icons/io5";
-import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
 import { GiTargetPrize } from "react-icons/gi";
 import { FaPeopleLine } from "react-icons/fa6";
 import { MdOutlineLocalActivity } from "react-icons/md";
-
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate();
 
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState(''); // State to track the active link
 
   const toggleCoursesMenu = () => {
     navigate('/MyCourses');
     setIsCoursesOpen(!isCoursesOpen);
-
+    setActiveLink('/MyCourses'); // Set the active link
   };
+
   const toggleLibraryMenu = () => {
     navigate('/MyBooks');
     setIsLibraryOpen(!isLibraryOpen);
+    setActiveLink('/MyBooks'); // Set the active link
+  };
 
+  const handleLinkClick = (path) => {
+    setActiveLink(path); // Set the active link
   };
 
   return (
     <div className="flex h-screen">
       <div className="w-64 bg-white shadow-lg fixed right-0 top-0 h-full overflow-y-auto">
         <div className="flex flex-col items-center p-2 border-b w-full">
-          <img src={logo} alt="Logo" className="h-16 " />
+          <img src={logo} alt="Logo" className="h-16" />
         </div>
         <nav className="flex flex-col w-full">
           <Link
             to="/HomeAfterLogin"
-            className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
+            onClick={() => handleLinkClick('/HomeAfterLogin')}
+            className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '/HomeAfterLogin' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <IoHomeOutline className="mr-2 ml-2 text-sm" />
@@ -54,7 +52,7 @@ const Sidebar = () => {
             <div>
               <button
                 onClick={toggleLibraryMenu}
-                className="flex items-center p-3 text-sm text-gray-700 w-full hover:bg-blue hover:rounded-lg"
+                className={`flex items-center p-3 text-sm w-full hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '/MyBooks' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
                 style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
               >
                 <IoLibraryOutline className="mr-2 ml-2 text-sm" />
@@ -69,7 +67,8 @@ const Sidebar = () => {
                 <div className="flex flex-col bg-white pl-12">
                   <Link
                     to="/MyBooks"
-                    className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
+                    onClick={() => handleLinkClick('/MyBooks')}
+                    className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg mr-10 ${activeLink === '/MyBooks' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
                     style={{
                       fontFamily: "Tajwal, sans-serif",
                       direction: "rtl",
@@ -79,7 +78,8 @@ const Sidebar = () => {
                   </Link>
                   <Link
                     to="/Myborrow"
-                    className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
+                    onClick={() => handleLinkClick('/Myborrow')}
+                    className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg mr-10 ${activeLink === '/Myborrow' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
                     style={{
                       fontFamily: "Tajwal, sans-serif",
                       direction: "rtl",
@@ -93,7 +93,7 @@ const Sidebar = () => {
             <div>
               <button
                 onClick={toggleCoursesMenu}
-                className="flex items-center p-3 text-sm text-gray-700 w-full hover:bg-blue hover:rounded-lg"
+                className={`flex items-center p-3 text-sm w-full hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '/MyCourses' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
                 style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
               >
                 <CiLaptop className="mr-2 ml-2 text-sm" />
@@ -106,33 +106,39 @@ const Sidebar = () => {
               </button>
               {isCoursesOpen && (
                 <div className="flex flex-col bg-white pl-12">
-                  <a
-                    href="#"
-                    className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
+                  <Link
+                    to="/MyCourses"
+                    onClick={() => handleLinkClick('/MyCourses')}
+                    className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg mr-10 ${activeLink === '#' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
                     style={{
                       fontFamily: "Tajwal, sans-serif",
                       direction: "rtl",
                     }}
                   >
                     محاضرات مسجلة
-                  </a>
-                  <a
-                    href="#"
-                    className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg mr-10"
+                  </Link>
+                 {/*
+                  <Link
+                    to="#"
+                    onClick={() => handleLinkClick('#')}
+                    className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg mr-10 ${activeLink === '#' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
                     style={{
                       fontFamily: "Tajwal, sans-serif",
                       direction: "rtl",
                     }}
                   >
                     محاضرات مغلقة
-                  </a>
+                  </Link>
+                 */}
                 </div>
               )}
             </div>
           </div>
+
           <Link
             to="/MyActivity"
-            className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
+            onClick={() => handleLinkClick('/MyActivity')}
+            className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '/MyActivity' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <MdOutlineLocalActivity className="mr-2 ml-2 text-sm" />
@@ -140,7 +146,8 @@ const Sidebar = () => {
           </Link>
           <Link
             to="/Contests"
-            className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
+            onClick={() => handleLinkClick('/Contests')}
+            className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '/Contests' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <GiTargetPrize className="mr-2 ml-2 text-sm" />
@@ -148,7 +155,8 @@ const Sidebar = () => {
           </Link>
           <Link
             to="/Seminars"
-            className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
+            onClick={() => handleLinkClick('/Seminars')}
+            className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '/Seminars' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <FaPeopleLine className="mr-2 ml-2 text-sm" />
@@ -156,7 +164,8 @@ const Sidebar = () => {
           </Link>
           <Link
             to="/Shop"
-            className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
+            onClick={() => handleLinkClick('/Shop')}
+            className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '/Shop' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <CiShop className="mr-2 ml-2 text-sm" />
@@ -164,24 +173,25 @@ const Sidebar = () => {
           </Link>
 
           <div className="flex flex-col items-center mt-auto p-1 bg-white w-full justify-center border-t"></div>
-          <a
-            href="#"
-            className="flex items-center p-3 text-sm text-gray-700 top-0 hover:bg-blue hover:rounded-lg"
+          <Link
+            to="#"
+            onClick={() => handleLinkClick('#')}
+            className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '#' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <FiAlertCircle className="mr-2 ml-2 text-sm" />
             مركز المساعدة
-          </a>
+          </Link>
           <Link
             to="/settings"
-            className="flex items-center p-3 text-sm text-gray-700 hover:bg-blue hover:rounded-lg"
+            onClick={() => handleLinkClick('/settings')}
+            className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '#' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
             <IoSettingsOutline className="mr-2 ml-2 text-sm" />
-            الإعدادات
+            الاعدادات
           </Link>
         </nav>
-
         <div className="flex flex-col items-center mt-auto p-2 mb-16">
           <div className="p-2 bg-blues rounded-lg w-full text-center">
             <h2 className="text-sm font-bold mb-1 font-tajwal">
@@ -199,6 +209,6 @@ const Sidebar = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Sidebar;

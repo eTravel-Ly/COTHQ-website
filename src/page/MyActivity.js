@@ -4,18 +4,15 @@ import NavbarLogin from "../component/NavbarLogin";
 import MySeminars from "../component/MySeminars";
 import MyContests from "../component/MyContests";
 import MyTrainingCourses from "../component/MyTrainingCourses";
-
 import MyConferences from "../component/MyConferences";
 
 
 export default function MyActivity() {
   const [selectedSection, setSelectedSection] = useState("myContests");
-
   const showMyContests = () => setSelectedSection("myContests");
   const showMyTrainingCourses = () => setSelectedSection("myTrainingCourses");
-const showmyConferences = () => setSelectedSection("myConferences");
-
-const showMySeminars = () => setSelectedSection("mySeminars");
+  const showmyConferences = () => setSelectedSection("myConferences");
+  const showMySeminars = () => setSelectedSection("mySeminars");
 return (
   <>
     <div className="flex h-screen">
