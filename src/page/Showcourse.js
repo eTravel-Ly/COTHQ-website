@@ -8,6 +8,8 @@ import ShareModels from "../models/ShareModels"; // تأكد من مسار ال�
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Showcourse = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // حالة المودال
@@ -16,6 +18,45 @@ const Showcourse = () => {
   const { courseId } = useParams();
   const [loading, setLoading] = useState(true);
 
+     
+  const [note, setNote] = useState("");
+  const [stars, setStars] = useState(3); // Default to 5 stars
+  const [error, setError] = useState("");
+  const [hoveredStar, setHoveredStar] = useState(0);
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("User not authenticated");
+        return;
+      }
+
+      const response = await axios.post(
+        baseurl + "add-comment",
+        {
+          entityType: "COURSE",
+          id: courseId,
+          comment: note,
+          stars: stars,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      setNote("");
+      setStars(3);
+
+      toast.success("تم تسجيل تقييمك بنجاح ");
+    } catch (error) {
+      toast.error("حدث مشكلة اثناء تسجيل تقيمك ");
+      console.error(error);
+    }
+  };
+
   const handleTogglePopup = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -23,16 +64,11 @@ const Showcourse = () => {
   const backpage = () => {
     navigate("/HomeAfterLogin");
   };
-  const [note, setNote] = useState("");
 
-  const handleSave = () => {
-    // Implement your save logic here
-    console.log("Note saved:", note);
-  };
 
-  const handleCancel = () => {
-    setNote("");
-  };
+
+
+
   useEffect(() => {
     // Fetch course data from the API
     const fetchCourse = async () => {
@@ -230,11 +266,10 @@ const Showcourse = () => {
                         </span>
                       </div>
                     </div>
-                
                   </div>
 
                   {/* Input and Select Elements */}
-                  <div className="flex items-center mb-4">
+                  <div className="flex items-center mb-4 ">
                     <input
                       type="text"
                       placeholder="ابحث عن مراجعة"
@@ -254,6 +289,8 @@ const Showcourse = () => {
 
                   {/* Comments Container */}
                   <div className="max-h-60 overflow-y-auto">
+                    {/* Single Comment  */}
+
                     {course.comments.length > 0 ? (
                       course.comments.map((comment) => (
                         <div
@@ -297,34 +334,53 @@ const Showcourse = () => {
             )}
 
             {activeButton === "ملاحظات" && (
-              <div className="mt-4 p-4 bg-white rounded-lg shadow-md ">
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">
-                    كتابة ملاحظاتك:
+              <>
+                <div className="flex items-center mb-4 mt-5">
+                  <h3 className="text-lg font-semibold mr-4">
+                    صوت واكتب ملاحظاتك :
                   </h3>
-                  <textarea
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                    rows="4"
-                    className="w-full p-2 border rounded-md mb-4 border-custom-orange bg-gray-100"
-                    placeholder="اكتب ملاحظاتك هنا..."
-                  />
-                  <div className="flex justify-end">
-                    <button
-                      onClick={handleCancel}
-                      className="px-4 py-2 bg-gray-500 text-white rounded-md ml-4"
-                    >
-                      إلغاء
-                    </button>
-                    <button
-                      onClick={handleSave}
-                      className="px-4 py-2 bg-custom-orange text-white rounded-md"
-                    >
-                      حفظ ملاحظة
-                    </button>
+                  <div className="flex items-center">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg
+                        key={star}
+                        onClick={() => setStars(star)}
+                        onMouseEnter={() => setHoveredStar(star)}
+                        onMouseLeave={() => setHoveredStar(0)}
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={`w-6 h-6 cursor-pointer ${
+                          star <= (hoveredStar || stars)
+                            ? "text-yellow-500"
+                            : "text-gray-300"
+                        }`}
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M12 17.27l5.18 3.09-1.36-5.91L21 9.24l-6.06-.52L12 3 9.06 8.72 3 9.24l4.18 4.24-1.36 5.91L12 17.27z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    ))}
                   </div>
                 </div>
-              </div>
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  rows="4"
+                  className="w-full p-2 border rounded-md mb-4 border-custom-orange bg-gray-100"
+                  placeholder="اكتب ملاحظاتك هنا..."
+                />
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleSave}
+                    className="px-4 py-2 bg-custom-orange text-white rounded-md"
+                  >
+                    حفظ ملاحظة
+                  </button>
+                </div>
+                {error && <p className="text-red-500 mt-2">{error}</p>}
+              </>
             )}
           </div>
           {/* Sidebar */}
@@ -354,7 +410,7 @@ const Showcourse = () => {
           </div>
         </div>
       </main>
-
+      <ToastContainer position="bottom-left" />
       {isModalOpen && <ShareModels handleTogglePopup={handleTogglePopup} />}
     </div>
   );

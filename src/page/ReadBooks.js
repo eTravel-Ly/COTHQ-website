@@ -10,20 +10,54 @@ import { PiInstagramLogoLight } from "react-icons/pi";
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const ReadBooks = () => {
     const navigate = useNavigate();
    
+  const [note, setNote] = useState("");
+  const [stars, setStars] = useState(3); // Default to 5 stars
+  const [error, setError] = useState("");
+  const [hoveredStar, setHoveredStar] = useState(0);
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("User not authenticated");
+        return;
+      }
+
+      const response = await axios.post(
+        baseurl + "add-comment",
+        {
+          entityType: "BOOK", 
+          id: bookId,
+          comment: note,
+          stars: stars,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+     
+      setNote(""); 
+      setStars(3); 
+
+      toast.success("تم تسجيل تقييمك بنجاح ");
+    } catch (error) {
+    toast.error("حدث مشكلة اثناء تسجيل تقيمك ");
+      console.error(error);
+    }
+  };
+
+
+
     const backpage = () => {
       navigate('/HomeAfterLogin');
-    };
-    const [note, setNote] = useState('');
-
-    const handleSave = () => {
-      console.log('Note saved:', note);
-    };
-  
-    const handleCancel = () => {
-      setNote('');
     };
 
     const [activeButton, setActiveButton] = useState('نظرة عامة');
@@ -97,166 +131,195 @@ const ReadBooks = () => {
         }
       }, [bookId]);*/   
     return (
-        <div className="bg-white font-tajwal min-h-screen" dir="rtl">
-            {/* Navbar */}
-            <nav className="bg-white shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-10">
-                {/* Right side: Arrow and Home Text */}
-                <div className="flex items-center">
-                    <button className="text-gray-700 hover:text-gray-900" onClick={backpage}>
-                        <IoIosArrowForward className="w-6 h-6" />
-                    </button>
-                    <span className="mr-2 text-gray-700" onClick={backpage}>العودة إلى الصفحة الرئيسية</span>
-                </div>
+      <div className="bg-white font-tajwal min-h-screen" dir="rtl">
+        {/* Navbar */}
+        <nav className="bg-white shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-10">
+          {/* Right side: Arrow and Home Text */}
+          <div className="flex items-center">
+            <button
+              className="text-gray-700 hover:text-gray-900"
+              onClick={backpage}
+            >
+              <IoIosArrowForward className="w-6 h-6" />
+            </button>
+            <span className="mr-2 text-gray-700" onClick={backpage}>
+              العودة إلى الصفحة الرئيسية
+            </span>
+          </div>
 
-                {/* Left side: Progress Bar */}
-                <div className="flex items-center">
-                    <span className="text-gray-700 ml-2">تقدم القراءة</span>
-                    <div className="w-48 bg-gray-200 rounded-full h-2 relative">
-                        <div className="bg-custom-orange h-full rounded-full" style={{ width: `${book.progressPercentage}%` }}></div>
-                    </div>
-                    <span className="ml-2 text-gray-700">  {book.progressPercentage}%</span>
-                </div>
-            </nav>
+          {/* Left side: Progress Bar */}
+          <div className="flex items-center">
+            <span className="text-gray-700 ml-2">تقدم القراءة</span>
+            <div className="w-48 bg-gray-200 rounded-full h-2 relative">
+              <div
+                className="bg-custom-orange h-full rounded-full"
+                style={{ width: `${book.progressPercentage}%` }}
+              ></div>
+            </div>
+            <span className="ml-2 text-gray-700">
+              {" "}
+              {book.progressPercentage}%
+            </span>
+          </div>
+        </nav>
 
-            {/* Main Content */}
-            <main className="p-4 pt-20">
-                <div className="pdf-container mb-4 bg-white shadow-md" style={{ height: '800px' }}>
-                <embed
-                //  src={`${pdf}#page=${lastPage}`}
-                  type="application/pdf"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 'none' }}
-             //     onLoad={() => savePage(lastPage)} // تخزين الصفحة الحالية
-                />
-                </div>
-        
-                <div className="flex justify-between items-center mt-4">
-                    {/* Buttons on the left */}
-                    <div className="flex items-center space-x-2">
-                    <button
-                      className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                        activeButton === 'نظرة عامة' ? 'bg-custom-orange text-blue' : 'bg-blue hover:bg-custom-orange hover:text-blue'
-                      }`}
-                      onClick={() => setActiveButton('نظرة عامة')}
-                    >
-                      نظرة عامة
-                    </button>
-                    <button
-                      className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                        activeButton === 'مراجعات' ? 'bg-custom-orange text-blue' : 'bg-blue hover:bg-custom-orange hover:text-blue'
-                      }`}
-                      onClick={() => setActiveButton('مراجعات')}
-                    >
-                      مراجعات
-                    </button>
-                    <button
-                      className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                        activeButton === 'ملاحظات' ? 'bg-custom-orange text-blue' : 'bg-blue hover:bg-custom-orange hover:text-blue'
-                      }`}
-                      onClick={() => setActiveButton('ملاحظات')}
-                    >
-                      ملاحظات
-                    </button>
-            
-                    </div>
+        {/* Main Content */}
+        <main className="p-4 pt-20">
+          <div
+            className="pdf-container mb-4 bg-white shadow-md"
+            style={{ height: "800px" }}
+          >
+            <embed
+              //  src={`${pdf}#page=${lastPage}`}
+              type="application/pdf"
+              width="100%"
+              height="100%"
+              style={{ border: "none" }}
+              //     onLoad={() => savePage(lastPage)} // تخزين الصفحة الحالية
+            />
+          </div>
 
-                    {/* Buttons in the center */}
-                    <div className="flex space-x-2">
-                        <button className="bg-white text-black px-4 py-2 rounded ml-5 flex items-center border border-custom-orange">
-                            <FaShareAlt className="w-5 h-5 ml-2" />
-                            مشاركة
-                        </button>
-                        <button className="bg-white text-black px-4 py-2 rounded flex items-center border border-custom-green">
-                            <FaCheck className="w-5 h-5 ml-2" />
-                            ضع علامة على أنها تمت قراءة
-                        </button>
-                    </div>
+          <div className="flex justify-between items-center mt-4">
+            {/* Buttons on the left */}
+            <div className="flex items-center space-x-2">
+              <button
+                className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+                  activeButton === "نظرة عامة"
+                    ? "bg-custom-orange text-blue"
+                    : "bg-blue hover:bg-custom-orange hover:text-blue"
+                }`}
+                onClick={() => setActiveButton("نظرة عامة")}
+              >
+                نظرة عامة
+              </button>
+              <button
+                className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+                  activeButton === "مراجعات"
+                    ? "bg-custom-orange text-blue"
+                    : "bg-blue hover:bg-custom-orange hover:text-blue"
+                }`}
+                onClick={() => setActiveButton("مراجعات")}
+              >
+                مراجعات
+              </button>
+              <button
+                className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+                  activeButton === "ملاحظات"
+                    ? "bg-custom-orange text-blue"
+                    : "bg-blue hover:bg-custom-orange hover:text-blue"
+                }`}
+                onClick={() => setActiveButton("ملاحظات")}
+              >
+                ملاحظات
+              </button>
+            </div>
 
-                    
-                </div>
-                <div className="w-3/4 p-4">
-                {/* Overview Box */}
-                {activeButton === 'نظرة عامة' && (
-                    <div className="mt-4 p-4 bg-white rounded-lg shadow-md " >
-                    <h3 className="text-green-800 bg-green-100 text-sm font-bold mb-2 h-10 w-24 rounded-xl flex items-center justify-center">أعلى تقييما</h3>
-                    <h4 className="text-2xl font-semibold mb-2">مقدمة منهجية</h4>
-                    <p className="text-gray-700 mb-4 p-4 rounded-md  bg-white text-right" style={{
-                        fontFamily: "Tajwal, sans-serif",
-                        textAlign: "justify", // توزيع النص لتملأ العرض
-                        lineHeight: "1.5", // لضبط المسافة بين الأسطر
-                        marginBottom: "8px" // المسافة بين الفقرات
-                        }}>
-                   {book.description}
+            {/* Buttons in the center */}
+            <div className="flex space-x-2">
+              <button className="bg-white text-black px-4 py-2 rounded ml-5 flex items-center border border-custom-orange">
+                <FaShareAlt className="w-5 h-5 ml-2" />
+                مشاركة
+              </button>
+              <button className="bg-white text-black px-4 py-2 rounded flex items-center border border-custom-green">
+                <FaCheck className="w-5 h-5 ml-2" />
+                ضع علامة على أنها تمت قراءة
+              </button>
+            </div>
+          </div>
+          <div className="w-3/4 p-4">
+            {/* Overview Box */}
+            {activeButton === "نظرة عامة" && (
+              <div className="mt-4 p-4 bg-white rounded-lg shadow-md ">
+                <h3 className="text-green-800 bg-green-100 text-sm font-bold mb-2 h-10 w-24 rounded-xl flex items-center justify-center">
+                  أعلى تقييما
+                </h3>
+                <h4 className="text-2xl font-semibold mb-2">مقدمة منهجية</h4>
+                <p
+                  className="text-gray-700 mb-4 p-4 rounded-md  bg-white text-right"
+                  style={{
+                    fontFamily: "Tajwal, sans-serif",
+                    textAlign: "justify", // توزيع النص لتملأ العرض
+                    lineHeight: "1.5", // لضبط المسافة بين الأسطر
+                    marginBottom: "8px", // المسافة بين الفقرات
+                  }}
+                >
+                  {book.description}
                 </p>
 
-
-                    <hr className="border-gray-200 mb-4" />
-                    <h4 className="text-lg font-semibold mb-2">حول المؤلفين</h4>
-                    <div className="flex items-center p-4 border border-gray-300 rounded-lg w-72 h-24">
-                        <img src={user} alt="Author" className="w-12 h-12 rounded-full mr-1" />
-                        <div className="flex-1 mr-5">
-                        <h5 className="text-sm font-semibold">{book.author}</h5>
-                        <p className="text-gray-600 text-sm">{book.genre}</p>
-                        <div className="flex space-x-2 mt-2">
-                            <CiFacebook className=" text-gray-600"/>
-                            <CiTwitter className=" text-gray-600"/>
-                        <PiInstagramLogoLight className=" text-gray-600"/>
-                        </div>
-                        </div>
-                        <button className="px-4 py-2 bg-blue-500 font-bold text-custom-orange rounded-full">متابعة</button>
+                <hr className="border-gray-200 mb-4" />
+                <h4 className="text-lg font-semibold mb-2">حول المؤلفين</h4>
+                <div className="flex items-center p-4 border border-gray-300 rounded-lg w-72 h-24">
+                  <img
+                    src={user}
+                    alt="Author"
+                    className="w-12 h-12 rounded-full mr-1"
+                  />
+                  <div className="flex-1 mr-5">
+                    <h5 className="text-sm font-semibold">{book.author}</h5>
+                    <p className="text-gray-600 text-sm">{book.genre}</p>
+                    <div className="flex space-x-2 mt-2">
+                      <CiFacebook className=" text-gray-600" />
+                      <CiTwitter className=" text-gray-600" />
+                      <PiInstagramLogoLight className=" text-gray-600" />
                     </div>
-                    </div>
-                )}
+                  </div>
+                  <button className="px-4 py-2 bg-blue-500 font-bold text-custom-orange rounded-full">
+                    متابعة
+                  </button>
+                </div>
+              </div>
+            )}
 
-                {activeButton === 'مراجعات' && (
-                    <div className="mt-4 p-4 bg-white rounded-lg shadow-md " >
-                    <div >
-                    {/* Header for Reviews */}
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center">
-                        <span className="text-gray-700 font-semibold">المراجعات ({book.comments.length})</span>
-                        <div className="flex items-center ml-4">
-                            <span className="text-yellow-500">⭐</span>
-                            <span className="ml-1 text-gray-700">
-                            {(
+            {activeButton === "مراجعات" && (
+              <div className="mt-4 p-4 bg-white rounded-lg shadow-md ">
+                <div>
+                  {/* Header for Reviews */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <span className="text-gray-700 font-semibold">
+                        المراجعات ({book.comments.length})
+                      </span>
+                      <div className="flex items-center ml-4">
+                        <span className="text-yellow-500">⭐</span>
+                        <span className="ml-1 text-gray-700">
+                          {(
                             book.comments.reduce(
                               (acc, comment) => acc + comment.rating,
                               0
                             ) / book.comments.length
                           ).toFixed(1)}
-                            </span>
-                        </div>
-                        </div>
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
-                        مراجعات
-                        </button>
+                        </span>
+                      </div>
                     </div>
+                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+                      مراجعات
+                    </button>
+                  </div>
 
-                    {/* Input and Select Elements */}
-                    <div className="flex items-center mb-4">
-                        <input
-                        type="text"
-                        placeholder="ابحث عن مراجعة"
-                        className="p-2 border rounded-md flex-grow mr-4"
-                        />
-                        <select className="p-2 border rounded-md mr-2">
-                        <option>تصفية حسب</option>
-                        <option>الأحدث</option>
-                        <option>الأعلى تقييمًا</option>
-                        </select>
-                        <select className="p-2 border rounded-md">
-                        <option>فرز حسب</option>
-                        <option>الأحدث</option>
-                        <option>الأعلى تقييمًا</option>
-                        </select>
-                    </div>
+                  {/* Input and Select Elements */}
+                  <div className="flex items-center mb-4">
+                    <input
+                      type="text"
+                      placeholder="ابحث عن مراجعة"
+                      className="p-2 border rounded-md flex-grow mr-4"
+                    />
+                    <select className="p-2 border rounded-md mr-2">
+                      <option>تصفية حسب</option>
+                      <option>الأحدث</option>
+                      <option>الأعلى تقييمًا</option>
+                    </select>
+                    <select className="p-2 border rounded-md">
+                      <option>فرز حسب</option>
+                      <option>الأحدث</option>
+                      <option>الأعلى تقييمًا</option>
+                    </select>
+                  </div>
 
-                    {/* Comments Container */}
-                    <div className="max-h-60 overflow-y-auto">
-                        {/* Single Comment  */}
-                       
-                        {book.comments.length > 0 ? (
+                  {/* Comments Container */}
+                  <div className="max-h-60 overflow-y-auto">
+                    {/* Single Comment  */}
+
+                    {book.comments.length > 0 ? (
                       book.comments.map((comment) => (
                         <div
                           key={comment.id}
@@ -293,44 +356,64 @@ const ReadBooks = () => {
                     ) : (
                       <p className="text-gray-700">لا توجد مراجعات متاحة</p>
                     )}
-                       
-                    </div>
-                    </div>
-                    </div>
-                )}
-
-                {activeButton === 'ملاحظات' && (
-                    <div className="mt-4 p-4 bg-white rounded-lg shadow-md " >
-                    <div>
-                    <h3 className="text-lg font-semibold mb-2">كتابة ملاحظاتك:</h3>
-                    <textarea
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                    rows="4"
-                    className="w-full p-2 border rounded-md mb-4 border-custom-orange bg-gray-100"
-                    placeholder="اكتب ملاحظاتك هنا..."
-                    />
-                    <div className="flex justify-end">
-                    <button
-                        onClick={handleCancel}
-                        className="px-4 py-2 bg-gray-500 text-white rounded-md ml-4"
-                    >
-                        إلغاء
-                    </button>
-                    <button
-                        onClick={handleSave}
-                        className="px-4 py-2 bg-custom-orange text-white rounded-md"
-                    >
-                        حفظ ملاحظة
-                    </button>
-                    </div>
-                    </div>
-                    </div>
-                )}
+                  </div>
                 </div>
-            </main>
+              </div>
+            )}
 
-        </div>
+            {activeButton === "ملاحظات" && (
+              <>
+                <div className="flex items-center mb-4">
+                  <h3 className="text-lg font-semibold mr-4">
+                    صوت واكتب ملاحظاتك :
+                  </h3>
+                  <div className="flex items-center">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg
+                        key={star}
+                        onClick={() => setStars(star)}
+                        onMouseEnter={() => setHoveredStar(star)}
+                        onMouseLeave={() => setHoveredStar(0)}
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={`w-6 h-6 cursor-pointer ${
+                          star <= (hoveredStar || stars)
+                            ? "text-yellow-500"
+                            : "text-gray-300"
+                        }`}
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M12 17.27l5.18 3.09-1.36-5.91L21 9.24l-6.06-.52L12 3 9.06 8.72 3 9.24l4.18 4.24-1.36 5.91L12 17.27z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  rows="4"
+                  className="w-full p-2 border rounded-md mb-4 border-custom-orange bg-gray-100"
+                  placeholder="اكتب ملاحظاتك هنا..."
+                />
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleSave}
+                    className="px-4 py-2 bg-custom-orange text-white rounded-md"
+                  >
+                    حفظ ملاحظة
+                  </button>
+                </div>
+                {error && <p className="text-red-500 mt-2">{error}</p>}
+              </>
+            )}
+          </div>
+        </main>
+        <ToastContainer position="bottom-left" />
+      </div>
     );
 };
 
