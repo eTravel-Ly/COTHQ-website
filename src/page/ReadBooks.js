@@ -8,9 +8,11 @@ import { CiFacebook } from "react-icons/ci";
 import { CiTwitter } from "react-icons/ci";
 import { PiInstagramLogoLight } from "react-icons/pi";
 import { baseurl } from "../helper/Baseurl";
+import noCoursesImage from "../assets/images/Search.png";
 import axios from "axios";
 const ReadBooks = () => {
     const navigate = useNavigate();
+   
     const backpage = () => {
       navigate('/HomeAfterLogin');
     };
@@ -27,7 +29,7 @@ const ReadBooks = () => {
     const [activeButton, setActiveButton] = useState('نظرة عامة');
     const [book, setBook] = useState(null);
     const { bookId } = useParams();
-
+    const [loading, setLoading] = useState(true);
     
     useEffect(() => {
         // Fetch course data from the API
@@ -43,6 +45,8 @@ const ReadBooks = () => {
             setBook(response.data);
           } catch (error) {
             console.error("Error fetching course data:", error);
+          } finally {
+            setLoading(false);
           }
         };
     
@@ -50,15 +54,30 @@ const ReadBooks = () => {
       }, [bookId]);
    
     
-      if (!book) {
+      if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-              <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-            </div>
-
-            
-          );
+          <div className="flex justify-center items-center h-screen">
+            <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
+        );
       }
+       if (!book) {
+         return (
+           <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+             <img
+               src={noCoursesImage}
+               alt="No courses available"
+               className="w-60 h-60 object-cover mb-10"
+             />
+             <p
+               className="text-lg text-gray-700 mt-0"
+               style={{ fontFamily: "Tajwal, sans-serif" }}
+             >
+               لا يوجد بيانات لعرضها الان...
+             </p>
+           </div>
+         );
+       }
 
       ///////////////////////////////////////////////////////////
    /* const [lastPage, setLastPage] = useState(1); // افتراضياً يبدأ من الصفحة 1

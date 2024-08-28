@@ -3,9 +3,7 @@ import { FaShareAlt, FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import video1 from "../assets/images/1.mp4";
 import user from "../assets/images/4EyBa.png";
-import { CiFacebook } from "react-icons/ci";
-import { CiTwitter } from "react-icons/ci";
-import { PiInstagramLogoLight } from "react-icons/pi";
+import noCoursesImage from "../assets/images/Search.png";
 import ShareModels from "../models/ShareModels"; // تأكد من مسار الاستيراد الصحيح
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
@@ -16,6 +14,7 @@ const Showcourse = () => {
   const [course, setCourse] = useState(null);
   const [activeButton, setActiveButton] = useState("نظرة عامة");
   const { courseId } = useParams();
+  const [loading, setLoading] = useState(true);
 
   const handleTogglePopup = () => {
     setIsModalOpen(!isModalOpen);
@@ -48,6 +47,8 @@ const Showcourse = () => {
         setCourse(response.data);
       } catch (error) {
         console.error("Error fetching course data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -59,10 +60,27 @@ const Showcourse = () => {
     return `${minutes} دقيقة${secs > 0 ? ` و ${secs} ثانية` : ""}`;
   };
 
+     if (loading) {
+       return (
+         <div className="flex justify-center items-center h-screen">
+           <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+         </div>
+       );
+     }
   if (!course) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        <img
+          src={noCoursesImage}
+          alt="No courses available"
+          className="w-60 h-60 object-cover mb-10"
+        />
+        <p
+          className="text-lg text-gray-700 mt-0"
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+        >
+          لا يوجد بيانات لعرضها الان...
+        </p>
       </div>
     );
   }
