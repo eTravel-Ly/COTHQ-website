@@ -12,7 +12,7 @@ const PartnerSection = () => {
   const showConferences = () => setSelectedSection("allConferences");
 
   return (
-    <section 
+    <section id="PartnerSection"
       className="bg-gray-10 py-10 px-6 rounded-lg border border-gray-200" 
       style={{ 
         marginTop: '150px',

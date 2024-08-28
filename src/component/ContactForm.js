@@ -6,7 +6,7 @@ const ContactPage = () => {
     <div className="min-h-screen flex flex-col mt-20">
    
       
-      <section className="flex-1 flex justify-center items-center">
+      <section id='contact' className="flex-1 flex justify-center items-center">
         <div className="bg-gray-100 p-8 rounded-lg shadow-lg w-full max-w-4xl">
           <h2 className="text-2xl font-bold text-center mb-8" style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}>تواصل معنا</h2>
           <form>

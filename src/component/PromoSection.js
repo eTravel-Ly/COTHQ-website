@@ -10,7 +10,7 @@ const PromoSection = () => {
     navigate('/Login');
   };
   return (
-    <section
+    <section id='PromoSection'
       className="relative bg-cover bg-center top-10 text-white rounded-lg flex justify-center items-center"
       style={{ 
         backgroundImage: `url(${Banner})`, 

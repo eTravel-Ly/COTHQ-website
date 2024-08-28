@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import logo from '../assets/images/logo.png';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import logo from "../assets/images/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleRegisterRedirect = () => {
-    navigate('/LoginRegister');
+    navigate("/LoginRegister");
   };
 
   const handleLogin = () => {
-    navigate('/Login');
+    navigate("/Login");
   };
 
   return (
@@ -20,7 +20,7 @@ const Navbar = () => {
         <div className="flex items-center space-x-4">
           <a
             href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="py-2 px-3 bg-custom-orange text-white rounded-full"
             onClick={handleRegisterRedirect}
           >
@@ -28,7 +28,7 @@ const Navbar = () => {
           </a>
           <a
             href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="py-2 px-3 border border-gray-500 text-gray-700 rounded-full hover:bg-gray-100"
             onClick={handleLogin}
           >
@@ -37,36 +37,47 @@ const Navbar = () => {
         </div>
         <div className="hidden md:flex items-center space-x-4">
           <a
-            href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            href="#" // Updated href to point to HeroSection
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="py-5 px-3 text-gray-700 hover:text-gray-900"
           >
             من نحن
           </a>
           <a
-            href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            href="#contact"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="py-5 px-3 text-gray-700 hover:text-gray-900"
           >
             اتصل
           </a>
           <a
-            href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            href="#PartnerSection"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="py-5 px-3 text-gray-700 hover:text-gray-900"
           >
-            الدورة
+            النشاطات
           </a>
           <a
-            href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            href="#courses"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+            className="py-5 px-3 text-gray-700 hover:text-gray-900"
+          >
+            الدورات
+          </a>
+
+          <a
+            href="#hero"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="py-5 px-3 text-gray-700 hover:text-gray-900"
           >
             الصفحة الرئيسية
           </a>
         </div>
         <div className="md:hidden flex items-center">
-          <button onClick={() => setIsOpen(!isOpen)} className="mobile-menu-button">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="mobile-menu-button"
+          >
             <svg
               className="w-6 h-6"
               fill="none"
@@ -85,7 +96,13 @@ const Navbar = () => {
         </div>
         <div className="flex items-center">
           <a href="#" className="py-5 px-2 text-gray-700 hover:text-gray-900">
-            <img src={logo} alt="Logo" width={60} height={60} className="mr-2" />
+            <img
+              src={logo}
+              alt="Logo"
+              width={60}
+              height={60}
+              className="mr-2"
+            />
           </a>
         </div>
       </div>
@@ -93,29 +110,29 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden w-full bg-white shadow-md">
           <a
-            href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            href="#hero" // Updated href to point to HeroSection
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="block py-2 px-4 text-sm hover:bg-gray-200"
           >
             الصفحة الرئيسية
           </a>
           <a
             href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="block py-2 px-4 text-sm hover:bg-gray-200"
           >
             من نحن
           </a>
           <a
             href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="block py-2 px-4 text-sm hover:bg-gray-200"
           >
             الدورة
           </a>
           <a
             href="#"
-            style={{ fontFamily: 'Tajwal, sans-serif' }}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
             className="block py-2 px-4 text-sm hover:bg-gray-200"
           >
             اتصل
