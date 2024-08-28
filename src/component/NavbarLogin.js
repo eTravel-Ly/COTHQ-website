@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { IoSearchOutline } from "react-icons/io5";
 import { CiShoppingCart, CiLogout, CiSettings } from "react-icons/ci";
 import { BsBell } from "react-icons/bs";
 import { FiUser } from "react-icons/fi";
-import Notifications from './Notifications';
+import Notifications from "./Notifications";
 import { Link } from "react-router-dom";
 import { GrUnorderedList } from "react-icons/gr";
 import { CiViewList } from "react-icons/ci";
@@ -15,47 +15,73 @@ const NavbarLogin = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0); // State for unread notifications count
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCartItemCount = async () => {
       try {
-        const response = await axios.get(baseurl+'my-cart', {
+        const response = await axios.get(baseurl + "my-cart", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        setCartItemCount(response.data.books.length + response.data.courses.length);
+        setCartItemCount(
+          response.data.books.length + response.data.courses.length
+        );
       } catch (error) {
-        console.error('Error fetching cart item count:', error);
+        console.error("Error fetching cart item count:", error);
+      }
+    };
+
+    const fetchUnreadNotificationCount = async () => {
+      try {
+        const response = await axios.get(baseurl + "my-notifications", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const unreadCount = response.data[0].filter(
+          (notification) => !notification.isRead
+        ).length;
+        setUnreadNotificationCount(unreadCount); // Counting unread notifications
+      } catch (error) {
+        console.error("Error fetching unread notification count:", error);
       }
     };
 
     fetchCartItemCount();
+    fetchUnreadNotificationCount();
 
-    // استماع لحدث تحديث سلة التسوق
     const handleCartUpdated = () => {
       fetchCartItemCount();
     };
 
-    window.addEventListener('cartUpdated', handleCartUpdated);
+    window.addEventListener("cartUpdated", handleCartUpdated);
 
     return () => {
-      window.removeEventListener('cartUpdated', handleCartUpdated);
+      window.removeEventListener("cartUpdated", handleCartUpdated);
     };
   }, []);
+
   const handleLogout = () => {
-    // مسح التوكن من localStorage
     localStorage.removeItem("token");
-    
-    // توجيه المستخدم إلى الصفحة الرئيسية
     navigate("/");
   };
+
   return (
     <div className="flex items-center justify-between bg-white p-4 w-full">
       <div className="flex items-center">
-        <button onClick={() => setShowNotifications(!showNotifications)}>
+        <button
+          onClick={() => setShowNotifications(!showNotifications)}
+          className="relative"
+        >
           <BsBell className="text-gray-700 text-xl mr-4" />
+          {unreadNotificationCount > 0 && (
+            <span className="absolute top-[-5px] right-[12px] bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              {unreadNotificationCount}
+            </span>
+          )}
           {showNotifications && <Notifications />}
         </button>
         <Link to="/ShoppingCart" className="relative">
@@ -94,7 +120,7 @@ const NavbarLogin = () => {
                 className=" px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                <span>قائمة الطلبات </span>
+                <span>قائمة الطلبات</span>
                 <GrUnorderedList className="ml-2" />
               </Link>
               <Link
@@ -102,7 +128,7 @@ const NavbarLogin = () => {
                 className=" px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                <span>طلبات الاستعارة </span>
+                <span>طلبات الاستعارة</span>
                 <CiViewList className="ml-2" />
               </Link>
               <button
