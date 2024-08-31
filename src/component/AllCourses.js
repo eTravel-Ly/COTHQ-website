@@ -103,7 +103,7 @@ export default function AllCourses() {
           </p>
         </div>
       ) : (
-        <div className="flex h-screen overflow-auto p-4">
+        <div className="flex h-screen  p-4">
           <div className="flex flex-wrap justify-center">
             {rows.map((row, index) => (
               <div key={index} className="flex flex-wrap mb-4 w-full max-w-6xl">
@@ -115,53 +115,41 @@ export default function AllCourses() {
                         alt={course.title}
                         className=" rounded-lg mb-3  h-40"
                       />
-                      <h3 className="text-md font-semibold mb-1">
-                        {course.title}
-                      </h3>
-                      <p
-                      className="text-gray-600 text-xs"
-                      style={{
-                        fontFamily: "Tajwal, sans-serif",
-                        textAlign: "justify",
-                        lineHeight: "1.5",
-                        marginBottom: "8px",
-                        wordWrap: "break-word",
-                        whiteSpace: "normal",
-                        overflow: "hidden",            // إخفاء النص الزائد
-                        display: "-webkit-box",         // استخدام box للنص
-                        WebkitBoxOrient: "vertical",    // اتجاه الصندوق عموديًا
-                        WebkitLineClamp: 4,             // عرض 4 أسطر فقط
-                      }}
-                    >
-                      {course.description}
-                    </p>
-                      <div className="flex items-center mt-1 mb-2">
-                        <FaRegUserCircle className="text-gray-600 ml-2" />
-                        <p
-                          className="text-xs text-gray-600"
-                          style={{ fontFamily: "Tajwal, sans-serif" }}
-                        >
-                          {course.createdBy}
-
+                     
+                     <div className="flex items-center mt-1 mb-2">
+                       
                       <div className="flex-grow">
                         <h3 className="text-md font-semibold mb-1 truncate">
                           {course.title}
                         </h3>
-                        <p className="text-xs text-gray-500 mb-2 overflow-hidden break-words max-h-12">
+                        <p  className="text-gray-600 text-xs"
+                         style={{
+                          fontFamily: "Tajwal, sans-serif",
+                          textAlign: "justify",
+                          lineHeight: "1.5",
+                          marginBottom: "8px",
+                          wordWrap: "break-word",
+                          whiteSpace: "normal",
+                          overflow: "hidden",
+                          display: "-webkit-box",
+                          WebkitBoxOrient: "vertical",
+                          WebkitLineClamp: 4,
+                        }}>
                           {course.description}
-
-                        </p>
+                           </p>
                         <div className="flex items-center mt-1 mb-2">
-                          <FaRegUserCircle className="text-gray-600 ml-2" />
+                          <FaRegUserCircle className="text-gray-600 " />
                           <p
-                            className="text-xs text-gray-600"
+                            className="text-xs text-gray-600  mr-2"
                             style={{ fontFamily: "Tajwal, sans-serif" }}
                           >
                             {course.createdBy}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between mt-2">
+                     
+                    </div>
+                    <div className="flex items-center justify-between ">
                         <div className="text-gray-600">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +177,7 @@ export default function AllCourses() {
                           اشتر الآن
                         </button>
                       </div>
-                    </div>
+                  </div>
                   </div>
                 ))}
               </div>
