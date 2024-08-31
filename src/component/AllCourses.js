@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 
+
 export default function AllCourses() {
   const showPicCourses = async (fileName) => {
     try {
@@ -98,21 +99,21 @@ export default function AllCourses() {
             className="w-60 h-60 object-cover"
           />
           <p className="text-lg text-gray-700 mt-0">
-            لا يوجد دورات تدريبية  متاحة في الوقت الحالى     ..   
+            لا يوجد دورات تدريبية متاحة في الوقت الحالى ..
           </p>
         </div>
       ) : (
-        <div className="flex h-screen">
-          <div className="p-4">
+        <div className="flex h-screen overflow-auto p-4">
+          <div className="flex flex-wrap justify-center">
             {rows.map((row, index) => (
-              <div key={index} className="flex flex-wrap mb-4">
+              <div key={index} className="flex flex-wrap mb-4 w-full max-w-6xl">
                 {row.map((course, idx) => (
-                  <div key={idx} className="w-1/4 p-2">
-                    <div className="bg-white rounded-lg shadow-md p-3">
+                  <div key={idx} className="w-full md:w-1/4 p-2">
+                    <div className="bg-white rounded-lg shadow-md p-3 h-auto flex flex-col justify-between">
                       <img
                         src={course.imageUrl || CourseImage}
                         alt={course.title}
-                        className="object-cover rounded-lg mb-3"
+                        className=" rounded-lg mb-3  h-40"
                       />
                       <h3 className="text-md font-semibold mb-1">
                         {course.title}
@@ -141,7 +142,24 @@ export default function AllCourses() {
                           style={{ fontFamily: "Tajwal, sans-serif" }}
                         >
                           {course.createdBy}
+
+                      <div className="flex-grow">
+                        <h3 className="text-md font-semibold mb-1 truncate">
+                          {course.title}
+                        </h3>
+                        <p className="text-xs text-gray-500 mb-2 overflow-hidden break-words max-h-12">
+                          {course.description}
+
                         </p>
+                        <div className="flex items-center mt-1 mb-2">
+                          <FaRegUserCircle className="text-gray-600 ml-2" />
+                          <p
+                            className="text-xs text-gray-600"
+                            style={{ fontFamily: "Tajwal, sans-serif" }}
+                          >
+                            {course.createdBy}
+                          </p>
+                        </div>
                       </div>
                       <div className="flex items-center justify-between mt-2">
                         <div className="text-gray-600">
