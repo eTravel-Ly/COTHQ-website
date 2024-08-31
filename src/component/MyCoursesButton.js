@@ -98,16 +98,22 @@ const MyCoursesButton = () => {
                 />
                 <h3 className="text-lg font-semibold mb-2">{course.title}</h3>
                 <p
-                  className="text-xs text-gray-500 mb-2"
-                  style={{
-                    fontFamily: "Tajwal, sans-serif",
-                    textAlign: "justify",
-                    lineHeight: "1.5",
-                    marginBottom: "8px",
-                  }}
-                >
-                  {course.description}
-                </p>
+                className="text-gray-600 text-xs"
+                style={{
+                  fontFamily: "Tajwal, sans-serif",
+                  textAlign: "justify",
+                  lineHeight: "1.5",
+                  marginBottom: "8px",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                  overflow: "hidden",            // إخفاء النص الزائد
+                  display: "-webkit-box",         // استخدام box للنص
+                  WebkitBoxOrient: "vertical",    // اتجاه الصندوق عموديًا
+                  WebkitLineClamp: 4,             // عرض 4 أسطر فقط
+                }}
+              >
+                {course.description}
+              </p>
                 <div className="flex items-center mb-2">
                   <FaRegUserCircle
                     className="text-gray-600 ml-4"

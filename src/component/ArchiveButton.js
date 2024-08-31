@@ -85,12 +85,23 @@ const ArchiveButton = () => {
                   className="w-full h-32 object-cover rounded-lg mb-3"
                 />
                 <h3 className="text-lg font-semibold mb-1">{course.title}</h3>
-                <p className="text-sm text-gray-500 mb-2" style={{
+                <p
+                className="text-gray-600 text-xs"
+                style={{
                   fontFamily: "Tajwal, sans-serif",
                   textAlign: "justify",
                   lineHeight: "1.5",
-                  marginBottom: "8px"
-                }}>{course.description}</p>
+                  marginBottom: "8px",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                  overflow: "hidden",            // إخفاء النص الزائد
+                  display: "-webkit-box",         // استخدام box للنص
+                  WebkitBoxOrient: "vertical",    // اتجاه الصندوق عموديًا
+                  WebkitLineClamp: 4,             // عرض 4 أسطر فقط
+                }}
+              >
+                {course.description}
+              </p>
                 <div className="flex items-center text-sm text-gray-600">
                   <FaRegUserCircle className="text-gray-600 ml-2" />
                   <p className="text-sm" style={{ fontFamily: "Tajwal, sans-serif" }}>

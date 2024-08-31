@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // تحقق من وجود قيمة في localStorage لتحديد حالة تسجيل الدخول
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token); // تعيين الحالة بناءً على وجود التوكن
+  }, []);
 
   const handleRegisterRedirect = () => {
     navigate("/LoginRegister");
@@ -14,35 +21,46 @@ const Navbar = () => {
     navigate("/Login");
   };
 
+  const handleAccount = () => {
+    navigate("/HomeAfterLogin"); // أو أي مسار لحساب المستخدم
+  };
+
   return (
     <nav className="fixed top-0 left-1/2 transform -translate-x-1/2 w-full h-20 z-50 bg-white shadow-md rounded-full mx-auto my-4 mb-0 max-w-6xl flex items-center justify-center">
       <div className="w-full max-w-6xl px-4 flex justify-between items-center">
         <div className="flex items-center space-x-4">
-          <a
-            href="#"
-            style={{ fontFamily: "Tajwal, sans-serif" }}
-            className="py-2 px-3 bg-custom-orange text-white rounded-full"
-            onClick={handleRegisterRedirect}
-          >
-            الاشتراك
-          </a>
-          <a
-            href="#"
-            style={{ fontFamily: "Tajwal, sans-serif" }}
-            className="py-2 px-3 border border-gray-500 text-gray-700 rounded-full hover:bg-gray-100"
-            onClick={handleLogin}
-          >
-            تسجيل الدخول
-          </a>
+          {isLoggedIn ? (
+            <a
+              href="#"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+              className="py-2 px-3 bg-custom-orange text-white rounded-full"
+              onClick={handleAccount}
+            >
+              حسابي
+            </a>
+          ) : (
+            <>
+              <a
+                href="#"
+                style={{ fontFamily: "Tajwal, sans-serif" }}
+                className="py-2 px-3 bg-custom-orange text-white rounded-full"
+                onClick={handleRegisterRedirect}
+              >
+                الاشتراك
+              </a>
+              <a
+                href="#"
+                style={{ fontFamily: "Tajwal, sans-serif" }}
+                className="py-2 px-3 border border-gray-500 text-gray-700 rounded-full hover:bg-gray-100"
+                onClick={handleLogin}
+              >
+                تسجيل الدخول
+              </a>
+            </>
+          )}
         </div>
         <div className="hidden md:flex items-center space-x-4">
-          <a
-            href="#" // Updated href to point to HeroSection
-            style={{ fontFamily: "Tajwal, sans-serif" }}
-            className="py-5 px-3 text-gray-700 hover:text-gray-900"
-          >
-            من نحن
-          </a>
+         
           <a
             href="#contact"
             style={{ fontFamily: "Tajwal, sans-serif" }}
@@ -64,7 +82,6 @@ const Navbar = () => {
           >
             الدورات
           </a>
-
           <a
             href="#hero"
             style={{ fontFamily: "Tajwal, sans-serif" }}
@@ -110,7 +127,7 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden w-full bg-white shadow-md">
           <a
-            href="#hero" // Updated href to point to HeroSection
+            href="#hero"
             style={{ fontFamily: "Tajwal, sans-serif" }}
             className="block py-2 px-4 text-sm hover:bg-gray-200"
           >

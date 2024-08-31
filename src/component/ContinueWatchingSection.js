@@ -134,7 +134,7 @@ const ContinueWatchingSection = () => {
             {courses.map((course, index) => (
               <div
                 key={index}
-                className="bg-white shadow-lg rounded-lg p-3 w-60 flex-shrink-0 text-right"
+                className="bg-white shadow-lg rounded-lg p-3 w-56 flex-shrink-0 text-right"
                 style={{ direction: "rtl", height: "100%" }}
                 onClick={() => openShowcourse(course.id)}
               >
@@ -150,17 +150,23 @@ const ContinueWatchingSection = () => {
                 >
                   {course.title}
                 </h3>
-                <p
-                  className="text-gray-600 text-xs"
-                  style={{
-                    fontFamily: "Tajwal, sans-serif",
-                    textAlign: "justify",
-                    lineHeight: "1.5",
-                    marginBottom: "8px",
-                  }}
-                >
-                  {course.description}
-                </p>
+                      <p
+              className="text-gray-600 text-xs"
+              style={{
+                fontFamily: "Tajwal, sans-serif",
+                textAlign: "justify",
+                lineHeight: "1.5",
+                marginBottom: "8px",
+                wordWrap: "break-word",
+                whiteSpace: "normal",
+                overflow: "hidden",            // إخفاء النص الزائد
+                display: "-webkit-box",         // استخدام box للنص
+                WebkitBoxOrient: "vertical",    // اتجاه الصندوق عموديًا
+                WebkitLineClamp: 4,             // عرض 4 أسطر فقط
+              }}
+            >
+              {course.description}
+            </p>
                 <div className="mt-2 relative">
                   <div
                     className="absolute left-0 text-xs text-gray-700"

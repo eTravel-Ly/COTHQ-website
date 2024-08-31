@@ -117,9 +117,23 @@ export default function AllCourses() {
                       <h3 className="text-md font-semibold mb-1">
                         {course.title}
                       </h3>
-                      <p className="text-xs text-gray-500 mb-2">
-                        {course.description}
-                      </p>
+                      <p
+                      className="text-gray-600 text-xs"
+                      style={{
+                        fontFamily: "Tajwal, sans-serif",
+                        textAlign: "justify",
+                        lineHeight: "1.5",
+                        marginBottom: "8px",
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+                        overflow: "hidden",            // إخفاء النص الزائد
+                        display: "-webkit-box",         // استخدام box للنص
+                        WebkitBoxOrient: "vertical",    // اتجاه الصندوق عموديًا
+                        WebkitLineClamp: 4,             // عرض 4 أسطر فقط
+                      }}
+                    >
+                      {course.description}
+                    </p>
                       <div className="flex items-center mt-1 mb-2">
                         <FaRegUserCircle className="text-gray-600 ml-2" />
                         <p
