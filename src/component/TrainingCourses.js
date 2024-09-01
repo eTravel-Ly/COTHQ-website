@@ -8,10 +8,22 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 
 Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
 const TrainingCourses = () => {
   const [course, setcourse] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1); // Current page state
+    const coursesPerPage = 8;
+    const indexOfLastCourse = currentPage * coursesPerPage;
+    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+    const currentCourses = course.slice(indexOfFirstCourse, indexOfLastCourse);
+    const totalPages = Math.ceil(course.length / coursesPerPage);
+
+    const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+    };
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchContests = async () => {
@@ -153,51 +165,93 @@ const TrainingCourses = () => {
   }
   return (
     <div className="p-4">
-        {loading1 ? (
+      {loading1 ? (
         <div className="flex items-center justify-center h-screen">
           <FaSpinner className="text-4xl animate-spin" />
         </div>
       ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {course.map((course) => (
-          <div
-            key={course.id}
-            className="bg-gray-100 shadow-lg rounded-lg p-6 flex flex-col items-center"
-          >
-            <img
-              src={course.image}
-              alt={course.title}
-              className="w-full h-50 object-cover rounded-lg mb-4"
-            />
-            <div className="w-full text-center">
-              <h3 className="text-lg sm:text-xl font-bold mb-2">
-                {course.title}
-              </h3>
-              <p className="text-sm text-gray-700 mb-4">{course.description}</p>
-              <p className="text-sm text-gray-500 mb-4">
-                تاريخ الدورة: {course.date}
-              </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {currentCourses.map((course) => (
+            <div
+              key={course.id}
+              className="bg-gray-100 shadow-lg rounded-lg p-6 flex flex-col items-center"
+            >
+              <img
+                src={course.image}
+                alt={course.title}
+                className="w-full h-50 object-cover rounded-lg mb-4"
+              />
+              <div className="w-full text-center">
+                <h3 className="text-lg sm:text-xl font-bold mb-2">
+                  {course.title}
+                </h3>
+                <p className="text-sm text-gray-700 mb-4">
+                  {course.description}
+                </p>
+                <p className="text-sm text-gray-500 mb-4">
+                  تاريخ الدورة: {course.date}
+                </p>
 
-              <div className="flex justify-between items-center text-sm text-gray-600 space-x-4 space-x-reverse">
-                <button
-                  onClick={() => openModal(course)} // Pass the contest object to openModal
-                  className="bg-custom-orange  text-white py-2 px-4 rounded"
-                >
-                  سجل الان{" "}
-                </button>
-                <button
-                  course
-                  onClick={() => opencourseDetails(course.id)}
-                  className="bg-custom-orange  text-white py-2 px-4 rounded"
-                >
-                  تفاصيل الدورة
-                </button>
+                <div className="flex justify-between items-center text-sm text-gray-600 space-x-4 space-x-reverse">
+                  <button
+                    onClick={() => openModal(course)} // Pass the contest object to openModal
+                    className="bg-custom-orange  text-white py-2 px-4 rounded"
+                  >
+                    سجل الان{" "}
+                  </button>
+                  <button
+                    course
+                    onClick={() => opencourseDetails(course.id)}
+                    className="bg-custom-orange  text-white py-2 px-4 rounded"
+                  >
+                    تفاصيل الدورة
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      )}
+      <div className="mt-4">
+        <ul className="flex justify-center space-x-2 items-center">
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+              disabled={currentPage === 1}
+            >
+              <FaArrowRight />
+            </button>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-1 rounded-full ${
+                  currentPage === index + 1
+                    ? "bg-custom-orange text-white"
+                    : "text-gray-700"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+            >
+              <FaArrowLeft />
+            </button>
+          </li>
+        </ul>
       </div>
-       )}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -381,19 +435,19 @@ const TrainingCourses = () => {
           </div>
 
           <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
-            disabled={loading}
-            style={{ fontFamily: "Tajwal, sans-serif" }}
-          >
-            {loading ? (
-              <FaSpinner className="animate-spin text-lg" />
-            ) : (
-              'تسجيل'
-            )}
-          </button>
-        </div>
+            <button
+              type="submit"
+              className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
+              disabled={loading}
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+            >
+              {loading ? (
+                <FaSpinner className="animate-spin text-lg" />
+              ) : (
+                "تسجيل"
+              )}
+            </button>
+          </div>
         </form>
       </Modal>
       <button
