@@ -2,17 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { baseurl } from '../helper/Baseurl';
 import axios from 'axios';
+import { FaRegUserCircle, FaSpinner, FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 
 const MyBookButton = () => {
   const navigate = useNavigate();
+    const [mybooks, setMyBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const coursesPerPage = 9; 
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = mybooks.slice(indexOfFirstCourse, indexOfLastCourse);
+  const totalPages = Math.ceil(mybooks.length / coursesPerPage);
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   const openBook = (bookId) => {
     navigate(`/ReadBooks/${bookId}`);
   };
 
-  const [mybooks, setMyBooks] = useState([]);
+
 
   const showMyBooks = async () => {
     try {
@@ -71,9 +83,9 @@ const MyBookButton = () => {
   
 
   // تقسيم الكتب إلى صفوف من 4
-  const rows = [];
-  for (let i = 0; i < mybooks.length; i += 3) {
-    rows.push(mybooks.slice(i, i + 3));
+  const groupedCourses = [];
+  for (let i = 0; i < currentCourses.length; i += 3) {
+    groupedCourses.push(currentCourses.slice(i, i + 3));
   }
  
   if (loading) {
@@ -99,14 +111,18 @@ const MyBookButton = () => {
     );
   }
   return (
-    <div className="p-4" >
-      {rows.map((row, index) => ( 
+    <div className="p-4">
+      {groupedCourses.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
-            <div key={idx} className="w-1/3 p-2" onClick={() => openBook(book.id)}>
+            <div
+              key={idx}
+              className="w-1/3 p-2"
+              onClick={() => openBook(book.id)}
+            >
               <div className="bg-white shadow-lg rounded-lg p-3 w-80 flex-shrink-0 flex items-center text-right">
                 <img
-                  src={book.coverImageUrl} 
+                  src={book.coverImageUrl}
                   alt={book.title}
                   className="h-32 object-cover rounded-lg ml-4"
                 />
@@ -129,13 +145,52 @@ const MyBookButton = () => {
                       style={{ width: `${book.progressPercentage || 0}%` }}
                     ></div>
                   </div>
-
                 </div>
               </div>
             </div>
           ))}
         </div>
       ))}
+      <div className="mt-4">
+        <ul className="flex justify-center space-x-2 items-center">
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+              disabled={currentPage === 1}
+            >
+              <FaArrowRight />
+            </button>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-1 rounded-full ${
+                  currentPage === index + 1
+                    ? "bg-custom-orange text-white"
+                    : "text-gray-700"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+            >
+              <FaArrowLeft />
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };

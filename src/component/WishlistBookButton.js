@@ -3,13 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
 import noCoursesImage from "../assets/images/favorites.png"; // صورة تعبيرية عند عدم وجود دورات
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 
 const WishlistBookButton = () => {
   const navigate = useNavigate();
   const [mybooks, setMyBooks] = useState([]);
   const [selectedType, setSelectedType] = useState("all");
   const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1); // Current page state
+    const coursesPerPage = 9;
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = mybooks.slice(indexOfFirstCourse, indexOfLastCourse);
+  const totalPages = Math.ceil(mybooks.length / coursesPerPage);
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   const showMyFavorites = async () => {
     try {
       const response = await axios.get(`${baseurl}my-favorites`, {
@@ -118,10 +128,10 @@ const WishlistBookButton = () => {
       ? mybooks
       : mybooks.filter((book) => book.genre === selectedType);
 
-  const rows = [];
-  for (let i = 0; i < filteredBooks.length; i += 3) {
-    rows.push(filteredBooks.slice(i, i + 3));
-  }
+ const groupedCourses = [];
+ for (let i = 0; i < currentCourses.length; i += 3) {
+   groupedCourses.push(currentCourses.slice(i, i + 3));
+ }
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -147,7 +157,7 @@ const WishlistBookButton = () => {
   return (
     <div className="p-4">
       <div className="mb-4">
-      {/*
+        {/*
         <select
           value={selectedType}
           onChange={handleTypeChange}
@@ -161,11 +171,11 @@ const WishlistBookButton = () => {
         </select>
       */}
       </div>
-      {rows.map((row, index) => (
+      {groupedCourses.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
             <div key={idx} className="w-1/3 p-2">
-              <div  className="bg-white shadow-lg rounded-lg p-3  flex-shrink-0 flex items-center text-right ">
+              <div className="bg-white shadow-lg rounded-lg p-3  flex-shrink-0 flex items-center text-right ">
                 <img
                   src={book.coverImageUrl}
                   alt={book.title}
@@ -223,6 +233,46 @@ const WishlistBookButton = () => {
           ))}
         </div>
       ))}
+      <div className="mt-4">
+        <ul className="flex justify-center space-x-2 items-center">
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+              disabled={currentPage === 1}
+            >
+              <FaArrowRight />
+            </button>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-1 rounded-full ${
+                  currentPage === index + 1
+                    ? "bg-custom-orange text-white"
+                    : "text-gray-700"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+            >
+              <FaArrowLeft />
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
