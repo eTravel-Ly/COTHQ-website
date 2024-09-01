@@ -5,13 +5,23 @@ import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 
 const MyborrowButton = () => {
   const navigate = useNavigate();
   const [mybooks, setMyBooks] = useState([]);
   const [notificationShown, setNotificationShown] = useState(false);
   const [loading, setLoading] = useState(true);
+   const [currentPage, setCurrentPage] = useState(1); // Current page state
+   const coursesPerPage = 9;
+   const indexOfLastCourse = currentPage * coursesPerPage;
+   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+   const currentCourses = mybooks.slice(indexOfFirstCourse, indexOfLastCourse);
+   const totalPages = Math.ceil(mybooks.length / coursesPerPage);
 
+   const handlePageChange = (pageNumber) => {
+     setCurrentPage(pageNumber);
+   };
   const showMyBooks = async () => {
     try {
       const response = await axios.get(baseurl + "my-book-borrows", {
@@ -105,9 +115,9 @@ const MyborrowButton = () => {
 
   // Split books into rows of 3
   const rows = [];
-  for (let i = 0; i < mybooks.length; i += 3) {
-    rows.push(mybooks.slice(i, i + 3));
-  }
+ for (let i = 0; i < currentCourses.length; i += 3) {
+   rows.push(currentCourses.slice(i, i + 3));
+ }
 
   if (loading) {
     return (
@@ -168,6 +178,46 @@ const MyborrowButton = () => {
           ))}
         </div>
       ))}
+      <div className="mt-4">
+        <ul className="flex justify-center space-x-2 items-center">
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+              disabled={currentPage === 1}
+            >
+              <FaArrowRight />
+            </button>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-1 rounded-full ${
+                  currentPage === index + 1
+                    ? "bg-custom-orange text-white"
+                    : "text-gray-700"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+            >
+              <FaArrowLeft />
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
