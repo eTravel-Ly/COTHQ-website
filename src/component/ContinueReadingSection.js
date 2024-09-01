@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useSwipeable } from "react-swipeable";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { baseurl } from '../helper/Baseurl';
@@ -9,6 +8,7 @@ const ContinueReadingSection = () => {
   const [mybooks, setMyBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const scrollContainerRef = useRef(null);
 
   const openBook = (bookId) => {
     navigate(`/ReadBooks/${bookId}`);
@@ -68,30 +68,19 @@ const ContinueReadingSection = () => {
     fetchData();
   }, []);
 
-  const scrollContainerRef = useRef(null);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (scrollContainerRef.current) {
+        const container = scrollContainerRef.current;
+        container.scrollLeft += 1;
+        if (container.scrollLeft >= (container.scrollWidth - container.clientWidth)) {
+          container.scrollLeft = 0;
+        }
+      }
+    }, 20);
 
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
-        left: -200,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
-        left: 200,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const handlers = useSwipeable({
-    onSwipedLeft: () => scrollRight(),
-    onSwipedRight: () => scrollLeft(),
-  });
+    return () => clearInterval(interval);
+  }, []);
 
   if (loading) {
     return (
@@ -124,41 +113,26 @@ const ContinueReadingSection = () => {
         >
           استمر في قراءة الكتب الذي بدأت قرأتها بالفعل
         </h4>
-        <button
-          onClick={scrollLeft}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-slate-50 p-2 text-2xl rounded-full shadow-md"
-          aria-label="Scroll left"
-        >
-          &#8249;
-        </button>
-        <button
-          onClick={scrollRight}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-slate-50 p-2 text-2xl rounded-full shadow-md"
-          aria-label="Scroll right"
-        >
-          &#8250;
-        </button>
+
         <div
+          className="flex overflow-hidden space-x-4"
           ref={scrollContainerRef}
-          className="flex overflow-x-auto space-x-4 scrollbar-hide justify-end mx-5"
           style={{ scrollBehavior: "smooth", overflowX: "hidden" }}
-          {...handlers}
         >
           {mybooks.length === 0 ? (
             <div className="flex flex-col items-center justify-center w-full text-center p-4 mt-0">
-            <img
-              src={noCoursesImage}
-              alt="No courses available"
-              className="w-48 h-48 object-cover"
-            />
-            <p className="text-lg text-gray-700" 
-               style={{
-                fontFamily: "Tajwal, sans-serif",
-              }}>
-              لا يوجد كتب قمت بشراءها .. قم بالاشراء الان
-            </p>
-          </div>
-          
+              <img
+                src={noCoursesImage}
+                alt="No books available"
+                className="w-48 h-48 object-cover"
+              />
+              <p className="text-lg text-gray-700" 
+                 style={{
+                  fontFamily: "Tajwal, sans-serif",
+                }}>
+                لا يوجد كتب قمت بشراءها .. قم بالاشراء الان
+              </p>
+            </div>
           ) : (
             mybooks.map((book, index) => (
               <div

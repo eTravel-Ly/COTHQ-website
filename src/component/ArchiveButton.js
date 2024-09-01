@@ -3,11 +3,13 @@ import axios from "axios";
 import { FaRegUserCircle } from "react-icons/fa";
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 
 const ArchiveButton = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const coursesPerPage = 8; // Number of courses per page
   const generateImageUrl = (coverImageUrl) => {
     const baseImageUrl = `${baseurl}uploads/file/download/`;
     return coverImageUrl
@@ -52,12 +54,6 @@ const ArchiveButton = () => {
     );
   }
 
-  // Split courses into rows of 4
-  const rows = [];
-  for (let i = 0; i < courses.length; i += 4) {
-    rows.push(courses.slice(i, i + 4));
-  }
-
   if (courses.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
@@ -67,25 +63,35 @@ const ArchiveButton = () => {
           className="w-60 h-60 object-cover mb-10"
         />
         <p className="text-lg text-gray-700 mt-0">
-        لا يوجد دورات انهيت مشاهداتها .. شاهد دوراتك الان
+          لا يوجد دورات انهيت مشاهداتها .. شاهد دوراتك الان
         </p>
       </div>
     );
   }
+
+  // Pagination logic
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
+  const totalPages = Math.ceil(courses.length / coursesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="p-4">
-      {rows.map((row, index) => (
-        <div key={index} className="flex flex-wrap mb-4">
-          {row.map((course, idx) => (
-            <div key={idx} className="w-1/4 p-2">
-              <div className="bg-white rounded-lg shadow-md p-3">
-                <img
-                  src={course.imageUrl}
-                  alt={course.title}
-                  className="w-full h-32 object-cover rounded-lg mb-3"
-                />
-                <h3 className="text-lg font-semibold mb-1">{course.title}</h3>
-                <p
+      <div className="flex flex-wrap mb-4">
+        {currentCourses.map((course, idx) => (
+          <div key={idx} className="w-1/4 p-2">
+            <div className="bg-white rounded-lg shadow-md p-3">
+              <img
+                src={course.imageUrl}
+                alt={course.title}
+                className="w-full h-32 object-cover rounded-lg mb-3"
+              />
+              <h3 className="text-lg font-semibold mb-1">{course.title}</h3>
+              <p
                 className="text-gray-600 text-xs"
                 style={{
                   fontFamily: "Tajwal, sans-serif",
@@ -94,25 +100,69 @@ const ArchiveButton = () => {
                   marginBottom: "8px",
                   wordWrap: "break-word",
                   whiteSpace: "normal",
-                  overflow: "hidden",            // إخفاء النص الزائد
-                  display: "-webkit-box",         // استخدام box للنص
-                  WebkitBoxOrient: "vertical",    // اتجاه الصندوق عموديًا
-                  WebkitLineClamp: 4,             // عرض 4 أسطر فقط
+                  overflow: "hidden",
+                  display: "-webkit-box", // استخدام box للنص
+                  WebkitBoxOrient: "vertical", // اتجاه الصندوق عموديًا
+                  WebkitLineClamp: 4, // عرض 4 أسطر فقط
                 }}
               >
                 {course.description}
               </p>
-                <div className="flex items-center text-sm text-gray-600">
-                  <FaRegUserCircle className="text-gray-600 ml-2" />
-                  <p className="text-sm" style={{ fontFamily: "Tajwal, sans-serif" }}>
-                    {course.createdBy}
-                  </p>
-                </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <FaRegUserCircle className="text-gray-600 ml-2" />
+                <p
+                  className="text-sm"
+                  style={{ fontFamily: "Tajwal, sans-serif" }}
+                >
+                  {course.createdBy}
+                </p>
               </div>
             </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="mt-4">
+        <ul className="flex justify-center space-x-2 items-center">
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+              disabled={currentPage === 1}
+            >
+              <FaArrowRight />
+            </button>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-1 rounded-full ${
+                  currentPage === index + 1
+                    ? "bg-custom-orange text-white"
+                    : "text-gray-700"
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
           ))}
-        </div>
-      ))}
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-orange"
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+            >
+              <FaArrowLeft />
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
