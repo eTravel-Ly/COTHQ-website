@@ -27,6 +27,7 @@ export { default as MyActivity } from "./MyActivity";
 export { default as Allactivity } from "./Allactivity";
 export { default as ContestsDetails } from "./ContestsDetails";
 export { default as TrainingCoursesDtails } from "./TrainingCoursesDtails";
+export { default as Paytheorder } from "./Paytheorder";
 
 
 export {};

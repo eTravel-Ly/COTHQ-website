@@ -258,8 +258,24 @@ function ShoppingCart() {
               عربة الشراء
             </h1>
             <h6 className="font-tajwal text-red-500 underline cursor-pointer" onClick={clearCart}>(حذف كل العناصر)</h6>
+           {/*
             {cartItems.map((item) =>
               renderItem(item, item.type === "COURSE" ? "course" : "book")
+            )}
+           
+           */}
+
+{cartItems.length === 0 ? (
+              <div className="flex flex-col items-center justify-center">
+                <img src={AddToCartImage} alt="Empty Cart" className="h-72" />
+                <p className="text-lg font-bold mt-4" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                  العــــــربـــــة فـــــارغـــــة
+                </p>
+              </div>
+            ) : (
+              <div>
+                {cartItems.map((item) => renderItem(item, item.hasOwnProperty("author") ? "book" : "course"))}
+              </div>
             )}
           </div>
         </div>

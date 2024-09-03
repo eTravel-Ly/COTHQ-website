@@ -91,13 +91,12 @@ const ContinueReadingSection = () => {
   }
 
   return (
-    <div className="p-4 rounded-md">
+    <div className="p-4 rounded-md" style={{ direction: "rtl" }}>
       <div className="relative">
         <h2
           className="text-xl font-bold mb-4"
           style={{
             fontFamily: "Tajwal, sans-serif",
-            direction: "rtl",
             textAlign: "right",
           }}
         >
@@ -107,7 +106,6 @@ const ContinueReadingSection = () => {
           className="text-l font-bold text-gray-400 mb-4"
           style={{
             fontFamily: "Tajwal, sans-serif",
-            direction: "rtl",
             textAlign: "right",
           }}
         >

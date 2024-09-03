@@ -91,29 +91,38 @@ const ReadBooks = () => {
     };
     
     
-  
+    const [pdfUrl, setPdfUrl] = useState(null);
     useEffect(() => {
-        // Fetch course data from the API
-        const fetchbook = async () => {
+      const fetchBookAndPdf = async () => {
           try {
-            console.log(bookId);
-            const response = await axios.get(`${baseurl}book/${bookId}`, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            });
-            console.log("bookId data fetched successfully:", response.data);
-            setBook(response.data);
+              const response = await axios.get(`${baseurl}book/${bookId}`, {
+                  headers: {
+                      Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+              });
+              setBook(response.data);
+
+              const pdfUrl = await showpicpdf(response.data.bookUrl);
+              setPdfUrl(pdfUrl);
           } catch (error) {
-            console.error("Error fetching course data:", error);
+              console.error("Error fetching book data:", error);
           } finally {
-            setLoading(false);
+              setLoading(false);
           }
-        };
-    
-        fetchbook();
-      }, [bookId]);
-   
+      };
+
+      fetchBookAndPdf();
+  }, [bookId]);
+
+  const showpicpdf = async (fileName) => {
+    try {
+        const pdfUrl = `${baseurl}uploads/file/download/${fileName}`;
+        return pdfUrl;
+    } catch (error) {
+        console.error('Error fetching PDF:', error);
+        return null;
+    }
+};
     
       if (loading) {
         return (
@@ -124,7 +133,9 @@ const ReadBooks = () => {
       }
        if (!book) {
          return (
+          
            <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
+        
              <img
                src={noCoursesImage}
                alt="No courses available"
@@ -196,15 +207,17 @@ const ReadBooks = () => {
             className="pdf-container mb-4 bg-white shadow-md"
             style={{ height: "800px" }}
           >
-            <embed
-              //  src={`${pdf}#page=${lastPage}`}
-              src={pdf}
-              type="application/pdf"
-              width="100%"
-              height="100%"
-              style={{ border: "none" }}
-              //     onLoad={() => savePage(lastPage)} // تخزين الصفحة الحالية
-            />
+             {pdfUrl ? (
+                        <embed
+                            src={pdfUrl}
+                            type="application/pdf"
+                            width="100%"
+                            height="100%"
+                            style={{ border: "none" }}
+                        />
+                    ) : (
+                        <p className="text-center text-gray-500">لم يتم العثور على ملف PDF.</p>
+                    )}
           </div>
 
           <div className="flex justify-between items-center mt-4">

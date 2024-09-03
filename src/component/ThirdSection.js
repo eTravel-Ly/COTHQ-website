@@ -27,9 +27,9 @@ function ThirdSection() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(`${baseurl}all-courses`, {
-          headers: {
+        /*  headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          },*/
         });
         setCourses(response.data);
         setTotalPages(Math.ceil(response.data.length / coursesPerPage));

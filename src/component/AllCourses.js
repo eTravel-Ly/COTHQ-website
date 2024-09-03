@@ -29,9 +29,11 @@ export default function AllCourses() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(`${baseurl}all-courses`, {
+        
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
+         
         });
         const courseData = await Promise.all(
           response.data.map(async (course) => {

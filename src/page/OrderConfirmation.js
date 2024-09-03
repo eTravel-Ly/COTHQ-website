@@ -4,11 +4,15 @@ import NavbarLogin from "../component/NavbarLogin";
 import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
-
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 function OrderConfirmation() {
+  const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [userData, setUserData] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // State for loading
   const { cartItems } = useParams();
   const location = useLocation();
   const { totalPrice } = location.state || { totalPrice: 0 };
@@ -60,6 +64,35 @@ function OrderConfirmation() {
   const handlePaymentChange = (event) => {
     setPaymentMethod(event.target.value);
   };
+
+  const handleCreateOrder = async () => {
+    setIsLoading(true); // Set loading state to true
+    try {
+      const response = await axios.post(
+        baseurl + "checkout",
+        {
+          paymentType: paymentMethod,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      
+      const orderId = response.data.id; // Assuming the response contains the order ID
+      toast.success("تم انشاء طلب بنجاح");
+      navigate('/Paytheorder', { state: { orderId } }); // Navigate with order ID in state
+  
+    } catch (error) {
+      console.error("Error creating order:", error);
+      toast.warning("Failed to create order");
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+  
 
   return (
     <div className="flex h-screen font-tajwal">
@@ -162,12 +195,23 @@ function OrderConfirmation() {
 
           {/* Order Button */}
           <div className="mt-6 text-center">
-            <button className="bg-custom-orange text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-base sm:text-lg w-full md:w-auto">
-              إنشاء طلب
+            <button
+              onClick={handleCreateOrder}
+              disabled={isLoading} // Disable button while loading
+              className={`bg-custom-orange text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-base sm:text-lg w-full md:w-auto ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {isLoading ? (
+                <span>جارٍ إنشاء الطلب...</span> 
+              ) : (
+                <span>إنشاء طلب</span>
+              )}
             </button>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

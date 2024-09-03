@@ -82,12 +82,11 @@ const ContinueWatchingSection = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4" style={{ direction: "rtl" }}>
       <h2
         className="text-xl font-bold mb-4"
         style={{
           fontFamily: "Tajwal, sans-serif",
-          direction: "rtl",
           textAlign: "right",
         }}
       >
@@ -97,7 +96,6 @@ const ContinueWatchingSection = () => {
         className="text-l font-bold text-gray-400 mb-4"
         style={{
           fontFamily: "Tajwal, sans-serif",
-          direction: "rtl",
           textAlign: "right",
         }}
       >
@@ -131,7 +129,7 @@ const ContinueWatchingSection = () => {
               <div
                 key={index}
                 className="bg-white shadow-lg rounded-lg p-3 w-56 flex-shrink-0 text-right transform transition-transform duration-300 hover:translate-x-4"
-                style={{ direction: "rtl", height: "100%" }}
+                style={{ height: "100%" }}
                 onClick={() => openShowcourse(course.id)}
               >
                 <img
@@ -165,13 +163,13 @@ const ContinueWatchingSection = () => {
                 </p>
                 <div className="mt-2 relative">
                   <div
-                    className="absolute left-0 text-xs text-gray-700"
+                    className="absolute right-0 text-xs text-gray-700"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
                     {course.progressPercentage}%
                   </div>
                   <div
-                    className="absolute right-0 text-xs text-gray-700"
+                    className="absolute left-0 text-xs text-gray-700"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
                     تقدم الدورة
