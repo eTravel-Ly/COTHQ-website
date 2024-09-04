@@ -4,8 +4,10 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { useNavigate } from "react-router-dom";
 
 const ArchiveButton = () => {
+    const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1); // Current page state
@@ -17,6 +19,9 @@ const ArchiveButton = () => {
       : "default-image-path"; // Replace with a path to a default image if necessary
   };
 
+    const openShowcourse = (courseId) => {
+      navigate(`/Showcourse/${courseId}`);
+    };
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -83,7 +88,11 @@ const ArchiveButton = () => {
     <div className="p-4">
       <div className="flex flex-wrap mb-4">
         {currentCourses.map((course, idx) => (
-          <div key={idx} className="w-1/4 p-2">
+          <div
+            key={idx}
+            className="w-1/4 p-2"
+            onClick={() => openShowcourse(course.id)}
+          >
             <div className="bg-white rounded-lg shadow-md p-3">
               <img
                 src={course.imageUrl}

@@ -400,7 +400,11 @@ const relatedBooks = books
                 </h2>
                 <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
                   {relatedBooks.map((book) => (
-                    <div key={book.id} className="flex items-center p-2 border">
+                    <div
+                      key={book.id}
+                      className="flex items-center p-2 border"
+                     
+                    >
                       <img
                         src={book.coverImageUrl}
                         alt={book.title}

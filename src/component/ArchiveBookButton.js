@@ -4,9 +4,11 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { useNavigate } from "react-router-dom";
 
 
 const ArchiveBookButton = () => {
+    const navigate = useNavigate();
   const [myBooks, setMyBooks] = useState([]);
   const [loading, setLoading] = useState(true);
  const [currentPage, setCurrentPage] = useState(1); // Current page state
@@ -78,6 +80,10 @@ const ArchiveBookButton = () => {
       </div>
     );
   }
+    const openBook = (bookId) => {
+      navigate(`/ReadBooks/${bookId}`);
+    };
+
 
   return (
     <div className="p-4">
@@ -95,7 +101,10 @@ const ArchiveBookButton = () => {
       ) : (
         currentCourses.map((book, index) => (
           <div key={index} className="w-1/3 p-2">
-            <div className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex items-center text-right">
+            <div
+              className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex items-center text-right"
+              onClick={() => openBook(book.id)}
+            >
               <img
                 src={book.coverImageUrl}
                 alt={book.title}
