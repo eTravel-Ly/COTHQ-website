@@ -402,7 +402,7 @@ const navigate = useNavigate();
               <h2 className="text-xl font-bold mb-2 font-tajwal">
                 الفيديوهات ذات الصلة
               </h2>
-              <div className="flex flex-col space-y-4">
+              <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
                 {relatedVideos.map((video) => (
                   <div key={video.id} className="flex items-center p-2 border">
                     <img

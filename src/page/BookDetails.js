@@ -154,10 +154,9 @@ const BookDetails = () => {
   }
 
   // Process relatedBooks
-  const relatedBooks = books
-    .filter((book) => book.id.toString() !== bookId)
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 3);
+const relatedBooks = books
+  .filter((book) => book.id.toString() !== bookId)
+  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   const openBookDetails = (bookId) => {
     navigate(`/BookDetails/${bookId}`);
@@ -399,7 +398,7 @@ const BookDetails = () => {
                 <h2 className="text-xl font-bold mb-2 font-tajwal">
                   الكتب ذات الصلة
                 </h2>
-                <div className="flex flex-col space-y-4">
+                <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
                   {relatedBooks.map((book) => (
                     <div key={book.id} className="flex items-center p-2 border">
                       <img
