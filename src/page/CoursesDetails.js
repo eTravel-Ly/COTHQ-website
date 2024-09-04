@@ -12,11 +12,41 @@ import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import user from "../assets/images/4EyBa.png";
+
 const CoursesDetails = () => {
   const [courseData, setCourseData] = useState(null);
   const [relatedVideos, setRelatedVideos] = useState([]);
   const [quantity, setQuantity] = useState(1);
+   const [likedcourses, setLikedcourse] = useState({});
   const { courseId } = useParams();
+    const handleLikeClick = async (id) => {
+      try {
+        const response = await axios.post(
+          `${baseurl}toggle-favorite`,
+          {
+            type: "COURSE",
+            id: id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // Update the state with the favorite status
+        if (response.data.isFavorite !== undefined) {
+          setLikedcourse((prev) => ({
+            ...prev,
+            [id]: response.data.isFavorite,
+          }));
+        }
+      } catch (error) {
+        console.error("Error toggling favorite:", error);
+      }
+    };
 const navigate = useNavigate();
   const showpicbooks = (fileName) => {
     try {
@@ -101,6 +131,16 @@ const navigate = useNavigate();
  const openCoursesDetails = (courseId) => {
    navigate(`/CoursesDetails/${courseId}`);
  };
+
+   useEffect(() => {
+     if (courseData) {
+       setLikedcourse((prev) => ({
+         ...prev,
+         [courseId]: courseData.isFavorite,
+       }));
+     }
+   }, [courseData, courseId]);
+
   if (!courseData) {
     // Display a loading state or placeholder while fetching data
     return (
@@ -238,8 +278,15 @@ const navigate = useNavigate();
                     أضف إلى سلة التسوق
                   </button>
 
-                  <button className="bg-white border border-gray-300 rounded p-2 ml-2 flex items-center justify-center">
-                    <FaRegHeart size={19} className="text-custom-orange" />
+                  <button
+                    onClick={() => handleLikeClick(courseId)}
+                    className={`${
+                      likedcourses[courseId]
+                        ? "text-red-500"
+                        : "text-custom-orange"
+                    } bg-white border border-gray-300 rounded p-2 ml-2 flex items-center justify-center`}
+                  >
+                    <FaRegHeart size={19} />
                   </button>
                 </div>
               </div>
@@ -280,6 +327,74 @@ const navigate = useNavigate();
                   </tr>
                 </tbody>
               </table>
+              <div className="mt-4 p-4 bg-white text-right ">
+                <div>
+                  {/* Header for Reviews */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <span className="text-gray-700 font-semibold">
+                        المراجعات ({courseData.comments.length})
+                      </span>
+                      <div className="flex items-center ml-4">
+                        <span className="text-yellow-500">⭐</span>
+                        <span className="ml-1 text-gray-700">
+                          {courseData.comments.length > 0
+                            ? (
+                                courseData.comments.reduce(
+                                  (acc, comment) => acc + comment.rating,
+                                  0
+                                ) / courseData.comments.length
+                              ).toFixed(1)
+                            : "0"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Comments Container */}
+                  <div className="max-h-60 overflow-auto">
+                    {courseData.comments.length > 0 ? (
+                      courseData.comments.map((comment) => (
+                        <div
+                          key={comment.id}
+                          className="flex items-start mb-4 p-4 border-b"
+                        >
+                          <img
+                            src={user}
+                            alt="User"
+                            className="w-12 h-12 rounded-full mr-4"
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center mb-2">
+                              <span className="font-semibold mr-2">
+                                {comment.learner.firstName}{" "}
+                                {comment.learner.lastName}
+                              </span>
+                              <div className="flex items-center">
+                                <span className="text-yellow-500">⭐</span>
+                                <span className="ml-1 text-gray-700">
+                                  {comment.rating}
+                                </span>
+                              </div>
+                            </div>
+                            <p className="text-gray-700">{comment.details}</p>
+                            <div className="flex items-center mt-2 text-gray-600">
+                              <span className="mr-2">
+                                👍 {comment.likesCount}
+                              </span>
+                              <span>👎 {comment.dislikesCount}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-gray-700">
+                        <p>لا توجد مراجعات متاحة</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Related Videos */}

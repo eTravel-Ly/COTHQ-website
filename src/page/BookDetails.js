@@ -325,7 +325,7 @@ const BookDetails = () => {
                   </tr>
                 </tbody>
               </table>
-              <div className="mt-4 p-4 bg-white  ">
+              <div className="mt-4 p-4 bg-white text-right ">
                 <div>
                   {/* Header for Reviews */}
                   <div className="flex items-center justify-between mb-4">
