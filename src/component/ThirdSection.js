@@ -26,7 +26,7 @@ function ThirdSection() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(`${baseurl}all-courses`, {
+        const response = await axios.get(`${baseurl}public/courses`, {
         /*  headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },*/
