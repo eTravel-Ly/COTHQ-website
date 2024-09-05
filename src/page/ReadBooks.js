@@ -312,10 +312,8 @@ if (sortedComments.length > 0) {
             {/* Overview Box */}
             {activeButton === "نظرة عامة" && (
               <div className="mt-4 p-4 bg-white rounded-lg shadow-md ">
-                <h3 className="text-green-800 bg-green-100 text-sm font-bold mb-2 h-10 w-24 rounded-xl flex items-center justify-center">
-                  أعلى تقييما
-                </h3>
-                <h4 className="text-2xl font-semibold mb-2">مقدمة منهجية</h4>
+                
+                <h4 className="text-2xl font-semibold mb-2">وصف الكتاب </h4>
                 <p
                   className="text-gray-700 mb-4 p-4 rounded-md  bg-white text-right"
                   style={{
@@ -340,14 +338,10 @@ if (sortedComments.length > 0) {
                     <h5 className="text-sm font-semibold">{book.author}</h5>
                     <p className="text-gray-600 text-sm">{book.genre}</p>
                     <div className="flex space-x-2 mt-2">
-                      <CiFacebook className=" text-gray-600" />
-                      <CiTwitter className=" text-gray-600" />
-                      <PiInstagramLogoLight className=" text-gray-600" />
+                     
                     </div>
                   </div>
-                  <button className="px-4 py-2 bg-blue-500 font-bold text-custom-orange rounded-full">
-                    متابعة
-                  </button>
+                  
                 </div>
               </div>
             )}

@@ -251,24 +251,14 @@ const navigate = useNavigate();
 
                 <div className="flex items-center">
                   <div className="flex items-center border rounded">
-                    <button
-                      className="px-4 py-2 border-r border-gray-300 bg-white text-gray-700 font-tajwal"
-                      onClick={handleDecrement}
-                    >
-                      <FaMinus size={12} className="text-custom-orange" />
-                    </button>
+                    
                     <input
                       type="text"
                       className="border-0 p-2 w-8 text-center font-tajwal"
                       value={quantity}
                       readOnly
                     />
-                    <button
-                      className="px-4 py-2 border-l border-gray-300 font-tajwal bg-white text-gray-700"
-                      onClick={handleIncrement}
-                    >
-                      <FaPlus size={12} className="text-custom-orange" />
-                    </button>
+                   
                   </div>
                   <button
                     className="bg-custom-orange text-white mr-2 font-tajwal px-4 py-2 rounded ml-4 flex items-center"

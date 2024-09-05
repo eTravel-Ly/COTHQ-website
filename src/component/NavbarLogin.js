@@ -143,6 +143,12 @@ const NavbarLogin = () => {
           )}
         </div>
       </div>
+      <div className="w-500 h-10 p-2 flex items-center mb-1 mx-5 "  style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+      >
+        <h2 className="text-lg sm:text-xl font-bold text-custom-orange" > مجمع القران الكريم</h2>
+        </div>
+     
+    {/*
       <div className="bg-gray-100 w-500 h-10 p-2 flex rounded-2xl items-center mb-1 mx-5">
         <IoSearchOutline className="text-gray-700 text-xl mr-4" />
         <input
@@ -152,6 +158,8 @@ const NavbarLogin = () => {
           className="bg-gray-100 w-500 text-right outline-none text-l flex-1"
         />
       </div>
+    
+    */}
     </div>
   );
 };
