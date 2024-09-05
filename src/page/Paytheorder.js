@@ -4,14 +4,21 @@ import NavbarLogin from "../component/NavbarLogin";
 import { useParams, useLocation } from "react-router-dom";
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Paytheorder() {
+  const navigate = useNavigate();
+
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [userData, setUserData] = useState(null);
   const location = useLocation();
   const { orderId } = location.state || {};
   const { totalPrice } = location.state || { totalPrice: 0 };
 
+  
+  const Paynow = () => {
+    navigate('/Paynow');
+  };
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -53,7 +60,7 @@ function Paytheorder() {
           <div className="flex flex-col gap-4 sm:gap-6">
 
             <div className="bg-gray-100 p-4 sm:p-6 rounded-lg shadow">
-              
+
               <h3 className="text-md sm:text-lg font-semibold mb-3 sm:mb-4">
                 ملخص الطلب
               </h3>
@@ -103,7 +110,7 @@ function Paytheorder() {
 
           {/* Order Button */}
           <div className="mt-6 text-center">
-            <button className="bg-custom-green text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-base sm:text-lg w-full md:w-auto">
+            <button onClick={Paynow} className="bg-custom-green text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-base sm:text-lg w-full md:w-auto">
              ادفع الان 
             </button>
           </div>
