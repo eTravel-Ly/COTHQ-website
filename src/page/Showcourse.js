@@ -62,20 +62,22 @@ const Showcourse = () => {
     setSortOption(e.target.value);
   };
 
-  const handleFilterChange = (e) => {
-    setFilterOption(e.target.value);
-  };
 
-  const sortedComments = [...course.comments];
 
-  if (sortOption === "الأحدث") {
-    sortedComments.sort(
-      (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
-    );
-  } else if (sortOption === "الأعلى تقييمًا") {
-    sortedComments.sort((a, b) => b.rating - a.rating);
-  }
+ const sortedComments = course?.comments ? [...course.comments] : [];
 
+ // قم بإجراء التحقق قبل محاولة الوصول إلى comments
+ if (sortedComments.length > 0) {
+   if (sortOption === "الأحدث") {
+     sortedComments.sort(
+       (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+     );
+   } else if (sortOption === "الأعلى تقييمًا") {
+     sortedComments.sort((a, b) => b.rating - a.rating);
+   }
+ } else {
+   console.log("No comments available for sorting.");
+ }
   const handleTogglePopup = () => {
     setIsModalOpen(!isModalOpen);
   };

@@ -19,6 +19,9 @@ const ReadBooks = () => {
   const [stars, setStars] = useState(3); // Default to 5 stars
   const [error, setError] = useState("");
   const [hoveredStar, setHoveredStar] = useState(0);
+ const [sortOption, setSortOption] = useState("الأحدث");
+ const [filterOption, setFilterOption] = useState("تصفية حسب");
+
 
   const handleSave = async () => {
     try {
@@ -92,7 +95,7 @@ const ReadBooks = () => {
     
     
     const [pdfUrl, setPdfUrl] = useState(null);
-    useEffect(() => {
+  
       const fetchBookAndPdf = async () => {
           try {
               const response = await axios.get(`${baseurl}book/${bookId}`, {
@@ -110,9 +113,45 @@ const ReadBooks = () => {
               setLoading(false);
           }
       };
-
-      fetchBookAndPdf();
+  useEffect(() => {
+    fetchBookAndPdf();
   }, [bookId]);
+
+    const handleButtonClick = (buttonName) => {
+      setActiveButton(buttonName);
+      if (buttonName === "مراجعات") {
+        fetchBookAndPdf(); // Re-fetch course data when "مراجعات" button is clicked
+      }
+    };
+
+
+ const handleSortChange = (e) => {
+   setSortOption(e.target.value);
+ };
+
+const sortedComments = book?.comments ? [...book.comments] : [];
+
+// قم بإجراء التحقق قبل محاولة الوصول إلى comments
+if (sortedComments.length > 0) {
+  if (sortOption === "الأحدث") {
+    sortedComments.sort(
+      (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+    );
+  } else if (sortOption === "الأعلى تقييمًا") {
+    sortedComments.sort((a, b) => b.rating - a.rating);
+  }
+} else {
+  console.log("No comments available for sorting.");
+}
+
+
+
+
+
+
+
+
+
 
   const showpicpdf = async (fileName) => {
     try {
@@ -207,17 +246,19 @@ const ReadBooks = () => {
             className="pdf-container mb-4 bg-white shadow-md"
             style={{ height: "800px" }}
           >
-             {pdfUrl ? (
-                        <embed
-                            src={pdfUrl}
-                            type="application/pdf"
-                            width="100%"
-                            height="100%"
-                            style={{ border: "none" }}
-                        />
-                    ) : (
-                        <p className="text-center text-gray-500">لم يتم العثور على ملف PDF.</p>
-                    )}
+            {pdfUrl ? (
+              <embed
+                src={pdfUrl}
+                type="application/pdf"
+                width="100%"
+                height="100%"
+                style={{ border: "none" }}
+              />
+            ) : (
+              <p className="text-center text-gray-500">
+                لم يتم العثور على ملف PDF.
+              </p>
+            )}
           </div>
 
           <div className="flex justify-between items-center mt-4">
@@ -239,7 +280,7 @@ const ReadBooks = () => {
                     ? "bg-custom-orange text-blue"
                     : "bg-blue hover:bg-custom-orange hover:text-blue"
                 }`}
-                onClick={() => setActiveButton("مراجعات")}
+                onClick={() => handleButtonClick("مراجعات")}
               >
                 مراجعات
               </button>
@@ -257,11 +298,11 @@ const ReadBooks = () => {
 
             {/* Buttons in the center */}
             <div className="flex space-x-2">
-              <button className="bg-white text-black px-4 py-2 rounded ml-5 flex items-center border border-custom-orange">
-                <FaShareAlt className="w-5 h-5 ml-2" />
-                مشاركة
-              </button>
-              <button  onClick={handleMarkAsRead} className="bg-white text-black px-4 py-2 rounded flex items-center border border-custom-green">
+              <input className="bg-white w-10 text-black px-4 py-2 rounded ml-5 flex items-center border border-custom-orange"></input>
+              <button
+                onClick={handleMarkAsRead}
+                className="bg-white text-black px-4 py-2 rounded flex items-center border border-custom-green"
+              >
                 <FaCheck className="w-5 h-5 ml-2" />
                 ضع علامة على أنها تمت قراءة
               </button>
@@ -311,94 +352,97 @@ const ReadBooks = () => {
               </div>
             )}
 
-{activeButton === "مراجعات" && (
-  <div className="mt-4 p-4 bg-white rounded-lg shadow-md">
-    <div>
-      {/* Header for Reviews */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center">
-          <span className="text-gray-700 font-semibold">
-            المراجعات ({book.comments.length})
-          </span>
-          <div className="flex items-center ml-4">
-            <span className="text-yellow-500">⭐</span>
-            <span className="ml-1 text-gray-700">
-              {book.comments.length > 0
-                ? (
-                    book.comments.reduce(
-                      (acc, comment) => acc + comment.rating,
-                      0
-                    ) / book.comments.length
-                  ).toFixed(1)
-                : '0'}
-            </span>
-          </div>
-        </div>
-      </div>
+            {activeButton === "مراجعات" && (
+              <div className="mt-4 p-4 bg-white rounded-lg shadow-md">
+                <div>
+                  {/* Header for Reviews */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <span className="text-gray-700 font-semibold">
+                        المراجعات ({book.comments.length})
+                      </span>
+                      <div className="flex items-center ml-4">
+                        <span className="text-yellow-500">⭐</span>
+                        <span className="ml-1 text-gray-700">
+                          {(
+                            book.comments.reduce(
+                              (acc, comment) => acc + comment.rating,
+                              0
+                            ) / book.comments.length
+                          ).toFixed(1)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
-      {/* Input and Select Elements */}
-      <div className="flex items-center mb-4">
-        <input
-          type="text"
-          placeholder="ابحث عن مراجعة"
-          className="p-2 border rounded-md flex-grow mr-4"
-        />
-        <select className="p-2 border rounded-md mr-2">
-          <option>تصفية حسب</option>
-          <option>الأحدث</option>
-          <option>الأعلى تقييمًا</option>
-        </select>
-        <select className="p-2 border rounded-md">
-          <option>فرز حسب</option>
-          <option>الأحدث</option>
-          <option>الأعلى تقييمًا</option>
-        </select>
-      </div>
+                  {/* Input and Select Elements */}
+                  <div className="flex items-center mb-4 ">
+                    <input
+                      type="text"
+                      placeholder="ابحث عن مراجعة"
+                      className="p-2 border rounded-md flex-grow mr-4"
+                    />
 
-      {/* Comments Container */}
-      <div className="max-h-60 overflow-y-auto">
-        {book.comments.length > 0 ? (
-          book.comments.map((comment) => (
-            <div
-              key={comment.id}
-              className="flex items-start mb-4 p-4 border-b"
-            >
-              <img
-                src={user}
-                alt="User"
-                className="w-12 h-12 rounded-full mr-4"
-              />
-              <div className="flex-1">
-                <div className="flex items-center mb-2">
-                  <span className="font-semibold mr-2">
-                    {comment.learner.firstName} {comment.learner.lastName}
-                  </span>
-                  <div className="flex items-center">
-                    <span className="text-yellow-500">⭐</span>
-                    <span className="ml-1 text-gray-700">
-                      {comment.rating}
-                    </span>
+                    <select
+                      className="p-2 border rounded-md"
+                      value={sortOption}
+                      onChange={handleSortChange}
+                    >
+                      <option value="فرز حسب">فرز حسب</option>
+                      <option value="الأحدث">الأحدث</option>
+                      <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
+                    </select>
+                  </div>
+
+                  {/* Comments Container */}
+                  <div className="max-h-60 overflow-y-auto">
+                    {loading ? (
+                      <div className="flex justify-center items-center ">
+                        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+                      </div>
+                    ) : sortedComments.length === 0 ? (
+                      <p className="text-gray-700">
+                        لا توجد مراجعات متاحة، قم بإضافة تعليقك!
+                      </p>
+                    ) : (
+                      sortedComments.map((comment) => (
+                        <div
+                          key={comment.id}
+                          className="flex items-start mb-4 p-4 border-b"
+                        >
+                          <img
+                            src={user}
+                            alt="User"
+                            className="w-12 h-12 rounded-full mr-4"
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center mb-2">
+                              <span className="font-semibold mr-2">
+                                {comment.learner.firstName}{" "}
+                                {comment.learner.lastName}
+                              </span>
+                              <div className="flex items-center">
+                                <span className="text-yellow-500">⭐</span>
+                                <span className="ml-1 text-gray-700">
+                                  {comment.rating}
+                                </span>
+                              </div>
+                            </div>
+                            <p className="text-gray-700">{comment.details}</p>
+                            <div className="flex items-center mt-2 text-gray-600">
+                              <span className="mr-2">
+                                👍 {comment.likesCount}
+                              </span>
+                              <span>👎 {comment.dislikesCount}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
-                <p className="text-gray-700">{comment.details}</p>
-                <div className="flex items-center mt-2 text-gray-600">
-                  <span className="mr-2">👍 {comment.likesCount}</span>
-                  <span>👎 {comment.dislikesCount}</span>
-                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-gray-700">
-            <p>لا توجد مراجعات متاحة</p>
-          
-          </div>
-        )}
-      </div>
-    </div>
-  </div>
-)}
-
+            )}
 
             {activeButton === "ملاحظات" && (
               <>
