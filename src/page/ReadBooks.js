@@ -147,6 +147,12 @@ if (sortedComments.length > 0) {
 
 
 
+
+
+
+
+
+
   const showpicpdf = async (fileName) => {
     try {
         const pdfUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -292,10 +298,7 @@ if (sortedComments.length > 0) {
 
             {/* Buttons in the center */}
             <div className="flex space-x-2">
-              <button className="bg-white text-black px-4 py-2 rounded ml-5 flex items-center border border-custom-orange">
-                <FaShareAlt className="w-5 h-5 ml-2" />
-                مشاركة
-              </button>
+              <input className="bg-white w-10 text-black px-4 py-2 rounded ml-5 flex items-center border border-custom-orange"></input>
               <button
                 onClick={handleMarkAsRead}
                 className="bg-white text-black px-4 py-2 rounded flex items-center border border-custom-green"
