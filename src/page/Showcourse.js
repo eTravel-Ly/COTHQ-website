@@ -93,22 +93,22 @@ const Showcourse = () => {
   };
 
 
-useEffect(() => {
-  const fetchCourse = async () => {
-    try {
-      const response = await axios.get(`${baseurl}course/${courseId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setCourse(response.data);
-    } catch (error) {
-      console.error("Error fetching course data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchCourse = async () => {
+  try {
+    const response = await axios.get(`${baseurl}course/${courseId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    setCourse(response.data);
+  } catch (error) {
+    console.error("Error fetching course data:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
+useEffect(() => {
   fetchCourse();
 }, [courseId]);
 
@@ -126,6 +126,12 @@ const videoUrl = `${baseurl}uploads/file/download/${course.videos[0]?.fileUrl}`;
     const secs = seconds % 60;
     return `${minutes} دقيقة${secs > 0 ? ` و ${secs} ثانية` : ""}`;
   };
+   const handleButtonClick = (buttonName) => {
+     setActiveButton(buttonName);
+     if (buttonName === "مراجعات") {
+       fetchCourse(); // Re-fetch course data when "مراجعات" button is clicked
+     }
+   };
 
      if (loading) {
        return (
@@ -214,7 +220,7 @@ const videoUrl = `${baseurl}uploads/file/download/${course.videos[0]?.fileUrl}`;
                       ? "bg-custom-orange text-blue"
                       : "bg-blue hover:bg-custom-orange hover:text-blue"
                   }`}
-                  onClick={() => setActiveButton("مراجعات")}
+                  onClick={() => handleButtonClick("مراجعات")}
                 >
                   مراجعات
                 </button>
