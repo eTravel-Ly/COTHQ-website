@@ -7,7 +7,7 @@ import noCoursesImage from "../assets/images/Search.png";
 import ShareModels from "../models/ShareModels"; // تأكد من مسار الاستيراد الصحيح
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
-import { FaExclamationTriangle } from "react-icons/fa"; 
+import { FaExclamationTriangle } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,8 +18,8 @@ const Showcourse = () => {
   const [activeButton, setActiveButton] = useState("نظرة عامة");
   const { courseId } = useParams();
   const [loading, setLoading] = useState(true);
-
-     
+  const [sortOption, setSortOption] = useState("الأحدث");
+  const [filterOption, setFilterOption] = useState("تصفية حسب");
   const [note, setNote] = useState("");
   const [stars, setStars] = useState(3); // Default to 5 stars
   const [error, setError] = useState("");
@@ -58,6 +58,24 @@ const Showcourse = () => {
     }
   };
 
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+  };
+
+  const handleFilterChange = (e) => {
+    setFilterOption(e.target.value);
+  };
+
+  const sortedComments = [...course.comments];
+
+  if (sortOption === "الأحدث") {
+    sortedComments.sort(
+      (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+    );
+  } else if (sortOption === "الأعلى تقييمًا") {
+    sortedComments.sort((a, b) => b.rating - a.rating);
+  }
+
   const handleTogglePopup = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -66,14 +84,13 @@ const Showcourse = () => {
     navigate("/HomeAfterLogin");
   };
 
-
   const handleMarkAsRead = async () => {
     try {
       const response = await axios.post(
-        baseurl + 'update-progress',
+        baseurl + "update-progress",
         {
-          id: Number(courseId),  // تأكد من أن bookId يتم تمريره كرقم
-          type: 'COURSE',         // النوع دائمًا "BOOK"
+          id: Number(courseId), // تأكد من أن bookId يتم تمريره كرقم
+          type: "COURSE", // النوع دائمًا "BOOK"
           progressStep: Number(100), // دائمًا 100 كعدد وليس نصًا
         },
         {
@@ -84,62 +101,61 @@ const Showcourse = () => {
       );
 
       if (response.status === 201) {
-        toast.success('تم وضع علامة على أنها تمت قراءتها!');
+        toast.success("تم وضع علامة على أنها تمت قراءتها!");
       }
     } catch (error) {
-      console.error('تفاصيل الخطأ:', error.response.data);
+      console.error("تفاصيل الخطأ:", error.response.data);
       toast.warning('حدث خطأ أثناء وضع علامة على الدورة كـ "تمت قراءته".');
     }
   };
 
+  const fetchCourse = async () => {
+    try {
+      const response = await axios.get(`${baseurl}course/${courseId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setCourse(response.data);
+    } catch (error) {
+      console.error("Error fetching course data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const fetchCourse = async () => {
-  try {
-    const response = await axios.get(`${baseurl}course/${courseId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    setCourse(response.data);
-  } catch (error) {
-    console.error("Error fetching course data:", error);
-  } finally {
-    setLoading(false);
+  useEffect(() => {
+    fetchCourse();
+  }, [courseId]);
+
+  if (!course || !course.videos || !course.videos.length) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
   }
-};
-
-useEffect(() => {
-  fetchCourse();
-}, [courseId]);
-
-if (!course || !course.videos || !course.videos.length) {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-    </div>
-  );
-}
-const videoUrl = `${baseurl}uploads/file/download/${course.videos[0]?.fileUrl}`;
+  const videoUrl = `${baseurl}uploads/file/download/${course.videos[0]?.fileUrl}`;
 
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes} دقيقة${secs > 0 ? ` و ${secs} ثانية` : ""}`;
   };
-   const handleButtonClick = (buttonName) => {
-     setActiveButton(buttonName);
-     if (buttonName === "مراجعات") {
-       fetchCourse(); // Re-fetch course data when "مراجعات" button is clicked
-     }
-   };
+  const handleButtonClick = (buttonName) => {
+    setActiveButton(buttonName);
+    if (buttonName === "مراجعات") {
+      fetchCourse(); // Re-fetch course data when "مراجعات" button is clicked
+    }
+  };
 
-     if (loading) {
-       return (
-         <div className="flex justify-center items-center h-screen">
-           <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-         </div>
-       );
-     }
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
   if (!course) {
     return (
       <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
@@ -316,15 +332,15 @@ const videoUrl = `${baseurl}uploads/file/download/${course.videos[0]?.fileUrl}`;
                       placeholder="ابحث عن مراجعة"
                       className="p-2 border rounded-md flex-grow mr-4"
                     />
-                    <select className="p-2 border rounded-md mr-2">
-                      <option>تصفية حسب</option>
-                      <option>الأحدث</option>
-                      <option>الأعلى تقييمًا</option>
-                    </select>
-                    <select className="p-2 border rounded-md">
-                      <option>فرز حسب</option>
-                      <option>الأحدث</option>
-                      <option>الأعلى تقييمًا</option>
+                
+                    <select
+                      className="p-2 border rounded-md"
+                      value={sortOption}
+                      onChange={handleSortChange}
+                    >
+                      <option value="فرز حسب">فرز حسب</option>
+                      <option value="الأحدث">الأحدث</option>
+                      <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
                     </select>
                   </div>
 
@@ -334,12 +350,12 @@ const videoUrl = `${baseurl}uploads/file/download/${course.videos[0]?.fileUrl}`;
                       <div className="flex justify-center items-center ">
                         <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
                       </div>
-                    ) : course.comments.length === 0 ? (
+                    ) : sortedComments.length === 0 ? (
                       <p className="text-gray-700">
                         لا توجد مراجعات متاحة، قم بإضافة تعليقك!
                       </p>
                     ) : (
-                      course.comments.map((comment) => (
+                      sortedComments.map((comment) => (
                         <div
                           key={comment.id}
                           className="flex items-start mb-4 p-4 border-b"
