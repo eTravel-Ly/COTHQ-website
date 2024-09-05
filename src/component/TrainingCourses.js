@@ -13,21 +13,25 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icon
 Modal.setAppElement("#root"); // لتجنب تحذيرات الوصول
 const TrainingCourses = () => {
   const [course, setcourse] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1); // Current page state
-    const coursesPerPage = 8;
-    const indexOfLastCourse = currentPage * coursesPerPage;
-    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-    const currentCourses = course.slice(indexOfFirstCourse, indexOfLastCourse);
-    const totalPages = Math.ceil(course.length / coursesPerPage);
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const coursesPerPage = 8;
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = course.slice(indexOfFirstCourse, indexOfLastCourse);
+  const totalPages = Math.ceil(course.length / coursesPerPage);
 
-    const handlePageChange = (pageNumber) => {
-      setCurrentPage(pageNumber);
-    };
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // حالة التحميل
+  const [loading1, setLoading1] = useState(true); // حالة تحميل جديدة
+
   useEffect(() => {
     const fetchContests = async () => {
       try {
+        setLoading1(true); // بدء تحميل البيانات
         const response = await axios.get(baseurl + "public/events/active", {});
         const Course = response.data.COURSE.map((course) => ({
           id: course.id,
@@ -40,15 +44,13 @@ const TrainingCourses = () => {
       } catch (error) {
         console.error("Error fetching contests:", error);
         toast.error("حدث خطأ أثناء جلب بيانات المسابقات."); // عرض رسالة خطأ باستخدام التوست
-      }finally {
+      } finally {
         setLoading1(false); // تعيين حالة التحميل إلى false بعد الانتهاء
       }
     };
 
     fetchContests();
   }, []);
-  const [loading, setLoading] = useState(false); // حالة التحميل
-  const [loading1, setLoading1] = useState(true); // حالة تحميل جديدة
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedSeminar, setSelectedSeminar] = useState(null);
@@ -64,6 +66,7 @@ const TrainingCourses = () => {
     attachmentFile: null,
     eventId: "",
   });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -149,6 +152,15 @@ const TrainingCourses = () => {
   const opencourseDetails = (id) => {
     navigate(`/TrainingCoursesDtails/${id}`);
   };
+
+  if (loading1) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="text-4xl animate-spin" />
+      </div>
+    );
+  }
+
   if (course.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
@@ -163,13 +175,10 @@ const TrainingCourses = () => {
       </div>
     );
   }
+
   return (
     <div className="p-4">
-      {loading1 ? (
-        <div className="flex items-center justify-center h-screen">
-          <FaSpinner className="text-4xl animate-spin" />
-        </div>
-      ) : (
+   
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {currentCourses.map((course) => (
             <div
@@ -194,7 +203,7 @@ const TrainingCourses = () => {
 
                 <div className="flex justify-between items-center text-sm text-gray-600 space-x-4 space-x-reverse">
                   <button
-                    onClick={() => openModal(course)} // Pass the contest object to openModal
+                    onClick={() => openModal(course)}
                     className="bg-custom-orange  text-white py-2 px-4 rounded"
                   >
                     سجل الان{" "}
@@ -211,7 +220,7 @@ const TrainingCourses = () => {
             </div>
           ))}
         </div>
-      )}
+    
       <div className="mt-4">
         <ul className="flex justify-center space-x-2 items-center">
           <li>
@@ -252,6 +261,7 @@ const TrainingCourses = () => {
           </li>
         </ul>
       </div>
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -263,9 +273,10 @@ const TrainingCourses = () => {
           className="text-xl font-bold mb-6 text-center"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
-          التسجيل في الدورة التدريبية
+          تسجيل في دورة التدريبية
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-wrap -mx-2 justify-end items-end">
           <div className="flex flex-wrap -mx-2 justify-end items-end">
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
               <label
@@ -282,7 +293,7 @@ const TrainingCourses = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+               className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -300,7 +311,7 @@ const TrainingCourses = () => {
                 value={formData.nationalityCode}
                 onChange={handleChange}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+              className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -317,12 +328,12 @@ const TrainingCourses = () => {
                 value={formData.gender}
                 onChange={handleChange}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+                  className="block w-full p-1.5 border border-gray-300 rounded"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                <option value="">اختر</option>
-                <option value="MALE">ذكر</option>
-                <option value="FEMALE">أنثى</option>
+                >
+                  <option value="">اختر</option>
+                  <option value="MALE">ذكر</option>
+                  <option value="FEMALE">أنثى</option>
               </select>
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
@@ -334,13 +345,14 @@ const TrainingCourses = () => {
                 تاريخ الميلاد
               </label>
               <input
-                type="date"
+                  type="date"
                 id="birthDate"
                 name="birthDate"
                 value={formData.birthDate}
                 onChange={handleChange}
+                style={{ fontFamily: "Tajwal, sans-serif" }}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+              className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
 
@@ -359,7 +371,7 @@ const TrainingCourses = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="block w-full p-1.5 border border-gray-300 rounded"
+               className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
 
@@ -396,7 +408,7 @@ const TrainingCourses = () => {
                 name="attachmentFile"
                 onChange={handleChange}
                 className="block w-full p-1 border border-gray-300 rounded cursor-pointer file:cursor-pointer file:bg-custom-green file:text-white file:px-2 file:py-1 file:border-0 file:mr-2 file:rounded file:text-sm"
-              />
+                />
             </div>
             <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
               <label
@@ -430,34 +442,36 @@ const TrainingCourses = () => {
                 value={formData.subscriberNotes}
                 onChange={handleChange}
                 className="block w-full p-2 border border-gray-300 rounded"
-              />
+                />
             </div>
           </div>
 
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
-              disabled={loading}
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              {loading ? (
-                <FaSpinner className="animate-spin text-lg" />
-              ) : (
-                "تسجيل"
-              )}
-            </button>
+          
           </div>
+          <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
+            disabled={loading}
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
+            {loading ? (
+              <FaSpinner className="animate-spin text-lg" />
+            ) : (
+              'تسجيل'
+            )}
+          </button>
+        </div>
+
         </form>
-      </Modal>
-      <button
+        <button
         onClick={closeModal}
         className="absolute top-2 left-2 text-white"
         style={{ fontFamily: "Tajwal, sans-serif" }}
       >
         إغلاق
       </button>
-      <ToastContainer />
+      </Modal>
     </div>
   );
 };
