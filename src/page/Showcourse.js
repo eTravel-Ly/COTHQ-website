@@ -114,9 +114,8 @@ useEffect(() => {
 
 if (!course || !course.videos || !course.videos.length) {
   return (
-    <div className="flex items-center justify-center">
-      <FaExclamationTriangle className="text-red-500 text-3xl mr-2" />
-      <p>No videos available or there is an issue with the video.</p>
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
     </div>
   );
 }
