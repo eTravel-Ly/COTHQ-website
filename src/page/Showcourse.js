@@ -58,11 +58,11 @@ const Showcourse = () => {
     }
   };
 
-  const handleSortChange = (e) => {
-    setSortOption(e.target.value);
-  };
 
 
+ const handleSortChange = (e) => {
+   setSortOption(e.target.value);
+ };
 
  const sortedComments = course?.comments ? [...course.comments] : [];
 
@@ -78,6 +78,9 @@ const Showcourse = () => {
  } else {
    console.log("No comments available for sorting.");
  }
+
+
+
   const handleTogglePopup = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -130,7 +133,7 @@ const Showcourse = () => {
     fetchCourse();
   }, [courseId]);
 
-  if (!course || !course.videos || !course.videos.length) {
+  if (!course) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
@@ -334,7 +337,7 @@ const Showcourse = () => {
                       placeholder="ابحث عن مراجعة"
                       className="p-2 border rounded-md flex-grow mr-4"
                     />
-                
+
                     <select
                       className="p-2 border rounded-md"
                       value={sortOption}

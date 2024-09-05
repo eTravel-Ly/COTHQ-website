@@ -52,32 +52,44 @@ export default function AllCourses() {
     fetchCourses();
   }, []);
 
-  const handleLikeClick = async (id) => {
-    try {
-      const response = await axios.post(
-        `${baseurl}toggle-favorite`,
-        {
-          type: "COURSE",
-          id: id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+ const handleLikeClick = async (id) => {
+   // Toggle the favorite state optimistically
+   setLikedCourses((prev) => ({
+     ...prev,
+     [id]: !prev[id], // Toggle the favorite status
+   }));
 
-      if (response.data.isFavorite !== undefined) {
-        setLikedCourses((prev) => ({
-          ...prev,
-          [id]: response.data.isFavorite,
-        }));
-      }
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-    }
-  };
+   try {
+     const response = await axios.post(
+       `${baseurl}toggle-favorite`,
+       {
+         type: "COURSE",
+         id: id,
+       },
+       {
+         headers: {
+           Authorization: `Bearer ${localStorage.getItem("token")}`,
+           "Content-Type": "application/json",
+         },
+       }
+     );
+
+     // Check if the response data matches the expected structure
+     if (response.data.isFavorite !== undefined) {
+       setLikedCourses((prev) => ({
+         ...prev,
+         [id]: response.data.isFavorite,
+       }));
+     }
+   } catch (error) {
+     console.error("Error toggling favorite:", error);
+     // Revert the local state if there was an error
+     setLikedCourses((prev) => ({
+       ...prev,
+       [id]: !prev[id], // Toggle back if there was an error
+     }));
+   }
+ };
 
   // Pagination logic
   const indexOfLastCourse = currentPage * coursesPerPage;
@@ -158,10 +170,12 @@ export default function AllCourses() {
                     <div className="text-gray-600">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill={course.isFavorite ? "#ff3f52" : "none"}
+                        fill={likedCourses[course.id] ? "#ff3f52" : "none"}
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
-                        stroke={course.isFavorite ? "#ff3f52" : "currentColor"}
+                        stroke={
+                          likedCourses[course.id] ? "#ff3f52" : "currentColor"
+                        }
                         className="w-6 h-6 cursor-pointer"
                         onClick={() => handleLikeClick(course.id)}
                       >
@@ -216,12 +230,12 @@ export default function AllCourses() {
                 <button
                   className="px-3 py-1 rounded-full text-custom-orange"
                   onClick={() =>
-                    currentPage < totalPages && handlePageChange(currentPage + 1)
+                    currentPage < totalPages &&
+                    handlePageChange(currentPage + 1)
                   }
                   disabled={currentPage === totalPages}
                 >
-                   <FaArrowLeft />
-                 
+                  <FaArrowLeft />
                 </button>
               </li>
             </ul>

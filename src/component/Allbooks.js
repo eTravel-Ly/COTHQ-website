@@ -31,33 +31,44 @@ const Allbooks = () => {
       setCurrentPage(pageNumber);
     };
 
-  const handleLikeClick = async (id) => {
-    try {
-      const response = await axios.post(
-        `${baseurl}toggle-favorite`,
-        {
-          type: "BOOK",
-          id: id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+ const handleLikeClick = async (id) => {
+   // Toggle the favorite state optimistically
+   setLikedBooks((prev) => ({
+     ...prev,
+     [id]: !prev[id], // Toggle the favorite status
+   }));
 
-      if (response.data.isFavorite !== undefined) {
-        setLikedBooks((prev) => ({
-          ...prev,
-          [id]: response.data.isFavorite,
-        }));
-      }
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-    }
-  };
+   try {
+     const response = await axios.post(
+       `${baseurl}toggle-favorite`,
+       {
+         type: "COURSE",
+         id: id,
+       },
+       {
+         headers: {
+           Authorization: `Bearer ${localStorage.getItem("token")}`,
+           "Content-Type": "application/json",
+         },
+       }
+     );
 
+     // Check if the response data matches the expected structure
+     if (response.data.isFavorite !== undefined) {
+       setLikedBooks((prev) => ({
+         ...prev,
+         [id]: response.data.isFavorite,
+       }));
+     }
+   } catch (error) {
+     console.error("Error toggling favorite:", error);
+     // Revert the local state if there was an error
+     setLikedBooks((prev) => ({
+       ...prev,
+       [id]: !prev[id], // Toggle back if there was an error
+     }));
+   }
+ };
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -250,15 +261,17 @@ const Allbooks = () => {
                             >
                               {availabilityStyle.btnText}
                             </button>
-                      
+
                             <div className="text-gray-600">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                fill={book.isFavorite ? "#ff3f52" : "none"}
+                                fill={likedBooks[book.id] ? "#ff3f52" : "none"}
                                 viewBox="0 0 24 24"
                                 strokeWidth="1.5"
                                 stroke={
-                                  book.isFavorite ? "#ff3f52" : "currentColor"
+                                  likedBooks[book.id]
+                                    ? "#ff3f52"
+                                    : "currentColor"
                                 }
                                 className="w-6 h-6 cursor-pointer"
                                 onClick={() => handleLikeClick(book.id)}
