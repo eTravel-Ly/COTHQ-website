@@ -29,7 +29,8 @@ import {
   Allactivity,
   ContestsDetails,
   TrainingCoursesDtails,
-  Paytheorder
+  Paytheorder,
+  Paynow
 } from "./page/index";
 function App() {
   return (
@@ -78,7 +79,7 @@ function App() {
           <Route path="/Allactivity" element={<Allactivity />} />
           <Route path="/Seminars" element={<Seminars />} />
           <Route path="/Paytheorder" element={<Paytheorder />} />
-
+          <Route path="/Paynow" element={<Paynow />} />
           <Route path="/SeminarsDetails/:Id" element={<SeminarsDetails />} />
         </Routes>
       </BrowserRouter>
