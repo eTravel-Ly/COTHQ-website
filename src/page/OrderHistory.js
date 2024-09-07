@@ -22,7 +22,7 @@ function OrderHistory() {
         setLoading(false); // إيقاف اللودينق بعد جلب البيانات
       })
       .catch((error) => {
-        console.error("Error fetching  data:", error);
+        console.error("Error fetching data:", error);
         setLoading(false); // إيقاف اللودينق في حالة حدوث خطأ
       });
   }, []);
@@ -35,6 +35,22 @@ function OrderHistory() {
       </div>
     );
   }
+
+  // دالة لتحديد لون الخلفية بناءً على حالة الطلب
+  const getStatusClass = (status) => {
+    switch (status) {
+      case 'PAYED':
+        return 'bg-green-500'; // أخضر
+      case 'CANCELLED':
+        return 'bg-blue-500'; // أزرق
+      case 'FAILED':
+        return 'bg-red-500'; // أحمر
+      case 'PENDING':
+        return 'bg-yellow-500'; // أصفر
+      default:
+        return 'bg-gray-300'; // لون افتراضي لحالات غير محددة
+    }
+  };
 
   return (
     <div className="flex h-screen font-tajwal">
@@ -68,7 +84,7 @@ function OrderHistory() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="bg-custom-orange text-white px-2 py-1 rounded">
+                  <span className={`text-white px-2 py-1 rounded ${getStatusClass(order.orderStatus)}`}>
                     {order.orderStatus}
                   </span>
                   <span className="text-gray-600">

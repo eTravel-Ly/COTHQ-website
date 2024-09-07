@@ -3,6 +3,7 @@ import axios from "axios";
 import group from "../assets/images/Group.png";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import { baseurl } from "../helper/Baseurl";
+import { useNavigate } from 'react-router-dom'; // استيراد useNavigate من react-router-dom
 
 function ThirdSection() {
   const [courses, setCourses] = useState([]);
@@ -62,6 +63,16 @@ function ThirdSection() {
     }
   };
 
+  const navigate = useNavigate(); // الحصول على دالة التوجيه
+
+  // دالة لمعالجة النقر على الزر
+  const handleButtonClick = (courseId, action) => {
+    if (action === 'اشتر الآن') {
+      navigate(`/CoursesDetails/${courseId}`); // الانتقال إلى صفحة تفاصيل الكتاب
+    } else if (action === 'سجل الآن') {
+      navigate('/Login'); // الانتقال إلى صفحة تسجيل الدخول
+    }
+  };
   return (
     <div id="courses" className="w-full bg-white py-16">
       <div className="container mx-auto px-4">
@@ -76,12 +87,8 @@ function ThirdSection() {
             className="text-gray-500"
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
           >
-            طريقك إلى الاكتشاف والنمو
+            طريقك إلى تعلم العلوم الدينية 
           </p>
-        </div>
-
-        <div className="flex justify-center mb-8">
-          {/* Your statistics */}
         </div>
 
         <div className="flex items-center justify-center space-x-4 p-2 mb-4 rounded-full bg-white border border-gray-200">
@@ -157,11 +164,12 @@ function ThirdSection() {
                     {course.price} دينار
                   </span>
                   <button
-                    className={`text-white px-4 py-2 rounded-lg ${isLocalStorageValue ? 'bg-custom-orange' : 'bg-custom-orange'}`}
-                    style={{ fontFamily: "Tajwal, sans-serif" }}
-                  >
-                    {isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن'}
-                  </button>
+                className={`text-white px-4 py-2 rounded-lg ${isLocalStorageValue ? 'bg-custom-orange' : 'bg-custom-orange'}`}
+                style={{ fontFamily: "Tajwal, sans-serif" }}
+                onClick={() => handleButtonClick(course.id, isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن')}
+              >
+                {isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن'}
+              </button>
                 </div>
               </div>
             </div>

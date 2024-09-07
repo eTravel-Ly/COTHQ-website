@@ -9,32 +9,32 @@ const SecondSection = () => {
       <div className="container mx-auto px-4 flex flex-wrap items-center justify-between">
       <div className="w-full lg:w-1/2 mb-8 lg:mb-0 text-right rtl">
         <h2 className="text-2xl md:text-3xl font-bold mb-8" style={{ fontFamily: 'Tajwal, sans-serif' }}>
-          إنشاء مسارات للنجاح من خلال التعليم
+         نبذة عن مجمع القرآن الكريم 
         </h2>
         <div className="space-y-6">
           <div className="flex items-start justify-end">
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Tajwal, sans-serif' }}>Lorem Ipsum Dolor</h3>
-              <p className="text-gray-600 text-sm" style={{ fontFamily: 'Tajwal, sans-serif' }}>
-                لكن يجب أن أشرح لك كيف ولدت كل هذه الفكرة الخاطئة المتمثلة في إدانة اللذة وتمجيد الألم، وسأقدم لك وصفاً كاملاً للنظام.
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Tajwal, sans-serif' }}> ماهو مجمع القرآن الكريم ؟</h3>
+              <p className="text-gray-600 text-sm" style={{ fontFamily: 'Tajwal, sans-serif', direction:'rtl'}}>
+                هو مركز يختص بنشر القرآن الكريم وعلومه ,ودعم الأعمال البحثية والعلمية التي لها علاقة بالقرآن الكريم وعلومه .
               </p>
             </div>
             <MdOutlineDescription className="text-orange-500 text-xl mr-4 mt-1" />
           </div>
           <div className="flex items-start justify-end">
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Tajwal, sans-serif' }}>Lorem Ipsum Dolor</h3>
-              <p className="text-gray-600 text-sm" style={{ fontFamily: 'Tajwal, sans-serif' }}>
-                لكن يجب أن أشرح لك كيف ولدت كل هذه الفكرة الخاطئة المتمثلة في إدانة اللذة وتمجيد الألم، وسأقدم لك وصفاً كاملاً للنظام.
-              </p>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Tajwal, sans-serif' }}> ماذا يقدم  مجمع القرآن الكريم ؟</h3>
+              <p className="text-gray-600 text-sm" style={{ fontFamily: 'Tajwal, sans-serif' , direction:'rtl'}}>
+             يقدم مجموعة من الكتب التى تخص ديننا الحبيب وهناك ايضا مجموعة من الدورات التدريبية والمسابقات والندوات و المؤتمرات الدينية
+              </p> 
             </div>
             <MdOutlineDescription className="text-green-500 text-xl mr-4 mt-1" />
           </div>
           <div className="flex items-start justify-end">
             <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Tajwal, sans-serif' }}>Lorem Ipsum Dolor</h3>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Tajwal, sans-serif' }}> مكان مجمع القرآن الكريم ؟</h3>
               <p className="text-gray-600 text-sm" style={{ fontFamily: 'Tajwal, sans-serif' }}>
-                لكن يجب أن أشرح لك كيف ولدت كل هذه الفكرة الخاطئة المتمثلة في إدانة اللذة وتمجيد الألم، وسأقدم لك وصفاً كاملاً للنظام.
+              ليبيا، زاوية السبعة الفواتير., Zliten, Libya
               </p>
             </div>
             <MdOutlineDescription className="text-yellow-500 text-xl mr-4 mt-1" />

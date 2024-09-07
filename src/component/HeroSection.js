@@ -1,7 +1,14 @@
 import React from 'react';
 import { MdOutlineSlowMotionVideo } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleRegisterRedirect = () => {
+    navigate("/LoginRegister");
+  };
+
   return (
     <section
       id="hero"
@@ -44,6 +51,7 @@ const HeroSection = () => {
           <button
             className="bg-custom-orange hover:bg-orange-600 text-white py-2 px-4 rounded-full"
             style={{ fontFamily: "Tajwal, sans-serif" }}
+            onClick={handleRegisterRedirect}
           >
             البدء
           </button>

@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { FaRegUserCircle } from "react-icons/fa";
-import cover1 from "../assets/images/test2.png";
+import { FaRegUserCircle, FaSpinner } from "react-icons/fa";
 import { CiCalendarDate } from "react-icons/ci";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from '../helper/Baseurl';
-import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import noCoursesImage from "../assets/images/search2.png"; // صورة تعبيرية عند عدم وجود دورات
+import noCoursesImage from "../assets/images/search2.png"; // Image for no courses
+import cover1 from "../assets/images/test2.png";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 
 Modal.setAppElement("#root");
 
 // Function to generate image URL
 const getImageUrl = (fileName) => {
- 
   return fileName ? `${baseurl}uploads/file/download/${fileName}` : cover1;
 };
 
@@ -35,8 +34,12 @@ const ConferencesAll = () => {
     eventId: 0,
   });
   const [conferences, setConferences] = useState([]);
-  const [loading, setLoading] = useState(false); // حالة التحميل
-  const [loading1, setLoading1] = useState(true); // حالة تحميل جديدة
+  const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(true);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8);
 
   const navigate = useNavigate();
 
@@ -45,15 +48,15 @@ const ConferencesAll = () => {
     const fetchConferences = async () => {
       try {
         const response = await axios.get(
-          baseurl+ "public/events/active",
+          baseurl + "public/events/active",
           { headers: { accept: "application/json" } }
         );
         const data = response.data.CONFERENCE || [];
         setConferences(data);
       } catch (error) {
         console.error("Error fetching conferences:", error);
-      }finally {
-        setLoading1(false); // تعيين حالة التحميل إلى false بعد الانتهاء
+      } finally {
+        setLoading1(false);
       }
     };
 
@@ -85,6 +88,7 @@ const ConferencesAll = () => {
       [name]: type === "file" ? files[0] : value,
     }));
   };
+
   const initialFormData = {
     fullName: "",
     gender: "MALE",
@@ -97,28 +101,26 @@ const ConferencesAll = () => {
     attachmentFile: null,
     eventId: 0,
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     
-    // Create an object to send in JSON format
     const dataToSend = { ...formData };
     if (dataToSend.attachmentFile) {
-      // Convert file to base64 if needed for JSON
       const reader = new FileReader();
       reader.readAsDataURL(dataToSend.attachmentFile);
       reader.onloadend = async () => {
         dataToSend.attachmentFile = reader.result;
         try {
-          await axios.post(baseurl+'public/event/register', dataToSend, {
+          await axios.post(baseurl + 'public/event/register', dataToSend, {
             headers: {
               'accept': 'application/json',
-              'Content-Type': 'application/json', // Use application/json
+              'Content-Type': 'application/json',
             },
           });
           toast.success('تم التسجيل بنجاح!');
-          setFormData(initialFormData); // Reset the form data
-
+          setFormData(initialFormData);
           closeModal();
         } catch (error) {
           console.error('Error submitting form:', error);
@@ -128,17 +130,15 @@ const ConferencesAll = () => {
         }
       };
     } else {
-      // No file to send
       try {
-        await axios.post(baseurl+'public/event/register', dataToSend, {
+        await axios.post(baseurl + 'public/event/register', dataToSend, {
           headers: {
             'accept': 'application/json',
             'Content-Type': 'application/json',
           },
         });
         toast.success('تم التسجيل بنجاح!');
-        setFormData(initialFormData); // Reset the form data
-
+        setFormData(initialFormData);
         closeModal();
       } catch (error) {
         console.error('Error submitting form:', error);
@@ -148,29 +148,49 @@ const ConferencesAll = () => {
       }
     }
   };
+
+  // Calculate current items
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentConferences = conferences.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(conferences.length / itemsPerPage);
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  if (loading1) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="text-4xl animate-spin" />
+      </div>
+    );
+  }
+
   if (conferences.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
         <img
           src={noCoursesImage}
-          alt="No courses available"
+          alt="No conferences available"
           className="w-60 h-60 object-cover "
         />
         <p className="text-lg text-gray-700 mt-0">
-         لا يوجد مؤتمرات  تمت اضافتها في الوقت الحالى ..
+          لا يوجد مؤتمرات تمت اضافتها في الوقت الحالى ..
         </p>
       </div>
     );
   }
+
   return (
     <>
-      {loading1 ? (
-        <div className="flex items-center justify-center h-screen">
-          <FaSpinner className="text-4xl animate-spin" />
-        </div>
-      ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {conferences.map((item) => (
+        {currentConferences.map((item) => (
           <div key={item.id} className="p-2">
             <div
               className={`bg-white rounded-lg shadow-md p-3 flex flex-col ${
@@ -224,8 +244,41 @@ const ConferencesAll = () => {
           </div>
         ))}
       </div>
-)}
 
+      <div className="flex justify-center mt-4">
+        <ul className="flex items-center space-x-2">
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-green"
+              onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : currentPage)}
+              disabled={currentPage === 1}
+            >
+              <FaArrowRight />
+            </button>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-1 rounded-full ${
+                  currentPage === index + 1 ? 'bg-custom-green text-white' : 'text-custom-green'
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-green"
+              onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : currentPage)}
+              disabled={currentPage === totalPages}
+            >
+              <FaArrowLeft />
+            </button>
+          </li>
+        </ul>
+      </div>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -437,9 +490,9 @@ const ConferencesAll = () => {
       </button>
       </Modal>
       <ToastContainer />
-    
     </>
   );
 };
 
 export default ConferencesAll;
+

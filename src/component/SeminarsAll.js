@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { CiCalendarDate } from "react-icons/ci";
-import { FaRegUserCircle } from "react-icons/fa";
+import { FaRegUserCircle, FaSpinner, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "react-modal";
 import cover from "../assets/images/test1.png";
 import { baseurl } from '../helper/Baseurl';
-import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 import { ToastContainer, toast } from 'react-toastify';
-import noCoursesImage from "../assets/images/search2.png"; // صورة تعبيرية عند عدم وجود دورات
+import noCoursesImage from "../assets/images/search2.png"; // Image for no seminars
 import 'react-toastify/dist/ReactToastify.css';
+
 const SeminarsAll = () => {
   const navigate = useNavigate();
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -27,8 +27,8 @@ const SeminarsAll = () => {
     eventId: 0,
   });
   const [seminarsData, setSeminarsData] = useState([]);
-  const [loading, setLoading] = useState(false); // حالة التحميل
-  const [loading1, setLoading1] = useState(true); // حالة تحميل جديدة
+  const [loading, setLoading] = useState(false); // Loading state for form submission
+  const [loading1, setLoading1] = useState(true); // Loading state for initial fetch
 
   useEffect(() => {
     const fetchSeminars = async () => {
@@ -37,8 +37,8 @@ const SeminarsAll = () => {
         setSeminarsData(response.data.SEMINAR);
       } catch (error) {
         console.error('Error fetching seminars:', error);
-      }finally {
-        setLoading1(false); // تعيين حالة التحميل إلى false بعد الانتهاء
+      } finally {
+        setLoading1(false); // Set loading state to false after fetching
       }
     };
     fetchSeminars();
@@ -46,6 +46,18 @@ const SeminarsAll = () => {
 
   const openSeminarsDetails = (id) => {
     navigate(`/SeminarsDetails/${id}`);
+  };
+
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const seminarsPerPage = 8;
+  const indexOfLastSeminar = currentPage * seminarsPerPage;
+  const indexOfFirstSeminar = indexOfLastSeminar - seminarsPerPage;
+  const hasData = seminarsData.length > 0;
+  const currentSeminarsData = hasData ? seminarsData.slice(indexOfFirstSeminar, indexOfLastSeminar) : [];
+  const totalPages = hasData ? Math.ceil(seminarsData.length / seminarsPerPage) : 0;
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   const openModal = (seminar) => {
@@ -81,6 +93,7 @@ const SeminarsAll = () => {
       [name]: type === "file" ? files[0] : value,
     }));
   };
+
   const initialFormData = {
     fullName: "",
     gender: "",
@@ -93,6 +106,7 @@ const SeminarsAll = () => {
     attachmentFile: null,
     eventId: 0,
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -114,7 +128,6 @@ const SeminarsAll = () => {
           });
           toast.success('تم التسجيل بنجاح!');
           setFormData(initialFormData); // Reset the form data
-
           closeModal();
         } catch (error) {
           console.error('Error submitting form:', error);
@@ -134,7 +147,6 @@ const SeminarsAll = () => {
         });
         toast.success('تم التسجيل بنجاح!');
         setFormData(initialFormData); // Reset the form data
-
         closeModal();
       } catch (error) {
         console.error('Error submitting form:', error);
@@ -144,12 +156,21 @@ const SeminarsAll = () => {
       }
     }
   };
-  if (!seminarsData || seminarsData.length === 0) {
+
+  if (loading1) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="text-4xl animate-spin" />
+      </div>
+    );
+  }
+
+  if (!hasData) {
     return (
       <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
         <img
           src={noCoursesImage}
-          alt="No courses available"
+          alt="No seminars available"
           className="w-60 h-60 object-cover"
         />
         <p className="text-lg text-gray-700 mt-0">
@@ -158,76 +179,110 @@ const SeminarsAll = () => {
       </div>
     );
   }
-  
+
   const getImageUrl = (fileName) => {
-    return fileName ? `${baseurl}uploads/file/download/${fileName}` : cover;
+    return fileName ? `${baseurl}uploads/file/download/${fileName}` : '';
   };
 
   return (
-   
-    <div >
-       {loading1 ? (
-      <div className="flex items-center justify-center h-screen">
-        <FaSpinner className="text-4xl animate-spin" />
-      </div>
-    ) : (
+    <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {seminarsData.map((item, index) => (
-        <div key={index} className="p-2">
-          <div
-            className={`bg-white rounded-lg p-3 flex flex-col ${
-              item.isActive ? 'shadow-sm shadow-green-400' : 'shadow-md'
-            }`}
-          >
-            <img
-              src={getImageUrl(item.coverImageFile)}
-              alt={item.title}
-              className="object-cover rounded-lg mb-4"
-            />
-            <h2 className="text-sm font-bold mb-2 text-right">{item.title}</h2>
-            <div className="flex items-center mb-2">
-              <CiCalendarDate className="text-gray-600 mr-2 ml-2" />
-              <p
-                className="text-xs text-gray-500 mb-2 text-right"
-                style={{
-                  fontFamily: "Tajwal, sans-serif",
-                  textAlign: "justify",
-                  lineHeight: "1.5",
-                  marginBottom: "8px",
-                }}
-              >
-                تاريخ بدء: {item.eventStartDate}
-              </p>
-            </div>
-            <div className="flex items-center mb-2">
-              <FaRegUserCircle className="text-gray-600 mr-2 ml-2" />
-              <p
-                className="text-xs text-gray-600 text-right"
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                المنظم: {item.organizer}
-              </p>
-            </div>
-            <div className="flex justify-center items-center text-sm text-gray-600 space-x-4 space-x-reverse">
-              <button
-                className="bg-custom-green text-white py-2 px-4 rounded"
-                onClick={() => openSeminarsDetails(item.id)}
-              >
-                تفاصيل الندوة
-              </button>
-              <button
-                className="bg-custom-green text-white py-2 px-4 rounded"
-                onClick={() => openModal(item)}
-              >
-                سجل الان
-              </button>
+        {currentSeminarsData.map((item, index) => (
+          <div key={index} className="p-2">
+            <div
+              className={`bg-white rounded-lg p-3 flex flex-col ${
+                item.isActive ? 'shadow-sm shadow-green-400' : 'shadow-md'
+              }`}
+            >
+              <img
+                src={getImageUrl(item.coverImageUrl)}
+                alt={item.title}
+                className="object-cover rounded-lg mb-4"
+              />
+              <h2 className="text-sm font-bold mb-2 text-right">{item.title}</h2>
+              <div className="flex items-center mb-2">
+                <CiCalendarDate className="text-gray-600 mr-2 ml-2" />
+                <p
+                  className="text-xs text-gray-500 mb-2 text-right"
+                  style={{
+                    fontFamily: "Tajwal, sans-serif",
+                    textAlign: "justify",
+                    lineHeight: "1.5",
+                    marginBottom: "8px",
+                  }}
+                >
+                  تاريخ بدء: {item.eventStartDate}
+                </p>
+              </div>
+              <div className="flex items-center mb-2">
+                <FaRegUserCircle className="text-gray-600 mr-2 ml-2" />
+                <p
+                  className="text-xs text-gray-600 text-right"
+                  style={{ fontFamily: "Tajwal, sans-serif" }}
+                >
+                  المنظم: {item.organizer}
+                </p>
+              </div>
+              <div className="flex justify-center items-center text-sm text-gray-600 space-x-4 space-x-reverse">
+                <button
+                  className="bg-custom-green text-white py-2 px-4 rounded"
+                  onClick={() => openSeminarsDetails(item.id)}
+                >
+                  تفاصيل الندوة
+                </button>
+                <button
+                  className="bg-custom-green text-white py-2 px-4 rounded"
+                  onClick={() => openModal(item)}
+                >
+                  سجل الان
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
       </div>
      
-    )}
+      <div className="mt-4">
+        <ul className="flex justify-center space-x-2 items-center">
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-green"
+              onClick={() =>
+                handlePageChange(currentPage > 1 ? currentPage - 1 : currentPage)
+              }
+              disabled={currentPage === 1}
+            >
+              <FaArrowRight />
+             
+            </button>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-1 rounded-full ${
+                  currentPage === index + 1 ? 'bg-custom-green text-white' : 'text-custom-green'
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+          <li>
+            <button
+              className="px-3 py-1 rounded-full text-custom-green"
+              onClick={() =>
+                handlePageChange(
+                  currentPage < totalPages ? currentPage + 1 : currentPage
+                )
+              }
+              disabled={currentPage === totalPages}
+            >
+               <FaArrowLeft />
+            </button>
+          </li>
+        </ul>
+      </div>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -439,9 +494,7 @@ const SeminarsAll = () => {
       </button>
       </Modal>
       <ToastContainer />
-
     </div>
- 
   );
 };
 

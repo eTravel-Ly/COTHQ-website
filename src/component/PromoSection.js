@@ -14,7 +14,7 @@ const PromoSection = () => {
       className="relative bg-cover bg-center top-10 text-white rounded-lg flex justify-center items-center"
       style={{ 
         backgroundImage: `url(${Banner})`, 
-        height: '300px', // Adjust the height as needed
+        height: '100px', // Adjust the height as needed
         width: '95%', 
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover'
@@ -26,27 +26,9 @@ const PromoSection = () => {
           className="text-3xl font-bold mb-4" 
           style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}
         >
-          اكتشف دورتك و ندواتك والمؤتمرات المثالية الآن!
+          اكتشف المسابقات و الدورات التدريبية و ندواتك والمؤتمرات الآن!
         </h2>
-        <p 
-          className="mb-6" 
-          style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}
-        >
-          لكن يجب أن أشرح لك كيف ولدت كل هذه الفكرة الخاطئة عن الاستمتاع بالمتع
-        </p>
-        <p 
-          className="mb-6" 
-          style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}
-        >
-          وتمجيد الألم وسأعطيك فكرة عن النظام وأشرح لك
-        </p>
-        <button 
-          className="bg-custom-orange text-white px-6 py-3 rounded-full" 
-          style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}
-          onClick={handleAllactivity}
-        >
-          شاهد الان 
-        </button>
+      
       </div>
     </section>
   );

@@ -94,7 +94,10 @@ export default function AllCourses() {
   // Pagination logic
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-  const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
+  const hasData = courses.length > 0;
+  const currentCourses = hasData ? courses.slice(indexOfFirstCourse, indexOfLastCourse) : [];
+
+  //const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
   const totalPages = Math.ceil(courses.length / coursesPerPage);
 
   const handlePageChange = (pageNumber) => {

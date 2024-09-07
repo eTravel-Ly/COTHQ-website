@@ -15,9 +15,8 @@ const PartnerSection = () => {
     <section id="PartnerSection"
       className="bg-gray-10 py-10 px-6 rounded-lg border border-gray-200" 
       style={{ 
-        marginTop: '150px',
+        marginTop: '50px',
         width: '95%',
-        height: '900px', // تحديد ارتفاع معين
         overflowY: 'auto' // تفعيل التمرير العمودي
       }}
     >
@@ -50,7 +49,7 @@ const PartnerSection = () => {
           </button>
           <button
             className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-white focus:outline-none ${
-              selectedSection === "allConferences" ? "bg-custom-orange" : "bg-gray-200"
+              selectedSection === "allConferences" ? "bg-custom-orange text-white" : "bg-gray-200"
             }`}
             onClick={showConferences}
           >
@@ -58,7 +57,7 @@ const PartnerSection = () => {
           </button>
           <button
             className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-white focus:outline-none ${
-              selectedSection === "allSeminars" ? "bg-custom-orange" : "bg-gray-200"
+              selectedSection === "allSeminars" ? "bg-custom-orange text-white" : "bg-gray-200"
             }`}
             onClick={showSeminars}
           >

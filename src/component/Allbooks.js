@@ -24,7 +24,8 @@ const Allbooks = () => {
   const coursesPerPage = 9;
     const indexOfLastCourse = currentPage * coursesPerPage;
     const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-    const currentCourses = books.slice(indexOfFirstCourse, indexOfLastCourse);
+    const hasData = books.length > 0;
+    const currentCourses = hasData ? books.slice(indexOfFirstCourse, indexOfLastCourse) : [];
     const totalPages = Math.ceil(books.length / coursesPerPage);
 
     const handlePageChange = (pageNumber) => {

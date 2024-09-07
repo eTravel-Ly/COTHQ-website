@@ -5,37 +5,56 @@ import NavbarLogin from "../component/NavbarLogin";
 import Navbar from '../component/Navbar'; // Import the Navbar component
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { CiCalendarDate } from "react-icons/ci";
 import axios from 'axios';
 import cover from "../assets/images/test1.png";
-import cover1 from "../assets/images/test2.png"; // Add import for conference cover
 import { baseurl } from '../helper/Baseurl';
 
 const SeminarsDetails = () => {
   const { Id } = useParams(); // Using useParams to get the parameter
   const [event, setEvent] = useState(null);
   const [eventType, setEventType] = useState(""); // State to store event type
+  const [conditions, setConditions] = useState([]);
+// Function to generate image URL
+const generateImageUrl = (coverImageUrl) => {
+  const baseImageUrl = `${baseurl}uploads/file/download/`;
+  return coverImageUrl
+    ? `${baseImageUrl}${coverImageUrl}`
+    : ""; // Replace with a path to a default image if necessary
+};
 
-  useEffect(() => {
-    const fetchEventDetails = async () => {
-      try {
-        const response = await axios.get(`${baseurl}public/event/${Id}`, {
-          headers: {
-            'accept': 'application/json',
-          },
-        });
+useEffect(() => {
+  const fetchEventDetails = async () => {
+    try {
+      const response = await axios.get(`${baseurl}public/event/${Id}`, {
+        headers: {
+          'accept': 'application/json',
+        },
+      });
 
-        // Set event type based on the response
-        const eventType = response.data.eventType;
-        setEventType(eventType);
-        setEvent(response.data);
-      } catch (error) {
-        console.error("Error fetching event details", error);
-      }
-    };
+      // Set event type based on the response
+      const eventType = response.data.eventType;
+      const conditionsText = response.data.conditions;
+      const conditionsArray = conditionsText.split('\r\n\r\n');
+      
+      // Generate the image URL for the event
+      const imageUrl = generateImageUrl(response.data.coverImageUrl);
+   
+      setConditions(conditionsArray);
+      setEventType(eventType);
 
-    fetchEventDetails();
-  }, [Id]); // Adding Id as a dependency for useEffect
+      // Update event data to include the generated image URL
+      setEvent({
+        ...response.data,
+        imageUrl, // Include the generated image URL
+      });
+    } catch (error) {
+      console.error("Error fetching event details", error);
+    }
+  };
+
+  fetchEventDetails();
+}, [Id]); // Adding Id as a dependency for useEffect
+
 
   const token = localStorage.getItem('token'); // Check for the token
 
@@ -57,62 +76,140 @@ const SeminarsDetails = () => {
           <Sidebar />
           <div className="flex flex-col w-[80%] mt-2 ml-1">
             <NavbarLogin />
-            <div
-              className="p-4"
-              style={{
-                fontFamily: "Tajwal, sans-serif",
-                direction: "rtl",
-                textAlign: "right",
-              }}
-            >
-              <h2 className="text-xl font-bold mb-1 text-custom-orange mr-11">
-                تفاصيل {isConference ? "المؤتمر" : "الندوة"}
-              </h2>
-              <h4 className="text-l font-bold text-gray-500 mr-11">
-                يمكنك الاطلاع على تفاصيل {isConference ? "المؤتمر" : "الندوة"} أدناه ..
-              </h4>
-              <div className="flex">
-                {/* Right Side - Event Details */}
-                <div className="w-1/2 pr-4">
-                  <div className="flex flex-col items-center mb-4">
-                    <img
-                      src={isConference ? cover1 : cover} // Use cover1 for conferences or cover for seminars
-                      alt={isConference ? "مؤتمر" : "ندوة"}
-                      className={imageStyle} // Apply conditional styling here
-                    />
-                    <h2 className="text-xl font-bold mb-2 text-center">{event.title}</h2>
-                    <div className="flex items-center mb-2 justify-center">
-                      <CiCalendarDate className="text-gray-600 mr-2 ml-2" />
-                      <p className="text-xs text-gray-500 mb-2 text-center" style={{ lineHeight: "1.5", marginBottom: "8px" }}>
-                        تاريخ البدء: {event.eventStartDate}
-                      </p>
-                    </div>
-                    <p className="mb-2 text-center">عدد الأشخاص المسجلين: {event.subscriberCount || 'غير محدد'}</p>
-                    <p className="mb-2 text-center">المنظم: {event.organizer}</p>
-                  </div>
-                </div>
-                {/* Left Side - Event Details */}
-                <div className="w-1/2 pl-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-lg font-semibold mb-2">تفاصيل {isConference ? "المؤتمر" : "الندوة"}</h3>
-                    <p><strong>المنظم:</strong> {event.organizer}</p>
-                    <p><strong>العنوان:</strong> {event.address}</p>
-                    <p><strong>الوصف:</strong> {event.description}</p>
-                    <p><strong>تاريخ بدء التسجيل:</strong> {event.applyStartDate}</p>
-                    <p><strong>تاريخ نهاية التسجيل:</strong> {event.applyEndDate}</p>
-                    <p><strong>تاريخ نهاية تقديم الموجز:</strong> {event.abstractApplyEndDate}</p>
-                    <p><strong>تاريخ مراجعة الأوراق:</strong> {event.papersReplayDate}</p>
-                    <p><strong>تاريخ انتهاء التسجيل:</strong> {event.enrollmentEndDate}</p>
-                    <p><strong>رقم الهاتف:</strong> {event.contactMobile}</p>
-                    <p><strong>واتساب:</strong> {event.contactWhatsApp}</p>
-                    <p><strong>البريد الإلكتروني:</strong> {event.contactEmail}</p>
-                    <p><strong>الموقع الإلكتروني:</strong> <a href={event.contactWebsite} className="text-blue-500" target="_blank" rel="noopener noreferrer">{event.contactWebsite}</a></p>
-                    <p><strong>الشروط:</strong> {event.conditions}</p>
-                    <p><strong>ملاحظات:</strong> {event.notes}</p>
-                  </div>
+            
+            <div className="container mx-auto p-4" dir="rtl">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
+            <div className="md:w-1/4 p-4">
+              <img   src={event.imageUrl }  alt="Book" className="w-60" />
+            </div>
+            <div className="md:w-2/3 p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold font-tajwal">
+                </h1>
+              </div>
+              <div className="flex items-center mb-4">
+              
+                <div className="text-orange-500">
+                  <span className="text-lg"></span>
                 </div>
               </div>
+
+              <div className="mb-4">
+                <div className="flex text-gray-700">
+                  <span className="flex items-center ml-60 font-bold font-tajwal">
+                 <strong>المنظم:</strong> 
+                  </span>
+                  <span className="flex items-center ml-10 font-bold font-tajwal">
+                  <strong>العنوان:</strong> 
+                  </span>
+                  <span className="flex items-center mr-28 font-bold font-tajwal">
+                  <strong>تاريخ بدء التسجيل:</strong>
+                  </span>
+                </div>
+                <div className="flex text-gray-700 mt-1">
+                  <span className="flex items-center ml-64 font-tajwal">
+                  {event.organizer}
+                  </span>
+                  <span className="flex items-center  ml-14 font-tajwal">
+                  {event.address}
+                  </span>
+                  <span className="flex items-center mr-28 font-tajwal">
+                  {event.applyStartDate}
+                  </span>
+                </div>
+              </div>
+
+              <p
+                className="mb-4"
+                style={{
+                  fontFamily: "Tajwal, sans-serif",
+                  textAlign: "justify",
+                  lineHeight: "1.5",
+                  marginBottom: "8px",
+                }}
+              >
+                {event.description}
+              </p>
+
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center">
+                  <span className="text-xl text-red_aa font-tajwal">
+                    تاريخ الانتهاء
+                  {event.applyEndDate}
+                  </span>
+                  <span className=" text-gray-500 mr-7 font-tajwal">
+                    تاريخ مراجعة الاوراق 
+                  {event.papersReplayDate}
+                  </span>
+                </div>
+
+               
+              </div>
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
+            <div className="md:w-2/3">
+              <h2 className="text-xl font-bold mb-2 font-tajwal">
+               تفاصيل الندوة او المؤتمر
+              </h2>
+              <table className="w-full text-right">
+                <tbody className="space-y-2">
+                  <tr className="border-t border-b">
+                    <td className="p-4 font-tajwal font-bold">عنوان </td>
+                    <td className="p-4 font-tajwal"> {event.address} </td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold">تاريخ انتهاء التسجيل</td>
+                    <td className="p-4 font-tajwal"> {event.enrollmentEndDate}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold">رقم الهاتف</td>
+                    <td className="p-4 font-tajwal">{event.contactMobile}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold"><strong>البريد الإلكتروني:</strong> </td>
+                    <td className="p-4 font-tajwal"> {event.contactEmail}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold"><strong>ملاحظات:</strong> </td>
+                    <td className="p-4 font-tajwal">
+                    {event.notes}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          
+            </div>
+            <div className="md:w-1/3">
+  <div>
+    <h2 className="text-xl font-bold mb-2 font-tajwal">
+    شروط الندوة او المؤتمر
+
+    </h2>
+    <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
+    {conditions.map((condition, index) => {
+      const parts = condition.split(':');
+      if (parts.length === 2) { // Ensure the condition splits into two parts
+        return (
+          <div key={index} className="bg-white p-4 border border-gray-200 rounded-md shadow-sm">
+            <p className="font-semibold">{`${index + 1}. ${parts[0]}:`}</p>
+            <p>{parts[1]}</p>
+          </div>
+        );
+      } else {
+        console.error(`Invalid condition format: ${condition}`);
+        return null; // Skip invalid conditions
+      }
+    })}
+
+    </div>
+  </div>
+</div>
+
+          </div>
+        
+        </div>
+     
           </div>
         </>
       ) : (
@@ -123,54 +220,138 @@ const SeminarsDetails = () => {
           }}
         >
           <Navbar />
-          <div className="flex-1 p-4" style={{
-            direction: 'rtl', // Ensure RTL direction
-          }}>
-            <h2 className="text-xl font-bold mb-1 text-custom-orange text-right">
-              تفاصيل {isConference ? "المؤتمر" : "الندوة"}
-            </h2>
-            <h4 className="text-l font-bold text-gray-500 text-right">
-              يمكنك الاطلاع على تفاصيل {isConference ? "المؤتمر" : "الندوة"} أدناه
-            </h4>
-            <div className="flex flex-row-reverse"> {/* Adjust flex direction for RTL */}
-              <div className="w-1/2 pl-4"> {/* Swap padding for RTL */}
-                <div className="flex flex-col items-center mb-4">
-                  <img
-                    src={isConference ? cover1 : cover} // Use cover1 for conferences or cover for seminars
-                    alt={isConference ? "مؤتمر" : "ندوة"}
-                    className={imageStyle} // Apply conditional styling here
-                  />
-                  <h2 className="text-xl font-bold mb-2 text-center">{event.title}</h2>
-                  <div className="flex items-center mb-2 justify-center">
-                    <CiCalendarDate className="text-gray-600 mr-2 ml-2" />
-                    <p className="text-xs text-gray-500 mb-2 text-center" style={{ lineHeight: "1.5", marginBottom: "8px" }}>
-                      تاريخ البدء: {event.eventStartDate}
-                    </p>
-                  </div>
-                  <p className="mb-2 text-center">المنظم: {event.organizer}</p>
+          <div className="container mx-auto p-4" dir="rtl">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
+            <div className="md:w-1/4 p-4">
+              <img src={event.imageUrl } alt="Book" className="w-60" />
+            </div>
+            <div className="md:w-2/3 p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold font-tajwal">
+                </h1>
+              </div>
+              <div className="flex items-center mb-4">
+              
+                <div className="text-orange-500">
+                  <span className="text-lg"></span>
                 </div>
               </div>
-              <div className="w-1/2 pr-4"> {/* Swap padding for RTL */}
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-2">تفاصيل {isConference ? "المؤتمر" : "الندوة"}</h3>
-                  <p><strong>المنظم:</strong> {event.organizer}</p>
-                  <p><strong>العنوان:</strong> {event.address}</p>
-                  <p><strong>الوصف:</strong> {event.description}</p>
-                  <p><strong>تاريخ بدء التسجيل:</strong> {event.applyStartDate}</p>
-                  <p><strong>تاريخ نهاية التسجيل:</strong> {event.applyEndDate}</p>
-                  <p><strong>تاريخ نهاية تقديم الموجز:</strong> {event.abstractApplyEndDate}</p>
-                  <p><strong>تاريخ مراجعة الأوراق:</strong> {event.papersReplayDate}</p>
-                  <p><strong>تاريخ انتهاء التسجيل:</strong> {event.enrollmentEndDate}</p>
-                  <p><strong>رقم الهاتف:</strong> {event.contactMobile}</p>
-                  <p><strong>واتساب:</strong> {event.contactWhatsApp}</p>
-                  <p><strong>البريد الإلكتروني:</strong> {event.contactEmail}</p>
-                  <p><strong>الموقع الإلكتروني:</strong> <a href={event.contactWebsite} className="text-blue-500" target="_blank" rel="noopener noreferrer">{event.contactWebsite}</a></p>
-                  <p><strong>الشروط:</strong> {event.conditions}</p>
-                  <p><strong>ملاحظات:</strong> {event.notes}</p>
+
+              <div className="mb-4">
+                <div className="flex text-gray-700">
+                  <span className="flex items-center ml-60 font-bold font-tajwal">
+                 <strong>المنظم:</strong> 
+                  </span>
+                  <span className="flex items-center ml-10 font-bold font-tajwal">
+                  <strong>العنوان:</strong> 
+                  </span>
+                  <span className="flex items-center mr-28 font-bold font-tajwal">
+                  <strong>تاريخ بدء التسجيل:</strong>
+                  </span>
                 </div>
+                <div className="flex text-gray-700 mt-1">
+                  <span className="flex items-center ml-64 font-tajwal">
+                  {event.organizer}
+                  </span>
+                  <span className="flex items-center  ml-14 font-tajwal">
+                  {event.address}
+                  </span>
+                  <span className="flex items-center mr-28 font-tajwal">
+                  {event.applyStartDate}
+                  </span>
+                </div>
+              </div>
+
+              <p
+                className="mb-4"
+                style={{
+                  fontFamily: "Tajwal, sans-serif",
+                  textAlign: "justify",
+                  lineHeight: "1.5",
+                  marginBottom: "8px",
+                }}
+              >
+                {event.description}
+              </p>
+
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center">
+                  <span className="text-xl text-red_aa font-tajwal">
+                    تاريخ الانتهاء
+                  {event.applyEndDate}
+                  </span>
+                  <span className=" text-gray-500 mr-7 font-tajwal">
+                    تاريخ مراجعة الاوراق 
+                  {event.papersReplayDate}
+                  </span>
+                </div>
+
+               
               </div>
             </div>
           </div>
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
+            <div className="md:w-2/3">
+              <h2 className="text-xl font-bold mb-2 font-tajwal">
+تفاصيل الندوة او المؤتمر
+              </h2>
+              <table className="w-full text-right">
+                <tbody className="space-y-2">
+                  <tr className="border-t border-b">
+                    <td className="p-4 font-tajwal font-bold">عنوان </td>
+                    <td className="p-4 font-tajwal"> {event.address} </td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold">تاريخ انتهاء التسجيل</td>
+                    <td className="p-4 font-tajwal"> {event.enrollmentEndDate}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold">رقم الهاتف</td>
+                    <td className="p-4 font-tajwal">{event.contactMobile}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold"><strong>البريد الإلكتروني:</strong> </td>
+                    <td className="p-4 font-tajwal"> {event.contactEmail}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold"><strong>ملاحظات:</strong> </td>
+                    <td className="p-4 font-tajwal">
+                    {event.notes}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          
+            </div>
+            <div className="md:w-1/3">
+  <div>
+    <h2 className="text-xl font-bold mb-2 font-tajwal">
+  شروط الندوة او المؤتمر
+    </h2>
+    <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
+    {conditions.map((condition, index) => {
+      const parts = condition.split(':');
+      if (parts.length === 2) { // Ensure the condition splits into two parts
+        return (
+          <div key={index} className="bg-white p-4 border border-gray-200 rounded-md shadow-sm">
+            <p className="font-semibold">{`${index + 1}. ${parts[0]}:`}</p>
+            <p>{parts[1]}</p>
+          </div>
+        );
+      } else {
+        console.error(`Invalid condition format: ${condition}`);
+        return null; // Skip invalid conditions
+      }
+    })}
+
+    </div>
+  </div>
+</div>
+
+          </div>
+        
+        </div>
+         
         </div>
       )}
       <ToastContainer />

@@ -3,18 +3,21 @@ import { useParams } from "react-router-dom";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import Navbar from "../component/Navbar"; // Import the Navbar component
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { CiCalendarDate } from "react-icons/ci";
 import axios from "axios";
-
 import { baseurl } from "../helper/Baseurl";
 import cover from "../assets/images/cover.png";
-
 export default function TrainingCoursesDtails() {
+  const [conditions, setConditions] = useState([]);
   const { Id } = useParams();
   const token = localStorage.getItem("token");
   const [trainingCourses, setTrainingCourses] = useState(null);
+  const generateImageUrl = (coverImageUrl) => {
+    const baseImageUrl = `${baseurl}uploads/file/download/`;
+    return coverImageUrl
+      ? `${baseImageUrl}${coverImageUrl}`
+      : ""; // Replace with a path to a default image if necessary
+  };
+
   useEffect(() => {
     const fetchtrainingCoursesDetails = async () => {
       try {
@@ -23,7 +26,15 @@ export default function TrainingCoursesDtails() {
             accept: "application/json",
           },
         });
-        setTrainingCourses(response.data);
+        const conditionsText = response.data.conditions;
+        const conditionsArray = conditionsText.split('\r\n\r\n');
+        const imageUrl = generateImageUrl(response.data.coverImageUrl);
+        setConditions(conditionsArray);
+        setTrainingCourses({
+          ...response.data,
+          imageUrl, // Include the generated image URL
+        });
+    
       } catch (error) {
         console.error("Error fetching Training Courses details", error);
       }
@@ -47,115 +58,137 @@ export default function TrainingCoursesDtails() {
           <Sidebar />
           <div className="flex flex-col w-[80%] mt-2 ml-1">
             <NavbarLogin />
-            <div
-              className="p-4"
-              style={{
-                fontFamily: "Tajwal, sans-serif",
-                direction: "rtl",
-                textAlign: "right",
-              }}
-            >
-              <h2 className="text-xl font-bold mb-1 text-custom-orange mr-11">
-                تفاصيل الدورة التدريبية
-              </h2>
-              <h4 className="text-l font-bold text-gray-500  mr-11">
-                يمكنك الاطلاع على تفاصيل الدورة التدريبية أدناه ..
-              </h4>
-              <div className="flex">
-                {/* جهة اليمين - تفاصيل الدورة التدريبية */}
-                <div className="w-1/2 pr-4">
-                  <div className="flex flex-col items-center mb-4 mt-10">
-                    <img
-                      src={trainingCourses.coverImageUrl || cover} // Use coverImageUrl from the API or fallback to a default image
-                      alt="دورة تدريبية"
-                      className="w-[80%] h-auto mb-4 rounded-lg"
-                    />
-                    <h2 className="text-xl font-bold mb-2 text-center">
-                      {trainingCourses.title}
-                    </h2>
-                    <div className="flex items-center mb-2 justify-center">
-                      <CiCalendarDate className="text-gray-600 mr-2 ml-2" />
-                      <p
-                        className="text-xs text-gray-500 mb-2 text-center"
-                        style={{ lineHeight: "1.5", marginBottom: "8px" }}
-                      >
-                        تاريخ البدء: {trainingCourses.eventStartDate}
-                      </p>
-                    </div>
-                    <p className="mb-2 text-center">
-                      عدد الأشخاص المسجلين:{" "}
-                      {trainingCourses.participantsCount || "غير محدد"}
-                    </p>
-                    <p className="mb-2 text-center">
-                      المنظم: {trainingCourses.organizer}
-                    </p>
-                  </div>
-                </div>
-                {/* جهة اليسار - تفاصيل الحدث */}
-                <div className="w-1/2 pl-4 mt-10">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-lg font-semibold mb-2">تفاصيل الحدث</h3>
-                    <p className="my-1">
-                      <strong>المنظم:</strong> {trainingCourses.organizer}
-                    </p>
-                    <p className="my-1">
-                      <strong>العنوان:</strong> {trainingCourses.address}
-                    </p>
-                    <p className="my-1">
-                      <strong>الوصف:</strong> {trainingCourses.description}
-                    </p>
-                    <p className="my-1">
-                      <strong>تاريخ بدء التسجيل:</strong>{" "}
-                      {trainingCourses.applyStartDate}
-                    </p>
-                    <p className="my-1">
-                      <strong>تاريخ نهاية التسجيل:</strong>{" "}
-                      {trainingCourses.applyEndDate}
-                    </p>
-                    <p className="my-1">
-                      <strong>تاريخ نهاية تقديم الموجز:</strong>{" "}
-                      {trainingCourses.abstractApplyEndDate}
-                    </p>
-                    <p className="my-1">
-                      <strong>تاريخ مراجعة الأوراق:</strong>{" "}
-                      {trainingCourses.papersReplayDate}
-                    </p>
-                    <p className="my-1">
-                      <strong>تاريخ انتهاء التسجيل:</strong>{" "}
-                      {trainingCourses.enrollmentEndDate}
-                    </p>
-                    <p className="my-1">
-                      <strong>رقم الهاتف:</strong>{" "}
-                      {trainingCourses.contactMobile}
-                    </p>
-                    <p className="my-1">
-                      <strong>واتساب:</strong> {trainingCourses.contactWhatsApp}
-                    </p>
-                    <p className="my-1">
-                      <strong>البريد الإلكتروني:</strong>{" "}
-                      {trainingCourses.contactEmail}
-                    </p>
-                    <p className="my-1">
-                      <strong>الموقع الإلكتروني:</strong>{" "}
-                      <a
-                        href={trainingCourses.contactWebsite}
-                        className="text-blue-500"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {trainingCourses.contactWebsite}
-                      </a>
-                    </p>
-                    <p className="my-1">
-                      <strong>الشروط:</strong> {trainingCourses.conditions}
-                    </p>
-                    <p className="my-1">
-                      <strong>ملاحظات:</strong> {trainingCourses.notes}
-                    </p>
-                  </div>
+            <div className="container mx-auto p-4" dir="rtl">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
+            <div className="md:w-1/4 p-4">
+              <img   src={trainingCourses.imageUrl}  alt="Book" className="w-60" />
+            </div>
+            <div className="md:w-2/3 p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold font-tajwal">
+                </h1>
+              </div>
+              <div className="flex items-center mb-4">
+              
+                <div className="text-orange-500">
+                  <span className="text-lg"></span>
                 </div>
               </div>
+
+              <div className="mb-4">
+                <div className="flex text-gray-700">
+                  <span className="flex items-center ml-60 font-bold font-tajwal">
+                 <strong>المنظم:</strong> 
+                  </span>
+                  <span className="flex items-center ml-10 font-bold font-tajwal">
+                  <strong>العنوان:</strong> 
+                  </span>
+                  <span className="flex items-center mr-28 font-bold font-tajwal">
+                  <strong>تاريخ بدء التسجيل:</strong>
+                  </span>
+                </div>
+                <div className="flex text-gray-700 mt-1">
+                  <span className="flex items-center ml-64 font-tajwal">
+                  {trainingCourses.organizer}
+                  </span>
+                  <span className="flex items-center  ml-14 font-tajwal">
+                  {trainingCourses.address}
+                  </span>
+                  <span className="flex items-center mr-28 font-tajwal">
+                  {trainingCourses.applyStartDate}
+                  </span>
+                </div>
+              </div>
+
+              <p
+                className="mb-4"
+                style={{
+                  fontFamily: "Tajwal, sans-serif",
+                  textAlign: "justify",
+                  lineHeight: "1.5",
+                  marginBottom: "8px",
+                }}
+              >
+                {trainingCourses.description}
+              </p>
+
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center">
+                  <span className="text-xl text-red_aa font-tajwal">
+                    تاريخ الانتهاء
+                  {trainingCourses.applyEndDate}
+                  </span>
+                  <span className=" text-gray-500 mr-7 font-tajwal">
+                    تاريخ مراجعة الاوراق 
+                  {trainingCourses.papersReplayDate}
+                  </span>
+                </div>
+
+               
+              </div>
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
+            <div className="md:w-2/3">
+              <h2 className="text-xl font-bold mb-2 font-tajwal">
+                تفاصيل الدورة التدريبية
+              </h2>
+              <table className="w-full text-right">
+                <tbody className="space-y-2">
+                  <tr className="border-t border-b">
+                    <td className="p-4 font-tajwal font-bold">عنوان </td>
+                    <td className="p-4 font-tajwal"> {trainingCourses.address} </td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold">تاريخ انتهاء التسجيل</td>
+                    <td className="p-4 font-tajwal"> {trainingCourses.enrollmentEndDate}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold">رقم الهاتف</td>
+                    <td className="p-4 font-tajwal">{trainingCourses.contactMobile}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold"><strong>البريد الإلكتروني:</strong> </td>
+                    <td className="p-4 font-tajwal"> {trainingCourses.contactEmail}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold"><strong>ملاحظات:</strong> </td>
+                    <td className="p-4 font-tajwal">
+                    {trainingCourses.notes}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          
+            </div>
+            <div className="md:w-1/3">
+  <div>
+    <h2 className="text-xl font-bold mb-2 font-tajwal">
+      شروط الدورة التدريبية
+    </h2>
+    <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
+    {conditions.map((condition, index) => {
+      const parts = condition.split(':');
+      if (parts.length === 2) { // Ensure the condition splits into two parts
+        return (
+          <div key={index} className="bg-white p-4 border border-gray-200 rounded-md shadow-sm">
+            <p className="font-semibold">{`${index + 1}. ${parts[0]}:`}</p>
+            <p>{parts[1]}</p>
+          </div>
+        );
+      } else {
+        console.error(`Invalid condition format: ${condition}`);
+        return null; // Skip invalid conditions
+      }
+    })}
+
+    </div>
+  </div>
+</div>
+
+          </div>
+        
+        </div>
           </div>
         </>
       ) : (
@@ -168,108 +201,137 @@ export default function TrainingCoursesDtails() {
           }}
         >
           <Navbar />
-          <div className="flex-1 p-4">
-            <h2 className="text-xl font-bold mb-1 text-custom-orange text-right">
-              تفاصيل المسابقة
-            </h2>
-            <h4 className="text-l font-bold text-gray-500 text-right">
-              يمكنك الاطلاع على تفاصيل لمسابقة أدناه
-            </h4>
-
-            <div className="flex flex-row-reverse">
-              {" "}
-              {/* Adjust flex direction for RTL */}
-              <div className="w-1/2 pl-4">
-                {" "}
-                {/* Swap padding for RTL */}
-                <div className="flex flex-col items-center mb-4">
-                  <img
-                    src={trainingCourses.coverImageUrl || cover} // Use coverImageUrl from the API or fallback to a default image
-                    alt="مسابقة"
-                    className="w-[80%] h-auto mb-4 rounded-lg"
-                  />
-                  <h2 className="text-xl font-bold mb-2 text-center">
-                    {trainingCourses.title}
-                  </h2>
-                  <div className="flex items-center mb-2 justify-center">
-                    <CiCalendarDate className="text-gray-600 mr-2 ml-2" />
-                    <p
-                      className="text-xs text-gray-500 mb-2 text-center"
-                      style={{ lineHeight: "1.5", marginBottom: "8px" }}
-                    >
-                      تاريخ البدء: {trainingCourses.eventStartDate}
-                    </p>
-                  </div>
-                  <p className="mb-2 text-center">
-                    المنظم: {trainingCourses.organizer}
-                  </p>
+          <div className="container mx-auto p-4" dir="rtl">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
+            <div className="md:w-1/4 p-4">
+              <img   src={trainingCourses.imageUrl}   alt="Book" className="w-60" />
+            </div>
+            <div className="md:w-2/3 p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold font-tajwal">
+                </h1>
+              </div>
+              <div className="flex items-center mb-4">
+              
+                <div className="text-orange-500">
+                  <span className="text-lg"></span>
                 </div>
               </div>
-              <div className="w-1/2 pr-4">
-                {" "}
-                {/* Swap padding for RTL */}
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-2">تفاصيل الندوة</h3>
-                  <p>
-                    <strong>المنظم:</strong> {trainingCourses.organizer}
-                  </p>
-                  <p>
-                    <strong>العنوان:</strong> {trainingCourses.address}
-                  </p>
-                  <p>
-                    <strong>الوصف:</strong> {trainingCourses.description}
-                  </p>
-                  <p>
-                    <strong>تاريخ بدء التسجيل:</strong>{" "}
-                    {trainingCourses.applyStartDate}
-                  </p>
-                  <p>
-                    <strong>تاريخ نهاية التسجيل:</strong>{" "}
-                    {trainingCourses.applyEndDate}
-                  </p>
-                  <p>
-                    <strong>تاريخ نهاية تقديم الموجز:</strong>{" "}
-                    {trainingCourses.abstractApplyEndDate}
-                  </p>
-                  <p>
-                    <strong>تاريخ مراجعة الأوراق:</strong>{" "}
-                    {trainingCourses.papersReplayDate}
-                  </p>
-                  <p>
-                    <strong>تاريخ انتهاء التسجيل:</strong>{" "}
-                    {trainingCourses.enrollmentEndDate}
-                  </p>
-                  <p>
-                    <strong>رقم الهاتف:</strong> {trainingCourses.contactMobile}
-                  </p>
-                  <p>
-                    <strong>واتساب:</strong> {trainingCourses.contactWhatsApp}
-                  </p>
-                  <p>
-                    <strong>البريد الإلكتروني:</strong>{" "}
-                    {trainingCourses.contactEmail}
-                  </p>
-                  <p>
-                    <strong>الموقع الإلكتروني:</strong>{" "}
-                    <a
-                      href={trainingCourses.contactWebsite}
-                      className="text-blue-500"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {trainingCourses.contactWebsite}
-                    </a>
-                  </p>
-                  <p>
-                    <strong>الشروط:</strong> {trainingCourses.conditions}
-                  </p>
-                  <p>
-                    <strong>ملاحظات:</strong> {trainingCourses.notes}
-                  </p>
+
+              <div className="mb-4">
+                <div className="flex text-gray-700">
+                  <span className="flex items-center ml-60 font-bold font-tajwal">
+                 <strong>المنظم:</strong> 
+                  </span>
+                  <span className="flex items-center ml-10 font-bold font-tajwal">
+                  <strong>العنوان:</strong> 
+                  </span>
+                  <span className="flex items-center mr-28 font-bold font-tajwal">
+                  <strong>تاريخ بدء التسجيل:</strong>
+                  </span>
                 </div>
+                <div className="flex text-gray-700 mt-1">
+                  <span className="flex items-center ml-64 font-tajwal">
+                  {trainingCourses.organizer}
+                  </span>
+                  <span className="flex items-center  ml-14 font-tajwal">
+                  {trainingCourses.address}
+                  </span>
+                  <span className="flex items-center mr-28 font-tajwal">
+                  {trainingCourses.applyStartDate}
+                  </span>
+                </div>
+              </div>
+
+              <p
+                className="mb-4"
+                style={{
+                  fontFamily: "Tajwal, sans-serif",
+                  textAlign: "justify",
+                  lineHeight: "1.5",
+                  marginBottom: "8px",
+                }}
+              >
+                {trainingCourses.description}
+              </p>
+
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center">
+                  <span className="text-xl text-red_aa font-tajwal">
+                    تاريخ الانتهاء
+                  {trainingCourses.applyEndDate}
+                  </span>
+                  <span className=" text-gray-500 mr-7 font-tajwal">
+                    تاريخ مراجعة الاوراق 
+                  {trainingCourses.papersReplayDate}
+                  </span>
+                </div>
+
+               
               </div>
             </div>
           </div>
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
+            <div className="md:w-2/3">
+              <h2 className="text-xl font-bold mb-2 font-tajwal">
+                تفاصيل الدورة التدريبية
+              </h2>
+              <table className="w-full text-right">
+                <tbody className="space-y-2">
+                  <tr className="border-t border-b">
+                    <td className="p-4 font-tajwal font-bold">عنوان </td>
+                    <td className="p-4 font-tajwal"> {trainingCourses.address} </td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold">تاريخ انتهاء التسجيل</td>
+                    <td className="p-4 font-tajwal"> {trainingCourses.enrollmentEndDate}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold">رقم الهاتف</td>
+                    <td className="p-4 font-tajwal">{trainingCourses.contactMobile}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold"><strong>البريد الإلكتروني:</strong> </td>
+                    <td className="p-4 font-tajwal"> {trainingCourses.contactEmail}</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-tajwal font-bold"><strong>ملاحظات:</strong> </td>
+                    <td className="p-4 font-tajwal">
+                    {trainingCourses.notes}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          
+            </div>
+            <div className="md:w-1/3">
+  <div>
+    <h2 className="text-xl font-bold mb-2 font-tajwal">
+      شروط الدورة التدريبية
+    </h2>
+    <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
+    {conditions.map((condition, index) => {
+      const parts = condition.split(':');
+      if (parts.length === 2) { // Ensure the condition splits into two parts
+        return (
+          <div key={index} className="bg-white p-4 border border-gray-200 rounded-md shadow-sm">
+            <p className="font-semibold">{`${index + 1}. ${parts[0]}:`}</p>
+            <p>{parts[1]}</p>
+          </div>
+        );
+      } else {
+        console.error(`Invalid condition format: ${condition}`);
+        return null; // Skip invalid conditions
+      }
+    })}
+
+    </div>
+  </div>
+</div>
+
+          </div>
+        
+        </div>
         </div>
       )}
     </div>

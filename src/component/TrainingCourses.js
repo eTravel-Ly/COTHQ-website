@@ -17,7 +17,9 @@ const TrainingCourses = () => {
   const coursesPerPage = 8;
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-  const currentCourses = course.slice(indexOfFirstCourse, indexOfLastCourse);
+  const hasData = course.length > 0;
+  const currentCourses = hasData ? course.slice(indexOfFirstCourse, indexOfLastCourse) : [];
+ // const currentCourses = course.slice(indexOfFirstCourse, indexOfLastCourse);
   const totalPages = Math.ceil(course.length / coursesPerPage);
 
   const handlePageChange = (pageNumber) => {
@@ -194,7 +196,18 @@ const TrainingCourses = () => {
                 <h3 className="text-lg sm:text-xl font-bold mb-2">
                   {course.title}
                 </h3>
-                <p className="text-sm text-gray-700 mb-4">
+                <p className="text-sm text-gray-700 mb-4" style={{
+                  fontFamily: "Tajwal, sans-serif",
+                  textAlign: "justify",
+                  lineHeight: "1.5",
+                  marginBottom: "8px",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                  overflow: "hidden",            // إخفاء النص الزائد
+                  display: "-webkit-box",         // استخدام box للنص
+                  WebkitBoxOrient: "vertical",    // اتجاه الصندوق عموديًا
+                  WebkitLineClamp: 3,             // عرض 4 أسطر فقط
+                }}>
                   {course.description}
                 </p>
                 <p className="text-sm text-gray-500 mb-4">
