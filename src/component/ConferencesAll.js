@@ -15,7 +15,7 @@ Modal.setAppElement("#root");
 
 // Function to generate image URL
 const getImageUrl = (fileName) => {
-  return fileName ? `${baseurl}uploads/file/download/${fileName}` : cover1;
+  return fileName ? `${baseurl}uploads/file/download/${fileName}` : "";
 };
 
 const ConferencesAll = () => {
@@ -198,7 +198,7 @@ const ConferencesAll = () => {
               }`}
             >
               <img
-                src={getImageUrl(item.coverImageFile)}
+                src={getImageUrl(item.coverImageUrl)}
                 alt={item.title}
                 className="object-cover rounded-lg mb-4"
               />

@@ -180,7 +180,9 @@ const AllContests = () => {
       </div>
     );
   }
-
+  const getImageUrl = (fileName) => {
+    return fileName ? `${baseurl}uploads/file/download/${fileName}` : "";
+  };
   return (
     <div className="p-4">
       <div className="flex flex-wrap -mx-4">
@@ -191,7 +193,8 @@ const AllContests = () => {
           >
             <div className="bg-gray-100 shadow-lg rounded-lg p-6 flex">
               <img
-                src={contest.image}
+                src={getImageUrl(contest.coverImageUrl)}
+
                 alt={contest.title}
                 className="h-24 w-24 object-cover rounded-lg ml-6 my-4"
               />

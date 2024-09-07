@@ -177,7 +177,9 @@ const TrainingCourses = () => {
       </div>
     );
   }
-
+  const getImageUrl = (fileName) => {
+    return fileName ? `${baseurl}uploads/file/download/${fileName}` : "";
+  };
   return (
     <div className="p-4">
    
@@ -188,7 +190,7 @@ const TrainingCourses = () => {
               className="bg-gray-100 shadow-lg rounded-lg p-6 flex flex-col items-center"
             >
               <img
-                src={course.image}
+                  src={getImageUrl(course.coverImageUrl)}
                 alt={course.title}
                 className="w-full h-50 object-cover rounded-lg mb-4"
               />
