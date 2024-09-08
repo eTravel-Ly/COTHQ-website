@@ -42,7 +42,7 @@ const HelpCenter = () => {
       <div className="flex flex-col w-[80%] mt-2 ml-1">
         <NavbarLogin />
         <div className="container mx-auto p-6 text-right" dir="rtl">
-          <h1 className="text-4xl font-bold mb-8 text-center" style={{ fontFamily: 'Tajwal, sans-serif' }}>
+          <h1 className="text-4xl font-bold mb-8 text-center text-custom-orange" style={{ fontFamily: 'Tajwal, sans-serif' }}>
             مركز المساعدة - مجمع القرآن الكريم
           </h1>
           <div className="space-y-4">
@@ -52,11 +52,11 @@ const HelpCenter = () => {
                   className="flex justify-between items-center cursor-pointer"
                   onClick={() => toggleQuestion(index)}
                 >
-                  <h2 className="text-lg font-semibold" style={{ fontFamily: 'Tajwal, sans-serif' }}>
+                  <h2 className="text-lg font-semibold text-custom-green" style={{ fontFamily: 'Tajwal, sans-serif' }}>
                     {item.question}
                   </h2>
                   <span
-                    className={`transform ${activeQuestion === index ? 'rotate-180' : ''}`}
+                    className={`transform text-custom-green ${activeQuestion === index ? 'rotate-180' : ''}`}
                     style={{ fontFamily: 'Tajwal, sans-serif' }}
                   >
                     &#x25BC;
