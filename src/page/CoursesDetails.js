@@ -12,7 +12,7 @@ import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import user from "../assets/images/4EyBa.png";
+import user from "../assets/images/user.png";
 
 const CoursesDetails = () => {
   const [courseData, setCourseData] = useState(null);

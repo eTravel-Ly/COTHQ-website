@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaShareAlt, FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import video1 from "../assets/images/1.mp4";
-import user from "../assets/images/4EyBa.png";
+import user from "../assets/images/user.png";
 import noCoursesImage from "../assets/images/Search.png";
 import ShareModels from "../models/ShareModels"; // تأكد من مسار الاستيراد الصحيح
 import { baseurl } from "../helper/Baseurl";

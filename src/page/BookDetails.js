@@ -8,7 +8,7 @@ import { CiShoppingCart } from "react-icons/ci";
 import { FaRegHeart, FaPlus, FaMinus } from "react-icons/fa6";
 import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
-import user from "../assets/images/4EyBa.png";
+import user from "../assets/images/user.png";
 
 import "react-toastify/dist/ReactToastify.css";
 

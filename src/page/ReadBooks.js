@@ -3,7 +3,7 @@ import pdf from "../assets/images/Noor-Book.pdf";
 import { FaShareAlt, FaCheck } from 'react-icons/fa';
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate, useParams } from "react-router-dom";
-import user from "../assets/images/4EyBa.png";
+import user from "../assets/images/user.png";
 import { CiFacebook } from "react-icons/ci";
 import { CiTwitter } from "react-icons/ci";
 import { PiInstagramLogoLight } from "react-icons/pi";
@@ -495,4 +495,3 @@ if (sortedComments.length > 0) {
 };
 
 export default ReadBooks;
- 
