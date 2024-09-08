@@ -14,6 +14,7 @@ const Allbooks = () => {
   const [books, setBooks] = useState([]);
   const [selectedType, setSelectedType] = useState('كل الأنواع');
   const [likedBooks, setLikedBooks] = useState({});
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [borrowDate, setBorrowDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
@@ -33,17 +34,11 @@ const Allbooks = () => {
     };
 
  const handleLikeClick = async (id) => {
-   // Toggle the favorite state optimistically
-   setLikedBooks((prev) => ({
-     ...prev,
-     [id]: !prev[id], // Toggle the favorite status
-   }));
-
    try {
      const response = await axios.post(
        `${baseurl}toggle-favorite`,
        {
-         type: "COURSE",
+         type: "BOOK",
          id: id,
        },
        {
@@ -54,7 +49,7 @@ const Allbooks = () => {
        }
      );
 
-     // Check if the response data matches the expected structure
+     // Update the state with the favorite status
      if (response.data.isFavorite !== undefined) {
        setLikedBooks((prev) => ({
          ...prev,
@@ -63,44 +58,43 @@ const Allbooks = () => {
      }
    } catch (error) {
      console.error("Error toggling favorite:", error);
-     // Revert the local state if there was an error
-     setLikedBooks((prev) => ({
-       ...prev,
-       [id]: !prev[id], // Toggle back if there was an error
-     }));
    }
  };
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await axios.get(baseurl + 'all-books', {
-          headers: {
-            'accept': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
-        });
+ 
+useEffect(() => {
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get(baseurl + "all-books", {
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-        const booksData = response.data.map(async (book) => {
-          const imageUrl = await showpicbooks(book.coverImageUrl);
-          return { ...book, imageUrl };
-        });
-        const booksWithImages = await Promise.all(booksData);
+      const booksData = response.data.map(async (book) => {
+        const imageUrl = await showpicbooks(book.coverImageUrl);
+        return { ...book, imageUrl };
+      });
 
-        setBooks(booksWithImages);
+      const booksWithImages = await Promise.all(booksData);
 
-        const initialLikedBooks = response.data.reduce((acc, book) => {
-          acc[book.id] = book.isFavorite;
-          return acc;
-        }, {});
-        setLikedBooks(initialLikedBooks);
-      } catch (error) {
-        console.error('Error fetching books:', error);
-      } finally {
-        setLoading(false); // تعيين حالة التحميل إلى false بعد الانتهاء
-      }
-    };
-    fetchBooks();
-  }, []);
+      // تحديث حالة likedBooks بناءً على isFavorite
+      const initialLikedBooks = {};
+      booksWithImages.forEach((book) => {
+        initialLikedBooks[book.id] = book.isFavorite;
+      });
+
+      setBooks(booksWithImages);
+      setLikedBooks(initialLikedBooks);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    } finally {
+      setLoading(false); // تعيين حالة التحميل إلى false بعد الانتهاء
+    }
+  };
+  fetchBooks();
+}, []);
+
 
   const showpicbooks = async (fileName) => {
     try {

@@ -29,19 +29,27 @@ export default function AllCourses() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(`${baseurl}all-courses`, {
-        
           headers: {
+            accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-         
         });
+
         const courseData = await Promise.all(
           response.data.map(async (course) => {
             const imageUrl = await showPicCourses(course.coverImageUrl);
             return { ...course, imageUrl };
           })
         );
+
+        // Set the initial state for likedCourses based on the isFavorite field
+        const initialLikedCourses = {};
+        courseData.forEach((course) => {
+          initialLikedCourses[course.id] = course.isFavorite;
+        });
+
         setCourses(courseData);
+        setLikedCourses(initialLikedCourses);
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
@@ -52,13 +60,8 @@ export default function AllCourses() {
     fetchCourses();
   }, []);
 
- const handleLikeClick = async (id) => {
-   // Toggle the favorite state optimistically
-   setLikedCourses((prev) => ({
-     ...prev,
-     [id]: !prev[id], // Toggle the favorite status
-   }));
 
+ const handleLikeClick = async (id) => {
    try {
      const response = await axios.post(
        `${baseurl}toggle-favorite`,
@@ -74,7 +77,7 @@ export default function AllCourses() {
        }
      );
 
-     // Check if the response data matches the expected structure
+     // Update the state with the favorite status
      if (response.data.isFavorite !== undefined) {
        setLikedCourses((prev) => ({
          ...prev,
@@ -83,11 +86,6 @@ export default function AllCourses() {
      }
    } catch (error) {
      console.error("Error toggling favorite:", error);
-     // Revert the local state if there was an error
-     setLikedCourses((prev) => ({
-       ...prev,
-       [id]: !prev[id], // Toggle back if there was an error
-     }));
    }
  };
 
