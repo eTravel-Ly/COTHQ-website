@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 
@@ -34,12 +34,13 @@ const ContinueWatchingSection = () => {
         (course) => course && course.coverImageUrl && course.progressPercentage < 100
       );
 
-      const updatedCourses = validCourses.map((course) => ({
+      // Get the last 4 courses
+      const lastFourCourses = validCourses.slice(-4).map((course) => ({
         ...course,
         imageUrl: generateImageUrl(course.coverImageUrl),
       }));
 
-      setCourses(updatedCourses);
+      setCourses(lastFourCourses);
     } catch (error) {
       console.error("Error fetching courses data", error);
     } finally {
@@ -83,15 +84,26 @@ const ContinueWatchingSection = () => {
 
   return (
     <div className="p-4" style={{ direction: "rtl" }}>
-      <h2
-        className="text-xl font-bold mb-4"
-        style={{
-          fontFamily: "Tajwal, sans-serif",
-          textAlign: "right",
-        }}
-      >
-        الاستمرار في المشاهدة
-      </h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2
+          className="text-xl font-bold"
+          style={{
+            fontFamily: "Tajwal, sans-serif",
+            textAlign: "right",
+          }}
+        >
+          الاستمرار في المشاهدة
+        </h2>
+        <Link
+          to="/MyCourses"
+          className="text-blue-500 underline"
+          style={{
+            fontFamily: "Tajwal, sans-serif",
+          }}
+        >
+          مشاهدة جميع الدورات
+        </Link>
+      </div>
       <h4
         className="text-l font-bold text-gray-400 mb-4"
         style={{
@@ -166,7 +178,7 @@ const ContinueWatchingSection = () => {
                     className="absolute right-0 text-xs text-gray-700"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
-                    {course.progressPercentage}%
+                    {course.progressPercentage || 0}%
                   </div>
                   <div
                     className="absolute left-0 text-xs text-gray-700"
@@ -178,7 +190,7 @@ const ContinueWatchingSection = () => {
                 <div className="w-full bg-gray-200 rounded-full h-2 mt-6">
                   <div
                     className="bg-custom-orange h-2 rounded-full"
-                    style={{ width: `${course.progressPercentage}%` }}
+                    style={{ width: `${course.progressPercentage ||0}%` }}
                   ></div>
                 </div>
               </div>

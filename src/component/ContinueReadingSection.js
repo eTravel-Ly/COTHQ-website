@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // تعديل هنا
 import { baseurl } from '../helper/Baseurl';
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 
@@ -62,7 +62,10 @@ const ContinueReadingSection = () => {
       // Filter books where progressPercentage is less than 100%
       const filteredBooks = updatedBooks.filter(book => book.progressPercentage < 100);
 
-      setMyBooks(filteredBooks);
+      // Get the last 3 books
+      const lastThreeBooks = filteredBooks.slice(-3);
+
+      setMyBooks(lastThreeBooks);
       setLoading(false);
     };
     fetchData();
@@ -135,7 +138,7 @@ const ContinueReadingSection = () => {
             mybooks.map((book, index) => (
               <div
                 key={index}
-                className="bg-white shadow-lg rounded-lg p-2 w-80 flex-shrink-0 flex items-center text-right"
+                className="bg-white shadow-lg rounded-lg p-2 w-72 flex-shrink-0 flex items-center text-right mb-4 ml-5"
                 style={{ direction: "rtl" }}
                 onClick={() => openBook(book.id)}
               >
@@ -163,7 +166,7 @@ const ContinueReadingSection = () => {
                       className="absolute left-0 text-xs text-gray-700"
                       style={{ fontFamily: "Tajwal, sans-serif" }}
                     >
-                      {book.progressPercentage}%
+                       {book.progressPercentage || 0}%
                     </div>
                     <div
                       className="absolute right-0 text-xs text-gray-700"
@@ -175,15 +178,28 @@ const ContinueReadingSection = () => {
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
                       className="bg-custom-orange h-2 rounded-full mt-6"
-                      style={{ width: `${book.progressPercentage}%` }}
+                      style={{ width: `${book.progressPercentage || 0}%` }}
                     ></div>
                   </div>
                 </div>
               </div>
-            ))
-          )}
+            )))
+          }
+        </div>
+
+        <div className=" bottom-0 left-0 top-10 absolute">
+          <Link
+            to="/MyBooks"
+            className="text-blue-500 underline"
+            style={{
+              fontFamily: "Tajwal, sans-serif",
+            }}
+          >
+            مشاهدة جميع الكتب
+          </Link>
         </div>
       </div>
+    
     </div>
   );
 };

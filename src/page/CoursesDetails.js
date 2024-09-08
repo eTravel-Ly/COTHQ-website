@@ -322,7 +322,7 @@ const navigate = useNavigate();
                   {/* Header for Reviews */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
-                      <span className="text-gray-700 font-semibold">
+                      <span className="text-gray-700 font-semibold"  style={{ fontFamily: "Tajwal, sans-serif" }}>
                         المراجعات ({courseData.comments.length})
                       </span>
                       <div className="flex items-center ml-4">
@@ -368,12 +368,14 @@ const navigate = useNavigate();
                               </div>
                             </div>
                             <p className="text-gray-700">{comment.details}</p>
+                           {/*
                             <div className="flex items-center mt-2 text-gray-600">
                               <span className="mr-2">
                                 👍 {comment.likesCount}
                               </span>
                               <span>👎 {comment.dislikesCount}</span>
                             </div>
+                           */}
                           </div>
                         </div>
                       ))

@@ -123,7 +123,7 @@ const MyBookButton = () => {
               className="w-1/3 p-2"
               onClick={() => openBook(book.id)}
             >
-              <div className="bg-white shadow-lg rounded-lg p-3 w-80 flex-shrink-0 flex items-center text-right">
+              <div className="bg-white shadow-lg rounded-lg p-3 w-72 flex-shrink-0 flex items-center text-right">
                 <img
                   src={book.coverImageUrl}
                   alt={book.title}
