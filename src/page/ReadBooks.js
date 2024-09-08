@@ -115,7 +115,7 @@ const ReadBooks = () => {
       );
 
       if (response.status === 201) {
-        toast.success('تم وضع علامة على أنها تمت قراءتها!');
+        toast.success('تم تغيير حالة تقدم القراءة!');
       }
     } catch (error) {
       console.error('تفاصيل الخطأ:', error.response?.data);
@@ -261,12 +261,12 @@ if (sortedComments.length > 0) {
             <div className="w-48 bg-gray-200 rounded-full h-2 relative">
               <div
                 className="bg-custom-orange h-full rounded-full"
-                style={{ width: `${book.progressPercentage}%` }}
+                style={{ width: `${book.progressPercentage ||0}%` }}
               ></div>
             </div>
             <span className="ml-2 text-gray-700">
               {" "}
-              {book.progressPercentage}%
+              {book.progressPercentage ||0}%
             </span>
           </div>
         </nav>

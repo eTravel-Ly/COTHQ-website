@@ -201,11 +201,11 @@ const Showcourse = () => {
           <div className="w-48 bg-gray-200 rounded-full h-2 relative">
             <div
               className="bg-custom-orange h-full rounded-full"
-              style={{ width: `${course.progressPercentage}%` }}
+              style={{ width: `${course.progressPercentage ||0}%` }}
             ></div>
           </div>
           <span className="ml-2 text-gray-700">
-            {course.progressPercentage}%
+            {course.progressPercentage ||0}%
           </span>
         </div>
       </nav>

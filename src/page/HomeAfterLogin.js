@@ -19,7 +19,6 @@ function HomeAfterLogin() {
             <ContinueReadingSection />
             <ContinueWatchingSection  />
             <NewCoursesSection />
-         
           </div>
         </div>
       </div>
