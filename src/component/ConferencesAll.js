@@ -106,8 +106,10 @@ const ConferencesAll = () => {
     e.preventDefault();
     setLoading(true);
     
+    // Create an object to send in JSON format
     const dataToSend = { ...formData };
     if (dataToSend.attachmentFile) {
+      // Convert file to base64 if needed for JSON
       const reader = new FileReader();
       reader.readAsDataURL(dataToSend.attachmentFile);
       reader.onloadend = async () => {
@@ -116,20 +118,20 @@ const ConferencesAll = () => {
           await axios.post(baseurl + 'public/event/register', dataToSend, {
             headers: {
               'accept': 'application/json',
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json', // Use application/json
             },
           });
           toast.success('تم التسجيل بنجاح!');
-          setFormData(initialFormData);
+          setFormData(initialFormData); // Reset the form data
           closeModal();
         } catch (error) {
-          console.error('Error submitting form:', error);
-          toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+          handleErrorResponse(error);
         } finally {
           setLoading(false);
         }
       };
     } else {
+      // No file to send
       try {
         await axios.post(baseurl + 'public/event/register', dataToSend, {
           headers: {
@@ -138,16 +140,29 @@ const ConferencesAll = () => {
           },
         });
         toast.success('تم التسجيل بنجاح!');
-        setFormData(initialFormData);
+        setFormData(initialFormData); // Reset the form data
         closeModal();
       } catch (error) {
-        console.error('Error submitting form:', error);
-        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+        handleErrorResponse(error);
       } finally {
         setLoading(false);
       }
     }
   };
+  
+  const handleErrorResponse = (error) => {
+    if (error.response && error.response.data && error.response.data.message) {
+      if (error.response.data.message === "Learner has already registered for this event.") {
+        toast.warning('لقد قمت بالتسجيل مسبقًا!');
+      } else {
+        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      }
+    } else {
+      console.error('Error submitting form:', error);
+      toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+    }
+  };
+  
 
   // Calculate current items
   const indexOfLastItem = currentPage * itemsPerPage;

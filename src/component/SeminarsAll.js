@@ -120,7 +120,7 @@ const SeminarsAll = () => {
       reader.onloadend = async () => {
         dataToSend.attachmentFile = reader.result;
         try {
-          await axios.post(baseurl+'public/event/register', dataToSend, {
+          await axios.post(baseurl + 'public/event/register', dataToSend, {
             headers: {
               'accept': 'application/json',
               'Content-Type': 'application/json', // Use application/json
@@ -130,8 +130,7 @@ const SeminarsAll = () => {
           setFormData(initialFormData); // Reset the form data
           closeModal();
         } catch (error) {
-          console.error('Error submitting form:', error);
-          toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+          handleErrorResponse(error);
         } finally {
           setLoading(false);
         }
@@ -139,7 +138,7 @@ const SeminarsAll = () => {
     } else {
       // No file to send
       try {
-        await axios.post(baseurl+'public/event/register', dataToSend, {
+        await axios.post(baseurl + 'public/event/register', dataToSend, {
           headers: {
             'accept': 'application/json',
             'Content-Type': 'application/json',
@@ -149,13 +148,26 @@ const SeminarsAll = () => {
         setFormData(initialFormData); // Reset the form data
         closeModal();
       } catch (error) {
-        console.error('Error submitting form:', error);
-        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+        handleErrorResponse(error);
       } finally {
         setLoading(false);
       }
     }
   };
+  
+  const handleErrorResponse = (error) => {
+    if (error.response && error.response.data && error.response.data.message) {
+      if (error.response.data.message === "Learner has already registered for this event.") {
+        toast.warning('لقد قمت بالتسجيل مسبقًا!');
+      } else {
+        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      }
+    } else {
+      console.error('Error submitting form:', error);
+      toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+    }
+  };
+  
 
   if (loading1) {
     return (

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import pdf from "../assets/images/Noor-Book.pdf";
-import { FaShareAlt, FaCheck } from 'react-icons/fa';
+import {FaCheck } from 'react-icons/fa';
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate, useParams } from "react-router-dom";
-import user from "../assets/images/4EyBa.png";
-import { CiFacebook } from "react-icons/ci";
-import { CiTwitter } from "react-icons/ci";
-import { PiInstagramLogoLight } from "react-icons/pi";
+import user from "../assets/images/user.png";
+import { IoIosAddCircle } from "react-icons/io";
+
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png";
 import axios from "axios";
@@ -92,6 +91,40 @@ const ReadBooks = () => {
         toast.warning('حدث خطأ أثناء وضع علامة على الكتاب كـ "تمت قراءته".');
       }
     };
+
+     const [pageNumber, setPageNumber] = useState(0);
+
+  // تحديث قيمة الإدخال عند تغييره
+  const handlePageNumberChange = (e) => {
+    setPageNumber(Number(e.target.value)); // التأكد من تخزين القيمة كرقم
+  };
+
+  // دالة لتقديم طلب POST
+  const handleMarkAsRead1 = async () => {
+    try {
+      const response = await axios.post(
+        baseurl + 'update-progress',
+        {
+          id: Number(bookId),  // تأكد من أن bookId يتم تمريره كرقم
+          type: 'BOOK',         // النوع دائمًا "BOOK"
+          progressStep: pageNumber, // القيمة من حقل الإدخال
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success('تم وضع علامة على أنها تمت قراءتها!');
+      }
+    } catch (error) {
+      console.error('تفاصيل الخطأ:', error.response?.data);
+      toast.warning('حدث خطأ أثناء وضع علامة على الكتاب كـ "تمت قراءته".');
+    }
+  };
+
     
     
     const [pdfUrl, setPdfUrl] = useState(null);
@@ -298,7 +331,22 @@ if (sortedComments.length > 0) {
 
             {/* Buttons in the center */}
             <div className="flex space-x-2">
-              <input className="bg-white w-10 text-black px-4 py-2 rounded ml-5 flex items-center border border-custom-orange"></input>
+           
+            <input 
+            type="number"
+            className="bg-white text-black px-4 py-2 rounded ml-2 flex items-center border border-custom-orange"
+            min="0"
+            placeholder="ادخل رقم الصفحة"
+            value={pageNumber} // القيمة الحالية من الحالة
+            onChange={handlePageNumberChange} // الحدث لتحديث الحالة
+          />
+                 <button
+                onClick={handleMarkAsRead1}
+                className="bg-custom-green text-white px-4 py-2 rounded flex items-center border border-custom-green"
+              >
+                <IoIosAddCircle className="w-5 h-5" />
+            
+              </button>
               <button
                 onClick={handleMarkAsRead}
                 className="bg-white text-black px-4 py-2 rounded flex items-center border border-custom-green"
@@ -308,12 +356,14 @@ if (sortedComments.length > 0) {
               </button>
             </div>
           </div>
-          <div className="w-3/4 p-4">
+          <div className="w-4/4 p-4">
             {/* Overview Box */}
             {activeButton === "نظرة عامة" && (
               <div className="mt-4 p-4 bg-white rounded-lg shadow-md ">
                 
-                <h4 className="text-2xl font-semibold mb-2">وصف الكتاب </h4>
+             
+                <h5 className="text-xl font-semibold mb-2">{book.title} </h5>
+                
                 <p
                   className="text-gray-700 mb-4 p-4 rounded-md  bg-white text-right"
                   style={{
@@ -326,6 +376,18 @@ if (sortedComments.length > 0) {
                   {book.description}
                 </p>
 
+
+                <div className="flex flex-wrap gap-2 mb-4">
+
+                  {book.keywords.split(",").map((keyword, index) => (
+                    <div
+                      key={index}
+                      className="px-3 py-1 font-semibold bg-blues text-gray-700 rounded-lg text-sm"
+                    >
+                      {keyword.trim()}
+                    </div>
+                  ))}
+                </div>
                 <hr className="border-gray-200 mb-4" />
                 <h4 className="text-lg font-semibold mb-2">حول المؤلفين</h4>
                 <div className="flex items-center p-4 border border-gray-300 rounded-lg w-72 h-24">
@@ -336,7 +398,7 @@ if (sortedComments.length > 0) {
                   />
                   <div className="flex-1 mr-5">
                     <h5 className="text-sm font-semibold">{book.author}</h5>
-                    <p className="text-gray-600 text-sm">{book.genre}</p>
+                    <p className="text-gray-600 text-sm">{book.publisher}</p>
                     <div className="flex space-x-2 mt-2">
                      
                     </div>
@@ -358,13 +420,14 @@ if (sortedComments.length > 0) {
                       <div className="flex items-center ml-4">
                         <span className="text-yellow-500">⭐</span>
                         <span className="ml-1 text-gray-700">
-                          {(
-                            book.comments.reduce(
-                              (acc, comment) => acc + comment.rating,
-                              0
-                            ) / book.comments.length
-                          ).toFixed(1)}
-                        </span>
+                        {book.comments.length > 0
+                          ? (
+                              book.comments.reduce((acc, comment) => acc + comment.rating, 0) /
+                              book.comments.length
+                            ).toFixed(1)
+                          : 0}
+                      </span>
+
                       </div>
                     </div>
                   </div>
@@ -423,12 +486,7 @@ if (sortedComments.length > 0) {
                               </div>
                             </div>
                             <p className="text-gray-700">{comment.details}</p>
-                            <div className="flex items-center mt-2 text-gray-600">
-                              <span className="mr-2">
-                                👍 {comment.likesCount}
-                              </span>
-                              <span>👎 {comment.dislikesCount}</span>
-                            </div>
+                           
                           </div>
                         </div>
                       ))

@@ -218,7 +218,7 @@ const Showcourse = () => {
             <div className="relative">
               <video controls className="w-full rounded-lg">
                 <source src={videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
+               نعتذر منك الفيديو غير متاح
               </video>
             </div>
 
@@ -258,6 +258,7 @@ const Showcourse = () => {
               </div>
 
               <div className="flex items-center space-x-4">
+                {/*
                 <button
                   className="bg-white text-gray-400 px-4 py-2 rounded ml-5 flex items-center "
                   onClick={handleTogglePopup}
@@ -265,6 +266,8 @@ const Showcourse = () => {
                   <FaShareAlt className="w-5 h-5 ml-2 text-gray-400" />
                   مشاركة
                 </button>
+                
+                */}
                 <button
                   onClick={handleMarkAsRead}
                   className="bg-white text-gray-400 px-4 py-2 rounded flex items-center"
@@ -277,33 +280,21 @@ const Showcourse = () => {
             {/* Overview Box */}
             {activeButton === "نظرة عامة" && (
               <div className="mt-4 p-4 bg-white rounded-lg shadow-md ">
-                <h3 className="text-green-800 bg-green-100 text-sm font-bold mb-2 h-10 w-24 rounded-xl flex items-center justify-center">
-                  أعلى تقييما
-                </h3>
-                <h4 className="text-2xl font-semibold mb-2">مقدمة منهجية</h4>
+                <h4 className="text-2xl font-semibold mb-2">{course.title} </h4>
                 <p className="text-gray-700 mb-4">{course.description}</p>
+                <hr className="border-gray-200 mb-4" />
+                <div className="flex flex-wrap gap-2 mb-4">
 
-                {/* <hr className="border-gray-200 mb-4" />
-                <h4 className="text-lg font-semibold mb-2">حول المؤلفين</h4>
-                <div className="flex items-center p-4 border border-gray-300 rounded-lg w-72 h-24">
-                  <img
-                    src={user}
-                    alt="Author"
-                    className="w-12 h-12 rounded-full mr-1"
-                  />
-                  <div className="flex-1 mr-5">
-                    <h5 className="text-sm font-semibold">أحمد السيد</h5>
-                    <p className="text-gray-600 text-sm">أصول الفقه</p>
-                    <div className="flex space-x-2 mt-2">
-                      <CiFacebook className=" text-gray-600" />
-                      <CiTwitter className=" text-gray-600" />
-                      <PiInstagramLogoLight className=" text-gray-600" />
+                  {course.keywords.split(",").map((keyword, index) => (
+                    <div
+                      key={index}
+                      className="px-3 py-1 font-semibold bg-blues text-gray-700 rounded-lg text-sm"
+                    >
+                      {keyword.trim()}
                     </div>
+                  ))}
                   </div>
-                  <button className="px-4 py-2 bg-blue-500 font-bold text-custom-orange rounded-full">
-                    متابعة
-                  </button>
-                </div> */}
+                
               </div>
             )}
 
@@ -319,12 +310,12 @@ const Showcourse = () => {
                       <div className="flex items-center ml-4">
                         <span className="text-yellow-500">⭐</span>
                         <span className="ml-1 text-gray-700">
-                          {(
-                            course.comments.reduce(
-                              (acc, comment) => acc + comment.rating,
-                              0
-                            ) / course.comments.length
-                          ).toFixed(1)}
+                        {course.comments.length > 0
+                          ? (
+                            course.comments.reduce((acc, comment) => acc + comment.rating, 0) /
+                            course.comments.length
+                            ).toFixed(1)
+                          : 0}
                         </span>
                       </div>
                     </div>
@@ -384,12 +375,7 @@ const Showcourse = () => {
                               </div>
                             </div>
                             <p className="text-gray-700">{comment.details}</p>
-                            <div className="flex items-center mt-2 text-gray-600">
-                              <span className="mr-2">
-                                👍 {comment.likesCount}
-                              </span>
-                              <span>👎 {comment.dislikesCount}</span>
-                            </div>
+                         
                           </div>
                         </div>
                       ))
@@ -466,10 +452,12 @@ const Showcourse = () => {
                       {formatDuration(video.durationInSeconds)}
                     </span>
                   </div>
+                {/*
                   <input
                     type="checkbox"
                     className="form-checkbox h-5 w-5 text-blue-600"
                   />
+                */}
                 </li>
               ))}
             </ul>

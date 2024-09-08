@@ -40,7 +40,7 @@ const TrainingCourses = () => {
           title: course.title,
           description: course.description,
           date: course.eventStartDate,
-          image: cover, // Placeholder image for all contests
+          image: course.coverImageUrl, // Placeholder image for all contests
         }));
         setcourse(Course);
       } catch (error) {
@@ -68,11 +68,22 @@ const TrainingCourses = () => {
     attachmentFile: null,
     eventId: "",
   });
-
+  const initialFormData = {
+    fullName: "",
+    gender: "",
+    birthDate: "",
+    email: "",
+    mobileNo: "",
+    city: "",
+    nationalityCode: "",
+    subscriberNotes: "",
+    attachmentFile: null,
+    eventId: 0,
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    
     // Create an object to send in JSON format
     const dataToSend = { ...formData };
     if (dataToSend.attachmentFile) {
@@ -82,17 +93,17 @@ const TrainingCourses = () => {
       reader.onloadend = async () => {
         dataToSend.attachmentFile = reader.result;
         try {
-          await axios.post(baseurl + "public/event/register", dataToSend, {
+          await axios.post(baseurl + 'public/event/register', dataToSend, {
             headers: {
-              accept: "application/json",
-              "Content-Type": "application/json", // Use application/json
+              'accept': 'application/json',
+              'Content-Type': 'application/json', // Use application/json
             },
           });
-          toast.success("تم التسجيل بنجاح!");
+          toast.success('تم التسجيل بنجاح!');
+          setFormData(initialFormData); // Reset the form data
           closeModal();
         } catch (error) {
-          console.error("Error submitting form:", error);
-          toast.warning("فشل التسجيل. يرجى المحاولة مرة أخرى.");
+          handleErrorResponse(error);
         } finally {
           setLoading(false);
         }
@@ -100,22 +111,36 @@ const TrainingCourses = () => {
     } else {
       // No file to send
       try {
-        await axios.post(baseurl + "public/event/register", dataToSend, {
+        await axios.post(baseurl + 'public/event/register', dataToSend, {
           headers: {
-            accept: "application/json",
-            "Content-Type": "application/json",
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
           },
         });
-        toast.success("تم التسجيل بنجاح!");
+        toast.success('تم التسجيل بنجاح!');
+        setFormData(initialFormData); // Reset the form data
         closeModal();
       } catch (error) {
-        console.error("Error submitting form:", error);
-        toast.warning("فشل التسجيل. يرجى المحاولة مرة أخرى.");
+        handleErrorResponse(error);
       } finally {
         setLoading(false);
       }
     }
   };
+  
+  const handleErrorResponse = (error) => {
+    if (error.response && error.response.data && error.response.data.message) {
+      if (error.response.data.message === "Learner has already registered for this event.") {
+        toast.warning('لقد قمت بالتسجيل مسبقًا!');
+      } else {
+        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      }
+    } else {
+      console.error('Error submitting form:', error);
+      toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+    }
+  };
+  
 
   const openModal = (Course) => {
     setSelectedSeminar(Course);
@@ -180,6 +205,7 @@ const TrainingCourses = () => {
   const getImageUrl = (fileName) => {
     return fileName ? `${baseurl}uploads/file/download/${fileName}` : "";
   };
+  console.log(currentCourses)
   return (
     <div className="p-4">
    
@@ -190,7 +216,7 @@ const TrainingCourses = () => {
               className="bg-gray-100 shadow-lg rounded-lg p-6 flex flex-col items-center"
             >
               <img
-                  src={getImageUrl(course.coverImageUrl)}
+                  src={getImageUrl(course.image)}
                 alt={course.title}
                 className="w-full h-50 object-cover rounded-lg mb-4"
               />

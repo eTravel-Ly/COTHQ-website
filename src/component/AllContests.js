@@ -55,7 +55,7 @@ const AllContests = () => {
           title: contest.title,
           description: contest.description,
           date: contest.eventStartDate,
-          image: allContests, // Placeholder image for all contests
+          image: contest.coverImageUrl, // Placeholder image for all contests
         }));
         setContests(competitions);
       } catch (error) {
@@ -107,7 +107,7 @@ const AllContests = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    
     // Create an object to send in JSON format
     const dataToSend = { ...formData };
     if (dataToSend.attachmentFile) {
@@ -127,8 +127,7 @@ const AllContests = () => {
           setFormData(initialFormData); // Reset the form data
           closeModal();
         } catch (error) {
-          console.error('Error submitting form:', error);
-          toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+          handleErrorResponse(error);
         } finally {
           setLoading(false);
         }
@@ -146,13 +145,26 @@ const AllContests = () => {
         setFormData(initialFormData); // Reset the form data
         closeModal();
       } catch (error) {
-        console.error('Error submitting form:', error);
-        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+        handleErrorResponse(error);
       } finally {
         setLoading(false);
       }
     }
   };
+  
+  const handleErrorResponse = (error) => {
+    if (error.response && error.response.data && error.response.data.message) {
+      if (error.response.data.message === "Learner has already registered for this event.") {
+        toast.warning('لقد قمت بالتسجيل مسبقًا!');
+      } else {
+        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      }
+    } else {
+      console.error('Error submitting form:', error);
+      toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+    }
+  };
+  
 
   const openContestsDetails = (id) => {
     navigate(`/ContestsDetails/${id}`);
@@ -193,8 +205,7 @@ const AllContests = () => {
           >
             <div className="bg-gray-100 shadow-lg rounded-lg p-6 flex">
               <img
-                src={getImageUrl(contest.coverImageUrl)}
-
+                src={getImageUrl(contest.image)}
                 alt={contest.title}
                 className="h-24 w-24 object-cover rounded-lg ml-6 my-4"
               />
