@@ -339,7 +339,7 @@ const LoginRegister = () => {
           <div className="w-full text-right mb-5">
             <h2 className="text-2xl font-bold font-tajwal mb-2">
               <span role="img" aria-label="wave" className="ml-2">
-                👋
+
               </span>
               مرحبًا بك في المنصة التعليمية
             </h2>
@@ -579,7 +579,7 @@ const LoginRegister = () => {
 
           <p className="mt-4 font-tajwal">
             لديك حساب؟{" "}
-            <a href="#" className="text-custom-orange font-tajwal">
+            <a href="Login" className="text-custom-orange font-tajwal">
               قم بتسجيل الدخول الآن
             </a>
           </p>
