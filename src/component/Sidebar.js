@@ -23,6 +23,8 @@ const menuItems = [
     { path: "/OrderHistory", label: "عمليات الشراء", icon: <CiShop /> },
     { path: "/borrowsHistory", label: "طلبات الاستعارة", icon: <CiShop /> },
     { path: "/settings", label: "الاعدادات", icon: <IoSettingsOutline /> },
+    { path: "/HelpCenter", label: "مركز المساعدة", icon: <FiAlertCircle /> },
+
 ];
 
 const Sidebar = () => {
@@ -118,8 +120,8 @@ const Sidebar = () => {
 
                     <div className="flex flex-col items-center mt-auto p-1 bg-white w-full justify-center border-t"></div>
                     <Link
-                        to="#"
-                        onClick={() => handleLinkClick('#')}
+                        to="/HelpCenter"
+                        onClick={() => handleLinkClick('/HelpCenter')}
                         className={`flex items-center p-3 text-sm hover:bg-blues hover:text-custom-orange hover:rounded-lg ${activeLink === '#' ? 'text-custom-orange bg-blues' : 'text-gray-700'}`}
                         style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
                     >

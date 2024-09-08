@@ -30,7 +30,8 @@ import {
   ContestsDetails,
   TrainingCoursesDtails,
   Paytheorder,
-  Paynow
+  Paynow,
+  HelpCenter
 } from "./page/index";
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="/NavbarLogin" element={<NavbarLogin />} />
           <Route path="/MyCourses" element={<MyCourses />} />
           <Route path="/Shop" element={<Shop />} />
+          <Route path="/HelpCenter" element={<HelpCenter />} />
 
           <Route path="/MyActivity" element={<MyActivity />} />
           <Route path="/MyBooks" element={<MyBooks />} />

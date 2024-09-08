@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
-import pdf from "../assets/images/Noor-Book.pdf";
 import {FaCheck } from 'react-icons/fa';
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate, useParams } from "react-router-dom";
 import user from "../assets/images/user.png";
-
 import { IoIosAddCircle } from "react-icons/io";
-import { CiFacebook } from "react-icons/ci";
-import { CiTwitter } from "react-icons/ci";
-import { PiInstagramLogoLight } from "react-icons/pi";
-
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png";
 import axios from "axios";
