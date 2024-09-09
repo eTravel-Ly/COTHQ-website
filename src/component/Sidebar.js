@@ -23,7 +23,6 @@ const menuItems = [
     { path: "/OrderHistory", label: "عمليات الشراء", icon: <CiShop /> },
     { path: "/borrowsHistory", label: "طلبات الاستعارة", icon: <CiShop /> },
     { path: "/settings", label: "الاعدادات", icon: <IoSettingsOutline /> },
-    { path: "/HelpCenter", label: "مركز المساعدة", icon: <FiAlertCircle /> },
 
 ];
 
