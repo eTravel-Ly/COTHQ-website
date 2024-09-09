@@ -197,7 +197,7 @@ export default function TrainingCoursesDtails() {
           style={{
             marginTop: "50px",
             width: "95%",
-            direction: "rtl", // Ensure RTL direction
+          
           }}
         >
           <Navbar />

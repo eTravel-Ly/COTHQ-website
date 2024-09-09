@@ -203,7 +203,7 @@ export default function ContestsDetails() {
           style={{
             marginTop: "50px",
             width: "95%",
-            direction: "rtl", // Ensure RTL direction
+           
           }}
         >
           <Navbar />
