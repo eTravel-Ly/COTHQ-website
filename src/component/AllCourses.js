@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import CourseImage from "../assets/images/ContinueWatchingSection1.png"; // Replace with your actual image import
-import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
-import { FaRegUserCircle, FaSpinner, FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import CourseImage from "../assets/images/ContinueWatchingSection1.png";
+import noCoursesImage from "../assets/images/Search.png";
+import { FaRegUserCircle, FaSpinner, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
@@ -10,7 +10,6 @@ export default function AllCourses() {
   const showPicCourses = async (fileName) => {
     try {
       const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
-      console.log("Fetched image URL:", imageUrl);
       return imageUrl;
     } catch (error) {
       console.error("Error fetching image:", error);
@@ -22,8 +21,11 @@ export default function AllCourses() {
   const [likedCourses, setLikedCourses] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const coursesPerPage = 8; // Number of courses per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const coursesPerPage = 8;
+  const [sortOption, setSortOption] = useState("فرز حسب");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredCourses, setFilteredCourses] = useState([]);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -42,13 +44,13 @@ export default function AllCourses() {
           })
         );
 
-        // Set the initial state for likedCourses based on the isFavorite field
         const initialLikedCourses = {};
         courseData.forEach((course) => {
           initialLikedCourses[course.id] = course.isFavorite;
         });
 
         setCourses(courseData);
+        setFilteredCourses(courseData);
         setLikedCourses(initialLikedCourses);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -60,43 +62,49 @@ export default function AllCourses() {
     fetchCourses();
   }, []);
 
+  // Handle sort change
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+  };
 
- const handleLikeClick = async (id) => {
-   try {
-     const response = await axios.post(
-       `${baseurl}toggle-favorite`,
-       {
-         type: "COURSE",
-         id: id,
-       },
-       {
-         headers: {
-           Authorization: `Bearer ${localStorage.getItem("token")}`,
-           "Content-Type": "application/json",
-         },
-       }
-     );
+  // Sort courses based on the selected option
+  const sortedCourses = [...filteredCourses];
+  if (sortOption === "الأحدث") {
+    sortedCourses.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+  } else if (sortOption === "الأعلى تقييمًا") {
+    sortedCourses.sort((a, b) => b.rating - a.rating); // Assuming `rating` exists in course data
+  }
 
-     // Update the state with the favorite status
-     if (response.data.isFavorite !== undefined) {
-       setLikedCourses((prev) => ({
-         ...prev,
-         [id]: response.data.isFavorite,
-       }));
-     }
-   } catch (error) {
-     console.error("Error toggling favorite:", error);
-   }
- };
+  const handleLikeClick = async (id) => {
+    try {
+      const response = await axios.post(
+        `${baseurl}toggle-favorite`,
+        { type: "COURSE", id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.isFavorite !== undefined) {
+        setLikedCourses((prev) => ({
+          ...prev,
+          [id]: response.data.isFavorite,
+        }));
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
 
   // Pagination logic
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-  const hasData = courses.length > 0;
-  const currentCourses = hasData ? courses.slice(indexOfFirstCourse, indexOfLastCourse) : [];
-
-  //const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
-  const totalPages = Math.ceil(courses.length / coursesPerPage);
+  const hasData = sortedCourses.length > 0;
+  const currentCourses = hasData ? sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse) : [];
+  const totalPages = Math.ceil(sortedCourses.length / coursesPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -104,6 +112,21 @@ export default function AllCourses() {
 
   const openCoursesDetails = (courseId) => {
     navigate(`/CoursesDetails/${courseId}`);
+  };
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+
+    if (e.target.value === "") {
+      setFilteredCourses(courses); // Reset to all courses if search term is empty
+    } else {
+      const filtered = courses.filter((course) =>
+        course.title.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        course.description.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setFilteredCourses(filtered);
+    }
   };
 
   return (
@@ -114,18 +137,33 @@ export default function AllCourses() {
         </div>
       ) : courses.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
-          <img
-            src={noCoursesImage}
-            alt="No courses available"
-            className="w-60 h-60 object-cover"
-          />
+          <img src={noCoursesImage} alt="No courses available" className="w-60 h-60 object-cover" />
           <p className="text-lg text-gray-700 mt-0">
             لا يوجد دورات تدريبية متاحة في الوقت الحالى ..
           </p>
         </div>
       ) : (
         <div className="flex flex-col items-center p-4">
-          <div className="flex flex-wrap justify-center">
+          <div className="flex items-center mb-4 w-full">
+            <input
+              type="text"
+              placeholder=" ادخل عنوان الدورة للبحث .. "
+              className="p-2 border rounded-md w-full mr-4"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+            <select
+              className="p-2 border rounded-md w-auto mr-4"
+              value={sortOption}
+              onChange={handleSortChange}
+            >
+              <option value="فرز حسب" selected>فرز حسب</option>
+              <option value="الأحدث">الأحدث</option>
+              <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
+            </select>
+          </div>
+
+          <div className="flex flex-wrap justify-start">
             {currentCourses.map((course, idx) => (
               <div key={idx} className="w-full md:w-1/4 p-2">
                 <div className="bg-white rounded-lg shadow-md p-3 h-auto flex flex-col justify-between">
@@ -199,8 +237,10 @@ export default function AllCourses() {
               </div>
             ))}
           </div>
-          {/* Pagination */}
-          <div className="mt-4">
+
+       
+            {/* Pagination */}
+            <div className="mt-4">
             <ul className="flex justify-center space-x-2 items-center">
               <li>
                 <button
@@ -213,10 +253,10 @@ export default function AllCourses() {
                   <FaArrowRight />
                 </button>
               </li>
-              {Array.from({ length: totalPages }, (_, index) => (
+              {Array.from({ length: totalPages }).map((_, index) => (
                 <li key={index}>
                   <button
-                    className={`px-3 py-1 rounded-full ${
+                     className={`px-3 py-1 rounded-full ${
                       currentPage === index + 1
                         ? "bg-custom-orange text-white"
                         : "text-gray-700"
@@ -241,7 +281,7 @@ export default function AllCourses() {
               </li>
             </ul>
           </div>
-        </div>
+         </div>
       )}
     </>
   );

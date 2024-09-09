@@ -49,7 +49,7 @@ export default function Shop() {
                 onClick={showallCourses}
 
               >
-                الكورسات المتاحة 
+                الدورات المتاحة 
               </button>
 
             </div>

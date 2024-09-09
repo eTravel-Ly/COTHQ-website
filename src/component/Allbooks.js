@@ -11,90 +11,84 @@ import { CiHeart } from "react-icons/ci";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 
 const Allbooks = () => {
+  const navigate = useNavigate();
   const [books, setBooks] = useState([]);
-  const [selectedType, setSelectedType] = useState('كل الأنواع');
   const [likedBooks, setLikedBooks] = useState({});
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [borrowDate, setBorrowDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [selectedBook, setSelectedBook] = useState(null);
-  const [loading, setLoading] = useState(true); // حالة تحميل جديدة
-  const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const coursesPerPage = 9;
-    const indexOfLastCourse = currentPage * coursesPerPage;
-    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-    const hasData = books.length > 0;
-    const currentCourses = hasData ? books.slice(indexOfFirstCourse, indexOfLastCourse) : [];
-    const totalPages = Math.ceil(books.length / coursesPerPage);
+  const [loading, setLoading] = useState(true); 
+  const [sortOption, setSortOption] = useState("فرز حسب");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-    const handlePageChange = (pageNumber) => {
-      setCurrentPage(pageNumber);
-    };
+  const booksPerPage = 9;
+  const indexOfLastBook = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const currentCourses = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
+  const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
 
- const handleLikeClick = async (id) => {
-   try {
-     const response = await axios.post(
-       `${baseurl}toggle-favorite`,
-       {
-         type: "BOOK",
-         id: id,
-       },
-       {
-         headers: {
-           Authorization: `Bearer ${localStorage.getItem("token")}`,
-           "Content-Type": "application/json",
-         },
-       }
-     );
-
-     // Update the state with the favorite status
-     if (response.data.isFavorite !== undefined) {
-       setLikedBooks((prev) => ({
-         ...prev,
-         [id]: response.data.isFavorite,
-       }));
-     }
-   } catch (error) {
-     console.error("Error toggling favorite:", error);
-   }
- };
- 
-useEffect(() => {
-  const fetchBooks = async () => {
+  const handleLikeClick = async (id) => {
     try {
-      const response = await axios.get(baseurl + "all-books", {
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const response = await axios.post(
+        `${baseurl}toggle-favorite`,
+        {
+          type: "BOOK",
+          id: id,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      const booksData = response.data.map(async (book) => {
-        const imageUrl = await showpicbooks(book.coverImageUrl);
-        return { ...book, imageUrl };
-      });
-
-      const booksWithImages = await Promise.all(booksData);
-
-      // تحديث حالة likedBooks بناءً على isFavorite
-      const initialLikedBooks = {};
-      booksWithImages.forEach((book) => {
-        initialLikedBooks[book.id] = book.isFavorite;
-      });
-
-      setBooks(booksWithImages);
-      setLikedBooks(initialLikedBooks);
+      if (response.data.isFavorite !== undefined) {
+        setLikedBooks((prev) => ({
+          ...prev,
+          [id]: response.data.isFavorite,
+        }));
+      }
     } catch (error) {
-      console.error("Error fetching books:", error);
-    } finally {
-      setLoading(false); // تعيين حالة التحميل إلى false بعد الانتهاء
+      console.error("Error toggling favorite:", error);
     }
   };
-  fetchBooks();
-}, []);
 
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get(baseurl + "all-books", {
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const booksData = await Promise.all(response.data.map(async (book) => {
+          const imageUrl = await showpicbooks(book.coverImageUrl);
+          return { ...book, imageUrl };
+        }));
+
+        const initialLikedBooks = {};
+        booksData.forEach((book) => {
+          initialLikedBooks[book.id] = book.isFavorite;
+        });
+
+        setBooks(booksData);
+        setFilteredBooks(booksData);
+        setLikedBooks(initialLikedBooks);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
 
   const showpicbooks = async (fileName) => {
     try {
@@ -107,12 +101,39 @@ useEffect(() => {
     }
   };
 
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+  };
+
+  useEffect(() => {
+    let sortedBooks = [...filteredBooks];
+    if (sortOption === "الأحدث") {
+      sortedBooks.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+    } else if (sortOption === "الأعلى تقييمًا") {
+      sortedBooks.sort((a, b) => b.rating - a.rating);
+    }
+    setFilteredBooks(sortedBooks);
+  }, [sortOption]);
+
+  useEffect(() => {
+    const searchQuery = searchTerm.toLowerCase();
+    const filtered = books.filter((book) =>
+      book.title.toLowerCase().includes(searchQuery) ||
+      book.publisher.toLowerCase().includes(searchQuery)
+    );
+    setFilteredBooks(filtered);
+  }, [searchTerm, books]);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   const openBookDetails = (bookId) => {
     navigate(`/BookDetails/${bookId}`);
   };
 
   const openBorrowModal = (bookId) => {
-    setBorrowDate(new Date().toISOString().split('T')[0]); // Default to today's date
+    setBorrowDate(new Date().toISOString().split('T')[0]); 
     setReturnDate('');
     setSelectedBook(bookId);
     setIsModalOpen(true);
@@ -121,8 +142,8 @@ useEffect(() => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  const [loading1, setLoading1] = useState(false); // حالة تحميل جديدة
 
+  const [loading1, setLoading1] = useState(false);
 
   const handleSaveBorrow = () => {
     if (!selectedBook || !borrowDate || !returnDate) {
@@ -136,7 +157,7 @@ useEffect(() => {
       returnDate: new Date(returnDate).toISOString(),
     };
 
-    setLoading1(true); // تعيين حالة التحميل إلى true عند بدء الحفظ
+    setLoading1(true);
 
     axios
       .post(baseurl + 'request-book-borrow', borrowData, {
@@ -147,25 +168,16 @@ useEffect(() => {
       })
       .then((response) => {
         toast.success('تم إرسال طلب الاستعارة بنجاح');
-        setLoading1(false); // تعيين حالة التحميل إلى false بعد الانتهاء
+        setLoading1(false);
         setTimeout(() => {
           closeModal(); 
         }, 3000);
       })
       .catch((error) => {
         toast.warning('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
-        setLoading1(false); // تعيين حالة التحميل إلى false عند حدوث خطأ
+        setLoading1(false);
       });
   };
-
-  const filteredBooks = selectedType === 'كل الأنواع'
-    ? books
-    : books.filter(book => book.genre === selectedType);
-
-  const rows = [];
-  for (let i = 0; i < filteredBooks.length; i += 3) {
-    rows.push(filteredBooks.slice(i, i + 3));
-  }
 
   const getAvailabilityStyle = (availability) => {
     switch (availability) {
@@ -208,6 +220,24 @@ useEffect(() => {
         <div>
           <div>
             <div className="p-4">
+               <div className="flex items-center mb-4 w-full">
+            <input
+              type="text"
+              placeholder="اكتب العنوان أو دار النشر للبحث عن كتاب .. "
+              className="p-2 border rounded-md w-full mr-4"
+              value={searchTerm}
+             onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <select
+              className="p-2 border rounded-md w-auto mr-4"
+              value={sortOption}
+              onChange={handleSortChange}
+            >
+              <option value="فرز حسب" >فرز حسب</option>
+              <option value="الأحدث">الأحدث</option>
+              <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
+            </select>
+          </div>
               <div className="flex flex-wrap -mx-2">
                 {currentCourses.map((book, index) => {
                   const availabilityStyle = getAvailabilityStyle(
