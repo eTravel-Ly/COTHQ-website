@@ -380,7 +380,7 @@ const navigate = useNavigate();
                         </div>
                       ))
                     ) : (
-                      <div className="text-gray-700">
+                      <div className="text-gray-700"  style={{ fontFamily: "Tajwal, sans-serif" }}>
                         <p>لا توجد مراجعات متاحة</p>
                       </div>
                     )}
