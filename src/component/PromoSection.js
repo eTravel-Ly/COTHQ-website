@@ -10,27 +10,28 @@ const PromoSection = () => {
     navigate('/Login');
   };
   return (
-    <section id='PromoSection'
+    <section
+      id="PromoSection"
       className="relative bg-cover bg-center top-10 text-white rounded-lg flex justify-center items-center"
-      style={{ 
-        backgroundImage: `url(${Banner})`, 
+      style={{
+        backgroundImage: `url(${Banner})`,
         height: '100px', // Adjust the height as needed
-        width: '95%', 
+        width: '95%',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
+        backgroundSize: 'cover',
       }}
     >
-      <div className="absolute inset-0 "></div>
+      <div className="absolute inset-0"></div>
       <div className="relative text-center z-10">
-        <h2 
-          className="text-3xl font-bold mb-4" 
+        <h2
+          className="text-l md:text-3xl lg:text-4xl font-bold mb-4"
           style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}
         >
           اكتشف المسابقات و الدورات التدريبية و ندواتك والمؤتمرات الآن!
         </h2>
-      
       </div>
     </section>
+
   );
 };
 

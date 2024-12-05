@@ -49,10 +49,7 @@ const SecondSection = () => {
       <div className="w-full lg:w-1/2 flex justify-center" style={{ marginTop: '-150px' , marginLeft:'-70px' }}>
         <img src={pic2} alt="Study Image 2" className="rounded-lg shadow-lg" style={{ width: '70%', height: 'auto' }} />
       </div>
-      <div className="absolute  text-white p-4 rounded-lg flex items-center" style={{ backgroundColor: '#229575' ,
-        marginTop:'250px',
-        marginRight:'45px'
-       }}>
+      <div className="hidden lg:block absolute text-white p-4 rounded-lg  items-center" style={{ backgroundColor: '#229575', marginTop: '250px', marginRight: '45px' }}>
         <div className="text-right">
           <h3 className="text-xl font-semibold" style={{ fontFamily: 'Tajwal, sans-serif' }}>128</h3>
           <p className="mt-2" style={{ fontFamily: 'Tajwal, sans-serif' }}>النشاط الطلابي لدينا الدورة التدريبية</p>
