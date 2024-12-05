@@ -6,7 +6,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { FaSpinner } from 'react-icons/fa'; // Import the spinner icon
+import { FaSpinner } from 'react-icons/fa';
 
 const LoginRegister = () => {
   const navigate = useNavigate();
@@ -22,13 +22,13 @@ const LoginRegister = () => {
     otp:''
   });
 
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false); 
 
   const [showOTP, setShowOTP] = useState(false);
   const handleVerifyClick  = async (event) => {
 
     event.preventDefault(); 
-    const isValid = validate1(); // Validate the form
+    const isValid = validate1(); 
     if (!isValid) {
       return;
     }
@@ -58,7 +58,6 @@ const LoginRegister = () => {
       return;
     }
   
-    // تعيين حالة التحميل إلى true عند بدء التسجيل
     setLoading(true);
   
     const year = values.birthYear.substring(0, 4);
@@ -321,20 +320,24 @@ const LoginRegister = () => {
 
   return (
     <div className="flex  h-full ">
-      <div className="w-1/2  h-full">
-        <img
-          src={LoginPic2}
-          alt="Login"
-          className="w-[80%] h-[90%]  ml-14 rounded-l  m-3"
-        />
-      </div>
+       {/* صورة جانبية */}
+       <div className="hidden md:block w-1/2 h-full">
+      <img
+        src={LoginPic2}
+        alt="Login"
+        className="w-[80%] h-[90%] ml-14 rounded-l m-3"
+      />
+    </div>
 
 
-      <div className="w-1/2 flex flex-col justify-center items-center">
-        <div className="w-2/3 flex flex-col justify-center items-center mr-14">
-          <div className="w-full flex justify-end">
-            <img src={logo} alt="Logo" className="mb-2 w-[20%]" />
-          </div>
+
+    <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-4">
+      <div className="w-full md:w-2/3 flex flex-col justify-center items-center md:mr-14">
+        {/* شعار */}
+        <div className="w-full flex justify-center md:justify-end">
+          <img src={logo} alt="Logo" className="mb-2 w-[20%] md:w-[20%]" />
+        </div>
+
 
           <div className="w-full text-right mb-5">
             <h2 className="text-2xl font-bold font-tajwal mb-2">

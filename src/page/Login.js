@@ -101,7 +101,7 @@ const Login = () => {
   return (
     <div className="flex h-screen">
       {/* Left side image */}
-      <div className="w-1/2 h-full">
+      <div className="hidden md:block w-1/2 h-full">
         <img
           src={loginPic}
           alt="Login"
@@ -110,8 +110,8 @@ const Login = () => {
       </div>
 
       {/* Right side form */}
-      <div className="w-2/3 flex flex-col justify-center items-center">
-        <div className="w-2/3 flex flex-col justify-center items-center mr-14">
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-4">
+      <div className="w-full md:w-2/3 flex flex-col justify-center items-center md:mr-14">
           <div className="w-full flex justify-end">
             <img src={logo} alt="Logo" className="mb-5 w-[20%]" />
           </div>
@@ -127,66 +127,80 @@ const Login = () => {
               .استمر في مشاهدة الدورات التدريبية التي بدأت مشاهدتها بالفعل
             </p>
           </div>
-          <form className="w-full max-w-sm ml-28">
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                htmlFor="username"
-              >
-                عنوان البريد الإلكتروني
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                value={values.username}
-                onChange={handleChange}
-                className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="email@example.com"
-              />
-              {errors.username && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.username}</p>}
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                htmlFor="password"
-              >
-                كلمة المرور
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={values.password}
-                onChange={handleChange}
-                className="shadow appearance-none font-tajwal border text-right rounded w-full text-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="********"
-              />
-              {errors.password && <p className="text-red-500 text-xs mx-1 mt-1 ml-14 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.password}</p>}
-            </div>
-            <div className="w-full text-right mb-8">
-              <button
-                onClick={handleClick}
-                disabled={loading} // Disable button while loading
-                className={`bg-custom-orange w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                {loading ? (
-                  <div className="flex justify-center items-center">
-                    <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* Spinner icon */}
-                  
-                  </div>
-                ) : (
-                  'تسجيل'
-                )}
-              </button>
-              <p className="text-custom-orange text-center mt-2 font-tajwal">
-                {" "}
-                <a href="#">
-                  هل نسيت كلمة المرور ؟
-                </a>
-              </p>
-            </div>
-          </form>
+          <form className="w-full max-w-sm mx-auto md:ml-28">
+  <div className="mb-4">
+    <label
+      className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
+      htmlFor="username"
+    >
+      عنوان البريد الإلكتروني
+    </label>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      value={values.username}
+      onChange={handleChange}
+      className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      placeholder="email@example.com"
+    />
+    {errors.username && (
+      <p
+        className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right"
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+      >
+        {errors.username}
+      </p>
+    )}
+  </div>
+  <div className="mb-4">
+    <label
+      className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
+      htmlFor="password"
+    >
+      كلمة المرور
+    </label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      value={values.password}
+      onChange={handleChange}
+      className="shadow appearance-none font-tajwal border text-right rounded w-full text-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      placeholder="********"
+    />
+    {errors.password && (
+      <p
+        className="text-red-500 text-xs mx-1 mt-1 ml-14 text-right"
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+      >
+        {errors.password}
+      </p>
+    )}
+  </div>
+  <div className="w-full text-right mb-8">
+    <button
+      onClick={handleClick}
+      disabled={loading} // Disable button while loading
+      className={`bg-custom-orange w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline ${
+        loading ? "opacity-50 cursor-not-allowed" : ""
+      }`}
+    >
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* Spinner icon */}
+        </div>
+      ) : (
+        "تسجيل"
+      )}
+    </button>
+    <p className="text-custom-orange text-center mt-2 font-tajwal">
+      {" "}
+      <a href="#">هل نسيت كلمة المرور ؟</a>
+    </p>
+  </div>
+</form>
+
           <p className="mt-4 ml-16 font-tajwal">
             لديك حساب؟{" "}
             <a href="#" className="text-custom-orange ml-16 font-tajwal" onClick={handleRegisterRedirect}>
