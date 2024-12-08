@@ -73,110 +73,117 @@ function ThirdSection() {
       navigate('/Login'); // الانتقال إلى صفحة تسجيل الدخول
     }
   };
+
+  const getShortTitle = (title) => {
+    const words = title.split(' ');  // تقسيم العنوان إلى كلمات
+    if (words.length > 4) {
+      return `${words.slice(0, 4).join(' ')}...`;  // عرض أول 4 كلمات مع النقاط
+    }
+    return title;  // إذا كان العنوان يحتوي على 4 كلمات أو أقل، يتم عرضه بالكامل
+  };
+  
+  
   return (
     <div id="courses" className="w-full bg-white py-16">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2
-            className="text-3xl font-semibold"
-            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-          >
-            اكتشف دورتك
-          </h2>
-          <p
-            className="text-gray-500"
-            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-          >
-            طريقك إلى تعلم العلوم الدينية 
-          </p>
-        </div>
-
-        <div className="flex items-center justify-center space-x-4 p-2 mb-4 rounded-full bg-white border border-gray-200">
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-semibold" style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}>
+          اكتشف دورتك
+        </h2>
+        <p className="text-gray-500" style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}>
+          طريقك إلى تعلم العلوم الدينية 
+        </p>
+      </div>
+  
+      <div className="flex items-center justify-center space-x-4 p-2 mb-4 rounded-full bg-white border border-gray-200">
+        <button
+          className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white"
+          style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <FaArrowAltCircleLeft size={20} />
+        </button>
+        {[...Array(totalPages)].map((_, index) => (
           <button
-            className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white"
+            key={index}
+            className={`px-4 py-2 rounded-full ${currentPage === index + 1 ? 'bg-custom-orange text-white' : 'bg-gray-50 text-black'} hover:bg-custom-orange hover:text-white border border-gray-200`}
             style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
+            onClick={() => handlePageChange(index + 1)}
           >
-            <FaArrowAltCircleLeft size={20} />
+            {index + 1}
           </button>
-          {[...Array(totalPages)].map((_, index) => (
-            <button
-              key={index}
-              className={`px-4 py-2 rounded-full ${currentPage === index + 1 ? 'bg-custom-orange text-white' : 'bg-gray-50 text-black'} hover:bg-custom-orange hover:text-white border border-gray-200`}
-              style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-              onClick={() => handlePageChange(index + 1)}
+        ))}
+        <button
+          className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white"
+          style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          <FaArrowAltCircleRight size={20} />
+        </button>
+      </div>
+  
+      {/* تعديل الشبكة هنا */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}>
+        {currentCourses.map((course, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-lg rounded-lg overflow-hidden"
+            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+          >
+            <img
+              src={courseImages[course.id] || group}
+              alt="Course"
+              className="w-full h-50 object-cover"
+            />
+            <div className="p-4 text-right">
+            <h3
+              className="text-lg font-semibold mb-2"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
             >
-               {index + 1}
-            </button>
-          ))}
-          <button
-            className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white"
-            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            <FaArrowAltCircleRight size={20} />
-          </button>
-        </div>
+              {getShortTitle(course.title)}
+            </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-8" style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}>
-          {currentCourses.map((course, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-lg rounded-lg overflow-hidden"
-              style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-            >
-              <img
-                src={courseImages[course.id] || group}
-                alt="Course"
-                className="w-full h-50 object-cover"
-              />
-              <div className="p-4 text-right">
-                <h3
-                  className="text-lg font-semibold mb-2"
+              <p
+                className="text-gray-600 text-xs"
+                style={{
+                  fontFamily: "Tajwal, sans-serif",
+                  textAlign: "justify",
+                  lineHeight: "1.5",
+                  marginBottom: "8px",
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                  overflow: "hidden",            
+                  display: "-webkit-box",         
+                  WebkitBoxOrient: "vertical",    
+                  WebkitLineClamp: 4,             
+                }}
+              >
+                {course.description}
+              </p>
+              <div className="flex justify-between items-center">
+                <span
+                  className="text-black-500 font-bold"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
-                  {course.title}
-                </h3>
-                <p
-                  className="text-gray-600 text-xs"
-                  style={{
-                    fontFamily: "Tajwal, sans-serif",
-                    textAlign: "justify",
-                    lineHeight: "1.5",
-                    marginBottom: "8px",
-                    wordWrap: "break-word",
-                    whiteSpace: "normal",
-                    overflow: "hidden",            
-                    display: "-webkit-box",         
-                    WebkitBoxOrient: "vertical",    
-                    WebkitLineClamp: 4,             
-                  }}
+                  {course.price} دينار
+                </span>
+                <button
+                  className={`text-white px-4 py-2 rounded-lg ${isLocalStorageValue ? 'bg-custom-orange' : 'bg-custom-orange'}`}
+                  style={{ fontFamily: "Tajwal, sans-serif" }}
+                  onClick={() => handleButtonClick(course.id, isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن')}
                 >
-                  {course.description}
-                </p>
-                <div className="flex justify-between items-center">
-                  <span
-                    className="text-black-500 font-bold"
-                    style={{ fontFamily: "Tajwal, sans-serif" }}
-                  >
-                    {course.price} دينار
-                  </span>
-                  <button
-                className={`text-white px-4 py-2 rounded-lg ${isLocalStorageValue ? 'bg-custom-orange' : 'bg-custom-orange'}`}
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-                onClick={() => handleButtonClick(course.id, isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن')}
-              >
-                {isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن'}
-              </button>
-                </div>
+                  {isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن'}
+                </button>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
+  </div>
+  
   );
 }
 

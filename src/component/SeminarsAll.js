@@ -481,7 +481,7 @@ const SeminarsAll = () => {
 
           
           </div>
-          <div className="flex justify-center">
+          {/* <div className="flex justify-center">
           <button
             type="submit"
             className="bg-custom-green text-white py-2 px-4 rounded w-full flex items-center justify-center"
@@ -494,8 +494,26 @@ const SeminarsAll = () => {
               'تسجيل'
             )}
           </button>
-        </div>
+        </div> */}
+            <div className="flex justify-center sm:justify-between sm:space-x-4">
+        <button
+          type="submit"
+          className="bg-custom-green text-white py-2 px-4 rounded w-full sm:w-auto flex items-center justify-center"
+          disabled={loading}
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+        >
+          {loading ? <FaSpinner className="animate-spin text-lg" /> : "تسجيل"}
+        </button>
 
+        {/* زر إغلاق يظهر فقط على الشاشات الصغيرة */}
+        <button
+          onClick={closeModal}
+          className="bg-red_aa text-white py-2 px-4 rounded w-full sm:w-auto flex items-center justify-center sm:hidden"
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+        >
+          إغلاق
+        </button>
+      </div>
         </form>
         <button
         onClick={closeModal}
