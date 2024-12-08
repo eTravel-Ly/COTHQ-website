@@ -52,7 +52,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   };
 
   return (
-    <div className="flex h-screen">
+    <>
    
       {/* Sidebar */}
       <div
@@ -189,7 +189,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
-    </div>
+    </>
   );
 };
 

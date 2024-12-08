@@ -13,6 +13,8 @@ import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 Modal.setAppElement('#root'); // لتفادي تحذير عند استخدام المودال
 
 function BorrowsHistory() {
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const [orders, setOrders] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
@@ -98,10 +100,17 @@ function BorrowsHistory() {
     );
   }
   return (
-    <div className="flex h-screen font-tajwal">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="container mx-auto p-4" dir="rtl">
           <h1 className="text-xl font-bold mb-4 text-right font-tajwal">
             قائمة طلبات الاستعارة الخاصة بي
@@ -119,89 +128,110 @@ function BorrowsHistory() {
               </p>
             </div>
           ) : (
-          orders.map((order) => (
-            <div key={order.id} className="border rounded-md p-4 mb-4">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="text-lg font-bold">حالة الطلب:</h2>
-                <span className={`text-white px-2 py-1 rounded ${getStatusColor(order.bookBorrowRequestStatus)}`}>
-                  {order.bookBorrowRequestStatus}
-                </span>
-              </div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">
-                  اسم الكتاب: {order.book.title}
-                </span>
-              </div>
-              <div className="flex flex-col space-y-2">
-                <div className="flex space-x-4 ml-7">
-                  <p className="font-semibold ml-7">تاريخ الاستعارة: {formatDate(order.requestDate)}</p>
-                  <p className="font-semibold">تاريخ الاستلام: {formatDate(order.collectDate)}</p>
-                  <p className="font-semibold">تاريخ الإرجاع: {formatDate(order.returnDate)}</p>
+            orders.map((order) => (
+              <div key={order.id} className="border rounded-md p-4 mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <h2 className="text-lg font-bold">حالة الطلب:</h2>
+                  <span
+                    className={`text-white px-2 py-1 rounded ${getStatusColor(
+                      order.bookBorrowRequestStatus
+                    )}`}
+                  >
+                    {order.bookBorrowRequestStatus}
+                  </span>
                 </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-600">
+                    اسم الكتاب: {order.book.title}
+                  </span>
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <div className="flex space-x-4 ml-7">
+                    <p className="font-semibold ml-7">
+                      تاريخ الاستعارة: {formatDate(order.requestDate)}
+                    </p>
+                    <p className="font-semibold">
+                      تاريخ الاستلام: {formatDate(order.collectDate)}
+                    </p>
+                    <p className="font-semibold">
+                      تاريخ الإرجاع: {formatDate(order.returnDate)}
+                    </p>
+                  </div>
+                </div>
+                {/* Conditionally render the button */}
+                {order.bookBorrowRequestStatus === "PENDING" && (
+                  <button
+                    onClick={() => openModal(order.id)}
+                    className="bg-custom-orange text-white px-2 py-2 text-sm rounded mt-4"
+                  >
+                    إلغاء الطلب
+                  </button>
+                )}
               </div>
-              {/* Conditionally render the button */}
-              {order.bookBorrowRequestStatus === 'PENDING' && (
-                <button
-                  onClick={() => openModal(order.id)}
-                  className="bg-custom-orange text-white px-2 py-2 text-sm rounded mt-4"
-                >
-                  إلغاء الطلب
-                </button>
-              )}
-            </div>
-          )
-        ))}
+            ))
+          )}
+        </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
         </div>
       </div>
 
       {/* Confirmation Modal */}
       <Modal
-  isOpen={isModalOpen}
-  onRequestClose={closeModal}
-  className="modal"
-  style={{
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      display: 'flex', // لضمان أن المودال يتمركز
-      justifyContent: 'center', // لضمان أن المودال يتمركز
-      alignItems: 'center', // لضمان أن المودال يتمركز
-    },
-    content: {
-      backgroundColor: 'white', // إضافة خلفية بيضاء
-      width: '400px', // تحديد العرض المناسب
-      height: '150px', // تحديد الارتفاع المناسب
-      padding: '20px',
-      borderRadius: '8px', // إضافة زوايا مستديرة للمربع
-      margin: 'auto',
-      textAlign: 'right',
-      direction: 'rtl',
-      fontFamily: 'Tajwal, sans-serif',
-      position: 'relative', // لضمان أن المودال في المنتصف
-    },
-  }}
->
-  <div className="p-6 text-center">
-    <h2 className="text-lg font-bold mb-4">هل أنت متأكد من إلغاء طلب الاستعارة؟</h2>
-    <div className="flex justify-center space-x-4">
-      <button
-        onClick={confirmCancelOrder}
-        className="bg-red-600 text-white px-4 py-2 rounded ml-2"
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        className="modal"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            display: "flex", // لضمان أن المودال يتمركز
+            justifyContent: "center", // لضمان أن المودال يتمركز
+            alignItems: "center", // لضمان أن المودال يتمركز
+          },
+          content: {
+            backgroundColor: "white", // إضافة خلفية بيضاء
+            width: "400px", // تحديد العرض المناسب
+            height: "150px", // تحديد الارتفاع المناسب
+            padding: "20px",
+            borderRadius: "8px", // إضافة زوايا مستديرة للمربع
+            margin: "auto",
+            textAlign: "right",
+            direction: "rtl",
+            fontFamily: "Tajwal, sans-serif",
+            position: "relative", // لضمان أن المودال في المنتصف
+          },
+        }}
       >
-        نعم
-      </button>
-      <button
-        onClick={closeModal}
-        className="bg-gray-300 text-black px-4 py-2 rounded"
-      >
-        لا
-      </button>
-    </div>
-  </div>
-</Modal>
-
+        <div className="p-6 text-center">
+          <h2 className="text-lg font-bold mb-4">
+            هل أنت متأكد من إلغاء طلب الاستعارة؟
+          </h2>
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={confirmCancelOrder}
+              className="bg-red-600 text-white px-4 py-2 rounded ml-2"
+            >
+              نعم
+            </button>
+            <button
+              onClick={closeModal}
+              className="bg-gray-300 text-black px-4 py-2 rounded"
+            >
+              لا
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       <ToastContainer />
-    </div>
+    </>
   );
 }
 

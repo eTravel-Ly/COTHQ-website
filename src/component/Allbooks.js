@@ -220,38 +220,42 @@ const Allbooks = () => {
         <div>
           <div>
             <div className="p-4">
-               <div className="flex items-center mb-4 w-full">
-            <input
-              type="text"
-              placeholder="اكتب العنوان أو دار النشر للبحث عن كتاب .. "
-              className="p-2 border rounded-md w-full mr-4"
-              value={searchTerm}
-             onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <select
-              className="p-2 border rounded-md w-auto mr-4"
-              value={sortOption}
-              onChange={handleSortChange}
-            >
-              <option value="فرز حسب" >فرز حسب</option>
-              <option value="الأحدث">الأحدث</option>
-              <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
-            </select>
-          </div>
+              <div className="flex items-center mb-4 w-full">
+                <input
+                  type="text"
+                  placeholder="اكتب العنوان أو دار النشر للبحث عن كتاب .. "
+                  className="p-2 border rounded-md w-full mr-4"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <select
+                  className="p-2 border rounded-md w-auto mr-4"
+                  value={sortOption}
+                  onChange={handleSortChange}
+                >
+                  <option value="فرز حسب">فرز حسب</option>
+                  <option value="الأحدث">الأحدث</option>
+                  <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
+                </select>
+              </div>
+
               <div className="flex flex-wrap -mx-2">
                 {currentCourses.map((book, index) => {
                   const availabilityStyle = getAvailabilityStyle(
                     book.bookAvailability
                   );
                   return (
-                    <div key={book.id} className="w-1/3 p-2">
-                      <div className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex items-center text-right">
+                    <div
+                      key={book.id}
+                      className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-2"
+                    >
+                      <div className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex flex-col items-center text-right">
                         <img
                           src={book.imageUrl}
                           alt={book.title}
-                          className="h-32 object-cover rounded-lg ml-4"
+                          className="h-32 object-cover rounded-lg mb-4"
                         />
-                        <div className="w-3/4 pl-4 flex flex-col justify-between">
+                        <div className="w-full flex flex-col justify-between">
                           <div>
                             <h3
                               className="text-lg font-bold mb-2 text-custom-orange"
@@ -269,7 +273,7 @@ const Allbooks = () => {
                               {book.price} دينار
                             </div>
                           </div>
-                          <div className="flex justify-between items-center">
+                          <div className="flex justify-between items-center mt-4">
                             <button
                               className={`bg-custom-orange text-white px-4 py-2 rounded-3xl ${
                                 availabilityStyle.btnDisabled
@@ -286,7 +290,6 @@ const Allbooks = () => {
                             >
                               {availabilityStyle.btnText}
                             </button>
-
                             <div className="text-gray-600">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"

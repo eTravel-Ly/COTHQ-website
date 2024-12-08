@@ -5,16 +5,23 @@ import SeminarsAll from "../component/SeminarsAll";
 import ConferencesAll from "../component/ConferencesAll";
 const Seminars = () => {
   const [selectedSection, setSelectedSection] = useState("allSeminars");
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const showSeminars = () => setSelectedSection("allSeminars");
   const showConferences = () => setSelectedSection("allConferences");
  
 
   return (
-    <div className="flex h-screen rtl">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 mr-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div
           className="p-4"
           style={{
@@ -28,8 +35,7 @@ const Seminars = () => {
             مواصلة مشاهدة الندوات والمؤتمرات
           </h4>
 
-          {/* أزرار التصفية */}
-          <div className="mb-4">
+          <div className="flex flex-wrap justify-center md:justify-start mt-4 gap-2">
             <button
               className={`py-2 px-4 rounded mr-2 ml-4 ${
                 selectedSection === "allSeminars"
@@ -52,14 +58,23 @@ const Seminars = () => {
               عرض جميع المؤتمرات
             </button>
           </div>
-
-          {selectedSection === "allSeminars" && <SeminarsAll/>}
-          {selectedSection === "allConferences" && <ConferencesAll/>}
-        
+          <div className="mt-4">
+            {selectedSection === "allSeminars" && <SeminarsAll />}
+            {selectedSection === "allConferences" && <ConferencesAll />}
+          </div>
         </div>
-   
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

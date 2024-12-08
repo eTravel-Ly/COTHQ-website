@@ -104,17 +104,17 @@ const handlePageChange = (pageNumber) => {
         {currentCourses.map((item, index) => (
           <div
             key={index}
-            className="bg-gray-100 shadow-lg rounded-lg p-2 flex flex-col"
+            className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center"
           >
             <img
               src={item.imageSrc}
               alt={item.title}
-              className="object-cover rounded-lg mb-4"
+              className="w-full h-40 object-cover rounded-lg mb-4"
             />
-            <h3 className="text-lg sm:text-xl font-bold  text-center mb-2">
+            <h3 className="text-lg sm:text-xl font-bold text-center mb-3">
               {item.title}
-            </h3>{" "}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ">
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full text-right">
               <p className="text-sm text-gray-700">
                 <strong>المنظم:</strong> {item.organizer}
               </p>
@@ -122,26 +122,31 @@ const handlePageChange = (pageNumber) => {
                 <strong>العنوان:</strong> {item.address}
               </p>
             </div>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-gray-700 text-right w-full mt-2">
               <strong>تاريخ البدء:</strong> {item.startDate}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
-              <p className=" text-xs text-gray-500">
-                <strong>الهاتف :</strong> {item.contactMobile}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 w-full text-right">
+              <p className="text-xs text-gray-500">
+                <strong>الهاتف:</strong> {item.contactMobile}
               </p>
-              <p className=" text-xs text-gray-500">
-                <strong className=" text-xs">واتساب:</strong>{" "}
-                {item.contactWhatsApp}
+              <p className="text-xs text-gray-500">
+                <strong>واتساب:</strong> {item.contactWhatsApp}
               </p>
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-4">
-        <ul className="flex justify-center space-x-2 items-center">
+
+      {/* Pagination */}
+      <div className="mt-6">
+        <ul className="flex justify-center items-center space-x-2">
           <li>
             <button
-              className="px-3 py-1 rounded-full text-custom-orange"
+              className={`px-3 py-1 rounded-full ${
+                currentPage > 1
+                  ? "text-custom-orange"
+                  : "text-gray-400 cursor-not-allowed"
+              }`}
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -166,7 +171,11 @@ const handlePageChange = (pageNumber) => {
           ))}
           <li>
             <button
-              className="px-3 py-1 rounded-full text-custom-orange"
+              className={`px-3 py-1 rounded-full ${
+                currentPage < totalPages
+                  ? "text-custom-orange"
+                  : "text-gray-400 cursor-not-allowed"
+              }`}
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }

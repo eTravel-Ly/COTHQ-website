@@ -99,34 +99,31 @@ const MyTrainingCourses = () => {
         {currentCourses.map((course) => (
           <div
             key={course.id}
-            className="bg-gray-100 shadow-lg rounded-lg p-2 mb-6 flex flex-col items-center"
+            className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center"
           >
             <img
               src={course.imageUrl}
               alt={course.title}
-              className="w-full h-50 object-cover rounded-lg mb-4"
+              className="w-full h-40 object-cover rounded-lg mb-4"
             />
             <div className="w-full text-center">
-              <h3 className="text-lg sm:text-xl font-bold mb-2">
+              <h3 className="text-lg sm:text-xl font-bold mb-3">
                 {course.title}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 ">
-                <p className="text-sm text-gray-700 ">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-right">
+                <p className="text-sm text-gray-700">
                   <strong>المنظم:</strong> {course.organizer}
                 </p>
                 <p
-                  className="text-sm text-gray-700 "
+                  className="text-sm text-gray-700"
                   style={{
                     fontFamily: "Tajwal, sans-serif",
                     textAlign: "justify",
                     lineHeight: "1.5",
-                    marginBottom: "8px",
-                    wordWrap: "break-word",
-                    whiteSpace: "normal",
-                    overflow: "hidden", // إخفاء النص الزائد
-                    display: "-webkit-box", // استخدام box للنص
-                    WebkitBoxOrient: "vertical", // اتجاه الصندوق عموديًا
-                    WebkitLineClamp: 1, // عرض 4 أسطر فقط
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 1,
                   }}
                 >
                   <strong>الوصف:</strong> {course.description}
@@ -139,23 +136,28 @@ const MyTrainingCourses = () => {
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 ">
-              <p className=" text-xs text-gray-500">
-                <strong>الهاتف :</strong> {course.contactMobile}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 text-right">
+              <p className="text-xs text-gray-500">
+                <strong>الهاتف:</strong> {course.contactMobile}
               </p>
-              <p className=" text-xs text-gray-500">
-                <strong className=" text-xs">واتساب:</strong>{" "}
-                {course.contactWhatsApp}
+              <p className="text-xs text-gray-500">
+                <strong>واتساب:</strong> {course.contactWhatsApp}
               </p>
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-4">
-        <ul className="flex justify-center space-x-2 items-center">
+
+      {/* Pagination */}
+      <div className="mt-6">
+        <ul className="flex justify-center items-center space-x-2">
           <li>
             <button
-              className="px-3 py-1 rounded-full text-custom-orange"
+              className={`px-3 py-1 rounded-full ${
+                currentPage > 1
+                  ? "text-custom-orange"
+                  : "text-gray-400 cursor-not-allowed"
+              }`}
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -180,7 +182,11 @@ const MyTrainingCourses = () => {
           ))}
           <li>
             <button
-              className="px-3 py-1 rounded-full text-custom-orange"
+              className={`px-3 py-1 rounded-full ${
+                currentPage < totalPages
+                  ? "text-custom-orange"
+                  : "text-gray-400 cursor-not-allowed"
+              }`}
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }

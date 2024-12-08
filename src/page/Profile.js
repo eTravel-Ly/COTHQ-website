@@ -18,6 +18,7 @@ const Profile = () => {
     learnerType: "",
   });
   const [loading, setLoading] = useState(true);
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     axios
@@ -49,16 +50,20 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="flex flex-1 flex-col" dir="rtl">
           <div
-            className="flex flex-col md:flex-row items-center bg-white p-6 shadow-sm rounded-md mb-4 mr-20"
-            style={{
-              width: "800px",
-            }}
+            className="flex flex-col md:flex-row items-center bg-white p-6 shadow-sm rounded-md mb-4 "
+           
           >
             <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 mr-20">
               <img
@@ -157,8 +162,19 @@ const Profile = () => {
           {selectedSection === "MyCoursesButton" && <MyCoursesButton />}
           {selectedSection === "MyBookButton" && <MyBookButton />}
         </div>
+
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

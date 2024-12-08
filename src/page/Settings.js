@@ -9,6 +9,8 @@ import { baseurl } from "../helper/Baseurl";
 import { FaSpinner } from "react-icons/fa"; // أيقونة لودينق
 
 const Settings = () => {
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -141,10 +143,17 @@ const Settings = () => {
     }
   };
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="flex flex-1">
           <div className="flex-1 p-8">
             <div className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -253,7 +262,7 @@ const Settings = () => {
                     </div>
                     <div className="flex flex-col mt-2 mb-1">
                       <div className="mt-1 px-20 text-center flex justify-center">
-                      <button
+                        <button
                           onClick={handleProfileSubmit}
                           disabled={loading}
                           style={{
@@ -263,10 +272,15 @@ const Settings = () => {
                             fontWeight: "bold",
                             fontFamily: "Tajwal, sans-serif",
                           }}
-                          className={`w-1/2 bg-custom-orange  text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center ${loading && "cursor-not-allowed opacity-50"}`}
+                          className={`w-1/2 bg-custom-orange  text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center ${
+                            loading && "cursor-not-allowed opacity-50"
+                          }`}
                         >
-                          {loading ? <FaSpinner className="animate-spin mr-2" /> : 'حـــفـــظ'}
-                          
+                          {loading ? (
+                            <FaSpinner className="animate-spin mr-2" />
+                          ) : (
+                            "حـــفـــظ"
+                          )}
                         </button>
                       </div>
                     </div>
@@ -336,7 +350,9 @@ const Settings = () => {
                         <button
                           onClick={handleSubmit}
                           disabled={loading}
-                          className={`w-1/2 bg-custom-orange  text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center ${loading && "cursor-not-allowed opacity-50"}`}
+                          className={`w-1/2 bg-custom-orange  text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center ${
+                            loading && "cursor-not-allowed opacity-50"
+                          }`}
                           style={{
                             borderRadius: "10px",
                             width: "80%",
@@ -345,8 +361,11 @@ const Settings = () => {
                             fontFamily: "Tajwal, sans-serif",
                           }}
                         >
-                            {loading ? <FaSpinner className="animate-spin mr-2" /> : 'حــــــفــــــــظ'}
-                            
+                          {loading ? (
+                            <FaSpinner className="animate-spin mr-2" />
+                          ) : (
+                            "حــــــفــــــــظ"
+                          )}
                         </button>
                       </div>
                     </div>
@@ -357,8 +376,18 @@ const Settings = () => {
           </div>
           <ToastContainer position="bottom-left" />
         </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -137,13 +137,18 @@ export default function AllCourses() {
         </div>
       ) : courses.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-10%]">
-          <img src={noCoursesImage} alt="No courses available" className="w-60 h-60 object-cover" />
+          <img
+            src={noCoursesImage}
+            alt="No courses available"
+            className="w-60 h-60 object-cover"
+          />
           <p className="text-lg text-gray-700 mt-0">
             لا يوجد دورات تدريبية متاحة في الوقت الحالى ..
           </p>
         </div>
       ) : (
         <div className="flex flex-col items-center p-4">
+          {/* Search and Sort Controls */}
           <div className="flex items-center mb-4 w-full">
             <input
               type="text"
@@ -157,56 +162,60 @@ export default function AllCourses() {
               value={sortOption}
               onChange={handleSortChange}
             >
-              <option value="فرز حسب" selected>فرز حسب</option>
+              <option value="فرز حسب">فرز حسب</option>
               <option value="الأحدث">الأحدث</option>
               <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
             </select>
           </div>
 
+          {/* Courses Grid */}
           <div className="flex flex-wrap justify-start">
             {currentCourses.map((course, idx) => (
-              <div key={idx} className="w-full md:w-1/4 p-2">
-                <div className="bg-white rounded-lg shadow-md p-3 h-auto flex flex-col justify-between">
+              <div key={idx} className="w-full sm:w-1/3 p-2">
+                <div className="bg-white rounded-lg shadow-md p-3 flex flex-col w-72 justify-between">
+                  {/* Course Image */}
                   <img
                     src={course.imageUrl || CourseImage}
                     alt={course.title}
                     className="rounded-lg mb-3 h-40"
                   />
-                  <div className="flex items-center mt-1 mb-2">
-                    <div className="flex-grow">
-                      <h3 className="text-md font-semibold mb-1 truncate">
-                        {course.title}
-                      </h3>
+
+                  {/* Course Info */}
+                  <div className="flex-grow">
+                    <h3 className="text-md font-semibold mb-1 truncate">
+                      {course.title}
+                    </h3>
+                    <p
+                      className="text-gray-600 text-xs"
+                      style={{
+                        fontFamily: "Tajwal, sans-serif",
+                        textAlign: "justify",
+                        lineHeight: "1.5",
+                        marginBottom: "8px",
+                        wordWrap: "break-word",
+                        whiteSpace: "normal",
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: 4,
+                      }}
+                    >
+                      {course.description}
+                    </p>
+                    <div className="flex items-center mt-1 mb-2">
+                      <FaRegUserCircle className="text-gray-600" />
                       <p
-                        className="text-gray-600 text-xs"
-                        style={{
-                          fontFamily: "Tajwal, sans-serif",
-                          textAlign: "justify",
-                          lineHeight: "1.5",
-                          marginBottom: "8px",
-                          wordWrap: "break-word",
-                          whiteSpace: "normal",
-                          overflow: "hidden",
-                          display: "-webkit-box",
-                          WebkitBoxOrient: "vertical",
-                          WebkitLineClamp: 4,
-                        }}
+                        className="text-xs text-gray-600 mr-2"
+                        style={{ fontFamily: "Tajwal, sans-serif" }}
                       >
-                        {course.description}
+                        {course.createdBy}
                       </p>
-                      <div className="flex items-center mt-1 mb-2">
-                        <FaRegUserCircle className="text-gray-600 " />
-                        <p
-                          className="text-xs text-gray-600 mr-2"
-                          style={{ fontFamily: "Tajwal, sans-serif" }}
-                        >
-                          {course.createdBy}
-                        </p>
-                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-gray-600">
+
+                  {/* Actions */}
+                  <div className="flex items-center justify-between mt-3">
+                    <div className="text-gray-600 cursor-pointer">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill={likedCourses[course.id] ? "#ff3f52" : "none"}
@@ -215,7 +224,7 @@ export default function AllCourses() {
                         stroke={
                           likedCourses[course.id] ? "#ff3f52" : "currentColor"
                         }
-                        className="w-6 h-6 cursor-pointer"
+                        className="w-6 h-6"
                         onClick={() => handleLikeClick(course.id)}
                       >
                         <path
@@ -238,9 +247,8 @@ export default function AllCourses() {
             ))}
           </div>
 
-       
-            {/* Pagination */}
-            <div className="mt-4">
+          {/* Pagination */}
+          <div className="mt-4">
             <ul className="flex justify-center space-x-2 items-center">
               <li>
                 <button
@@ -256,7 +264,7 @@ export default function AllCourses() {
               {Array.from({ length: totalPages }).map((_, index) => (
                 <li key={index}>
                   <button
-                     className={`px-3 py-1 rounded-full ${
+                    className={`px-3 py-1 rounded-full ${
                       currentPage === index + 1
                         ? "bg-custom-orange text-white"
                         : "text-gray-700"
@@ -281,7 +289,7 @@ export default function AllCourses() {
               </li>
             </ul>
           </div>
-         </div>
+        </div>
       )}
     </>
   );

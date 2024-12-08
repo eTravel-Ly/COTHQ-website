@@ -9,6 +9,7 @@ import noCoursesImage from "../assets/images/Search.png"; // صورة تعبير
 function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     axios
@@ -53,10 +54,16 @@ function OrderHistory() {
   };
 
   return (
-    <div className="flex h-screen font-tajwal">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="container mx-auto p-4" dir="rtl">
           <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
             قائمة طلباتي
@@ -84,7 +91,11 @@ function OrderHistory() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className={`text-white px-2 py-1 rounded ${getStatusClass(order.orderStatus)}`}>
+                  <span
+                    className={`text-white px-2 py-1 rounded ${getStatusClass(
+                      order.orderStatus
+                    )}`}
+                  >
                     {order.orderStatus}
                   </span>
                   <span className="text-gray-600">
@@ -92,15 +103,27 @@ function OrderHistory() {
                   </span>
                 </div>
                 <div className="space-y-2">
-                  <p className="font-semibold">نوع الدفع: {order.paymentType}</p>
+                  <p className="font-semibold">
+                    نوع الدفع: {order.paymentType}
+                  </p>
                   <p className="font-semibold">الخصم: {order.discount} دينار</p>
                 </div>
               </div>
             ))
           )}
         </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -35,35 +35,56 @@ const HelpCenter = () => {
       answer: 'نعم، يوفر مجمع القرآن الكريم برامج تعليم القرآن الكريم عن بُعد، ويمكنك التسجيل في البرامج المتاحة عبر الموقع الإلكتروني.',
     },
   ];
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen" >
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="container mx-auto p-6 text-right" dir="rtl">
-          <h1 className="text-4xl font-bold mb-8 text-center text-custom-orange" style={{ fontFamily: 'Tajwal, sans-serif' }}>
+          <h1
+            className="text-4xl font-bold mb-8 text-center text-custom-orange"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+          >
             مركز المساعدة - مجمع القرآن الكريم
           </h1>
           <div className="space-y-4">
             {faqData.map((item, index) => (
-              <div key={index} className="border border-gray-300 rounded-lg p-4">
+              <div
+                key={index}
+                className="border border-gray-300 rounded-lg p-4"
+              >
                 <div
                   className="flex justify-between items-center cursor-pointer"
                   onClick={() => toggleQuestion(index)}
                 >
-                  <h2 className="text-lg font-semibold text-custom-green" style={{ fontFamily: 'Tajwal, sans-serif' }}>
+                  <h2
+                    className="text-lg font-semibold text-custom-green"
+                    style={{ fontFamily: "Tajwal, sans-serif" }}
+                  >
                     {item.question}
                   </h2>
                   <span
-                    className={`transform text-custom-green ${activeQuestion === index ? 'rotate-180' : ''}`}
-                    style={{ fontFamily: 'Tajwal, sans-serif' }}
+                    className={`transform text-custom-green ${
+                      activeQuestion === index ? "rotate-180" : ""
+                    }`}
+                    style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
                     &#x25BC;
                   </span>
                 </div>
                 {activeQuestion === index && (
-                  <p style={{ fontFamily: 'Tajwal, sans-serif' }} className="mt-4 text-gray-600">
+                  <p
+                    style={{ fontFamily: "Tajwal, sans-serif" }}
+                    className="mt-4 text-gray-600"
+                  >
                     {item.answer}
                   </p>
                 )}
@@ -71,8 +92,18 @@ const HelpCenter = () => {
             ))}
           </div>
         </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

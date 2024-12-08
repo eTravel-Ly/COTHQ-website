@@ -145,24 +145,25 @@ const MyborrowButton = () => {
     <div className="p-4">
       <ToastContainer position="bottom-left" />
       {rows.map((row, index) => (
-        <div key={index} className="flex flex-wrap mb-4">
+        <div key={index} className="flex flex-wrap -mx-2 mb-4">
           {row.map((book, idx) => (
-            <div key={idx} className="w-1/3 p-2">
-              <div className="bg-white shadow-lg rounded-lg p-3 w-80 flex-shrink-0 flex items-center text-right">
+            <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+              <div className="bg-white shadow-lg rounded-lg p-4 flex items-center text-right h-full">
                 <img
                   src={book.coverImageUrl}
                   alt={book.title}
-                  className="h-32 object-cover rounded-lg ml-4"
+                  className="w-24 h-32 object-cover rounded-lg ml-4 flex-shrink-0"
                 />
                 <div
                   className="flex-1"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
                   <h3 className="text-lg font-bold mb-2">{book.title}</h3>
-                  <p className="text-sm text-gray-500 mb-2">
-                    {book.description}
+                  <p className="text-sm text-gray-500 mb-3">
+                    {book.description.length > 100
+                      ? `${book.description.slice(0, 100)}...`
+                      : book.description}
                   </p>
-                  {/* Add formatted return date */}
                   <p
                     className={`text-sm font-bold ${
                       isDatePast(book.returnDate)
@@ -178,11 +179,17 @@ const MyborrowButton = () => {
           ))}
         </div>
       ))}
+
+      {/* Pagination */}
       <div className="mt-4">
         <ul className="flex justify-center space-x-2 items-center">
           <li>
             <button
-              className="px-3 py-1 rounded-full text-custom-orange"
+              className={`px-3 py-1 rounded-full ${
+                currentPage > 1
+                  ? "text-custom-orange"
+                  : "text-gray-400 cursor-not-allowed"
+              }`}
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -207,7 +214,11 @@ const MyborrowButton = () => {
           ))}
           <li>
             <button
-              className="px-3 py-1 rounded-full text-custom-orange"
+              className={`px-3 py-1 rounded-full ${
+                currentPage < totalPages
+                  ? "text-custom-orange"
+                  : "text-gray-400 cursor-not-allowed"
+              }`}
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }

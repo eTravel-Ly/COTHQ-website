@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Helper function to fetch image URL for books
 const showpicbooks = (fileName) => {
+
   try {
     const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
     return imageUrl;
@@ -35,6 +36,7 @@ function ShoppingCart() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -214,29 +216,45 @@ function ShoppingCart() {
   );
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="border-t"></div>
         <div className="flex flex-col lg:flex-row justify-between container mx-auto mt-10 rtl">
-          
-          <div className="lg:w-1/3 rounded-lg p-6 mt-6 lg:mt-0">
-            <h2 className="text-2xl font-bold mb-4 text-right" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          <div className="lg:w-1/3 rounded-lg p- mt-6 lg:mt-0">
+            <h2
+              className="text-2xl font-bold mb-4 text-right"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+            >
               الإجمالي
             </h2>
             <div className="flex justify-between mb-4">
-              <p className="font-bold text-lg" style={{ fontFamily: "Tajwal, sans-serif" }}>
+              <p
+                className="font-bold text-lg"
+                style={{ fontFamily: "Tajwal, sans-serif" }}
+              >
                 {totalPrice.toFixed(2)} دينار
               </p>
-              <p className="font-bold text-lg" style={{ fontFamily: "Tajwal, sans-serif" }}>
+              <p
+                className="font-bold text-lg"
+                style={{ fontFamily: "Tajwal, sans-serif" }}
+              >
                 الإجمالي
               </p>
             </div>
             <div className="border-t border-gray-300 mb-4"></div>
             <button
               className={`w-full bg-custom-orange text-white py-3 px-4 rounded-lg transition duration-300 ${
-                cartItems.length === 0 || checkoutLoading ? "opacity-50 cursor-not-allowed" : ""
+                cartItems.length === 0 || checkoutLoading
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
               }`}
               onClick={handleCheckout}
               disabled={cartItems.length === 0 || checkoutLoading}
@@ -251,37 +269,60 @@ function ShoppingCart() {
                 "إتمام الشراء"
               )}
             </button>
-           
           </div>
           <div className="lg:w-2/3">
-          <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
+            <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
               عربة الشراء
             </h1>
-            <h6 className="font-tajwal text-red-500 underline cursor-pointer" onClick={clearCart}>(حذف كل العناصر)</h6>
-           {/*
+            <h6
+              className="font-tajwal text-red-500 underline cursor-pointer"
+              onClick={clearCart}
+            >
+              (حذف كل العناصر)
+            </h6>
+            {/*
             {cartItems.map((item) =>
               renderItem(item, item.type === "COURSE" ? "course" : "book")
             )}
            
            */}
 
-{cartItems.length === 0 ? (
+            {cartItems.length === 0 ? (
               <div className="flex flex-col items-center justify-center">
                 <img src={AddToCartImage} alt="Empty Cart" className="h-72" />
-                <p className="text-lg font-bold mt-4" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                <p
+                  className="text-lg font-bold mt-4"
+                  style={{ fontFamily: "Tajwal, sans-serif" }}
+                >
                   العــــــربـــــة فـــــارغـــــة
                 </p>
               </div>
             ) : (
               <div>
-                {cartItems.map((item) => renderItem(item, item.hasOwnProperty("author") ? "book" : "course"))}
+                {cartItems.map((item) =>
+                  renderItem(
+                    item,
+                    item.hasOwnProperty("author") ? "book" : "course"
+                  )
+                )}
               </div>
             )}
           </div>
         </div>
+
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
       <ToastContainer />
-    </div>
+    </>
   );
 }
 

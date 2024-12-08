@@ -8,6 +8,8 @@ import noNotificationImage from "../assets/images/New.png"; // تأكد من إ�
 
 export default function AllNotify() {
   const [notifications, setNotifications] = useState([]);
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const [loading, setLoading] = useState(true); // حالة اللودينق
 
   useEffect(() => {
@@ -29,10 +31,16 @@ export default function AllNotify() {
 
   return (
     <>
-      <div className="flex h-screen font-tajwal">
-        <Sidebar />
-        <div className="flex flex-col w-[80%] mt-2 ml-1">
-          <NavbarLogin />
+      <>
+        <div
+          className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+        >
+          <NavbarLogin
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
+        <div className="flex flex-col md:flex-row pt-16 w-full">
           <div className="container mx-auto p-4" dir="rtl">
             <h3
               className="text-lg font-bold mb-4 text-right"
@@ -42,9 +50,9 @@ export default function AllNotify() {
             </h3>
 
             {loading ? ( // إظهار أيقونة اللودينق أثناء التحميل
-             <div className="flex items-center justify-center h-screen">
-             <FaSpinner className="text-4xl animate-spin" />
-           </div>
+              <div className="flex items-center justify-center h-screen">
+                <FaSpinner className="text-4xl animate-spin" />
+              </div>
             ) : notifications.length === 0 ? (
               <div className="flex flex-col justify-center items-center h-[70vh]">
                 <img
@@ -111,8 +119,18 @@ export default function AllNotify() {
               ))
             )}
           </div>
+          <div
+            className={`transition-all duration-300 ${
+              isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+            } md:w-[20%] h-full`}
+          >
+            <Sidebar
+              isSidebarOpen={isSidebarOpen}
+              setIsSidebarOpen={setIsSidebarOpen}
+            />
+          </div>
         </div>
-      </div>
+      </>
     </>
   );
 }
