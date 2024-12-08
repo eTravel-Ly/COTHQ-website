@@ -10,8 +10,8 @@ import { GrUnorderedList } from "react-icons/gr";
 import { CiViewList } from "react-icons/ci";
 import { baseurl } from "../helper/Baseurl";
 import { useNavigate } from "react-router-dom";
-
-const NavbarLogin = () => {
+import MenuIcon from "@mui/icons-material/Menu";
+const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
@@ -70,7 +70,7 @@ const NavbarLogin = () => {
   };
 
   return (
-    <div className="flex items-center justify-between bg-white p-4 w-full">
+    <div className="flex items-center justify-between bg-white p-4 ">
       <div className="flex items-center">
         <button
           onClick={() => setShowNotifications(!showNotifications)}
@@ -143,23 +143,21 @@ const NavbarLogin = () => {
           )}
         </div>
       </div>
-      <div className="w-500 h-10 p-2 flex items-center mb-1 mx-5 "  style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+      <div
+        className="w-500 h-10 p-2 flex  items-center mb-1 mx-5 "
+        style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
       >
-        <h2 className="text-lg sm:text-xl font-bold text-custom-orange" > مجمع القران الكريم</h2>
-        </div>
-     
-    {/*
-      <div className="bg-gray-100 w-500 h-10 p-2 flex rounded-2xl items-center mb-1 mx-5">
-        <IoSearchOutline className="text-gray-700 text-xl mr-4" />
-        <input
-          style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-          type="text"
-          placeholder="ابحث عن شيء..."
-          className="bg-gray-100 w-500 text-right outline-none text-l flex-1"
-        />
+        <button
+          className="p-2 bg-blues rounded-full md:block mx-3 lg:hidden"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          <MenuIcon />
+        </button>
+        <h2 className="text-lg sm:text-xl  font-bold text-custom-orange">
+          {" "}
+          مجمع القران الكريم
+        </h2>
       </div>
-    
-    */}
     </div>
   );
 };

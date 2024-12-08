@@ -120,7 +120,7 @@ const MyBookButton = () => {
           {row.map((book, idx) => (
             <div
               key={idx}
-              className="w-1/3 p-2"
+              className="w-full sm:w-1/3 p-2" // تغيير هنا ليكون عرض العنصر 100% على الموبايل
               onClick={() => openBook(book.id)}
             >
               <div className="bg-white shadow-lg rounded-lg p-3 w-72 flex-shrink-0 flex items-center text-right">

@@ -141,7 +141,7 @@ const WishlistButton = () => {
     <div className="p-2">
       <div className="flex flex-wrap mb-4">
         {currentCourses.map((course, idx) => (
-          <div key={idx} className="w-1/4 p-2">
+          <div key={idx} className="w-full sm:w-1/3 p-2">
             <div className="bg-white rounded-lg shadow-md p-3">
               <img
                 src={course.coverImageUrl}
@@ -210,6 +210,8 @@ const WishlistButton = () => {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
       <div className="mt-4">
         <ul className="flex justify-center space-x-2 items-center">
           <li>

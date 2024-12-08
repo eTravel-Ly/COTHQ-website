@@ -142,106 +142,123 @@ const NewCoursesSection = () => {
           </div>
         ) : (
           <>
-           <div className="flex items-center justify-center space-x-4 p-2 mb-2 rounded-full bg-white border border-gray-200">
-          <button
-            className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white text-custom-orange"
-            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <FaArrowAltCircleLeft size={20} />
-          </button>
-          {[...Array(totalPages)].map((_, index) => (
-            <button
-              key={index}
-              className={`px-3 py-1 rounded-full ${currentPage === index + 1 ? 'bg-custom-orange text-white' : 'bg-gray-50 text-black'} hover:bg-custom-orange hover:text-white border border-gray-200`}
+            <div className="flex items-center w-full sm:w-42 justify-center space-x-4 p-2 mb-2 rounded-full bg-white border border-gray-200">
+              <button
+                className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white text-custom-orange"
+                style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <FaArrowAltCircleLeft size={20} />
+              </button>
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index}
+                  className={`px-3 py-1 rounded-full ${
+                    currentPage === index + 1
+                      ? "bg-custom-orange text-white"
+                      : "bg-gray-50 text-black"
+                  } hover:bg-custom-orange hover:text-white border border-gray-200`}
+                  style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              <button
+                className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white text-custom-orange"
+                style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                <FaArrowAltCircleRight size={20} />
+              </button>
+            </div>
+            <div
+              className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-6"
               style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-              onClick={() => handlePageChange(index + 1)}
             >
-               {index + 1}
-            </button>
-          ))}
-          <button
-            className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white text-custom-orange"
-            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            <FaArrowAltCircleRight size={20} />
-          </button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-6" style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}>
-  {currentCourses.map((course) => (
-    <div
-      key={course.id}
-      className="bg-white shadow-lg rounded-lg overflow-hidden p-4"
-      style={{ direction: "rtl", fontSize: '14px' }} // تصغير الحجم
-    >
-      <img
-        src={course.imageUrl}
-        alt={course.title}
-        className="w-full h-40 object-cover rounded-lg mb-2"
-        style={{ fontFamily: "Tajwal, sans-serif" }}
-      />
-      <div className="flex items-center mb-2 justify-between  ">
-        <h3
-          className="text-xs font-bold"
-          style={{ fontFamily: "Tajwal, sans-serif", fontSize: '16px' }}
-        >
-          {course.title}
-        </h3>
-        <p
-          className="text-xsfont-semibold mb-2"
-          style={{ fontFamily: "Tajwal, sans-serif", color: '#4A4A4A' }}
-        >
-          {course.price} دينار
-        </p>
-      </div>
-      <p
-        className="text-gray-600 text-xs"
-        style={{
-          fontFamily: "Tajwal, sans-serif",
-          textAlign: "justify",
-          lineHeight: "1.5",
-          marginBottom: "8px",
-          wordWrap: "break-word",
-          whiteSpace: "normal",
-          overflow: "hidden",
-          display: "-webkit-box",
-          WebkitBoxOrient: "vertical",
-          WebkitLineClamp: 4,
-        }}
-      >
-        {course.description}
-      </p>
-      <div className="flex items-center justify-between mt-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill={likedCourses[course.id] ? "#ff3f52" : "none"}
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke={likedCourses[course.id] ? "#ff3f52" : "currentColor"}
-          className="w-6 h-6 cursor-pointer"
-          onClick={() => handleLikeClick(course.id)}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-          />
-        </svg>
-        <button
-          onClick={() => openCoursesDetails(course.id)}
-          className="bg-custom-orange text-white px-4 py-2 rounded-lg"
-          style={{ fontFamily: "Tajwal, sans-serif", fontSize: '14px' }}
-        >
-          اشتر الآن
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
-
+              {currentCourses.map((course) => (
+                <div
+                  key={course.id}
+                  className="bg-white shadow-lg rounded-lg w-full sm:w-42 overflow-hidden p-4"
+                  style={{ direction: "rtl", fontSize: "14px" }} // تصغير الحجم
+                >
+                  <img
+                    src={course.imageUrl}
+                    alt={course.title}
+                    className="w-full h-40 object-cover rounded-lg mb-2"
+                    style={{ fontFamily: "Tajwal, sans-serif" }}
+                  />
+                  <div className="flex items-center mb-2 justify-between  ">
+                    <h3
+                      className="text-xs font-bold"
+                      style={{
+                        fontFamily: "Tajwal, sans-serif",
+                        fontSize: "16px",
+                      }}
+                    >
+                      {course.title}
+                    </h3>
+                    <p
+                      className="text-xsfont-semibold mb-2"
+                      style={{
+                        fontFamily: "Tajwal, sans-serif",
+                        color: "#4A4A4A",
+                      }}
+                    >
+                      {course.price} دينار
+                    </p>
+                  </div>
+                  <p
+                    className="text-gray-600 text-xs"
+                    style={{
+                      fontFamily: "Tajwal, sans-serif",
+                      textAlign: "justify",
+                      lineHeight: "1.5",
+                      marginBottom: "8px",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      overflow: "hidden",
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 4,
+                    }}
+                  >
+                    {course.description}
+                  </p>
+                  <div className="flex items-center justify-between mt-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill={likedCourses[course.id] ? "#ff3f52" : "none"}
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke={
+                        likedCourses[course.id] ? "#ff3f52" : "currentColor"
+                      }
+                      className="w-6 h-6 cursor-pointer"
+                      onClick={() => handleLikeClick(course.id)}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                      />
+                    </svg>
+                    <button
+                      onClick={() => openCoursesDetails(course.id)}
+                      className="bg-custom-orange text-white px-4 py-2 rounded-lg"
+                      style={{
+                        fontFamily: "Tajwal, sans-serif",
+                        fontSize: "14px",
+                      }}
+                    >
+                      اشتر الآن
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </>
         )}
       </div>

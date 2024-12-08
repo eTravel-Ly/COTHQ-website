@@ -156,26 +156,12 @@ const WishlistBookButton = () => {
   }
   return (
     <div className="p-4">
-      <div className="mb-4">
-        {/*
-        <select
-          value={selectedType}
-          onChange={handleTypeChange}
-          className="p-2 border rounded-md w-60 border-gray-300 outline-none"
-          style={{ fontFamily: "Tajwal, sans-serif", marginRight: "1225px" }}
-        >
-          <option value="all">كل الأنواع</option>
-          <option value="RELIGIOUS">دين</option>
-          <option value="FIQH">الفقه</option>
-         
-        </select>
-      */}
-      </div>
       {groupedCourses.map((row, index) => (
         <div key={index} className="flex flex-wrap mb-4">
           {row.map((book, idx) => (
-            <div key={idx} className="w-1/3 p-2">
-              <div className="bg-white shadow-lg rounded-lg p-3  flex-shrink-0 flex items-center text-right ">
+            <div key={idx} className="w-full sm:w-1/3 p-2">
+              {" "}
+              <div className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex items-center text-right">
                 <img
                   src={book.coverImageUrl}
                   alt={book.title}

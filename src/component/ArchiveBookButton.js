@@ -100,7 +100,7 @@ const ArchiveBookButton = () => {
         </div>
       ) : (
         currentCourses.map((book, index) => (
-          <div key={index} className="w-1/3 p-2">
+          <div key={index} className="w-full sm:w-1/3 p-2">
             <div
               className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex items-center text-right"
               onClick={() => openBook(book.id)}
@@ -132,6 +132,7 @@ const ArchiveBookButton = () => {
           </div>
         ))
       )}
+
       <div className="mt-4">
         <ul className="flex justify-center space-x-2 items-center">
           <li>

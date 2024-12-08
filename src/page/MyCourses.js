@@ -8,7 +8,7 @@ import ArchiveButton from "../component/ArchiveButton";
 
 function MyCourses() {
   const [selectedSection, setSelectedSection] = useState("myCourses");
- 
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const showMyCourses = () => setSelectedSection("myCourses");
   const showWishlist = () => setSelectedSection("wishlist");
@@ -19,9 +19,15 @@ function MyCourses() {
   
   return (
     <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div
           className="p-4"
           style={{
@@ -38,7 +44,9 @@ function MyCourses() {
           <div className="flex mt-4">
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                selectedSection === "myCourses" ? "bg-custom-orange text-white" : ""
+                selectedSection === "myCourses"
+                  ? "bg-custom-orange text-white"
+                  : ""
               }`}
               onClick={showMyCourses}
             >
@@ -46,7 +54,9 @@ function MyCourses() {
             </button>
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                selectedSection === "wishlist" ? "bg-custom-orange text-white" : ""
+                selectedSection === "wishlist"
+                  ? "bg-custom-orange text-white"
+                  : ""
               }`}
               onClick={showWishlist}
             >
@@ -54,7 +64,9 @@ function MyCourses() {
             </button>
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                selectedSection === "archive" ? "bg-custom-orange text-white" : ""
+                selectedSection === "archive"
+                  ? "bg-custom-orange text-white"
+                  : ""
               }`}
               onClick={showArchive}
             >
@@ -62,11 +74,19 @@ function MyCourses() {
             </button>
           </div>
 
-          {selectedSection === "myCourses" && (
-            <MyCoursesButton  />
-          )}
+          {selectedSection === "myCourses" && <MyCoursesButton />}
           {selectedSection === "wishlist" && <WishlistButton />}
           {selectedSection === "archive" && <ArchiveButton />}
+        </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
         </div>
       </div>
     </div>

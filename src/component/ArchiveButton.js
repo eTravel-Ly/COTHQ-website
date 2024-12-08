@@ -90,16 +90,21 @@ const ArchiveButton = () => {
         {currentCourses.map((course, idx) => (
           <div
             key={idx}
-            className="w-1/4 p-2"
+            className="w-full sm:w-1/3 p-2"
             onClick={() => openShowcourse(course.id)}
           >
-            <div className="bg-white rounded-lg shadow-md p-3">
+            <div className="bg-white rounded-lg shadow-md p-3 hover:shadow-lg transition-shadow duration-300">
               <img
                 src={course.imageUrl}
                 alt={course.title}
                 className="w-full h-32 object-cover rounded-lg mb-3"
               />
-              <h3 className="text-lg font-semibold mb-1">{course.title}</h3>
+              <h3
+                className="text-lg font-semibold mb-1 text-gray-800"
+                style={{ fontFamily: "Tajwal, sans-serif" }}
+              >
+                {course.title}
+              </h3>
               <p
                 className="text-gray-600 text-xs"
                 style={{
@@ -110,9 +115,9 @@ const ArchiveButton = () => {
                   wordWrap: "break-word",
                   whiteSpace: "normal",
                   overflow: "hidden",
-                  display: "-webkit-box", // استخدام box للنص
-                  WebkitBoxOrient: "vertical", // اتجاه الصندوق عموديًا
-                  WebkitLineClamp: 4, // عرض 4 أسطر فقط
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 4,
                 }}
               >
                 {course.description}
@@ -136,7 +141,7 @@ const ArchiveButton = () => {
         <ul className="flex justify-center space-x-2 items-center">
           <li>
             <button
-              className="px-3 py-1 rounded-full text-custom-orange"
+              className="px-3 py-1 rounded-full text-custom-orange hover:bg-gray-100 transition-all"
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -151,8 +156,8 @@ const ArchiveButton = () => {
                 className={`px-3 py-1 rounded-full ${
                   currentPage === index + 1
                     ? "bg-custom-orange text-white"
-                    : "text-gray-700"
-                }`}
+                    : "text-gray-700 hover:bg-gray-200"
+                } transition-all`}
                 onClick={() => handlePageChange(index + 1)}
               >
                 {index + 1}
@@ -161,7 +166,7 @@ const ArchiveButton = () => {
           ))}
           <li>
             <button
-              className="px-3 py-1 rounded-full text-custom-orange"
+              className="px-3 py-1 rounded-full text-custom-orange hover:bg-gray-100 transition-all"
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }

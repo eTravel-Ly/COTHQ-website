@@ -7,6 +7,7 @@ import ArchiveButton from "../component/ArchiveBookButton";
 
 
 function MyBooks() {
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState("myBooks");
 
   const showMyBooks = () => setSelectedSection("myBooks");
@@ -16,9 +17,16 @@ function MyBooks() {
   return (
     <>
       <div className="flex h-screen">
-        <Sidebar />
-        <div className="flex flex-col w-[80%] mt-2 ml-1">
-          <NavbarLogin />
+        <div
+          className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+        >
+          <NavbarLogin
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
+
+        <div className="flex flex-col md:flex-row pt-16 w-full">
           <div className="border-t"></div>
 
           <div
@@ -30,12 +38,16 @@ function MyBooks() {
             }}
           >
             <h2 className="text-xl font-bold mb-1">مكتبتي</h2>
-            <h4 className="text-l  font-bold text-gray-500">مواصلـــة  قراءة الكــتــب</h4>
+            <h4 className="text-l  font-bold text-gray-500">
+              مواصلـــة قراءة الكــتــب
+            </h4>
 
             <div className="flex mt-4">
-            <button
+              <button
                 className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l  font-bold text-gray-900  hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                  selectedSection === "myBooks" ? "bg-custom-orange text-white" : ""
+                  selectedSection === "myBooks"
+                    ? "bg-custom-orange text-white"
+                    : ""
                 }`}
                 onClick={showMyBooks}
               >
@@ -43,7 +55,9 @@ function MyBooks() {
               </button>
               <button
                 className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l  font-bold text-gray-900  hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                  selectedSection === "wishlist" ? "bg-custom-orange text-white" : ""
+                  selectedSection === "wishlist"
+                    ? "bg-custom-orange text-white"
+                    : ""
                 }`}
                 onClick={showWishlist}
               >
@@ -51,7 +65,9 @@ function MyBooks() {
               </button>
               <button
                 className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l  font-bold text-gray-900  hover:bg-custom-orange hover:text-blue focus:outline-none ${
-                  selectedSection === "archive" ? "bg-custom-orange text-white" : ""
+                  selectedSection === "archive"
+                    ? "bg-custom-orange text-white"
+                    : ""
                 }`}
                 onClick={showArchive}
               >
@@ -59,9 +75,19 @@ function MyBooks() {
               </button>
             </div>
 
-            {selectedSection === "myBooks" && <MyBookButton/>}
+            {selectedSection === "myBooks" && <MyBookButton />}
             {selectedSection === "wishlist" && <WishlistButton />}
             {selectedSection === "archive" && <ArchiveButton />}
+          </div>
+          <div
+            className={`transition-all duration-300 ${
+              isSidebarOpen ? "w-1/4" : "w-0"
+            } md:w-[20%] h-full`}
+          >
+            <Sidebar
+              isSidebarOpen={isSidebarOpen}
+              setIsSidebarOpen={setIsSidebarOpen}
+            />
           </div>
         </div>
       </div>

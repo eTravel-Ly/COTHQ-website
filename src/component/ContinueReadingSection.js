@@ -94,10 +94,10 @@ const ContinueReadingSection = () => {
   }
 
   return (
-    <div className="p-4 rounded-md" style={{ direction: "rtl" }}>
-      <div className="relative">
+    <div className="p-4 " style={{ direction: "rtl" }}>
+      <div className="flex justify-between items-center mb-4">
         <h2
-          className="text-xl font-bold mb-4"
+          className="text-xl font-bold "
           style={{
             fontFamily: "Tajwal, sans-serif",
             textAlign: "right",
@@ -105,101 +105,112 @@ const ContinueReadingSection = () => {
         >
           الاستمرار في القراءة
         </h2>
-        <h4
-          className="text-l font-bold text-gray-400 mb-4"
+        <Link
+          to="/MyBooks"
+          className="text-blue-500 underline"
           style={{
             fontFamily: "Tajwal, sans-serif",
-            textAlign: "right",
           }}
         >
-          استمر في قراءة الكتب الذي بدأت قرأتها بالفعل
-        </h4>
+          مشاهدة جميع الكتب
+        </Link>
+      </div>
 
-        <div
-          className="flex overflow-hidden space-x-4"
-          ref={scrollContainerRef}
-          style={{ scrollBehavior: "smooth", overflowX: "hidden" }}
-        >
-          {mybooks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center w-full text-center p-4 mt-0">
+      <h4
+        className="text-l font-bold text-gray-400 mb-4"
+        style={{
+          fontFamily: "Tajwal, sans-serif",
+          textAlign: "right",
+        }}
+      >
+        استمر في قراءة الكتب الذي بدأت قرأتها بالفعل
+      </h4>
+
+      <div
+        className="flex overflow-hidden space-x-4"
+        ref={scrollContainerRef}
+        style={{ scrollBehavior: "smooth", overflowX: "hidden" }}
+      >
+        {mybooks.length === 0 ? (
+          <div className="flex flex-col items-center justify-center w-full text-center p-4 mt-0">
+            <img
+              src={noCoursesImage}
+              alt="No books available"
+              className="w-48 h-48 object-cover"
+            />
+            <p
+              className="text-lg text-gray-700"
+              style={{
+                fontFamily: "Tajwal, sans-serif",
+              }}
+            >
+              لا يوجد كتب قمت بشراءها .. قم بالاشراء الان
+            </p>
+          </div>
+        ) : (
+          mybooks.map((book, index) => (
+            <div
+              key={index}
+              className="bg-white shadow-lg rounded-lg p-2 w-72 flex-shrink-0 flex items-center text-right mb-4 ml-5"
+              style={{ direction: "rtl" }}
+              onClick={() => openBook(book.id)}
+            >
               <img
-                src={noCoursesImage}
-                alt="No books available"
-                className="w-48 h-48 object-cover"
+                src={book.coverImageUrl}
+                alt={book.title}
+                className="object-cover rounded w-20 h-30 ml-2"
+                style={{ fontFamily: "Tajwal, sans-serif" }}
               />
-              <p className="text-lg text-gray-700" 
-                 style={{
-                  fontFamily: "Tajwal, sans-serif",
-                }}>
-                لا يوجد كتب قمت بشراءها .. قم بالاشراء الان
-              </p>
-            </div>
-          ) : (
-            mybooks.map((book, index) => (
-              <div
-                key={index}
-                className="bg-white shadow-lg rounded-lg p-2 w-72 flex-shrink-0 flex items-center text-right mb-4 ml-5"
-                style={{ direction: "rtl" }}
-                onClick={() => openBook(book.id)}
-              >
-                <img
-                  src={book.coverImageUrl}
-                  alt={book.title}
-                  className="object-cover rounded w-20 h-30 ml-2"
+              <div className="flex-1">
+                <h3
+                  className="text-md font-bold mb-2"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
-                />
-                <div className="flex-1">
-                  <h3
-                    className="text-md font-bold mb-2"
+                >
+                  {book.title}
+                </h3>
+                <p
+                  className="text-gray-600 text-xs mb-2"
+                  style={{ fontFamily: "Tajwal, sans-serif" }}
+                >
+                  {book.description}
+                </p>
+                <div className="mt-0 relative">
+                  <div
+                    className="absolute left-0 text-xs text-gray-700"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
-                    {book.title}
-                  </h3>
-                  <p
-                    className="text-gray-600 text-xs mb-2"
-                    style={{ fontFamily: "Tajwal, sans-serif" }}
-                  >
-                    {book.description}
-                  </p>
-                  <div className="mt-0 relative">
-                    <div
-                      className="absolute left-0 text-xs text-gray-700"
-                      style={{ fontFamily: "Tajwal, sans-serif" }}
-                    >
-                       {book.progressPercentage || 0}%
-                    </div>
-                    <div
-                      className="absolute right-0 text-xs text-gray-700"
-                      style={{ fontFamily: "Tajwal, sans-serif" }}
-                    >
-                      تقدم الدورة
-                    </div>
+                    {book.progressPercentage || 0}%
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-custom-orange h-2 rounded-full mt-6"
-                      style={{ width: `${book.progressPercentage || 0}%` }}
-                    ></div>
+                  <div
+                    className="absolute right-0 text-xs text-gray-700"
+                    style={{ fontFamily: "Tajwal, sans-serif" }}
+                  >
+                    تقدم الدورة
                   </div>
                 </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-custom-orange h-2 rounded-full mt-6"
+                    style={{ width: `${book.progressPercentage || 0}%` }}
+                  ></div>
+                </div>
               </div>
-            )))
-          }
-        </div>
-
-        <div className=" bottom-0 left-0 top-10 absolute">
-          <Link
-            to="/MyBooks"
-            className="text-blue-500 underline"
-            style={{
-              fontFamily: "Tajwal, sans-serif",
-            }}
-          >
-            مشاهدة جميع الكتب
-          </Link>
-        </div>
+            </div>
+          ))
+        )}
       </div>
-    
+
+      <div className=" bottom-0 left-0 top-10 absolute">
+        <Link
+          to="/MyBooks"
+          className="text-blue-500 underline"
+          style={{
+            fontFamily: "Tajwal, sans-serif",
+          }}
+        >
+          مشاهدة جميع الكتب
+        </Link>
+      </div>
     </div>
   );
 };
