@@ -18,7 +18,7 @@ function MyCourses() {
 
   
   return (
-    <div className="flex h-screen">
+    <>
       <div
         className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
       >
@@ -29,7 +29,7 @@ function MyCourses() {
       </div>
       <div className="flex flex-col md:flex-row pt-16 w-full">
         <div
-          className="p-4"
+          className="p-4 flex-1"
           style={{
             fontFamily: "Tajwal, sans-serif",
             direction: "rtl",
@@ -41,7 +41,7 @@ function MyCourses() {
             مواصلة مشاهدة الدورات
           </h4>
 
-          <div className="flex mt-4">
+          <div className="flex flex-wrap justify-center md:justify-start mt-4 gap-2">
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
                 selectedSection === "myCourses"
@@ -89,7 +89,7 @@ function MyCourses() {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

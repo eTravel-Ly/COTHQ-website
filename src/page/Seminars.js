@@ -22,8 +22,9 @@ const Seminars = () => {
         />
       </div>
       <div className="flex flex-col md:flex-row pt-16 w-full">
+        {" "}
         <div
-          className="p-4"
+          className="p-4 flex-1"
           style={{
             fontFamily: "Tajwal, sans-serif",
             direction: "rtl",
