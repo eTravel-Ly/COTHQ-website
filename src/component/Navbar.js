@@ -99,14 +99,19 @@ const Navbar = () => {
         </a>
       </div>
   
-      {/* الصورة في اليمين */}
-      <div className="flex items-center">
-        <img
-          src={logo}
-          alt="Logo"
-          className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14"
-        />
-      </div>
+    {/* الصورة والنص في اليمين */}
+<div className="flex items-center space-x-2">
+<span className="text-lg sm:text-sm md:text-lg lg:text-xl font-bold text-custom-orange font-tajwal">
+    مجمع القرآن الكريم
+  </span>
+  <img
+    src={logo}
+    alt="Logo"
+    className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14"
+  />
+ 
+</div>
+
     </div>
   
     {/* القائمة الجانبية (Mobile Dropdown) */}
