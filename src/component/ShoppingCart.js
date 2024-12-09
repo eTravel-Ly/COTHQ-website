@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Helper function to fetch image URL for books
 const showpicbooks = (fileName) => {
-
   try {
     const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
     return imageUrl;
@@ -36,8 +35,7 @@ function ShoppingCart() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
-     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -225,10 +223,11 @@ function ShoppingCart() {
           setIsSidebarOpen={setIsSidebarOpen}
         />
       </div>
+
       <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="border-t"></div>
         <div className="flex flex-col lg:flex-row justify-between container mx-auto mt-10 rtl">
-          <div className="lg:w-1/3 rounded-lg p- mt-6 lg:mt-0">
+          <div className="lg:w-1/3 rounded-lg p-6 mt-6 lg:mt-0">
             <h2
               className="text-2xl font-bold mb-4 text-right"
               style={{ fontFamily: "Tajwal, sans-serif" }}
@@ -270,7 +269,7 @@ function ShoppingCart() {
               )}
             </button>
           </div>
-          <div className="lg:w-2/3">
+          <div className="lg:w-2/3 p-6" >
             <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
               عربة الشراء
             </h1>
@@ -309,7 +308,6 @@ function ShoppingCart() {
             )}
           </div>
         </div>
-
         <div
           className={`transition-all duration-300 ${
             isSidebarOpen ? "w-full md:w-1/4" : "w-0"

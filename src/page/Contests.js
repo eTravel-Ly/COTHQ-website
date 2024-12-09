@@ -18,7 +18,7 @@ const Contests = () => {
       >
         <NavbarLogin />
         <div
-          className="container  px-4 sm:px-6 lg:px-8 mt-10 rtl"
+          className="container  px-4 sm:px-6 lg:px-8 mt-10 rtl font-tajwal"
           style={{ direction: "rtl" }}
         >
           <div className="text-right border-b pb-4 mb-4">

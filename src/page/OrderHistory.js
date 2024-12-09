@@ -63,7 +63,7 @@ function OrderHistory() {
           setIsSidebarOpen={setIsSidebarOpen}
         />
       </div>
-      <div className="flex flex-col md:flex-row pt-16 w-full">
+      <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
         <div className="container mx-auto p-4" dir="rtl">
           <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
             قائمة طلباتي
