@@ -16,7 +16,10 @@ const Contests = () => {
       <div
         className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
       >
-        <NavbarLogin />
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
         <div
           className="container  px-4 sm:px-6 lg:px-8 mt-10 rtl font-tajwal"
           style={{ direction: "rtl" }}
