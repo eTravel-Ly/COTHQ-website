@@ -11,6 +11,7 @@ import cover from "../assets/images/allContests.jpg";
 import { baseurl } from "../helper/Baseurl";
 export default function ContestsDetails() {
   const [conditions, setConditions] = useState([]);
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const { Id } = useParams(); 
       const [contests, setContests] = useState(null);
@@ -55,146 +56,176 @@ export default function ContestsDetails() {
              </div>
            );
   return (
-    <div
-      className="flex h-screen rtl"
-      style={{ fontFamily: "Tajwal, sans-serif" }}
-    >
+    <>
       {token ? (
         <>
-          <Sidebar />
-          <div className="flex flex-col w-[80%] mt-2 ml-1">
-            <NavbarLogin />
-            <div className="container mx-auto p-4" dir="rtl">
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
-            <div className="md:w-1/4 p-4">
-              <img src={contests.imageUrl} alt="Book" className="w-60" />
-            </div>
-            <div className="md:w-2/3 p-4">
-              <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold font-tajwal">
-                </h1>
-              </div>
-              <div className="flex items-center mb-4">
-              
-                <div className="text-orange-500">
-                  <span className="text-lg"></span>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <div className="flex text-gray-700">
-                  <span className="flex items-center ml-60 font-bold font-tajwal">
-                 <strong>المنظم:</strong> 
-                  </span>
-                  <span className="flex items-center ml-10 font-bold font-tajwal">
-                  <strong>العنوان:</strong> 
-                  </span>
-                  <span className="flex items-center mr-28 font-bold font-tajwal">
-                  <strong>تاريخ بدء التسجيل:</strong>
-                  </span>
-                </div>
-                <div className="flex text-gray-700 mt-1">
-                  <span className="flex items-center ml-64 font-tajwal">
-                  {contests.organizer}
-                  </span>
-                  <span className="flex items-center  ml-14 font-tajwal">
-                  {contests.address}
-                  </span>
-                  <span className="flex items-center mr-28 font-tajwal">
-                  {contests.applyStartDate}
-                  </span>
-                </div>
-              </div>
-
-              <p
-                className="mb-4"
-                style={{
-                  fontFamily: "Tajwal, sans-serif",
-                  textAlign: "justify",
-                  lineHeight: "1.5",
-                  marginBottom: "8px",
-                }}
-              >
-                {contests.description}
-              </p>
-
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center">
-                  <span className="text-xl text-red_aa font-tajwal">
-                    تاريخ الانتهاء
-                  {contests.applyEndDate}
-                  </span>
-                  <span className=" text-gray-500 mr-7 font-tajwal">
-                    تاريخ مراجعة الاوراق 
-                  {contests.papersReplayDate}
-                  </span>
-                </div>
-
-               
-              </div>
-            </div>
+          <div
+            className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
+          >
+            <NavbarLogin
+              isSidebarOpen={isSidebarOpen}
+              setIsSidebarOpen={setIsSidebarOpen}
+            />
           </div>
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
-            <div className="md:w-2/3">
-              <h2 className="text-xl font-bold mb-2 font-tajwal">
-                تفاصيل المسابقة
-              </h2>
-              <table className="w-full text-right">
-                <tbody className="space-y-2">
-                  <tr className="border-t border-b">
-                    <td className="p-4 font-tajwal font-bold">عنوان </td>
-                    <td className="p-4 font-tajwal"> {contests.address} </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">تاريخ انتهاء التسجيل</td>
-                    <td className="p-4 font-tajwal"> {contests.enrollmentEndDate}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">رقم الهاتف</td>
-                    <td className="p-4 font-tajwal">{contests.contactMobile}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold"><strong>البريد الإلكتروني:</strong> </td>
-                    <td className="p-4 font-tajwal"> {contests.contactEmail}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold"><strong>ملاحظات:</strong> </td>
-                    <td className="p-4 font-tajwal">
-                    {contests.notes}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-          
+          <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
+            <div className="container mx-auto md:p-14 " dir="rtl">
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
+                <div className="md:w-1/4 p-4">
+                  <img src={contests.imageUrl} alt="Book" className="w-60" />
+                </div>
+                <div className="md:w-2/3 p-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-2xl font-bold font-tajwal"></h1>
+                  </div>
+                  <div className="flex items-center mb-4">
+                    <div className="text-orange-500">
+                      <span className="text-lg"></span>
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <div className="flex text-gray-700">
+                      <span className="flex items-center ml-60 font-bold font-tajwal">
+                        <strong>المنظم:</strong>
+                      </span>
+                      <span className="flex items-center ml-10 font-bold font-tajwal">
+                        <strong>العنوان:</strong>
+                      </span>
+                      <span className="flex items-center mr-28 font-bold font-tajwal">
+                        <strong>تاريخ بدء التسجيل:</strong>
+                      </span>
+                    </div>
+                    <div className="flex text-gray-700 mt-1">
+                      <span className="flex items-center ml-64 font-tajwal">
+                        {contests.organizer}
+                      </span>
+                      <span className="flex items-center  ml-14 font-tajwal">
+                        {contests.address}
+                      </span>
+                      <span className="flex items-center mr-28 font-tajwal">
+                        {contests.applyStartDate}
+                      </span>
+                    </div>
+                  </div>
+
+                  <p
+                    className="mb-4"
+                    style={{
+                      fontFamily: "Tajwal, sans-serif",
+                      textAlign: "justify",
+                      lineHeight: "1.5",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    {contests.description}
+                  </p>
+
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <span className="text-xl text-red_aa font-tajwal">
+                        تاريخ الانتهاء
+                        {contests.applyEndDate}
+                      </span>
+                      <span className=" text-gray-500 mr-7 font-tajwal">
+                        تاريخ مراجعة الاوراق
+                        {contests.papersReplayDate}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
+                <div className="md:w-2/3">
+                  <h2 className="text-xl font-bold mb-2 font-tajwal">
+                    تفاصيل المسابقة
+                  </h2>
+                  <table className="w-full text-right">
+                    <tbody className="space-y-2">
+                      <tr className="border-t border-b">
+                        <td className="p-4 font-tajwal font-bold">عنوان </td>
+                        <td className="p-4 font-tajwal">
+                          {" "}
+                          {contests.address}{" "}
+                        </td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="p-4 font-tajwal font-bold">
+                          تاريخ انتهاء التسجيل
+                        </td>
+                        <td className="p-4 font-tajwal">
+                          {" "}
+                          {contests.enrollmentEndDate}
+                        </td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="p-4 font-tajwal font-bold">
+                          رقم الهاتف
+                        </td>
+                        <td className="p-4 font-tajwal">
+                          {contests.contactMobile}
+                        </td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="p-4 font-tajwal font-bold">
+                          <strong>البريد الإلكتروني:</strong>{" "}
+                        </td>
+                        <td className="p-4 font-tajwal">
+                          {" "}
+                          {contests.contactEmail}
+                        </td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="p-4 font-tajwal font-bold">
+                          <strong>ملاحظات:</strong>{" "}
+                        </td>
+                        <td className="p-4 font-tajwal">{contests.notes}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="md:w-1/3">
+                  <div>
+                    <h2 className="text-xl font-bold mb-2 font-tajwal">
+                      شروط المسابقة
+                    </h2>
+                    <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
+                      {conditions.map((condition, index) => {
+                        const parts = condition.split(":");
+                        if (parts.length === 2) {
+                          // Ensure the condition splits into two parts
+                          return (
+                            <div
+                              key={index}
+                              className="bg-white p-4 border border-gray-200 rounded-md shadow-sm"
+                            >
+                              <p className="font-semibold">{`${index + 1}. ${
+                                parts[0]
+                              }:`}</p>
+                              <p>{parts[1]}</p>
+                            </div>
+                          );
+                        } else {
+                          console.error(
+                            `Invalid condition format: ${condition}`
+                          );
+                          return null; // Skip invalid conditions
+                        }
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="md:w-1/3">
-  <div>
-    <h2 className="text-xl font-bold mb-2 font-tajwal">
-      شروط المسابقة
-    </h2>
-    <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
-    {conditions.map((condition, index) => {
-      const parts = condition.split(':');
-      if (parts.length === 2) { // Ensure the condition splits into two parts
-        return (
-          <div key={index} className="bg-white p-4 border border-gray-200 rounded-md shadow-sm">
-            <p className="font-semibold">{`${index + 1}. ${parts[0]}:`}</p>
-            <p>{parts[1]}</p>
-          </div>
-        );
-      } else {
-        console.error(`Invalid condition format: ${condition}`);
-        return null; // Skip invalid conditions
-      }
-    })}
-
-    </div>
-  </div>
-</div>
-
-          </div>
-        
-        </div>
+            <div
+              className={`transition-all duration-300 ${
+                isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+              } md:w-[20%] h-full`}
+            >
+              <Sidebar
+                isSidebarOpen={isSidebarOpen}
+                setIsSidebarOpen={setIsSidebarOpen}
+              />
+            </div>
           </div>
         </>
       ) : (
@@ -203,143 +234,152 @@ export default function ContestsDetails() {
           style={{
             marginTop: "50px",
             width: "95%",
-           
           }}
         >
           <Navbar />
           <div className="container mx-auto p-4" dir="rtl">
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
-            <div className="md:w-1/4 p-4">
-              <img src={contests.imageUrl} alt="Book" className="w-60" />
+            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
+              <div className="md:w-1/4 p-4">
+                <img src={contests.imageUrl} alt="Book" className="w-60" />
+              </div>
+              <div className="md:w-2/3 p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h1 className="text-2xl font-bold font-tajwal"></h1>
+                </div>
+                <div className="flex items-center mb-4">
+                  <div className="text-orange-500">
+                    <span className="text-lg"></span>
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <div className="flex text-gray-700">
+                    <span className="flex items-center ml-60 font-bold font-tajwal">
+                      <strong>المنظم:</strong>
+                    </span>
+                    <span className="flex items-center ml-10 font-bold font-tajwal">
+                      <strong>العنوان:</strong>
+                    </span>
+                    <span className="flex items-center mr-28 font-bold font-tajwal">
+                      <strong>تاريخ بدء التسجيل:</strong>
+                    </span>
+                  </div>
+                  <div className="flex text-gray-700 mt-1">
+                    <span className="flex items-center ml-64 font-tajwal">
+                      {contests.organizer}
+                    </span>
+                    <span className="flex items-center  ml-14 font-tajwal">
+                      {contests.address}
+                    </span>
+                    <span className="flex items-center mr-28 font-tajwal">
+                      {contests.applyStartDate}
+                    </span>
+                  </div>
+                </div>
+
+                <p
+                  className="mb-4"
+                  style={{
+                    fontFamily: "Tajwal, sans-serif",
+                    textAlign: "justify",
+                    lineHeight: "1.5",
+                    marginBottom: "8px",
+                  }}
+                >
+                  {contests.description}
+                </p>
+
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center">
+                    <span className="text-xl text-red_aa font-tajwal">
+                      تاريخ الانتهاء
+                      {contests.applyEndDate}
+                    </span>
+                    <span className=" text-gray-500 mr-7 font-tajwal">
+                      تاريخ مراجعة الاوراق
+                      {contests.papersReplayDate}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="md:w-2/3 p-4">
-              <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold font-tajwal">
-                </h1>
+            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
+              <div className="md:w-2/3">
+                <h2 className="text-xl font-bold mb-2 font-tajwal">
+                  تفاصيل المسابقة
+                </h2>
+                <table className="w-full text-right">
+                  <tbody className="space-y-2">
+                    <tr className="border-t border-b">
+                      <td className="p-4 font-tajwal font-bold">عنوان </td>
+                      <td className="p-4 font-tajwal"> {contests.address} </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="p-4 font-tajwal font-bold">
+                        تاريخ انتهاء التسجيل
+                      </td>
+                      <td className="p-4 font-tajwal">
+                        {" "}
+                        {contests.enrollmentEndDate}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="p-4 font-tajwal font-bold">رقم الهاتف</td>
+                      <td className="p-4 font-tajwal">
+                        {contests.contactMobile}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="p-4 font-tajwal font-bold">
+                        <strong>البريد الإلكتروني:</strong>{" "}
+                      </td>
+                      <td className="p-4 font-tajwal">
+                        {" "}
+                        {contests.contactEmail}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="p-4 font-tajwal font-bold">
+                        <strong>ملاحظات:</strong>{" "}
+                      </td>
+                      <td className="p-4 font-tajwal">{contests.notes}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div className="flex items-center mb-4">
-              
-                <div className="text-orange-500">
-                  <span className="text-lg"></span>
+              <div className="md:w-1/3">
+                <div>
+                  <h2 className="text-xl font-bold mb-2 font-tajwal">
+                    شروط المسابقة
+                  </h2>
+                  <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
+                    {conditions.map((condition, index) => {
+                      const parts = condition.split(":");
+                      if (parts.length === 2) {
+                        // Ensure the condition splits into two parts
+                        return (
+                          <div
+                            key={index}
+                            className="bg-white p-4 border border-gray-200 rounded-md shadow-sm"
+                          >
+                            <p className="font-semibold">{`${index + 1}. ${
+                              parts[0]
+                            }:`}</p>
+                            <p>{parts[1]}</p>
+                          </div>
+                        );
+                      } else {
+                        console.error(`Invalid condition format: ${condition}`);
+                        return null; // Skip invalid conditions
+                      }
+                    })}
+                  </div>
                 </div>
-              </div>
-
-              <div className="mb-4">
-                <div className="flex text-gray-700">
-                  <span className="flex items-center ml-60 font-bold font-tajwal">
-                 <strong>المنظم:</strong> 
-                  </span>
-                  <span className="flex items-center ml-10 font-bold font-tajwal">
-                  <strong>العنوان:</strong> 
-                  </span>
-                  <span className="flex items-center mr-28 font-bold font-tajwal">
-                  <strong>تاريخ بدء التسجيل:</strong>
-                  </span>
-                </div>
-                <div className="flex text-gray-700 mt-1">
-                  <span className="flex items-center ml-64 font-tajwal">
-                  {contests.organizer}
-                  </span>
-                  <span className="flex items-center  ml-14 font-tajwal">
-                  {contests.address}
-                  </span>
-                  <span className="flex items-center mr-28 font-tajwal">
-                  {contests.applyStartDate}
-                  </span>
-                </div>
-              </div>
-
-              <p
-                className="mb-4"
-                style={{
-                  fontFamily: "Tajwal, sans-serif",
-                  textAlign: "justify",
-                  lineHeight: "1.5",
-                  marginBottom: "8px",
-                }}
-              >
-                {contests.description}
-              </p>
-
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center">
-                  <span className="text-xl text-red_aa font-tajwal">
-                    تاريخ الانتهاء
-                  {contests.applyEndDate}
-                  </span>
-                  <span className=" text-gray-500 mr-7 font-tajwal">
-                    تاريخ مراجعة الاوراق 
-                  {contests.papersReplayDate}
-                  </span>
-                </div>
-
-               
               </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
-            <div className="md:w-2/3">
-              <h2 className="text-xl font-bold mb-2 font-tajwal">
-                تفاصيل المسابقة
-              </h2>
-              <table className="w-full text-right">
-                <tbody className="space-y-2">
-                  <tr className="border-t border-b">
-                    <td className="p-4 font-tajwal font-bold">عنوان </td>
-                    <td className="p-4 font-tajwal"> {contests.address} </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">تاريخ انتهاء التسجيل</td>
-                    <td className="p-4 font-tajwal"> {contests.enrollmentEndDate}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">رقم الهاتف</td>
-                    <td className="p-4 font-tajwal">{contests.contactMobile}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold"><strong>البريد الإلكتروني:</strong> </td>
-                    <td className="p-4 font-tajwal"> {contests.contactEmail}</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold"><strong>ملاحظات:</strong> </td>
-                    <td className="p-4 font-tajwal">
-                    {contests.notes}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-          
-            </div>
-            <div className="md:w-1/3">
-  <div>
-    <h2 className="text-xl font-bold mb-2 font-tajwal">
-      شروط المسابقة
-    </h2>
-    <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
-    {conditions.map((condition, index) => {
-      const parts = condition.split(':');
-      if (parts.length === 2) { // Ensure the condition splits into two parts
-        return (
-          <div key={index} className="bg-white p-4 border border-gray-200 rounded-md shadow-sm">
-            <p className="font-semibold">{`${index + 1}. ${parts[0]}:`}</p>
-            <p>{parts[1]}</p>
-          </div>
-        );
-      } else {
-        console.error(`Invalid condition format: ${condition}`);
-        return null; // Skip invalid conditions
-      }
-    })}
-
-    </div>
-  </div>
-</div>
-
-          </div>
-        
-        </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

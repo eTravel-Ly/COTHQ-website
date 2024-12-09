@@ -148,7 +148,7 @@ const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
         style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
       >
         <button
-          className="p-2 bg-blues rounded-full md:block mx-3 lg:hidden"
+          className="p-2 bg-blues rounded-full md:block ml-14 lg:hidden"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <MenuIcon />

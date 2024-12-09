@@ -19,6 +19,7 @@ const BookDetails = () => {
   const [books, setBooks] = useState([]);
   const [likedBooks, setLikedBooks] = useState({});
   const navigate = useNavigate();
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const showpicbooks = (fileName) => {
     try {
@@ -162,10 +163,16 @@ const relatedBooks = books
     navigate(`/BookDetails/${bookId}`);
   };
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="container mx-auto p-4" dir="rtl">
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
             <div className="md:w-1/4 p-4">
@@ -255,14 +262,12 @@ const relatedBooks = books
 
                 <div className="flex items-center">
                   <div className="flex items-center border rounded">
-                   
                     <input
                       type="text"
                       className="border-0 p-2 w-8 text-center font-tajwal"
                       value={quantity}
                       readOnly
                     />
-                    
                   </div>
                   <button
                     onClick={handleAddToCart}
@@ -319,7 +324,10 @@ const relatedBooks = books
                   {/* Header for Reviews */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
-                      <span className="text-gray-700 font-semibold"  style={{ fontFamily: "Tajwal, sans-serif" }}>
+                      <span
+                        className="text-gray-700 font-semibold"
+                        style={{ fontFamily: "Tajwal, sans-serif" }}
+                      >
                         المراجعات ({bookData.comments.length})
                       </span>
                       <div className="flex items-center ml-4">
@@ -365,12 +373,14 @@ const relatedBooks = books
                               </div>
                             </div>
                             <p className="text-gray-700">{comment.details}</p>
-                           
                           </div>
                         </div>
                       ))
                     ) : (
-                      <div className="text-gray-700"  style={{ fontFamily: "Tajwal, sans-serif" }}>
+                      <div
+                        className="text-gray-700"
+                        style={{ fontFamily: "Tajwal, sans-serif" }}
+                      >
                         <p>لا توجد مراجعات متاحة</p>
                       </div>
                     )}
@@ -385,11 +395,7 @@ const relatedBooks = books
                 </h2>
                 <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
                   {relatedBooks.map((book) => (
-                    <div
-                      key={book.id}
-                      className="flex items-center p-2 border"
-                     
-                    >
+                    <div key={book.id} className="flex items-center p-2 border">
                       <img
                         src={book.coverImageUrl}
                         alt={book.title}
@@ -418,9 +424,19 @@ const relatedBooks = books
             </div>
           </div>
         </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
       <ToastContainer />
-    </div>
+    </>
   );
 };
 
