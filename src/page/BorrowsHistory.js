@@ -185,50 +185,58 @@ function BorrowsHistory() {
 
       {/* Confirmation Modal */}
       <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        className="modal"
-        style={{
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.6)",
-            display: "flex", // لضمان أن المودال يتمركز
-            justifyContent: "center", // لضمان أن المودال يتمركز
-            alignItems: "center", // لضمان أن المودال يتمركز
-          },
-          content: {
-            backgroundColor: "white", // إضافة خلفية بيضاء
-            width: "400px", // تحديد العرض المناسب
-            height: "150px", // تحديد الارتفاع المناسب
-            padding: "20px",
-            borderRadius: "8px", // إضافة زوايا مستديرة للمربع
-            margin: "auto",
-            textAlign: "right",
-            direction: "rtl",
-            fontFamily: "Tajwal, sans-serif",
-            position: "relative", // لضمان أن المودال في المنتصف
-          },
-        }}
+  isOpen={isModalOpen}
+  onRequestClose={closeModal}
+  className="modal"
+  style={{
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.6)",
+      display: "flex", // لضمان أن المودال يتمركز
+      justifyContent: "center", // لضمان أن المودال يتمركز
+      alignItems: "center", // لضمان أن المودال يتمركز
+      position: "fixed", // لضمان تغطية الصفحة بالكامل
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 9999, // وضع قيمة عالية لـ z-index
+    },
+    content: {
+      backgroundColor: "white", // إضافة خلفية بيضاء
+      width: "400px", // تحديد العرض المناسب
+      height: "150px", // تحديد الارتفاع المناسب
+      padding: "20px",
+      borderRadius: "8px", // إضافة زوايا مستديرة للمربع
+      margin: "auto",
+      textAlign: "right",
+      direction: "rtl",
+      fontFamily: "Tajwal, sans-serif",
+      position: "relative", // لضمان أن المودال في المنتصف
+      zIndex: 10000, // وضع قيمة أعلى لـ z-index بالنسبة للمحتوى
+    },
+  }}
+>
+  <div className="p-6 text-center">
+    <h2 className="text-lg font-bold mb-4">
+      هل أنت متأكد من إلغاء طلب الاستعارة؟
+    </h2>
+    <div className="flex justify-center space-x-4">
+      <button
+        onClick={confirmCancelOrder}
+        className="bg-red-600 text-white px-4 py-2 rounded ml-2"
       >
-        <div className="p-6 text-center">
-          <h2 className="text-lg font-bold mb-4">
-            هل أنت متأكد من إلغاء طلب الاستعارة؟
-          </h2>
-          <div className="flex justify-center space-x-4">
-            <button
-              onClick={confirmCancelOrder}
-              className="bg-red-600 text-white px-4 py-2 rounded ml-2"
-            >
-              نعم
-            </button>
-            <button
-              onClick={closeModal}
-              className="bg-gray-300 text-black px-4 py-2 rounded"
-            >
-              لا
-            </button>
-          </div>
-        </div>
-      </Modal>
+        نعم
+      </button>
+      <button
+        onClick={closeModal}
+        className="bg-gray-300 text-black px-4 py-2 rounded"
+      >
+        لا
+      </button>
+    </div>
+  </div>
+</Modal>
+
 
       <ToastContainer />
     </>

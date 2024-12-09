@@ -6,6 +6,7 @@ import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
 import logo from "../assets/images/pay.png";
 import otp1 from "../assets/images/otp.png";
+import { useMediaQuery } from 'react-responsive';
 
 function Paynow() {
   const [currentStep, setCurrentStep] = useState(1); // Track the current step
@@ -19,6 +20,9 @@ function Paynow() {
   const [errors, setErrors] = useState({}); // لتخزين الأخطاء
   const [loading1, setLoading1] = useState(false);
   const [otpCode, setOtpCode] = useState(""); // لتخزين رمز التأكيد
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 640px)' });
+  const isMediumScreen = useMediaQuery({ query: '(max-width: 1024px)' });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -246,42 +250,52 @@ function Paynow() {
 
   return (
     <div className="flex h-screen font-tajwal">
-      <Sidebar />
-      <div className="flex flex-col w-full lg:w-[80%] mt-2 ml-1">
-        <NavbarLogin />
-        <div
-          className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10 rtl"
-          style={{ direction: "rtl" }}
-        >
-          {/* Step Progress Indicator */}
-          <div className="flex justify-center items-center mb-8">
-            {[1, 2, 3].map((step) => (
-              <div key={step} className="flex items-center">
-                <div
-                  className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                    step <= currentStep
-                      ? "border-custom-orange bg-custom-orange text-white"
-                      : "border-gray-500"
-                  }`}
-                >
-                  {step}
-                </div>
-                {step !== 3 && (
-                  <div
-                    className={`w-52 h-1 ${
-                      step < currentStep ? "bg-custom-orange" : "bg-gray-300"
-                    }`}
-                  ></div>
-                )}
-              </div>
-            ))}
+    <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+    <div className="flex flex-col w-full lg:w-[80%] mt-2 ml-1">
+      <NavbarLogin isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+           />
+      <div
+      className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10 rtl"
+      style={{ direction: "rtl" }}
+    >
+      {/* Step Progress Indicator */}
+      <div className="flex justify-center items-center mb-8">
+        {[1, 2, 3].map((step) => (
+          <div key={step} className="flex items-center">
+            <div
+              className={`flex items-center justify-center ${
+                isSmallScreen ? 'w-6 h-6' : isMediumScreen ? 'w-7 h-7' : 'w-8 h-8'
+              } rounded-full border-2 ${
+                step <= currentStep
+                  ? "border-custom-orange bg-custom-orange text-white"
+                  : "border-gray-500"
+              }`}
+            >
+              {step}
+            </div>
+            {step !== 3 && (
+              <div
+                className={`${
+                  isSmallScreen ? 'w-24' : isMediumScreen ? 'w-40' : 'w-52'
+                } h-1 ${
+                  step < currentStep ? "bg-custom-orange" : "bg-gray-300"
+                }`}
+              ></div>
+            )}
           </div>
-
-          {/* Step Form Content */}
-          <div className="p-8  rounded-lg shadow">{renderStepContent()}</div>
-        </div>
+        ))}
       </div>
+
+      {/* Step Form Content */}
+      <div className="p-8 rounded-lg shadow">{renderStepContent()}</div>
     </div>
+    </div>
+  </div>
+  
   );
 }
 
