@@ -60,12 +60,19 @@ function Paytheorder() {
     fetchOrderDetails();
   }, [orderId]);
 
-  
+       const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
-    <div className="flex h-screen font-tajwal">
-      <Sidebar />
-      <div className="flex flex-col w-full lg:w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
         <div
           className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10 rtl"
           style={{ direction: "rtl" }}
@@ -80,7 +87,7 @@ function Paytheorder() {
               <h3 className="text-md sm:text-lg font-semibold mb-3 sm:mb-4">
                 ملخص الطلب
               </h3>
-            
+
               <div className="mb-3 sm:mb-4">
                 <h4 className="font-medium text-gray-600 text-sm sm:text-base">
                   معلومات المستخدم
@@ -106,55 +113,67 @@ function Paytheorder() {
             </div>
           </div>
           {orderData ? (
-                <div>
-                  <div key={orderData.id} className="border rounded-md p-4 mb-4 mt-5">
-                    <div className="flex justify-between items-center mb-2">
-                      <h2 className="text-lg font-bold">
-                        طلب رقم {orderData.orderNo}
-                      </h2>
-                      <span className="text-gray-600">
-                        {new Date(orderData.createdDate).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="bg-yellow-500 text-white px-2 py-1 rounded">
-                        {orderData.orderStatus}
-                      </span>
-                      <span className="text-gray-600">
-                        إجمالي الطلب: {orderData.total} دينار
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="font-semibold">
-                        نوع الدفع: {orderData.paymentType}
-                      </p>
-                      <p className="font-semibold">
-                        الخصم: {orderData.discount} دينار
-                      </p>
-                    </div>
-                  </div>
+            <div>
+              <div
+                key={orderData.id}
+                className="border rounded-md p-4 mb-4 mt-5"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <h2 className="text-lg font-bold">
+                    طلب رقم {orderData.orderNo}
+                  </h2>
+                  <span className="text-gray-600">
+                    {new Date(orderData.createdDate).toLocaleDateString()}
+                  </span>
                 </div>
-              ) : (
-                <p>جاري تحميل تفاصيل الطلب...</p>
-              )}
-              
+                <div className="flex justify-between items-center mb-2">
+                  <span className="bg-yellow-500 text-white px-2 py-1 rounded">
+                    {orderData.orderStatus}
+                  </span>
+                  <span className="text-gray-600">
+                    إجمالي الطلب: {orderData.total} دينار
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <p className="font-semibold">
+                    نوع الدفع: {orderData.paymentType}
+                  </p>
+                  <p className="font-semibold">
+                    الخصم: {orderData.discount} دينار
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p>جاري تحميل تفاصيل الطلب...</p>
+          )}
+
           {/* زر الدفع */}
           <div className="mt-6 text-center">
             <button
               onClick={Paynow}
               className="bg-custom-green  text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-base sm:text-lg w-full md:w-auto"
             >
-               {isLoading ? (
-                <span>جارٍ ادفع الان ...</span> 
+              {isLoading ? (
+                <span>جارٍ ادفع الان ...</span>
               ) : (
-                <span>  ادفع الان </span>
+                <span> ادفع الان </span>
               )}
-            
             </button>
           </div>
         </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -17,7 +17,7 @@ function MyBooks() {
   return (
     <>
       <div
-        className={`fixed top-0 z-10 transition-all duration-300 sm:w-full md:w-full lg:w-[calc(100%-20%)]`}
+        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
       >
         <NavbarLogin
           isSidebarOpen={isSidebarOpen}

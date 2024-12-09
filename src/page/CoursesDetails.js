@@ -20,6 +20,8 @@ const CoursesDetails = () => {
   const [quantity, setQuantity] = useState(1);
    const [likedcourses, setLikedcourse] = useState({});
   const { courseId } = useParams();
+       const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
     const handleLikeClick = async (id) => {
       try {
         const response = await axios.post(
@@ -156,10 +158,16 @@ const navigate = useNavigate();
     ((originalPrice - studentPrice) / originalPrice) * 100;
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="container mx-auto p-4" dir="rtl">
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
             {/* Course Image */}
@@ -251,14 +259,12 @@ const navigate = useNavigate();
 
                 <div className="flex items-center">
                   <div className="flex items-center border rounded">
-                    
                     <input
                       type="text"
                       className="border-0 p-2 w-8 text-center font-tajwal"
                       value={quantity}
                       readOnly
                     />
-                   
                   </div>
                   <button
                     className="bg-custom-orange text-white mr-2 font-tajwal px-4 py-2 rounded ml-4 flex items-center"
@@ -322,7 +328,10 @@ const navigate = useNavigate();
                   {/* Header for Reviews */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
-                      <span className="text-gray-700 font-semibold"  style={{ fontFamily: "Tajwal, sans-serif" }}>
+                      <span
+                        className="text-gray-700 font-semibold"
+                        style={{ fontFamily: "Tajwal, sans-serif" }}
+                      >
                         المراجعات ({courseData.comments.length})
                       </span>
                       <div className="flex items-center ml-4">
@@ -368,7 +377,7 @@ const navigate = useNavigate();
                               </div>
                             </div>
                             <p className="text-gray-700">{comment.details}</p>
-                           {/*
+                            {/*
                             <div className="flex items-center mt-2 text-gray-600">
                               <span className="mr-2">
                                 👍 {comment.likesCount}
@@ -380,7 +389,10 @@ const navigate = useNavigate();
                         </div>
                       ))
                     ) : (
-                      <div className="text-gray-700"  style={{ fontFamily: "Tajwal, sans-serif" }}>
+                      <div
+                        className="text-gray-700"
+                        style={{ fontFamily: "Tajwal, sans-serif" }}
+                      >
                         <p>لا توجد مراجعات متاحة</p>
                       </div>
                     )}
@@ -425,9 +437,19 @@ const navigate = useNavigate();
             </div>
           </div>
         </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
       <ToastContainer position="bottom-left" />
-    </div>
+    </>
   );
 };
 

@@ -27,15 +27,19 @@ const CompetitionsDetails = () => {
     // Add logic to send data to the server here
     toast.success("تم التسجيل بنجاح!");
   };
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div
-      className="flex h-screen rtl"
-      style={{ fontFamily: "Tajwal, sans-serif" }}
-    >
-      <Sidebar />
-      <div className="flex flex-col w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
         <div
           className="p-4"
           style={{
@@ -155,13 +159,22 @@ const CompetitionsDetails = () => {
                 </p>
               </div>
               <p className="mb-2 text-center">عدد الأشخاص المسجلين: 150</p>
-             
             </div>
           </div>
         </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
       <ToastContainer />
-    </div>
+    </>
   );
 };
 

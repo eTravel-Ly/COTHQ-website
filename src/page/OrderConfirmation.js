@@ -16,6 +16,7 @@ function OrderConfirmation() {
   const { cartItems } = useParams();
   const location = useLocation();
   const { totalPrice } = location.state || { totalPrice: 0 };
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const showPicPayment = async (fileName) => {
     try {
@@ -95,10 +96,16 @@ function OrderConfirmation() {
   
 
   return (
-    <div className="flex h-screen font-tajwal">
-      <Sidebar />
-      <div className="flex flex-col w-full lg:w-[80%] mt-2 ml-1">
-        <NavbarLogin />
+    <>
+      <div
+        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
         <div
           className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10 rtl"
           style={{ direction: "rtl" }}
@@ -203,16 +210,26 @@ function OrderConfirmation() {
               }`}
             >
               {isLoading ? (
-                <span>جارٍ إنشاء الطلب...</span> 
+                <span>جارٍ إنشاء الطلب...</span>
               ) : (
                 <span>إنشاء طلب</span>
               )}
             </button>
           </div>
         </div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       </div>
       <ToastContainer />
-    </div>
+    </>
   );
 }
 
