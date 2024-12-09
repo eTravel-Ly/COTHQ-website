@@ -251,7 +251,6 @@ if (sortedComments.length > 0) {
               <IoIosArrowForward className="w-6 h-6" />
             </button>
             <span className="mr-2 text-gray-700" onClick={backpage}>
-              العودة إلى الصفحة الرئيسية
             </span>
           </div>
 
@@ -292,68 +291,84 @@ if (sortedComments.length > 0) {
             )}
           </div>
 
-          <div className="flex justify-between items-center mt-4">
-            {/* Buttons on the left */}
-            <div className="flex items-center space-x-2">
-              <button
-                className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                  activeButton === "نظرة عامة"
-                    ? "bg-custom-orange text-blue"
-                    : "bg-blue hover:bg-custom-orange hover:text-blue"
-                }`}
-                onClick={() => setActiveButton("نظرة عامة")}
-              >
-                نظرة عامة
-              </button>
-              <button
-                className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                  activeButton === "مراجعات"
-                    ? "bg-custom-orange text-blue"
-                    : "bg-blue hover:bg-custom-orange hover:text-blue"
-                }`}
-                onClick={() => handleButtonClick("مراجعات")}
-              >
-                مراجعات
-              </button>
-              <button
-                className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                  activeButton === "ملاحظات"
-                    ? "bg-custom-orange text-blue"
-                    : "bg-blue hover:bg-custom-orange hover:text-blue"
-                }`}
-                onClick={() => setActiveButton("ملاحظات")}
-              >
-                ملاحظات
-              </button>
-            </div>
+          <div className="flex flex-col md:flex-row justify-between items-center mt-4">
+  {/* Buttons on the left */}
+  <div className="flex flex-col md:flex-row items-center space-y-4 md:space-x-2 md:space-y-0">
+    {/* Dropdown for mobile */}
+    <div className="block md:hidden">
+      <select
+        className="px-4 py-2 rounded-3xl text-lg text-gray-900 border border-custom-orange"
+        value={activeButton}
+        onChange={(e) => setActiveButton(e.target.value)}
+      >
+        <option value="نظرة عامة">نظرة عامة</option>
+        <option value="مراجعات">مراجعات</option>
+        <option value="ملاحظات">ملاحظات</option>
+      </select>
+    </div>
 
-            {/* Buttons in the center */}
-            <div className="flex space-x-2">
-           
-            <input 
-            type="number"
-            className="bg-white text-black px-4 py-2 rounded ml-2 flex items-center border border-custom-orange"
-            min="0"
-            placeholder="ادخل رقم الصفحة"
-            value={pageNumber} // القيمة الحالية من الحالة
-            onChange={handlePageNumberChange} // الحدث لتحديث الحالة
-          />
-                 <button
-                onClick={handleMarkAsRead1}
-                className="bg-custom-green text-white px-4 py-2 rounded flex items-center border border-custom-green"
-              >
-                <IoIosAddCircle className="w-5 h-5" />
-            
-              </button>
-              <button
-                onClick={handleMarkAsRead}
-                className="bg-white text-black px-4 py-2 rounded flex items-center border border-custom-green"
-              >
-                <FaCheck className="w-5 h-5 ml-2" />
-                ضع علامة على أنها تمت قراءة
-              </button>
-            </div>
-          </div>
+    {/* Buttons for large screens */}
+    <div className="hidden md:flex items-center space-x-2">
+      <button
+        className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+          activeButton === "نظرة عامة"
+            ? "bg-custom-orange text-blue"
+            : "bg-blue hover:bg-custom-orange hover:text-blue"
+        }`}
+        onClick={() => setActiveButton("نظرة عامة")}
+      >
+        نظرة عامة
+      </button>
+      <button
+        className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+          activeButton === "مراجعات"
+            ? "bg-custom-orange text-blue"
+            : "bg-blue hover:bg-custom-orange hover:text-blue"
+        }`}
+        onClick={() => handleButtonClick("مراجعات")}
+      >
+        مراجعات
+      </button>
+      <button
+        className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+          activeButton === "ملاحظات"
+            ? "bg-custom-orange text-blue"
+            : "bg-blue hover:bg-custom-orange hover:text-blue"
+        }`}
+        onClick={() => setActiveButton("ملاحظات")}
+      >
+        ملاحظات
+      </button>
+    </div>
+  </div>
+
+  {/* Buttons in the center */}
+  <div className="flex flex-col md:flex-row space-y-4 md:space-x-2 md:space-y-0 mt-4 md:mt-0">
+    <input
+      type="number"
+      className="bg-white text-black px-4 py-2 rounded ml-2 flex items-center border border-custom-orange w-full md:w-auto"
+      min="0"
+      placeholder="ادخل رقم الصفحة"
+      value={pageNumber} // القيمة الحالية من الحالة
+      onChange={handlePageNumberChange} // الحدث لتحديث الحالة
+    />
+    <button
+      onClick={handleMarkAsRead1}
+      className="bg-custom-green text-white px-4 py-2 rounded flex items-center border border-custom-green "
+    >
+      <IoIosAddCircle className="w-5 h-5" />
+    </button>
+    <button
+      onClick={handleMarkAsRead}
+      className="bg-white text-black px-4 py-2 rounded flex items-center border border-custom-green w-full md:w-auto"
+    >
+      <FaCheck className="w-5 h-5 ml-2" />
+      ضع علامة على أنها تمت قراءة
+    </button>
+  </div>
+</div>
+
+
           <div className="w-4/4 p-4">
             {/* Overview Box */}
             {activeButton === "نظرة عامة" && (

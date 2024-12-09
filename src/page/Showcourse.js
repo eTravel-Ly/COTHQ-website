@@ -11,6 +11,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useMediaQuery } from "react-responsive"; // استيراد مكتبة react-responsive
 
 const Showcourse = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // حالة المودال
@@ -24,6 +25,9 @@ const Showcourse = () => {
   const [stars, setStars] = useState(3); // Default to 5 stars
   const [error, setError] = useState("");
   const [hoveredStar, setHoveredStar] = useState(0);
+
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
 
   const handleSave = async () => {
     try {
@@ -191,7 +195,6 @@ const Showcourse = () => {
             <IoIosArrowForward className="w-6 h-6" />
           </button>
           <span className="mr-2 text-gray-700" onClick={backpage}>
-            العودة إلى الصفحة الرئيسية
           </span>
         </div>
 
@@ -211,259 +214,244 @@ const Showcourse = () => {
       </nav>
 
       {/* Main Content */}
-      <main className="p-4 pt-20">
-        <div className="flex flex-grow">
-          {/* Video Player */}
-          <div className="w-3/4 p-4">
-            <div className="relative">
-              <video controls className="w-full rounded-lg">
-                <source src={videoUrl} type="video/mp4" />
-               نعتذر منك الفيديو غير متاح
-              </video>
-            </div>
+    {/* Main Content */}
+<main className="p-4 pt-20">
+  <div className="flex flex-grow flex-col md:flex-row">
+    {/* Video Player */}
+    <div className="w-full md:w-3/4 p-4">
+      <div className="relative">
+        <video controls className="w-full rounded-lg">
+          <source src={videoUrl} type="video/mp4" />
+          نعتذر منك الفيديو غير متاح
+        </video>
+      </div>
 
-            {/* Action Buttons */}
-            <div className="mt-4 flex justify-between items-center">
-              <div className="flex space-x-4">
-                <button
-                  className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                    activeButton === "نظرة عامة"
-                      ? "bg-custom-orange text-blue"
-                      : "bg-blue hover:bg-custom-orange hover:text-blue"
-                  }`}
-                  onClick={() => setActiveButton("نظرة عامة")}
-                >
-                  نظرة عامة
-                </button>
-                <button
-                  className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                    activeButton === "مراجعات"
-                      ? "bg-custom-orange text-blue"
-                      : "bg-blue hover:bg-custom-orange hover:text-blue"
-                  }`}
-                  onClick={() => handleButtonClick("مراجعات")}
-                >
-                  مراجعات
-                </button>
-                <button
-                  className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
-                    activeButton === "ملاحظات"
-                      ? "bg-custom-orange text-blue"
-                      : "bg-blue hover:bg-custom-orange hover:text-blue"
-                  }`}
-                  onClick={() => setActiveButton("ملاحظات")}
-                >
-                  ملاحظات
-                </button>
+      {/* Action Buttons */}
+      <div className="mt-4 flex flex-col md:flex-row justify-between items-center">
+      <div className="flex flex-col md:flex-row space-y-4 md:space-x-4 md:space-y-0">
+  {/* List of buttons for larger screens */}
+  <div className="hidden md:flex">
+    <button
+      className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+        activeButton === "نظرة عامة"
+          ? "bg-custom-orange text-blue"
+          : "bg-blue hover:bg-custom-orange hover:text-blue"
+      }`}
+      onClick={() => setActiveButton("نظرة عامة")}
+    >
+      نظرة عامة
+    </button>
+    <button
+      className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+        activeButton === "مراجعات"
+          ? "bg-custom-orange text-blue"
+          : "bg-blue hover:bg-custom-orange hover:text-blue"
+      }`}
+      onClick={() => handleButtonClick("مراجعات")}
+    >
+      مراجعات
+    </button>
+    <button
+      className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
+        activeButton === "ملاحظات"
+          ? "bg-custom-orange text-blue"
+          : "bg-blue hover:bg-custom-orange hover:text-blue"
+      }`}
+      onClick={() => setActiveButton("ملاحظات")}
+    >
+      ملاحظات
+    </button>
+  </div>
+
+  {/* Dropdown menu for mobile */}
+  <div className="md:hidden">
+    <select
+      className="w-full px-4 py-2 bg-white border rounded-3xl text-lg"
+      value={activeButton}
+      onChange={(e) => setActiveButton(e.target.value)}
+    >
+      <option value="نظرة عامة">نظرة عامة</option>
+      <option value="مراجعات">مراجعات</option>
+      <option value="ملاحظات">ملاحظات</option>
+    </select>
+  </div>
+</div>
+
+
+        <div className="flex items-center space-x-4">
+          {/* Placeholder for share button */}
+          <button
+            onClick={handleMarkAsRead}
+            className="bg-white text-gray-400 px-4 py-2 rounded flex items-center"
+          >
+            <FaCheck className="w-5 h-5 ml-2 text-gray-400" />
+            ضع علامة على أنها تمت قراءة
+          </button>
+        </div>
+      </div>
+
+      {/* Overview Box */}
+      {activeButton === "نظرة عامة" && (
+        <div className="mt-4 p-4 bg-white rounded-lg shadow-md ">
+          <h4 className="text-2xl font-semibold mb-2">{course.title} </h4>
+          <p className="text-gray-700 mb-4">{course.description}</p>
+          <hr className="border-gray-200 mb-4" />
+          <div className="flex flex-wrap gap-2 mb-4">
+            {course.keywords.split(",").map((keyword, index) => (
+              <div
+                key={index}
+                className="px-3 py-1 font-semibold bg-blues text-gray-700 rounded-lg text-sm"
+              >
+                {keyword.trim()}
               </div>
-
-              <div className="flex items-center space-x-4">
-                {/*
-                <button
-                  className="bg-white text-gray-400 px-4 py-2 rounded ml-5 flex items-center "
-                  onClick={handleTogglePopup}
-                >
-                  <FaShareAlt className="w-5 h-5 ml-2 text-gray-400" />
-                  مشاركة
-                </button>
-                
-                */}
-                <button
-                  onClick={handleMarkAsRead}
-                  className="bg-white text-gray-400 px-4 py-2 rounded flex items-center"
-                >
-                  <FaCheck className="w-5 h-5 ml-2 text-gray-400" />
-                  ضع علامة على أنها تمت قراءة
-                </button>
-              </div>
-            </div>
-            {/* Overview Box */}
-            {activeButton === "نظرة عامة" && (
-              <div className="mt-4 p-4 bg-white rounded-lg shadow-md ">
-                <h4 className="text-2xl font-semibold mb-2">{course.title} </h4>
-                <p className="text-gray-700 mb-4">{course.description}</p>
-                <hr className="border-gray-200 mb-4" />
-                <div className="flex flex-wrap gap-2 mb-4">
-
-                  {course.keywords.split(",").map((keyword, index) => (
-                    <div
-                      key={index}
-                      className="px-3 py-1 font-semibold bg-blues text-gray-700 rounded-lg text-sm"
-                    >
-                      {keyword.trim()}
-                    </div>
-                  ))}
-                  </div>
-                
-              </div>
-            )}
-
-            {activeButton === "مراجعات" && (
-              <div className="mt-4 p-4 bg-white rounded-lg shadow-md">
-                <div>
-                  {/* Header for Reviews */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center">
-                      <span className="text-gray-700 font-semibold">
-                        المراجعات ({course.comments.length})
-                      </span>
-                      <div className="flex items-center ml-4">
-                        <span className="text-yellow-500">⭐</span>
-                        <span className="ml-1 text-gray-700">
-                        {course.comments.length > 0
-                          ? (
-                            course.comments.reduce((acc, comment) => acc + comment.rating, 0) /
-                            course.comments.length
-                            ).toFixed(1)
-                          : 0}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Input and Select Elements */}
-                  <div className="flex items-center mb-4 ">
-                    <input
-                      type="text"
-                      placeholder="ابحث عن مراجعة"
-                      className="p-2 border rounded-md flex-grow mr-4"
-                    />
-
-                    <select
-                      className="p-2 border rounded-md"
-                      value={sortOption}
-                      onChange={handleSortChange}
-                    >
-                      <option value="فرز حسب">فرز حسب</option>
-                      <option value="الأحدث">الأحدث</option>
-                      <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
-                    </select>
-                  </div>
-
-                  {/* Comments Container */}
-                  <div className="max-h-60 overflow-y-auto">
-                    {loading ? (
-                      <div className="flex justify-center items-center ">
-                        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-                      </div>
-                    ) : sortedComments.length === 0 ? (
-                      <p className="text-gray-700">
-                        لا توجد مراجعات متاحة، قم بإضافة تعليقك!
-                      </p>
-                    ) : (
-                      sortedComments.map((comment) => (
-                        <div
-                          key={comment.id}
-                          className="flex items-start mb-4 p-4 border-b"
-                        >
-                          <img
-                            src={user}
-                            alt="User"
-                            className="w-12 h-12 rounded-full mr-4"
-                          />
-                          <div className="flex-1">
-                            <div className="flex items-center mb-2">
-                              <span className="font-semibold mr-2">
-                                {comment.learner.firstName}{" "}
-                                {comment.learner.lastName}
-                              </span>
-                              <div className="flex items-center">
-                                <span className="text-yellow-500">⭐</span>
-                                <span className="ml-1 text-gray-700">
-                                  {comment.rating}
-                                </span>
-                              </div>
-                            </div>
-                            <p className="text-gray-700">{comment.details}</p>
-                         
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeButton === "ملاحظات" && (
-              <>
-                <div className="flex items-center mb-4 mt-5">
-                  <h3 className="text-lg font-semibold mr-4">
-                    صوت واكتب ملاحظاتك :
-                  </h3>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg
-                        key={star}
-                        onClick={() => setStars(star)}
-                        onMouseEnter={() => setHoveredStar(star)}
-                        onMouseLeave={() => setHoveredStar(0)}
-                        xmlns="http://www.w3.org/2000/svg"
-                        className={`w-6 h-6 cursor-pointer ${
-                          star <= (hoveredStar || stars)
-                            ? "text-yellow-500"
-                            : "text-gray-300"
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12 17.27l5.18 3.09-1.36-5.91L21 9.24l-6.06-.52L12 3 9.06 8.72 3 9.24l4.18 4.24-1.36 5.91L12 17.27z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    ))}
-                  </div>
-                </div>
-                <textarea
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  rows="4"
-                  className="w-full p-2 border rounded-md mb-4 border-custom-orange bg-gray-100"
-                  placeholder="اكتب ملاحظاتك هنا..."
-                />
-                <div className="flex justify-end">
-                  <button
-                    onClick={handleSave}
-                    className="px-4 py-2 bg-custom-orange text-white rounded-md"
-                  >
-                    حفظ ملاحظة
-                  </button>
-                </div>
-                {error && <p className="text-red-500 mt-2">{error}</p>}
-              </>
-            )}
-          </div>
-          {/* Sidebar */}
-          <div className="w-1/4 border rounded-2xl p-4 max-h-screen overflow-y-auto">
-            <h2 className="text-lg font-bold mb-4">محتوى الدورة</h2>
-            <ul>
-              {course.videos.map((video, index) => (
-                <li
-                  key={video.id}
-                  className="mb-4 p-4 border rounded-md flex justify-between items-center"
-                >
-                  <div className="flex flex-col">
-                    <span className="font-semibold">
-                      {index + 1}. {video.title}
-                    </span>
-                    <span className="text-gray-500">
-                      {formatDuration(video.durationInSeconds)}
-                    </span>
-                  </div>
-                {/*
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-5 w-5 text-blue-600"
-                  />
-                */}
-                </li>
-              ))}
-            </ul>
+            ))}
           </div>
         </div>
-      </main>
+      )}
+
+      {activeButton === "مراجعات" && (
+        <div className="mt-4 p-4 bg-white rounded-lg shadow-md">
+          <div>
+            {/* Header for Reviews */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <span className="text-gray-700 font-semibold">
+                  المراجعات ({course.comments.length})
+                </span>
+                <div className="flex items-center ml-4">
+                  <span className="text-yellow-500">⭐</span>
+                  <span className="ml-1 text-gray-700">
+                    {course.comments.length > 0
+                      ? (
+                          course.comments.reduce((acc, comment) => acc + comment.rating, 0) /
+                          course.comments.length
+                        ).toFixed(1)
+                      : 0}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Input and Select Elements */}
+            <div className="flex items-center mb-4 ">
+              <input
+                type="text"
+                placeholder="ابحث عن مراجعة"
+                className="p-2 border rounded-md flex-grow mr-4"
+              />
+              <select
+                className="p-2 border rounded-md"
+                value={sortOption}
+                onChange={handleSortChange}
+              >
+                <option value="فرز حسب">فرز حسب</option>
+                <option value="الأحدث">الأحدث</option>
+                <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
+              </select>
+            </div>
+
+            {/* Comments Container */}
+            <div className="max-h-60 overflow-y-auto">
+              {loading ? (
+                <div className="flex justify-center items-center ">
+                  <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+                </div>
+              ) : sortedComments.length === 0 ? (
+                <p className="text-gray-700">لا توجد مراجعات متاحة، قم بإضافة تعليقك!</p>
+              ) : (
+                sortedComments.map((comment) => (
+                  <div key={comment.id} className="flex items-start mb-4 p-4 border-b">
+                    <img
+                      src={user}
+                      alt="User"
+                      className="w-12 h-12 rounded-full mr-4"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center mb-2">
+                        <span className="font-semibold mr-2">
+                          {comment.learner.firstName} {comment.learner.lastName}
+                        </span>
+                        <div className="flex items-center">
+                          <span className="text-yellow-500">⭐</span>
+                          <span className="ml-1 text-gray-700">
+                            {comment.rating}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-gray-700">{comment.details}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeButton === "ملاحظات" && (
+        <>
+          <div className="flex items-center mb-4 mt-5">
+            <h3 className="text-lg font-semibold mr-4">صوت واكتب ملاحظاتك :</h3>
+            <div className="flex items-center">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <svg
+                  key={star}
+                  onClick={() => setStars(star)}
+                  onMouseEnter={() => setHoveredStar(star)}
+                  onMouseLeave={() => setHoveredStar(0)}
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`w-6 h-6 cursor-pointer ${
+                    star <= (hoveredStar || stars) ? "text-yellow-500" : "text-gray-300"
+                  }`}
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 17.27l5.18 3.09-1.36-5.91L21 9.24l-6.06-.52L12 3 9.06 8.72 3 9.24l4.18 4.24-1.36 5.91L12 17.27z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              ))}
+            </div>
+          </div>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            rows="4"
+            className="w-full p-2 border rounded-md mb-4 border-custom-orange bg-gray-100"
+            placeholder="اكتب ملاحظاتك هنا..."
+          />
+          <div className="flex justify-end">
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 bg-custom-orange text-white rounded-md"
+            >
+              حفظ ملاحظة
+            </button>
+          </div>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+        </>
+      )}
+    </div>
+
+    {/* Sidebar */}
+    <div className={`${isMobile ? "w-full mt-4" : "w-1/4"} border rounded-2xl p-4 max-h-screen overflow-y-auto`}>
+      <h2 className="text-lg font-bold mb-4">محتوى الدورة</h2>
+      <ul>
+        {course.videos.map((video, index) => (
+          <li key={video.id} className="mb-4 p-4 border rounded-md flex justify-between items-center">
+            <div className="flex flex-col">
+              <span className="font-semibold">{index + 1}. {video.title}</span>
+              <span className="text-gray-500">{formatDuration(video.durationInSeconds)}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</main>
+
       <ToastContainer position="bottom-left" />
       {isModalOpen && <ShareModels handleTogglePopup={handleTogglePopup} />}
     </div>
