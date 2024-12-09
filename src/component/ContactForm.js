@@ -1,29 +1,32 @@
 import React, { useState } from 'react';
-import Banner from '../assets/images/Rectangle.png'; // تأكد من مسار الصورة الصحيح
+import Banner from '../assets/images/Rectangle.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useMediaQuery } from 'react-responsive';
 
 const ContactPage = () => {
   const [loading, setLoading] = useState(false);
+
+  // استخدام react-responsive للكشف عن حجم الشاشة
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setLoading(true);
 
-    // Simulate form submission
     setTimeout(() => {
       setLoading(false);
       toast.success('تم إرسال ملاحظتك بنجاح');
-    }, 2000); // Simulate a 2-second loading time
+    }, 2000);
   };
 
   return (
     <div className="min-h-screen flex flex-col mt-20">
-      <section id='contact' className="flex-1 flex justify-center items-center">
-        <div className="bg-gray-100 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+      <section id="contact" className="flex-1 flex justify-center items-center">
+        <div className={`bg-gray-100 p-8 rounded-lg shadow-lg w-full ${isMobile ? 'max-w-full' : 'max-w-4xl'}`}>
           <h2 className="text-2xl font-bold text-center mb-8" style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}>تواصل معنا</h2>
           <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className={`grid grid-cols-1 ${isMobile ? 'sm:grid-cols-1' : 'md:grid-cols-2'} gap-4 mb-4`}>
               <div>
                 <label className="block mb-1" style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}>اسمك</label>
                 <input
@@ -68,17 +71,15 @@ const ContactPage = () => {
         </div>
       </section>
 
-      <footer className="relative bg-cover bg-center text-white py-12 px-8 rounded-lg mt-12" style={{ backgroundImage: `url(${Banner})`, width: '1200px', height: '350px' }}>
+      <footer className="relative bg-cover bg-center text-white py-12 px-8 rounded-lg mt-12" style={{ backgroundImage: `url(${Banner})`, width: isMobile ? '100%' : '1200px', height: '350px' }}>
         <div className="absolute inset-0 opacity-50 rounded-lg"></div>
         <div className="relative text-center z-10 py-12">
           <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: 'Tajwal, sans-serif' }}>المنصة التعليمية</h2>
-          <ul className="flex justify-center gap-6 mb-6">
-           
+          <ul className={`flex justify-center gap-6 mb-6 ${isMobile ? 'flex-wrap' : ''}`}>
             <li><a href="#" style={{ fontFamily: 'Tajwal, sans-serif' }}>الدورة</a></li>
             <li><a href="#" style={{ fontFamily: 'Tajwal, sans-serif' }}>اتصل</a></li>
             <li><a href="#" style={{ fontFamily: 'Tajwal, sans-serif' }}>من نحن</a></li>
             <li><a href="#" style={{ fontFamily: 'Tajwal, sans-serif' }}>الرئيسية</a></li>
-           
           </ul>
           <p className="text-sm" style={{ fontFamily: 'Tajwal, sans-serif' }}>حقوق النشر والنشر © 2024</p>
         </div>
