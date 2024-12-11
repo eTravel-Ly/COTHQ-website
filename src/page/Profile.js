@@ -29,11 +29,11 @@ const Profile = () => {
       })
       .then((response) => {
         setProfileData(response.data);
-        setLoading(false); // إيقاف اللودينق بعد جلب البيانات
+        setLoading(false); 
       })
       .catch((error) => {
         console.error("Error fetching profile data:", error);
-        setLoading(false); // إيقاف اللودينق في حالة حدوث خطأ
+        setLoading(false); 
       });
   }, []);
 
@@ -41,7 +41,6 @@ const Profile = () => {
   const showallCourses = () => setSelectedSection("MyCoursesButton");
 
   if (loading) {
-    // عرض مكون اللودينق في حالة انتظار تحميل البيانات
     return (
       <div className="flex items-center justify-center h-screen">
         <FaSpinner className="text-4xl animate-spin" />
@@ -61,18 +60,15 @@ const Profile = () => {
       </div>
       <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="flex flex-1 flex-col" dir="rtl">
-          <div
-            className="flex flex-col md:flex-row items-center bg-white p-6 shadow-sm rounded-md mb-4 "
-           
-          >
-            <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 mr-20">
+          <div className="flex flex-col md:flex-row items-center md:items-start justify-between bg-white p-6 shadow-sm rounded-md mb-4">
+            <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 md:ml-6">
               <img
                 src={user}
                 className="w-full h-full object-cover"
                 alt="User"
               />
             </div>
-            <div className="mt-4 md:mt-0 md:ml-6 mr-24">
+            <div className="mt-4 md:mt-0 text-center md:text-right md:mr-6 flex-1">
               <p
                 className="text-gray-700 font-bold"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
