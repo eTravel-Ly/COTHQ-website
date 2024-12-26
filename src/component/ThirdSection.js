@@ -27,11 +27,7 @@ function ThirdSection() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(`${baseurl}public/courses`, {
-        /*  headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },*/
-        });
+        const response = await axios.get(`${baseurl}public/courses`);
         setCourses(response.data);
         setTotalPages(Math.ceil(response.data.length / coursesPerPage));
         response.data.forEach(async (course) => {
@@ -49,7 +45,7 @@ function ThirdSection() {
     fetchCourses();
 
     // Check localStorage value on component mount
-    const value = localStorage.getItem("token"); // Change "someKey" to your actual key
+    const value = localStorage.getItem("token");
     setIsLocalStorageValue(!!value); // Update state based on the localStorage value
   }, []);
 
@@ -81,7 +77,6 @@ function ThirdSection() {
     }
     return title;  // إذا كان العنوان يحتوي على 4 كلمات أو أقل، يتم عرضه بالكامل
   };
-  
   
   return (
     <div id="courses" className="w-full bg-white py-16">
@@ -126,7 +121,7 @@ function ThirdSection() {
   
       {/* تعديل الشبكة هنا */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}>
-        {currentCourses.map((course, index) => (
+      {currentCourses.map((course, index) => (
           <div
             key={index}
             className="bg-white shadow-lg rounded-lg overflow-hidden"
@@ -135,7 +130,7 @@ function ThirdSection() {
             <img
               src={courseImages[course.id] || group}
               alt="Course"
-              className="w-full h-50 object-cover"
+              className="w-full h-48 object-cover" // تعديل الحجم هنا
             />
             <div className="p-4 text-right">
             <h3
@@ -183,7 +178,6 @@ function ThirdSection() {
       </div>
     </div>
   </div>
-  
   );
 }
 
