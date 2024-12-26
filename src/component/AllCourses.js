@@ -169,7 +169,7 @@ export default function AllCourses() {
           </div>
 
           {/* Courses Grid */}
-          <div className="flex flex-wrap justify-start">
+          <div className="flex flex-wrap w-full ">
             {currentCourses.map((course, idx) => (
               <div key={idx} className="w-full sm:w-1/3 p-2">
                 <div className="bg-white rounded-lg shadow-md p-3 flex flex-col w-72 justify-between">

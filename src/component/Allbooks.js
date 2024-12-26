@@ -239,7 +239,7 @@ const Allbooks = () => {
                 </select>
               </div>
 
-              <div className="flex flex-wrap -mx-2">
+              <div className="flex flex-wrap mx-2">
                 {currentCourses.map((book, index) => {
                   const availabilityStyle = getAvailabilityStyle(
                     book.bookAvailability
@@ -249,13 +249,17 @@ const Allbooks = () => {
                       key={book.id}
                       className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-2"
                     >
-                      <div className="bg-white shadow-lg rounded-lg p-3 flex-shrink-0 flex flex-col items-center text-right">
-                        <img
-                          src={book.imageUrl}
-                          alt={book.title}
-                          className="h-32 object-cover rounded-lg mb-4"
-                        />
-                        <div className="w-full flex flex-col justify-between">
+                      <div className="bg-white shadow-lg rounded-lg flex flex-row text-right">
+                        <div className="w-1/3 p-2">
+                          <img
+                            src={book.imageUrl}
+                            alt={book.title}
+                            className="w-full   h-full  object-cover rounded-lg"
+                          />
+                        </div>
+
+                        {/* النصوص والأزرار */}
+                        <div className="w-2/3 p-4 flex flex-col justify-between">
                           <div>
                             <h3
                               className="text-lg font-bold mb-2 text-custom-orange"
