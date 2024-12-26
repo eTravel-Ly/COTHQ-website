@@ -144,11 +144,11 @@ const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </div>
       </div>
       <div
-        className="w-500 h-10 p-2 flex  items-center mb-1 mx-5 "
+        className=" flex items-center mb-1  "
         style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
       >
         <button
-          className="p-2 bg-blues rounded-full md:block ml-14 lg:hidden"
+          className="p-2 bg-blues rounded-full md:block ml-5 lg:hidden"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <MenuIcon />

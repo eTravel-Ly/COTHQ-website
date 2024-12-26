@@ -173,9 +173,9 @@ const relatedBooks = books
         />
       </div>
       <div className="flex flex-col md:flex-row pt-16 w-full">
-        <div className="container mx-auto p-4" dir="rtl">
+        <div className="container  p-4" dir="rtl">
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
-            <div className="md:w-1/4 p-4">
+            <div className="w-full sm:w-1/3 p-2">
               <img src={bookData.coverImageUrl} alt="Book" className="w-60" />
             </div>
             <div className="md:w-2/3 p-4">
@@ -205,25 +205,25 @@ const relatedBooks = books
               </div>
 
               <div className="mb-4">
-                <div className="flex text-gray-700">
-                  <span className="flex items-center ml-60 font-bold font-tajwal">
+                <div className="flex justify-between text-gray-700">
+                  <span className="flex items-center font-bold font-tajwal">
                     <FaRegUserCircle className="ml-1" /> كتب بواسطة
                   </span>
-                  <span className="flex items-center ml-10 font-bold font-tajwal">
+                  <span className="flex items-center font-bold font-tajwal">
                     دار النشر
                   </span>
-                  <span className="flex items-center mr-28 font-bold font-tajwal">
+                  <span className="flex items-center font-bold font-tajwal">
                     تاريخ النشر
                   </span>
                 </div>
-                <div className="flex text-gray-700 mt-1">
-                  <span className="flex items-center ml-64 font-tajwal">
+                <div className="flex justify-between text-gray-700 mt-1">
+                  <span className="flex items-center font-tajwal">
                     {bookData.author}
                   </span>
-                  <span className="flex items-center  ml-14 font-tajwal">
+                  <span className="flex items-center font-tajwal">
                     {bookData.publisher}
                   </span>
-                  <span className="flex items-center mr-28 font-tajwal">
+                  <span className="flex items-center font-tajwal">
                     {bookData.publicationDate}
                   </span>
                 </div>
@@ -424,16 +424,16 @@ const relatedBooks = books
             </div>
           </div>
         </div>
-        <div
-          className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
-          } md:w-[20%] h-full`}
-        >
-          <Sidebar
-            isSidebarOpen={isSidebarOpen}
-            setIsSidebarOpen={setIsSidebarOpen}
-          />
-        </div>
+      </div>
+      <div
+        className={`transition-all duration-300 ${
+          isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+        } md:w-[20%] h-full`}
+      >
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
       </div>
       <ToastContainer />
     </>

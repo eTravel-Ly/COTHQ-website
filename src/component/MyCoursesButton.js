@@ -93,7 +93,7 @@ const MyCoursesButton = () => {
         {currentCourses.map((course, idx) => (
           <div
             key={idx}
-            className="w-1/4 p-2"
+            className="w-full sm:w-1/3 p-2"
             onClick={() => openShowcourse(course.id)}
           >
             <div className="bg-white rounded-lg shadow-md p-3">
@@ -112,10 +112,10 @@ const MyCoursesButton = () => {
                   marginBottom: "8px",
                   wordWrap: "break-word",
                   whiteSpace: "normal",
-                  overflow: "hidden",            // إخفاء النص الزائد
-                  display: "-webkit-box",         // استخدام box للنص
-                  WebkitBoxOrient: "vertical",    // اتجاه الصندوق عموديًا
-                  WebkitLineClamp: 4,             // عرض 4 أسطر فقط
+                  overflow: "hidden", 
+                  display: "-webkit-box", 
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 4, 
                 }}
               >
                 {course.description}
