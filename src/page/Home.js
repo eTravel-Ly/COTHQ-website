@@ -3,10 +3,10 @@ import Navbar from '../component/Navbar';
 import HeroSection from '../component/HeroSection';
 import SecondSection from '../component/SecondSection';
 import ThirdSection from '../component/ThirdSection';
-import PromoSection from '../component/PromoSection'
-import PartnerSection from '../component/PartnerSection'
-import ContactForm from '../component/ContactForm'
-
+import PromoSection from '../component/PromoSection';
+import PartnerSection from '../component/PartnerSection';
+import ContactForm from '../component/ContactForm';
+import PromoSectionWithMap from '../component/PromoSectionWithMap';
 
 function Home() {
   return (
@@ -20,6 +20,9 @@ function Home() {
          <ThirdSection/>
        <PromoSection/>
      <PartnerSection/>
+
+     <PromoSectionWithMap/>
+
            <ContactForm/>
       </main>
     </>
