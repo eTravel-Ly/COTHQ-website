@@ -7,7 +7,7 @@ import PromoSection from '../component/PromoSection';
 import PartnerSection from '../component/PartnerSection';
 import ContactForm from '../component/ContactForm';
 import PromoSectionWithMap from '../component/PromoSectionWithMap';
-
+import ShiekSection from '../component/ShiekSection'
 function Home() {
   return (
     <>
@@ -20,8 +20,9 @@ function Home() {
          <ThirdSection/>
        <PromoSection/>
      <PartnerSection/>
-
      <PromoSectionWithMap/>
+     <ShiekSection/>
+
 
            <ContactForm/>
       </main>

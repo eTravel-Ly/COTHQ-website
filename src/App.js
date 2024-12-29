@@ -31,7 +31,8 @@ import {
   TrainingCoursesDtails,
   Paytheorder,
   Paynow,
-  HelpCenter
+  HelpCenter,
+  ShiekSection,
 } from "./page/index";
 function App() {
   return (
@@ -78,6 +79,8 @@ function App() {
             path="/OrderConfirmation/:cartItems"
             element={<OrderConfirmation />}
           />
+          <Route path="/ShiekSection" element={<Allactivity />} />
+
           <Route path="/Allactivity" element={<Allactivity />} />
           <Route path="/Seminars" element={<Seminars />} />
           <Route path="/Paytheorder" element={<Paytheorder />} />
