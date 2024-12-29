@@ -204,7 +204,7 @@ function BorrowsHistory() {
     content: {
       backgroundColor: "white", // إضافة خلفية بيضاء
       width: "400px", // تحديد العرض المناسب
-      height: "150px", // تحديد الارتفاع المناسب
+      height: "200px", // تحديد الارتفاع المناسب
       padding: "20px",
       borderRadius: "8px", // إضافة زوايا مستديرة للمربع
       margin: "auto",
