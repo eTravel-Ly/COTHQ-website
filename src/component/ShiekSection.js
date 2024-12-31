@@ -10,11 +10,7 @@ const ShiekSection = () => {
   useEffect(() => {
  const fetchShieks = async () => {
    try {
-     const response = await axios.get(baseurl + "sheikhs", {
-       headers: {
-         accept: "application/json",
-         Authorization: `Bearer ${localStorage.getItem("token")}`,
-       },
+     const response = await axios.get(baseurl + "public/sheikh", {
      });
 
   
