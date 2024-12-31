@@ -38,19 +38,15 @@
   }
 }
 
-  @keyframes scrollLeftRight {
-   0% {
-          transform: translateX(100%); 
-        }
-        100% {
-          transform: translateX(-100%); 
-  }}
-   
-
-  .animate-scrollLeftRight {
-    display: flex;
-      scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        animation: scrollLeftRight 10s linear infinite; 
-    
+@keyframes scrollLeftRight {
+  0% {
+    transform: translateX(100%);
   }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scrollLeftRight {
+  animation: scrollLeftRight 60s linear infinite;
+}
