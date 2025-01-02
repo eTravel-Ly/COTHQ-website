@@ -4,6 +4,9 @@ import Banner from '../assets/images/Banner.png';
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { FaUsers, FaChalkboardTeacher, FaPhone } from "react-icons/fa";
+import { IoTime } from "react-icons/io5";
+import { MdEmail } from "react-icons/md";
 
 const containerStyle = {
   width: '100%',
@@ -19,6 +22,7 @@ const PromoSectionWithMap = () => {
     googleMapsApiKey: 'AIzaSyB41wwqZUpq-R_vifyy8X4QpNqlcC5AiSM',
   });
 
+
   const [centers, setCenters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +30,8 @@ const PromoSectionWithMap = () => {
   const coursesPerPage = 8; // Number of courses per page
   const [searchTerm, setSearchTerm] = useState("");
     const [filteredcenters, setFilteredcenters] = useState([]);
-  
+      const [isActive, setIsActive] = useState(0);
+
         // Pagination logic
         const indexOfLastCourse = currentPage * coursesPerPage;
         const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
@@ -62,8 +67,7 @@ const PromoSectionWithMap = () => {
   
 
 
-  console.log(centers)
-  if (!isLoaded || loading) {
+ if (!isLoaded || loading) {
     return <div>جاري التحميل...</div>;
   }
 
@@ -77,6 +81,12 @@ const PromoSectionWithMap = () => {
       setCurrentPage(pageNumber);
     };
 
+
+    const handleToggle = () => {
+      setIsActive(centers.isActive === 1 ? 0 : 1);
+    };
+  
+    
     
   return (
     <>
@@ -144,37 +154,50 @@ const PromoSectionWithMap = () => {
             >
               <h3 className="text-xl font-bold mb-3 text-gray-800 text-center" style={{ fontFamily: "Tajwal, sans-serif" }}>{center.name}</h3>
 
-              <div className="flex justify-between mb-2">
-                <p className="text-sm text-gray-600" style={{ fontFamily: "Tajwal, sans-serif" }}>
-                  <span className="font-bold">رقم الهاتف:</span> {center.phoneNumber}
-                </p>
-              </div>
-
-
-              
-
-              <p 
-                className="text-sm mb-4 text-gray-600 text-justify" 
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-              >
-                 {center.description}
-              </p>
-
               <div className="mt-auto">
                 <GoogleMap
                   key={`${center.lat}-${center.lng}`}
                   mapContainerStyle={containerStyle}
                   center={{ lat: center.lat, lng: center.lng }}
                   zoom={12}
+                  options={{
+                    disableDefaultUI: true, // تعطيل واجهة المستخدم الافتراضية
+                    zoomControl: false, // إخفاء أزرار التكبير/التصغير
+                    mapTypeControl: false, // إخفاء خيار Satellite/Map
+                  }}
                 >
                   <Marker position={{ lat: center.lat, lng: center.lng }} />
                 </GoogleMap>
               </div>
-              <div className="flex justify-between mb-2 mt-2">
-                <p className="text-sm text-gray-600" style={{ fontFamily: "Tajwal, sans-serif" }}>عدد الطلاب: {center.numberOfStudents}</p>
-                <p className="text-sm text-gray-600" style={{ fontFamily: "Tajwal, sans-serif" }}>عدد المعلمين: {center.numberOfTeachers}</p>
+              <div className="flex flex-row-reverse justify-between mb-2 mt-2" dir="rtl">
+                <p className="text-sm text-gray-600 flex items-center" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                  <FaUsers className="text-gray-600 ml-2" />
+                  {center.numberOfStudents}
+                </p>
+                <p className="text-sm text-gray-600 flex items-center" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                <FaPhone className="text-gray-600 ml-2"  />
+                {center.phoneNumber}
+                </p>
+                <p className="text-sm text-gray-600 flex items-center" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                  <FaChalkboardTeacher className="text-gray-600 ml-2" />
+                  {center.numberOfTeachers}
+                </p>
               </div>
-            </div>
+              <div className="flex flex-row-reverse justify-between mb-2 mt-2" dir="rtl">
+              <label htmlFor="toggle" className="inline-flex relative items-center cursor-pointer">
+                  <div
+                    className={`w-10 h-6 rounded-full transition-all ${center.isActive == 1 ? 'bg-green-500' : 'bg-red-500'}`}
+                  ></div>
+                  <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all"></div>
+                </label>
+              
+              <p className="text-sm text-gray-600 flex items-center" style={{ fontFamily: "Tajwal, sans-serif" }}>
+                  <IoTime className="text-gray-600 ml-2" />
+                  {center.workingHours}
+                </p>
+
+               </div>
+                 </div>
           ))}
         </div>
         </div>
