@@ -14,17 +14,14 @@ function Home() {
       <header>
         <Navbar/>
       </header>
-      <main className="p-10 flex flex-col items-center">
+      <main >
         <HeroSection/>
         <SecondSection/>
          <ThirdSection/>
        <PromoSection/>
-     <PartnerSection/>
-     <PromoSectionWithMap/>
-     <ShiekSection/>
+ 
 
 
-           <ContactForm/>
       </main>
     </>
   );

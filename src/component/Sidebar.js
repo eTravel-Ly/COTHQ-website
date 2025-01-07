@@ -13,6 +13,8 @@ import { GiTargetPrize } from "react-icons/gi";
 import { FaPeopleLine } from "react-icons/fa6";
 import { MdOutlineLocalActivity } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { FaUsers} from "react-icons/fa";
+import { FaShop } from "react-icons/fa6";
 
 const menuItems = [
   {
@@ -28,6 +30,8 @@ const menuItems = [
   },
   { path: "/Seminars", label: "الندوات و مؤتمرات", icon: <FaPeopleLine /> },
   { path: "/Shop", label: "المتجر", icon: <CiShop /> },
+  { path: "/", label: "المشايخ", icon: <FaUsers /> },
+  { path: "/", label: "مراكز التحفيظ", icon: <FaShop /> },
   { path: "/OrderHistory", label: "عمليات الشراء", icon: <CiShop /> },
   { path: "/borrowsHistory", label: "طلبات الاستعارة", icon: <CiShop /> },
   { path: "/settings", label: "الاعدادات", icon: <IoSettingsOutline /> },

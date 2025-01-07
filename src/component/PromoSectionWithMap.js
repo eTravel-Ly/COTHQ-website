@@ -47,7 +47,7 @@ const PromoSectionWithMap = () => {
         setFilteredcenters(response.data);
 
       } catch (err) {
-        setError('حدث خطأ أثناء جلب البيانات.');
+        // setError('حدث خطأ أثناء جلب البيانات.');
       } finally {
         setLoading(false);
       }

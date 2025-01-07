@@ -1,183 +1,34 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import group from "../assets/images/Group.png";
-import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
-import { baseurl } from "../helper/Baseurl";
-import { useNavigate } from 'react-router-dom'; // استيراد useNavigate من react-router-dom
+import pic2 from '../assets/images/tt12.jpg';
+
 
 function ThirdSection() {
-  const [courses, setCourses] = useState([]);
-  const [courseImages, setCourseImages] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [isLocalStorageValue, setIsLocalStorageValue] = useState(false); // state for localStorage value
-  const coursesPerPage = 8;
-
-  const showPicCourses = async (fileName) => {
-    try {
-      const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
-      console.log("Fetched image URL:", imageUrl);
-      return imageUrl;
-    } catch (error) {
-      console.error("Error fetching image:", error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await axios.get(`${baseurl}public/courses`);
-        setCourses(response.data);
-        setTotalPages(Math.ceil(response.data.length / coursesPerPage));
-        response.data.forEach(async (course) => {
-          const imageUrl = await showPicCourses(course.coverImageUrl);
-          setCourseImages((prevImages) => ({
-            ...prevImages,
-            [course.id]: imageUrl,
-          }));
-        });
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-
-    fetchCourses();
-
-    // Check localStorage value on component mount
-    const value = localStorage.getItem("token");
-    setIsLocalStorageValue(!!value); // Update state based on the localStorage value
-  }, []);
-
-  const indexOfLastCourse = currentPage * coursesPerPage;
-  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-  const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber > 0 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const navigate = useNavigate(); // الحصول على دالة التوجيه
-
-  // دالة لمعالجة النقر على الزر
-  const handleButtonClick = (courseId, action) => {
-    if (action === 'اشتر الآن') {
-      navigate(`/CoursesDetails/${courseId}`); // الانتقال إلى صفحة تفاصيل الكتاب
-    } else if (action === 'سجل الآن') {
-      navigate('/Login'); // الانتقال إلى صفحة تسجيل الدخول
-    }
-  };
-
-  const getShortTitle = (title) => {
-    const words = title.split(' ');  // تقسيم العنوان إلى كلمات
-    if (words.length > 4) {
-      return `${words.slice(0, 4).join(' ')}...`;  // عرض أول 4 كلمات مع النقاط
-    }
-    return title;  // إذا كان العنوان يحتوي على 4 كلمات أو أقل، يتم عرضه بالكامل
-  };
-  
+ 
   return (
-    <div id="courses" className="w-full bg-white py-16">
-    <div className="container mx-auto px-4">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-semibold" style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}>
-          اكتشف دورتك
-        </h2>
-        <p className="text-gray-500" style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}>
-          طريقك إلى تعلم العلوم الدينية 
-        </p>
-      </div>
-  
-      <div className="flex items-center justify-center space-x-4 p-2 mb-4 rounded-full bg-white border border-gray-200">
-        <button
-          className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white"
-          style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          <FaArrowAltCircleLeft size={20} />
-        </button>
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index}
-            className={`px-4 py-2 rounded-full ${currentPage === index + 1 ? 'bg-custom-orange text-white' : 'bg-gray-50 text-black'} hover:bg-custom-orange hover:text-white border border-gray-200`}
-            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-            onClick={() => handlePageChange(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white"
-          style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          <FaArrowAltCircleRight size={20} />
-        </button>
-      </div>
-  
-      {/* تعديل الشبكة هنا */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" style={{ fontFamily: 'Tajwal, sans-serif', direction: 'rtl' }}>
-      {currentCourses.map((course, index) => (
-          <div
-            key={index}
-            className="bg-white shadow-lg rounded-lg overflow-hidden"
-            style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
-          >
-            <img
-              src={courseImages[course.id] || group}
-              alt="Course"
-              className="w-full h-48 object-cover" // تعديل الحجم هنا
-            />
-            <div className="p-4 text-right">
-            <h3
-              className="text-lg font-semibold mb-2"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              {getShortTitle(course.title)}
-            </h3>
+    <section
+    className="relative bg-cover bg-center bg-no-repeat h-64 md:h-96 flex items-center justify-center"
+    style={{
+      backgroundImage: `url(${pic2})`, // استخدام الصورة المستوردة
+    }}
+  >
+    {/* Overlay الأزرق الشفاف */}
 
-              <p
-                className="text-gray-600 text-xs"
-                style={{
-                  fontFamily: "Tajwal, sans-serif",
-                  textAlign: "justify",
-                  lineHeight: "1.5",
-                  marginBottom: "8px",
-                  wordWrap: "break-word",
-                  whiteSpace: "normal",
-                  overflow: "hidden",            
-                  display: "-webkit-box",         
-                  WebkitBoxOrient: "vertical",    
-                  WebkitLineClamp: 4,             
-                }}
-              >
-                {course.description}
-              </p>
-              <div className="flex justify-between items-center">
-                <span
-                  className="text-black-500 font-bold"
-                  style={{ fontFamily: "Tajwal, sans-serif" }}
-                >
-                  {course.price} دينار
-                </span>
-                <button
-                  className={`text-white px-4 py-2 rounded-lg ${isLocalStorageValue ? 'bg-custom-orange' : 'bg-custom-orange'}`}
-                  style={{ fontFamily: "Tajwal, sans-serif" }}
-                  onClick={() => handleButtonClick(course.id, isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن')}
-                >
-                  {isLocalStorageValue ? 'اشتر الآن' : 'سجل الآن'}
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
+    <div className="absolute inset-0 bg-blues bg-opacity-50"></div>
+    {/* النص */}
+    <div className="relative z-10 text-center" dir="rtl">
+  <p className="text-sm md:text-lg text-white font-light mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+    قال رسول الله صلى الله عليه وسلم:
+  </p>
+  <br/>
+
+
+
+  <h1 className="text-xl md:text-3xl lg:text-5xl text-white font-bold" style={{ fontFamily: "Tajwal, sans-serif" }}>
+    خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ
+  </h1>
+</div>
+
+  </section>
   );
 }
 
