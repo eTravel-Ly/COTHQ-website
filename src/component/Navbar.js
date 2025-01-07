@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "../assets/images/logo2.png";
+import logo from "../assets/images/logo.svg";
 import logo1 from "../assets/images/logo.png";
 
 import { useNavigate } from "react-router-dom";
@@ -169,7 +169,7 @@ const Navbar = () => {
           <img
              src={scrolled ? logo1 : logo} // تغيير الصورة بناءً على حالة التمرير            alt="Logo"
             className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 ${
-              scrolled ? "" : "filter invert"
+              scrolled ? "" : ""
             }`}
           />
         </div>
