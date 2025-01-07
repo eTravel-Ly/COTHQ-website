@@ -16,7 +16,7 @@ const HeroSection = () => {
       id="hero"
       className="text-center py-72 flex flex-col items-center relative"
       style={{
-        backgroundImage: `url(${test})`, // استخدام الصورة المستوردة
+        backgroundImage: `url("https://i.pinimg.com/originals/d0/36/1c/d0361c7d1c5ba81a5f020b50076ecb52.jpg")`, // استخدام الصورة المستوردة
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

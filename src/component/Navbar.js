@@ -174,6 +174,80 @@ const Navbar = () => {
           />
         </div>
       </div>
+
+       
+    {/* القائمة الجانبية (Mobile Dropdown) */}
+    {isOpen && (
+      <div className="absolute top-14 sm:top-16 md:top-20 left-0 w-full bg-white shadow-md flex flex-col space-y-2 px-4 py-2 text-xs sm:text-sm">
+        <a
+          href="#hero"
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+          className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
+          onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+        >
+          الصفحة الرئيسية
+        </a>
+        <a
+          href="#courses"
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+          className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
+          onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+        >
+          الدورات
+        </a>
+        <a
+          href="#PartnerSection"
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+          className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
+          onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+        >
+          النشاطات
+        </a>
+        <a
+          href="#contact"
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+          className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
+          onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+        >
+          اتصل
+        </a>
+        {isLoggedIn ? (
+          <a
+            href="#"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
+            className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
+            onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+          >
+            حسابي
+          </a>
+        ) : (
+          <>
+            <a
+              href="#"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+              className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
+              onClick={() => {
+                handleRegisterRedirect();
+                setIsOpen(false); // إغلاق القائمة عند الضغط
+              }}
+            >
+              الاشتراك
+            </a>
+            <a
+              href="#"
+              style={{ fontFamily: "Tajwal, sans-serif" }}
+              className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
+              onClick={() => {
+                handleLogin();
+                setIsOpen(false); // إغلاق القائمة عند الضغط
+              }}
+            >
+              تسجيل الدخول
+            </a>
+          </>
+        )}
+      </div>
+    )}
     </nav>
   );
 };
