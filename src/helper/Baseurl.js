@@ -6,5 +6,5 @@
 
 export const baseurl =  "http://app.holyquran.ly:8080/api/"
 
-//export const baseurl =  "http://127.0.0.1:8080/api/"
+// export const baseurl =  "http://127.0.0.1:8080/api/"
 

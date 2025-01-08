@@ -4,10 +4,11 @@ import HeroSection from '../component/HeroSection';
 import SecondSection from '../component/SecondSection';
 import ThirdSection from '../component/ThirdSection';
 import PromoSection from '../component/PromoSection';
-import PartnerSection from '../component/PartnerSection';
 import ContactForm from '../component/ContactForm';
 import PromoSectionWithMap from '../component/PromoSectionWithMap';
 import ShiekSection from '../component/ShiekSection'
+import SectionFive from '../component/SectionFive';
+import Footer from '../component/Footer';
 function Home() {
   return (
     <>
@@ -19,7 +20,10 @@ function Home() {
         <SecondSection/>
          <ThirdSection/>
        <PromoSection/>
- 
+       <SectionFive/>
+       <ShiekSection/>
+        
+       <Footer/>
 
 
       </main>
