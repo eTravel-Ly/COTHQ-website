@@ -4,18 +4,19 @@ import pic2 from '../assets/images/bg.webp';
 function SectionFive() {
   const quotes = [
     {
-      text: "من تعلم العلم ثم عمل به وأوصله إلى الناس فقد أتم النعمة، ومن عمل بالعلم ولم يعلم فقد ضلّ الطريق.",
+      text: "مَن تَعَلَّمَ العِلْمَ ثُمَّ عَمِلَ بِهِ وأَوْصَلَهُ إلى النَّاسِ فَقَدْ أَتَمَّ النِّعْمَةَ، ومَنْ عَمِلَ بِالعِلْمِ وَلَمْ يُعَلِّمْ فَقَدْ ضَلَّ الطَّرِيقَ.",
       author: "الإمام مالك بن أنس",
     },
     {
-      text: "تعلموا العلم وعلموه الناس، وتعلموا الوقار والسكون.",
-      author: "عمر بن الخطاب",
+      text: "تَعَلَّمُوا العِلْمَ وَعَلِّمُوهُ النَّاسَ، وتَعَلَّمُوا الوَقَارَ والسُّكُونَ.",
+      author: "عُمَرُ بنُ الخَطَّابِ",
     },
     {
-      text: "العلم ما كان نافعا، والنافع ما يُقرب إلى الله.",
+      text: "العِلْمُ مَا كَانَ نَافِعًا، والنَّافِعُ مَا يُقَرِّبُ إلى اللهِ.",
       author: "ابن تيمية",
     },
   ];
+  
 
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [fade, setFade] = useState(true); // حالة للتحكم بالأنيميشن
@@ -43,7 +44,7 @@ function SectionFive() {
 
       <div className={`relative z-10 text-center transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`} dir="rtl">
         <h1
-          className="text-xl md:text-3xl lg:text-5xl text-white font-bold"
+          className="text-lg md:text-2xl lg:text-3xl text-white font-bold"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
           {quotes[currentQuoteIndex].text}

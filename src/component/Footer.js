@@ -6,8 +6,13 @@ import { Copyright } from "@mui/icons-material";
 export default function Footer() {
   return (
     <>
-      <div dir='rtl' className={`bg-[#006b80bc] text-white py-10 `}style={{ fontFamily: "Tajwal, sans-serif" }} >
-      <div className="container mx-auto px-4">
+<div 
+  dir='rtl' 
+  className={`bg-[#006b80bc] text-white py-10`} 
+  style={{ 
+    fontFamily: "Tajwal, sans-serif", 
+    borderRadius: "50px 50px 0 0" // الحواف مدورة على اليمين واليسار
+  }}>      <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center ">
           {/* Logo and Description */}
           <div className="w-full sm:w-1/3 text-center mb-8">
@@ -91,7 +96,7 @@ export default function Footer() {
         {/* Privacy Policy and Copyright */}
         <div className="text-center font-bold">
           <div className="flex justify-center space-x-6 mb-2">
-            <p className="text-sm"> جميع الحقوق محفوظة | <Copyright className='ml-2'/> </p>
+            <p className="text-sm"> جميع الحقوق محفوظة | <Copyright className='ml-2 '/> </p>
             <p className="text-sm"> مجمع القرآن الكريم </p>
           </div>
           <p className="text-sm">2025</p>

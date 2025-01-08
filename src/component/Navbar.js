@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "../assets/images/logo.svg";
 import logo1 from "../assets/images/logo.png";
-
+import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -9,6 +9,10 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  // Refs for animation
+  const navRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const linksRef = useRef([]);
 
   useEffect(() => {
     // تحقق من وجود قيمة في localStorage لتحديد حالة تسجيل الدخول
@@ -29,6 +33,36 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  useEffect(() => {
+    // Animate navbar on load
+    gsap.fromTo(
+      navRef.current,
+      { y: -50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 2}
+    );
+    gsap.fromTo(
+      navRef.current,
+      { y: -50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 2, ease: "power3.out" }
+    );
+    
+    // Animate links individually
+    gsap.fromTo(
+      linksRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 2, stagger: 0.2 }
+    );
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      gsap.fromTo(
+        mobileMenuRef.current,
+        { y: -20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1 }
+      );
+    }
+  }, [isOpen]);
 
   const handleRegisterRedirect = () => {
     navigate("/LoginRegister");
@@ -44,6 +78,7 @@ const Navbar = () => {
 
   return (
     <nav
+    ref={navRef}
       className={`fixed top-0 left-0 w-full z-50  flex items-center px-4 h-14 sm:h-16 md:h-20 transition-all duration-300 ${
         scrolled ? "bg-white text-black" : "bg-transparent text-white"
       }`}
@@ -83,6 +118,7 @@ const Navbar = () => {
           {isLoggedIn ? (
             <a
               href="#"
+              ref={(el) => (linksRef.current[0] = el)}
               style={{ fontFamily: "Tajwal, sans-serif" }}
               className={`py-2 px-3 rounded-full ${
                 scrolled ? "bg-custom-orange text-white" : "border border-white"
@@ -95,6 +131,7 @@ const Navbar = () => {
             <>
               <a
                 href="#"
+                ref={(el) => (linksRef.current[1] = el)}
                 style={{ fontFamily: "Tajwal, sans-serif" }}
                 className={`py-2 px-3 border rounded-full ${
                   scrolled
@@ -107,6 +144,7 @@ const Navbar = () => {
               </a>
               <a
                 href="#"
+                ref={(el) => (linksRef.current[2] = el)}
                 style={{ fontFamily: "Tajwal, sans-serif" }}
                 className={`py-2 px-3 border rounded-full ${
                   scrolled
@@ -121,6 +159,7 @@ const Navbar = () => {
           )}
           <a
             href="#contact"
+            ref={(el) => (linksRef.current[3] = el)}
             style={{ fontFamily: "Tajwal, sans-serif" }}
             className={`py-4 px-3 font-bold ${
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
@@ -130,6 +169,7 @@ const Navbar = () => {
           </a>
           <a
             href="#courses"
+            ref={(el) => (linksRef.current[4] = el)}
             style={{ fontFamily: "Tajwal, sans-serif" }}
             className={`py-4 px-3 font-bold ${
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
@@ -139,6 +179,7 @@ const Navbar = () => {
           </a>
           <a
             href="#PartnerSection"
+            ref={(el) => (linksRef.current[5] = el)}
             style={{ fontFamily: "Tajwal, sans-serif" }}
             className={`py-4 px-3 font-bold ${
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
@@ -148,6 +189,7 @@ const Navbar = () => {
           </a>
           <a
             href="#hero"
+            ref={(el) => (linksRef.current[5] = el)}
             style={{ fontFamily: "Tajwal, sans-serif" }}
             className={`py-4 px-3 font-bold ${
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"

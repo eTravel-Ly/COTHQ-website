@@ -93,7 +93,7 @@ function ShiekhsList() {
   
   {/* العنوان والوصف */}
   <div className="flex items-center mb-4 justify-center">
-    <FaUser className="ml-4 text-gray-700 text-xl" />
+    <FaUser className="ml-2 text-gray-700 text-md" />
     <p className="text-gray-600 font-bold">
       {shiek.firstName} {shiek.lastName}
     </p>
@@ -101,7 +101,7 @@ function ShiekhsList() {
 
   {/* رقم الشيخ */}
   <div className="flex items-center mb-4 justify-center">
-    <FaPhone className="ml-4 text-gray-700 text-xl" />
+    <FaPhone className="ml-2 text-gray-700 text-md" />
     <p className="text-gray-600">
       {shiek.phoneNumber}
     </p>
@@ -109,7 +109,7 @@ function ShiekhsList() {
 
   {/* الوصف */}
   <div className="flex items-center justify-center mb-4">
-  <FaInfoCircle className="ml-4 text-gray-700 text-4xl" />
+  {/* <FaInfoCircle className="ml-4 text-gray-700 text-4xl" /> */}
     <p className="text-gray-600">
       {shiek.description}
     </p>
