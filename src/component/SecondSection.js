@@ -3,6 +3,7 @@ import { MdOutlineSlowMotionVideo } from "react-icons/md";
 import { FaBookOpen, FaUserFriends, FaGlobe, FaLink } from "react-icons/fa";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { motion } from 'framer-motion';
 
 const SecondSection = () => {
   const features = [
@@ -21,20 +22,27 @@ const SecondSection = () => {
   ];
 
   useEffect(() => {
+    // Initialize AOS with options
     AOS.init({
       duration: 1000,
       easing: 'ease-in-out',
-      once: true,
+      once: false, // Allow animations to happen more than once
     });
 
-    // Refresh AOS on scroll and resize
-    window.addEventListener('scroll', AOS.refresh);
-    window.addEventListener('resize', AOS.refresh);
+    // Manually trigger the AOS refresh
+    AOS.refresh();
+
+    // Refresh AOS on scroll and resize events
+    const handleScroll = () => AOS.refresh();
+    const handleResize = () => AOS.refresh();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
 
     // Clean up the event listeners on component unmount
     return () => {
-      window.removeEventListener('scroll', AOS.refresh);
-      window.removeEventListener('resize', AOS.refresh);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -52,7 +60,7 @@ const SecondSection = () => {
 
       <div className="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-12">
         {features.map((feature, index) => (
-          <div
+          <motion.div
             key={index}
             data-aos="fade-up" // Animation when scrolling
             data-aos-duration="1500" // Duration of the animation
@@ -64,7 +72,7 @@ const SecondSection = () => {
             <h3 className="text-base md:text-lg font-medium text-gray-700 mt-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
               {feature.title}
             </h3>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

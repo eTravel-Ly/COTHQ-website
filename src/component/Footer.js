@@ -7,6 +7,7 @@ export default function Footer() {
   return (
     <>
 <div 
+id="contact"
   dir='rtl' 
   className={`bg-[#006b80bc] text-white py-10`} 
   style={{ 

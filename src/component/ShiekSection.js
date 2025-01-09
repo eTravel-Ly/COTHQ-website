@@ -35,7 +35,7 @@ function ShiekhsList() {
   // }
 
   return (
-    <section className="text-center py-20 bg-gray-50 " style={{ fontFamily: "Tajwal" }} >
+    <section className="text-center py-20 bg-gray-50 " style={{ fontFamily: "Tajwal" }}  id="ShiekhsList">
         <h2 className="text-2xl md:text-4xl font-bold text-center text-gray-500 mb-8" style={{ fontFamily: "Tajwal, sans-serif" }}>
         قائمة المشايخ
     </h2>

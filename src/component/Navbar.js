@@ -168,14 +168,14 @@ const Navbar = () => {
             اتصل بنا
           </a>
           <a
-            href="#courses"
+            href="#ShiekhsList"
             ref={(el) => (linksRef.current[4] = el)}
             style={{ fontFamily: "Tajwal, sans-serif" }}
             className={`py-4 px-3 font-bold ${
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
             }`}
           >
-            الدورات
+            المشايخ
           </a>
           <a
             href="#PartnerSection"
@@ -185,7 +185,7 @@ const Navbar = () => {
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
             }`}
           >
-            النشاطات
+            خدماتنا
           </a>
           <a
             href="#hero"
@@ -230,20 +230,20 @@ const Navbar = () => {
           الصفحة الرئيسية
         </a>
         <a
-          href="#courses"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
+            href="#PartnerSection"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          الدورات
+          خدماتنا
         </a>
         <a
-          href="#PartnerSection"
+          href="#ShiekhsList"
           style={{ fontFamily: "Tajwal, sans-serif" }}
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          النشاطات
+          المشايخ
         </a>
         <a
           href="#contact"
@@ -251,7 +251,7 @@ const Navbar = () => {
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          اتصل
+          اتصل بنا
         </a>
         {isLoggedIn ? (
           <a
