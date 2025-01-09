@@ -3,6 +3,7 @@ import logo from "../assets/images/logo.svg";
 import logo1 from "../assets/images/logo.png";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
+import { IoLanguageOutline } from "react-icons/io5";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -107,6 +108,8 @@ const Navbar = () => {
               ></path>
             </svg>
           </button>
+          <IoLanguageOutline size={22} className="ml-2" /> 
+
         </div>
 
         {/* القائمة للشاشات الكبيرة */}
@@ -157,6 +160,7 @@ const Navbar = () => {
               </a>
             </>
           )}
+<IoLanguageOutline size={22} /> 
           <a
             href="#contact"
             ref={(el) => (linksRef.current[3] = el)}
@@ -168,14 +172,14 @@ const Navbar = () => {
             اتصل بنا
           </a>
           <a
-            href="#courses"
+            href="#ShiekhsList"
             ref={(el) => (linksRef.current[4] = el)}
             style={{ fontFamily: "Tajwal, sans-serif" }}
             className={`py-4 px-3 font-bold ${
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
             }`}
           >
-            الدورات
+            المشايخ
           </a>
           <a
             href="#PartnerSection"
@@ -185,7 +189,7 @@ const Navbar = () => {
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
             }`}
           >
-            النشاطات
+            خدماتنا
           </a>
           <a
             href="#hero"
@@ -230,20 +234,20 @@ const Navbar = () => {
           الصفحة الرئيسية
         </a>
         <a
-          href="#courses"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
+            href="#PartnerSection"
+            style={{ fontFamily: "Tajwal, sans-serif" }}
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          الدورات
+          خدماتنا
         </a>
         <a
-          href="#PartnerSection"
+          href="#ShiekhsList"
           style={{ fontFamily: "Tajwal, sans-serif" }}
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          النشاطات
+          المشايخ
         </a>
         <a
           href="#contact"
@@ -251,7 +255,7 @@ const Navbar = () => {
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          اتصل
+          اتصل بنا
         </a>
         {isLoggedIn ? (
           <a
