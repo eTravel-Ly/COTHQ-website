@@ -3,6 +3,7 @@ import logo from "../assets/images/logo.svg";
 import logo1 from "../assets/images/logo.png";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
+import { IoLanguageOutline } from "react-icons/io5";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -107,6 +108,8 @@ const Navbar = () => {
               ></path>
             </svg>
           </button>
+          <IoLanguageOutline size={22} className="ml-2" /> 
+
         </div>
 
         {/* القائمة للشاشات الكبيرة */}
@@ -157,6 +160,7 @@ const Navbar = () => {
               </a>
             </>
           )}
+<IoLanguageOutline size={22} /> 
           <a
             href="#contact"
             ref={(el) => (linksRef.current[3] = el)}
