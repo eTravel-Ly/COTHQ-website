@@ -88,7 +88,7 @@ const FAQSection = () => {
 
   return (
     <motion.div
-      className="container mx-auto p-5 rtl"
+      className="container mx-auto p-5 rtl mt-10 mb-5 "
       style={{ fontFamily: "Tajwal, sans-serif" }}
       initial={{ opacity: 0, x: -100 }} // تحديد النقطة الابتدائية للتحريك (من اليسار)
       animate={{ opacity: 1, x: 0 }}  // التحرك إلى وضعه الطبيعي
