@@ -1,0 +1,52 @@
+{
+    "home": {
+      "buttonText": "Read More",
+      "navbar": {
+        "home": "Home",
+        "about": "About Digital Dinar",
+        "contact": "Contact Us"
+      },
+      "FirstSection": {
+        "title": "Your money, your way, anytime, anywhere",
+
+        "description": "Enjoy the ease of using the complete digital wallet with Digital Dinar – secure, fast, and simple. Managing your money has never been this easy, whether you're paying bills, sending money, or making purchases. The financial future is in your hands now."
+      },
+      "DownloadApp": {
+        "title": "Join the Future of Payments Today",
+        "description": "Are you ready to experience a new way of managing money? Download Digital Dinar and enjoy the freedom of secure digital payments that suit you.",
+        "appStoreLink": "App Store",
+        "googlePlayLink": "Google Play"
+      },
+      "SecondSection": {
+        "title": "Easy login and seamless payments in seconds",
+        "description": "With Digital Dinar, sending and receiving money has never been easier. Make instant payments to friends, family, and businesses all with a few clicks. Say goodbye to cash problems and enjoy the speed of digital transactions."
+      },
+      "ThirdSection": {
+        "title": "Safe and trustworthy",
+        "description": "Your security is our priority. Digital Dinar uses the latest encryption technologies and security measures to ensure the protection of your personal and financial information at all times. Manage your money with comfort and peace of mind."
+      },
+      "FourthSection": {
+        "title": "Accepted Everywhere",
+        "description": "From local stores to online services, Digital Dinar is accepted by thousands of merchants across Libya. Whether you're shopping, dining, or paying bills, use Digital Dinar for a fast and touchless experience."
+      },
+      "PaymentMethods": {
+        "title": "Our Trusted Partners",
+        "description": "Our partners from banks, financial institutions, and leading merchants ensure that every transaction made through Digital Dinar is safe, fast, and reliable. By collaborating with these institutions, we aim to provide innovative services that meet your everyday financial needs with confidence and ease."
+      },
+      "Footer": {
+        "title": "Digital Dinar",
+        "description": "Digital Dinar is designed for individuals seeking a seamless and secure digital financial experience.",
+        "links": {
+          "about": "About",
+          "contact": "Contact Us",
+          "home": "Home",
+          "products": "Products",
+          "careers": "Careers"
+        },
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service",
+        "copyright": "© 2024 Digital Dinar"
+      }
+    }
+  }
+  
