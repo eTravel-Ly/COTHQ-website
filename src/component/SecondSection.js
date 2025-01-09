@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { MdOutlineSlowMotionVideo } from "react-icons/md";
-import { FaBookOpen, FaUserFriends, FaGlobe, FaLink } from "react-icons/fa";
+import { FaBookOpen, FaGlobe } from "react-icons/fa";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { motion } from 'framer-motion';
@@ -22,24 +22,18 @@ const SecondSection = () => {
   ];
 
   useEffect(() => {
-    // Initialize AOS with options
     AOS.init({
       duration: 1000,
       easing: 'ease-in-out',
-      once: false, // Allow animations to happen more than once
+      once: false,
     });
 
-    // Manually trigger the AOS refresh
-    AOS.refresh();
-
-    // Refresh AOS on scroll and resize events
     const handleScroll = () => AOS.refresh();
     const handleResize = () => AOS.refresh();
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
 
-    // Clean up the event listeners on component unmount
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
@@ -62,11 +56,15 @@ const SecondSection = () => {
         {features.map((feature, index) => (
           <motion.div
             key={index}
-            data-aos="fade-up" // Animation when scrolling
-            data-aos-duration="1500" // Duration of the animation
-            data-aos-delay={`${index * 200}`} // Delay based on the index
-            data-aos-easing="ease-out-back" // Easing for smoother animation
-            className="flex flex-col items-center text-center bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
+            data-aos="fade-up"
+            data-aos-duration="1500"
+            data-aos-delay={`${index * 200}`}
+            data-aos-easing="ease-out-back"
+            className="flex flex-col items-center justify-center text-center bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
+            style={{
+              width: '230px', // تحديد عرض الكارد
+              height: '190px', // تحديد ارتفاع الكارد
+            }}
           >
             {feature.icon}
             <h3 className="text-base md:text-lg font-medium text-gray-700 mt-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
