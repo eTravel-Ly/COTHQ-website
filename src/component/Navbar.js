@@ -4,6 +4,7 @@ import logo1 from "../assets/images/logo.png";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import { IoLanguageOutline } from "react-icons/io5";
+import { useTranslation } from "../context/TranslationContext"; // استيراد هوك الترجمة
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,7 @@ const Navbar = () => {
   const navRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const linksRef = useRef([]);
+  const { translations,  language, changeLanguage } = useTranslation(); // استخدام الترجمة
 
   useEffect(() => {
     // تحقق من وجود قيمة في localStorage لتحديد حالة تسجيل الدخول
@@ -77,6 +79,13 @@ const Navbar = () => {
     navigate("/HomeAfterLogin"); // أو أي مسار لحساب المستخدم
   };
 
+
+  // التبديل بين العربية والإنجليزية
+  const handleLanguageChange = () => {
+    const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
+    changeLanguage(newLanguage); // تغيير اللغة
+  };
+
   return (
     <nav
     ref={navRef}
@@ -108,7 +117,7 @@ const Navbar = () => {
               ></path>
             </svg>
           </button>
-          <IoLanguageOutline size={22} className="ml-2" /> 
+          <IoLanguageOutline size={22} className="ml-2 cursor-pointer" onClick={handleLanguageChange} />
 
         </div>
 
@@ -128,7 +137,8 @@ const Navbar = () => {
               }`}
               onClick={handleAccount}
             >
-              حسابي
+                          {translations.account}
+
             </a>
           ) : (
             <>
@@ -143,7 +153,7 @@ const Navbar = () => {
                 }`}
                 onClick={handleRegisterRedirect}
               >
-                الاشتراك
+                   {translations.register}
               </a>
               <a
                 href="#"
@@ -156,11 +166,12 @@ const Navbar = () => {
                 }`}
                 onClick={handleLogin}
               >
-                تسجيل الدخول
+                                 {translations.login}
+
               </a>
             </>
           )}
-<IoLanguageOutline size={22} /> 
+          <IoLanguageOutline size={22} className="ml-2 cursor-pointer" onClick={handleLanguageChange} />
           <a
             href="#contact"
             ref={(el) => (linksRef.current[3] = el)}
@@ -169,7 +180,8 @@ const Navbar = () => {
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
             }`}
           >
-            اتصل بنا
+                                     {translations.contactUs}
+
           </a>
           <a
             href="#ShiekhsList"
@@ -179,7 +191,8 @@ const Navbar = () => {
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
             }`}
           >
-            المشايخ
+              {translations.sheikhs}
+
           </a>
           <a
             href="#PartnerSection"
@@ -189,7 +202,7 @@ const Navbar = () => {
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
             }`}
           >
-            خدماتنا
+               {translations.services}
           </a>
           <a
             href="#hero"
@@ -199,8 +212,8 @@ const Navbar = () => {
               scrolled ? "hover:text-gray-700" : "hover:text-gray-900"
             }`}
           >
-            الصفحة الرئيسية
-          </a>
+               {translations.home}
+               </a>
         </div>
 
         {/* الصورة والنص في اليمين */}
@@ -210,7 +223,8 @@ const Navbar = () => {
               scrolled ? "text-black" : "text-white"
             }`}
           >
-            مجمع القرآن الكريم
+            
+            {translations.quranComplex}
           </span>
           <img
              src={scrolled ? logo1 : logo} // تغيير الصورة بناءً على حالة التمرير            alt="Logo"
@@ -231,15 +245,15 @@ const Navbar = () => {
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          الصفحة الرئيسية
-        </a>
+            {translations.home}
+            </a>
         <a
             href="#PartnerSection"
             style={{ fontFamily: "Tajwal, sans-serif" }}
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          خدماتنا
+                      {translations.services}
         </a>
         <a
           href="#ShiekhsList"
@@ -247,7 +261,7 @@ const Navbar = () => {
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          المشايخ
+           {translations.sheikhs}
         </a>
         <a
           href="#contact"
@@ -255,7 +269,7 @@ const Navbar = () => {
           className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
           onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
         >
-          اتصل بنا
+           {translations.contactUs}
         </a>
         {isLoggedIn ? (
           <a
@@ -264,7 +278,8 @@ const Navbar = () => {
             className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
             onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
           >
-            حسابي
+                       {translations.account}
+
           </a>
         ) : (
           <>
@@ -277,7 +292,7 @@ const Navbar = () => {
                 setIsOpen(false); // إغلاق القائمة عند الضغط
               }}
             >
-              الاشتراك
+               {translations.register}
             </a>
             <a
               href="#"
@@ -288,7 +303,7 @@ const Navbar = () => {
                 setIsOpen(false); // إغلاق القائمة عند الضغط
               }}
             >
-              تسجيل الدخول
+               {translations.login}
             </a>
           </>
         )}

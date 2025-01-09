@@ -34,9 +34,14 @@ import {
   HelpCenter,
   ShiekSection,
 } from "./page/index";
+
+import { TranslationProvider, useTranslation } from './context/TranslationContext';
+
 function App() {
   return (
     <>
+        <TranslationProvider>
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -88,6 +93,7 @@ function App() {
           <Route path="/SeminarsDetails/:Id" element={<SeminarsDetails />} />
         </Routes>
       </BrowserRouter>
+      </TranslationProvider>
     </>
   );
 }
