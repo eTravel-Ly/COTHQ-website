@@ -1,9 +1,9 @@
-import React from 'react';
-import { MdOutlineDescription, MdCheckCircle } from "react-icons/md";
-import pic1 from '../assets/images/pic1.png';
-import pic2 from '../assets/images/pic2.png';
+import React, { useEffect } from 'react';
 import { MdOutlineSlowMotionVideo } from "react-icons/md";
 import { FaBookOpen, FaUserFriends, FaGlobe, FaLink } from "react-icons/fa";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const SecondSection = () => {
   const features = [
     {
@@ -20,34 +20,55 @@ const SecondSection = () => {
     },
   ];
 
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      easing: 'ease-in-out',
+      once: true,
+    });
+
+    // Refresh AOS on scroll and resize
+    window.addEventListener('scroll', AOS.refresh);
+    window.addEventListener('resize', AOS.refresh);
+
+    // Clean up the event listeners on component unmount
+    return () => {
+      window.removeEventListener('scroll', AOS.refresh);
+      window.removeEventListener('resize', AOS.refresh);
+    };
+  }, []);
+
   return (
     <section className="text-center py-24 bg-gray-50">
-      <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-700 mb-2"  style={{ fontFamily: "Tajwal, sans-serif" }} >
+      <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-700 mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
         أهلاً بكم في مجمعنا
       </h2>
- 
+
       <p className="text-sm md:text-base lg:text-lg text-gray-600 mb-10 px-4 md:px-20" style={{ fontFamily: "Tajwal, sans-serif" }}>
-        تحقيقاً لرؤية صاحب السمو الشيخ الدكتور سلطان بن محمد القاسمي -حفظه الله-، وسعياً نحو التميز والريادة في خدمة القرآن الكريم وعلومه،
+        تحقيقاً لرؤية صاحب السمو الشيخ -حفظه الله-، وسعياً نحو التميز والريادة في خدمة القرآن الكريم وعلومه،
         <br />
         جاءت فكرة إنشاء مجمع القرآن الكريم بليبيا ليكون منارة علمية قرآنية متميزة.
       </p>
-
 
       <div className="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-12">
         {features.map((feature, index) => (
           <div
             key={index}
+            data-aos="fade-up" // Animation when scrolling
+            data-aos-duration="1500" // Duration of the animation
+            data-aos-delay={`${index * 200}`} // Delay based on the index
+            data-aos-easing="ease-out-back" // Easing for smoother animation
             className="flex flex-col items-center text-center bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
           >
             {feature.icon}
-            <h3 className="text-base md:text-lg font-medium text-gray-700 mt-2"  style={{ fontFamily: "Tajwal, sans-serif" }} >
+            <h3 className="text-base md:text-lg font-medium text-gray-700 mt-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
               {feature.title}
             </h3>
           </div>
         ))}
       </div>
     </section>
-  )
+  );
 };
 
 export default SecondSection;

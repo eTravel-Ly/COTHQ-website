@@ -9,6 +9,7 @@ import PromoSectionWithMap from '../component/PromoSectionWithMap';
 import ShiekSection from '../component/ShiekSection'
 import SectionFive from '../component/SectionFive';
 import Footer from '../component/Footer';
+import FAQSection from '../component/FAQSection'
 function Home() {
   return (
     <>
@@ -22,7 +23,7 @@ function Home() {
        <PromoSection/>
        <SectionFive/>
        <ShiekSection/>
-        
+        <FAQSection/>
        <Footer/>
 
 

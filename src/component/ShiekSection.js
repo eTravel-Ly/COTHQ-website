@@ -36,8 +36,8 @@ function ShiekhsList() {
 
   return (
     <section className="text-center py-20 bg-gray-50 " style={{ fontFamily: "Tajwal" }} >
-    <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-700 mb-2" >
-      قائمة المشايخ
+        <h2 className="text-2xl md:text-4xl font-bold text-center text-gray-500 mb-8" style={{ fontFamily: "Tajwal, sans-serif" }}>
+        قائمة المشايخ
     </h2>
     <div dir="rtl" className="grid grid-cols-1   p-8 md:grid-cols-5 gap-8 text-center">
     {[
