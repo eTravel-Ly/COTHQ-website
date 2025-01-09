@@ -8,6 +8,7 @@ import ContactForm from '../component/ContactForm';
 import PromoSectionWithMap from '../component/PromoSectionWithMap';
 import ShiekSection from '../component/ShiekSection'
 import SectionFive from '../component/SectionFive';
+import NumSection from '../component/NumSection';
 import Footer from '../component/Footer';
 import FAQSection from '../component/FAQSection'
 function Home() {
@@ -23,6 +24,9 @@ function Home() {
        <PromoSection/>
        <SectionFive/>
        <ShiekSection/>
+      <NumSection/>
+   
+    
         <FAQSection/>
        <Footer/>
 
