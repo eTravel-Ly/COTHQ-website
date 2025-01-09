@@ -82,16 +82,18 @@ function ShiekhsList() {
     image: sh5
   }
 ].map((shiek) => (
-  <div key={shiek.id} className="text-center shadow-md hover:shadow-lg transition-shadow border rounded-md p-5 border-gray-200">
+  <div
+  key={shiek.id}
+  className="text-center shadow-md hover:shadow-lg  border rounded-md p-5 border-gray-200 transform hover:scale-105 transition-transform duration-300"
+>
   <div className="w-36 h-36 mx-auto mb-4">
     <img
-       src={shiek.image} 
+      src={shiek.image}
       alt={`${shiek.firstName} ${shiek.lastName}`}
       className="w-full h-full rounded-full object-cover"
     />
   </div>
-  
-  {/* العنوان والوصف */}
+
   <div className="flex items-center mb-4 justify-center">
     <FaUser className="ml-2 text-gray-700 text-md" />
     <p className="text-gray-600 font-bold">
@@ -99,20 +101,13 @@ function ShiekhsList() {
     </p>
   </div>
 
-  {/* رقم الشيخ */}
   <div className="flex items-center mb-4 justify-center">
     <FaPhone className="ml-2 text-gray-700 text-md" />
-    <p className="text-gray-600">
-      {shiek.phoneNumber}
-    </p>
+    <p className="text-gray-600">{shiek.phoneNumber}</p>
   </div>
 
-  {/* الوصف */}
   <div className="flex items-center justify-center mb-4">
-  {/* <FaInfoCircle className="ml-4 text-gray-700 text-4xl" /> */}
-    <p className="text-gray-600">
-      {shiek.description}
-    </p>
+    <p className="text-gray-600">{shiek.description}</p>
   </div>
 </div>
 
