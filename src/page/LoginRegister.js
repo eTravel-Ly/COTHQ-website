@@ -319,7 +319,7 @@ const LoginRegister = () => {
   };
 
   return (
-    <div className="flex  h-full ">
+    <div className="flex  h-full " id="LoginRegister">
        {/* صورة جانبية */}
        <div className="hidden md:block w-1/2 h-full">
       <img
@@ -582,7 +582,7 @@ const LoginRegister = () => {
 
           <p className="mt-4 font-tajwal">
             لديك حساب؟{" "}
-            <a href="Login" className="text-custom-orange font-tajwal">
+            <a href="#Login" className="text-custom-orange font-tajwal">
               قم بتسجيل الدخول الآن
             </a>
           </p>

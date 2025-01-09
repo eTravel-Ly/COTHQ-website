@@ -99,7 +99,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen" id="Login">
       {/* Left side image */}
       <div className="hidden md:block w-1/2 h-full">
         <img
@@ -203,8 +203,8 @@ const Login = () => {
 
           <p className="mt-4 ml-16 font-tajwal">
             لديك حساب؟{" "}
-            <a href="#" className="text-custom-orange ml-16 font-tajwal" onClick={handleRegisterRedirect}>
-              قم بتسجيل الدخول الآن
+            <a href="#LoginRegister" className="text-custom-orange ml-16 font-tajwal" onClick={handleRegisterRedirect}>
+              قم بتسجيل الآن
             </a>
           </p>
         </div>
