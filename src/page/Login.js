@@ -13,12 +13,20 @@ import { IoLanguageOutline } from "react-icons/io5";
 const Login = () => {
         const { translations,  language , changeLanguage } = useTranslation(); // استخدام الترجمة
         const isRtl = language === "ar";
+
+      
+// استرداد اللغة المخزنة أو استخدام القيمة الافتراضية
+useEffect(() => {
+  const storedLanguage = localStorage.getItem('language') || 'ar'; // اللغة الافتراضية "ar"
+  changeLanguage(storedLanguage); // تغيير اللغة عند بدء التطبيق
+}, []);
+
 // التبديل بين العربية والإنجليزية
 const handleLanguageChange = () => {
   const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
   changeLanguage(newLanguage); // تغيير اللغة
+  localStorage.setItem('language', newLanguage); // تخزين اللغة الجديدة في localStorage
 };
-
 
   const navigate = useNavigate();
   const [values, setValues] = useState({

@@ -1,7 +1,7 @@
-import React, { createContext, useState, useContext } from "react";
-import homeTranslations from "./Navbarlang"
-import SecondTranslations from "./SecondSectionlang"
-import ThirdTranslations from "./ThirdSectionlang"
+import React, { createContext, useState, useContext, useEffect } from "react";
+import homeTranslations from "./Navbarlang";
+import SecondTranslations from "./SecondSectionlang";
+import ThirdTranslations from "./ThirdSectionlang";
 import ServicesTranslations from "./Serviceslang";
 import SectionFiveTranslations from "./SectionFivelang";
 import ShiekhsListTranslations from "./ShiekhsListlang";
@@ -10,6 +10,7 @@ import FAQSectionTranslations from "./FAQSectionlang";
 import FooterTranslations from "./Footerlang";
 import LoginRegisterlang from "./LoginRegisterlang";
 import Toastlang from "./Toastlang";
+
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -24,9 +25,7 @@ const combinedTranslations = {
     ...FAQSectionTranslations.en,
     ...FooterTranslations.en,
     ...LoginRegisterlang.en,
-    ...Toastlang.en
-
-  
+    ...Toastlang.en,
   },
   ar: {
     ...homeTranslations.ar,
@@ -39,17 +38,28 @@ const combinedTranslations = {
     ...FAQSectionTranslations.ar,
     ...FooterTranslations.ar,
     ...LoginRegisterlang.ar,
-    ...Toastlang.ar
-
+    ...Toastlang.ar,
   },
 };
 
 export const TranslationProvider = ({ children }) => {
-  const [language, setLanguage] = useState("ar");
+  // استرداد اللغة المخزنة أو تعيين اللغة الافتراضية
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem("language") || "ar"; // اللغة الافتراضية هي العربية
+  });
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
+    localStorage.setItem("language", lang); // تخزين اللغة في localStorage
   };
+
+  // تحديث اللغة عند تحميل الصفحة
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem("language");
+    if (storedLanguage) {
+      setLanguage(storedLanguage);
+    }
+  }, []);
 
   return (
     <TranslationContext.Provider

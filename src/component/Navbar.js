@@ -16,7 +16,7 @@ const Navbar = () => {
   const mobileMenuRef = useRef(null);
   const linksRef = useRef([]);
   const { translations,  language, changeLanguage } = useTranslation(); // استخدام الترجمة
-
+  
   useEffect(() => {
     // تحقق من وجود قيمة في localStorage لتحديد حالة تسجيل الدخول
     const token = localStorage.getItem("token");
@@ -80,12 +80,18 @@ const Navbar = () => {
   };
 
 
-  // التبديل بين العربية والإنجليزية
-  const handleLanguageChange = () => {
-    const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
-    changeLanguage(newLanguage); // تغيير اللغة
-  };
+// استرداد اللغة المخزنة أو استخدام القيمة الافتراضية
+useEffect(() => {
+  const storedLanguage = localStorage.getItem('language') || 'ar'; // اللغة الافتراضية "ar"
+  changeLanguage(storedLanguage); // تغيير اللغة عند بدء التطبيق
+}, []);
 
+// التبديل بين العربية والإنجليزية
+const handleLanguageChange = () => {
+  const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
+  changeLanguage(newLanguage); // تغيير اللغة
+  localStorage.setItem('language', newLanguage); // تخزين اللغة الجديدة في localStorage
+};
   return (
     <nav
     dir={language === "ar" ? "ltr" : "rtl"} // تغيير الاتجاه

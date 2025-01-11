@@ -319,10 +319,17 @@ const LoginRegister = () => {
     }));
   };
 
-   // التبديل بين العربية والإنجليزية
-   const handleLanguageChange = () => {
+  // استرداد اللغة المخزنة أو استخدام القيمة الافتراضية
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('language') || 'ar'; // اللغة الافتراضية "ar"
+    changeLanguage(storedLanguage); // تغيير اللغة عند بدء التطبيق
+  }, []);
+  
+  // التبديل بين العربية والإنجليزية
+  const handleLanguageChange = () => {
     const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
     changeLanguage(newLanguage); // تغيير اللغة
+    localStorage.setItem('language', newLanguage); // تخزين اللغة الجديدة في localStorage
   };
 
   return (
