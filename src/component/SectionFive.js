@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import pic2 from '../assets/images/bg.webp';
+import { useTranslation } from "../context/TranslationContext"; // استيراد هوك الترجمة
 
 function SectionFive() {
+    const { translations,  language } = useTranslation(); // استخدام الترجمة
+  
   const quotes = [
     {
-      text: "مَن تَعَلَّمَ العِلْمَ ثُمَّ عَمِلَ بِهِ وأَوْصَلَهُ إلى النَّاسِ فَقَدْ أَتَمَّ النِّعْمَةَ، ومَنْ عَمِلَ بِالعِلْمِ وَلَمْ يُعَلِّمْ فَقَدْ ضَلَّ الطَّرِيقَ.",
-      author: "الإمام مالك بن أنس",
+      text:  translations.quotes[0].text,
+      author: translations.quotes[0].author,
     },
     {
-      text: "تَعَلَّمُوا العِلْمَ وَعَلِّمُوهُ النَّاسَ، وتَعَلَّمُوا الوَقَارَ والسُّكُونَ.",
-      author: "عُمَرُ بنُ الخَطَّابِ",
+      text:  translations.quotes[1].text,
+      author: translations.quotes[1].author,
     },
     {
-      text: "العِلْمُ مَا كَانَ نَافِعًا، والنَّافِعُ مَا يُقَرِّبُ إلى اللهِ.",
-      author: "ابن تيمية",
+      text:  translations.quotes[2].text,
+      author: translations.quotes[2].author,
     },
   ];
   
@@ -44,12 +47,14 @@ function SectionFive() {
 
       <div className={`relative z-10 text-center transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`} dir="rtl">
         <h1
-          className="text-lg md:text-2xl lg:text-3xl text-white font-bold"
+            dir={language === "ar" ? "ltr" : "rtl"} // تغيير الاتجاه
+          className="text-lg md:text-1xl lg:text-2xl text-white font-bold"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
           {quotes[currentQuoteIndex].text}
         </h1>
         <p
+            dir={language === "ar" ? "ltr" : "rtl"} // تغيير الاتجاه
           className="text-sm md:text-base lg:text-lg text-white mt-2"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >

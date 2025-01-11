@@ -29,7 +29,7 @@ const combinedTranslations = {
     ...ThirdTranslations.ar,
     ...ServicesTranslations.ar,
     ...SectionFiveTranslations.ar,
-    ...ShiekhsListTranslations.en,
+    ...ShiekhsListTranslations.ar,
     ...NumSectionTranslations.ar,
     ...FAQSectionTranslations.ar,
     ...FooterTranslations.ar
