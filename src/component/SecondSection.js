@@ -52,7 +52,9 @@ const SecondSection = () => {
       </h2>
 
       <p className="text-sm md:text-base lg:text-lg text-gray-600 mb-10 px-4 md:px-20" style={{ fontFamily: "Tajwal, sans-serif" }}>
-      {translations.welcomeText}
+      {translations.welcomeText.slice(0, translations.Description.length / 2)}
+  <br />
+  {translations.welcomeText.slice(translations.Description.length / 2)}
       </p>
 
       <div className="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-12">
