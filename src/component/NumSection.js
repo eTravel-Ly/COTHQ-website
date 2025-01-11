@@ -4,29 +4,30 @@ import { Navigation, Pagination } from "swiper"; // استيراد Navigation و
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
+import { useTranslation } from "../context/TranslationContext"; 
 export default function NumSection() {
   const swiperRef = useRef(null);
+  const { translations } = useTranslation(); // استخدام الترجمة
 
   const data = [
     {
       image: "https://i.pinimg.com/736x/6d/65/f2/6d65f2639fb51d71a31c4569bb01aaee.jpg",
-      title: "عدد مراكز التحفيظ",
+      title: translations.titles[0].title ,
       count: 50,
     },
     {
       image: "https://i.pinimg.com/736x/58/42/f8/5842f8849b887dddf5c16ded032ffe2d.jpg",
-      title: "عدد المشايخ في مراكز التحفيظ",
+      title: translations.titles[1].title ,
       count: 100,
     },
     {
       image: "https://i.pinimg.com/736x/3c/96/9d/3c969d4031eabeb596fe59920aef73f7.jpg",
-      title: "عدد الطلاب في مراكز التحفيظ",
+      title: translations.titles[2].title ,
       count: 500,
     },
     {
       image: "https://i.pinimg.com/736x/bc/6a/76/bc6a76788f8acd7bd4c034b04f2b3cef.jpg",
-      title: "عدد المجازين والمجازات",
+      title: translations.titles[3].title ,
       count: 200,
     },
   ];
