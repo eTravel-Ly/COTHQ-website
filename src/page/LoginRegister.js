@@ -8,9 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa';
 import { useTranslation } from "../context/TranslationContext"; 
+import { IoLanguageOutline } from "react-icons/io5";
 
 const LoginRegister = () => {
-    const { translations,  language, } = useTranslation(); 
+    const { translations,  language, changeLanguage} = useTranslation(); 
     const isRtl = language === "ar";
 
   const navigate = useNavigate();
@@ -317,8 +318,19 @@ const LoginRegister = () => {
     }));
   };
 
+   // التبديل بين العربية والإنجليزية
+   const handleLanguageChange = () => {
+    const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
+    changeLanguage(newLanguage); // تغيير اللغة
+  };
+
   return (
     <div className="flex  h-full " id="LoginRegister">
+      <IoLanguageOutline
+          size={22}
+          className="absolute top-3 right-0 m-4 cursor-pointer"
+          onClick={handleLanguageChange}
+        />
        {/* صورة جانبية */}
        <div className="hidden md:block w-1/2 h-full">
       <img
@@ -367,7 +379,7 @@ const LoginRegister = () => {
             placeholder={translations.lastName}
           />
           {errors.lastName && (
-            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10"  style={{ fontFamily: "Tajwal, sans-serif" }}>
               {errors.lastName}
             </p>
           )}
@@ -391,7 +403,7 @@ const LoginRegister = () => {
             placeholder={translations.firstName}
           />
           {errors.firstName && (
-            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10"  style={{ fontFamily: "Tajwal, sans-serif" }}>
               {errors.firstName}
             </p>
           )}
@@ -419,7 +431,7 @@ const LoginRegister = () => {
             <option value="INSTRUCTOR">{translations.instructor}</option>
           </select>
           {errors.learnerType && (
-            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10"         style={{ fontFamily: "Tajwal, sans-serif" }}>
               {errors.learnerType}
             </p>
           )}
@@ -442,7 +454,7 @@ const LoginRegister = () => {
             className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           />
           {errors.birthYear && (
-            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10"   style={{ fontFamily: "Tajwal, sans-serif" }}>
               {errors.birthYear}
             </p>
           )}
@@ -466,7 +478,7 @@ const LoginRegister = () => {
             placeholder={translations.placeholderPhone}
           />
           {errors.mobileNo && (
-            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10"         style={{ fontFamily: "Tajwal, sans-serif" }}>
               {errors.mobileNo}
             </p>
           )}
@@ -490,7 +502,7 @@ const LoginRegister = () => {
             placeholder={translations.studentId}
           />
           {errors.studentId && (
-            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10" style={{ fontFamily: "Tajwal, sans-serif" }} >
               {errors.studentId}
             </p>
           )}
@@ -514,7 +526,7 @@ const LoginRegister = () => {
             placeholder={translations.placeholderPassword}
           />
           {errors.password && (
-            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10" style={{ fontFamily: "Tajwal, sans-serif" }}>
               {errors.password}
             </p>
           )}
@@ -538,7 +550,7 @@ const LoginRegister = () => {
             placeholder={translations.placeholderEmail}
           />
           {errors.email && (
-            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10" style={{ fontFamily: "Tajwal, sans-serif" }}>
               {errors.email}
             </p>
           )}

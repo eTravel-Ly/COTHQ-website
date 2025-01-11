@@ -44,9 +44,7 @@ const LoginRegisterlang = {
     mobileNoError: 'Please enter a valid phone number.',
     otpError: 'Please enter a valid OTP (6 digits).',
     otpenter: 'Please enter  OTP .',
-
-
-
+    Forgotpass:"Forgot your password?"
     },
     ar: {
       platformWelcome: 'مرحبًا بك في المنصة التعليمية',
@@ -92,6 +90,7 @@ loginnow: 'قم بتسجيل الآن',
       mobileNoError: 'الرجاء إدخال رقم هاتف صالح',
       otpError: 'الرجاء إدخال رمز التحقق صالح (6 أرقام)',
       otpenter: 'ادخل رمز التحقق',
+      Forgotpass:'هل نسيت كلمة المرور ؟'
     },
   };
   export default LoginRegisterlang

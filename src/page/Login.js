@@ -8,10 +8,18 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaSpinner } from 'react-icons/fa'; // Import the spinner icon
 import { useTranslation } from "../context/TranslationContext"; // استيراد هوك الترجمة
+import { IoLanguageOutline } from "react-icons/io5";
 
 const Login = () => {
-        const { translations,  language } = useTranslation(); // استخدام الترجمة
-  
+        const { translations,  language , changeLanguage } = useTranslation(); // استخدام الترجمة
+        const isRtl = language === "ar";
+// التبديل بين العربية والإنجليزية
+const handleLanguageChange = () => {
+  const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
+  changeLanguage(newLanguage); // تغيير اللغة
+};
+
+
   const navigate = useNavigate();
   const [values, setValues] = useState({
     username: '',
@@ -53,18 +61,18 @@ const Login = () => {
     let newErrors = { username: '', password: '' };
 
     if (!values.username) {
-      newErrors.username = 'الرجاء إدخال البريد الإلكتروني';
+      newErrors.username = translations.emailError1;
       valid = false;
     } else if (!/\S+@\S+\.\S+/.test(values.username)) {
-      newErrors.username = 'صيغة البريد الإلكتروني غير صحيحة';
+      newErrors.username = translations.emailError;
       valid = false;
     }
 
     if (!values.password) {
-      newErrors.password = 'الرجاء إدخال كلمة المرور';
+      newErrors.password = translations.passwordError;
       valid = false;
     } else if (values.password.length < 4) {
-      newErrors.password = 'يجب أن تكون كلمة المرور على الأقل 6 أحرف';
+      newErrors.password = translations.passwordLengthError;
       valid = false;
     }
     setErrors(newErrors);
@@ -101,8 +109,14 @@ const Login = () => {
     navigate('/LoginRegister');
   };
 
+    
   return (
     <div className="flex h-screen" id="Login">
+<IoLanguageOutline
+    size={22}
+    className="absolute top-3 right-0 m-4 cursor-pointer"
+    onClick={handleLanguageChange}
+  />
       {/* Left side image */}
       <div className="hidden md:block w-1/2 h-full">
         <img
@@ -113,14 +127,15 @@ const Login = () => {
       </div>
 
       {/* Right side form */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-4" >
-      <div className="w-full md:w-2/3 flex flex-col justify-center items-center md:mr-14">
-          <div className="w-full flex justify-end">
-            <img src={logo} alt="Logo" className="mb-5 w-[20%]" />
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-4 ">
+      
+      <div className={`w-full md:w-2/3 flex flex-col justify-center items-center ${isRtl ? 'md:ml-14' : 'md:mr-14'}`}>
+      <div className={`w-full flex justify-center ${isRtl ? 'md:justify-end' : 'md:justify-start '}`}>
+      <img src={logo} alt="Logo" className="mb-5 w-[20%]" />
           </div>
 
-          <div className="w-full text-right mb-8">
-            <h2 className="text-2xl font-bold font-tajwal mb-2">
+          <div className={`w-full ${isRtl ? 'text-right' : 'text-left'} mb-5`}>
+          <h2 className="text-2xl font-bold font-tajwal mb-2">
               <span role="img" aria-label="wave" className="ml-2">
                 👋
               </span>
@@ -133,9 +148,9 @@ const Login = () => {
             </p>
           </div>
           <form className="w-full max-w-sm mx-auto md:ml-28">
-  <div className="mb-4">
+  <div className={`mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
     <label
-      className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
+      className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
       htmlFor="username"
     >
             {translations.email}
@@ -146,12 +161,12 @@ const Login = () => {
       type="text"
       value={values.username}
       onChange={handleChange}
-      className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      className={`shadow appearance-none font-tajwal  ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
       placeholder="email@example.com"
     />
     {errors.username && (
       <p
-        className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right"
+        className={`text-red-500 text-xs mx-1 mt-1  ${isRtl ? 'text-right' : 'text-left'}`}
         style={{ fontFamily: "Tajwal, sans-serif" }}
       >
         {errors.username}
@@ -160,7 +175,7 @@ const Login = () => {
   </div>
   <div className="mb-4">
     <label
-      className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
+      className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
       htmlFor="password"
     >
                  {translations.password}
@@ -172,13 +187,13 @@ const Login = () => {
       type="password"
       value={values.password}
       onChange={handleChange}
-      className="shadow appearance-none font-tajwal border text-right rounded w-full text-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      className={`shadow appearance-none font-tajwal  ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
       placeholder="********"
     />
     {errors.password && (
       <p
-        className="text-red-500 text-xs mx-1 mt-1 ml-14 text-right"
-        style={{ fontFamily: "Tajwal, sans-serif" }}
+      className={`text-red-500 text-xs mx-1 mt-1  ${isRtl ? 'text-right' : 'text-left'}`}
+      style={{ fontFamily: "Tajwal, sans-serif" }}
       >
         {errors.password}
       </p>
@@ -202,14 +217,14 @@ const Login = () => {
     </button>
     <p className="text-custom-orange text-center mt-2 font-tajwal">
       {" "}
-      <a href="#">هل نسيت كلمة المرور ؟</a>
+      <a href="#">{translations.Forgotpass}</a>
     </p>
   </div>
 </form>
 
-          <p className="mt-4 ml-16 font-tajwal">
+          <p className="mt-4  font-tajwal text-center">
           {translations.loginPrompt1}{" "}
-            <a href="#LoginRegister" className="text-custom-orange  font-tajwal" onClick={handleRegisterRedirect}>
+            <a className="text-custom-orange  font-tajwal" onClick={handleRegisterRedirect}>
             {translations.loginnow}
             </a>
           </p>
