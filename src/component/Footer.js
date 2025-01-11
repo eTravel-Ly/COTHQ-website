@@ -3,8 +3,13 @@ import { FaFacebook, FaLinkedinIn, FaTwitter } from "react-icons/fa";
 import logo from '../assets/images/logo.svg'
 import { LocationOn, Phone, MailOutline } from "@mui/icons-material";
 import { Copyright } from "@mui/icons-material";
+import Footerlang from "../context/Footerlang";
+import { useTranslation } from "../context/TranslationContext"; 
 export default function Footer() {
+  const { translations,  language, changeLanguage } = useTranslation(); 
   return (
+
+
     <>
 <div 
 id="contact"
@@ -12,41 +17,33 @@ id="contact"
   className={`bg-[#006b80bc] text-white py-10`} 
   style={{ 
     fontFamily: "Tajwal, sans-serif", 
-    borderRadius: "50px 50px 0 0" // الحواف مدورة على اليمين واليسار
+    borderRadius: "50px 50px 0 0" 
   }}>      <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center ">
-          {/* Logo and Description */}
+          
           <div className="w-full sm:w-1/3 text-center mb-8">
   <div className="flex flex-col items-center justify-center">
     <img src={logo} alt="Logo" className="max-w-[150px]" />
-    <h4 className="text-2xl font-bold mt-1">مجمع القرآن الكريم</h4>
-    <p className="text-sm mt-2 mx-4">
-      مَجْمَعُ يُعني بالإشراف على تعليم القرآن الكريم، ودراسة علومه،
-      وإقامة الدراسات المُعمَقة عنه، إظهارا لمقاصده، وتحقيقا لأهدافه، وإبرازا
-      لمعارفه وهداياته.
-    </p>
+    <h4 className="text-2xl font-bold mt-1">{translations.logoTitle}</h4>
+    <p className="text-sm mt-2 mx-4">{translations.logoDescription}</p>
   </div>
 </div>
 
 
           {/* Footer Links */}
           <div className="w-full sm:w-1/2 md:w-1/3 text-center mb-8">
-          <h4 className="text-2xl font-bold mt-1">خدماتنا الالكترونية  </h4>
+          <h4 className="text-2xl font-bold mt-1">{translations.servicesTitle}</h4>
             <div className="space-y-2 mt-4">
-              <p className="text-sm">تعليم التلاوة والتجويد</p>
-              <p className="text-sm">تعليم الحفظ</p>
-              <p className="text-sm">تعليم التفسير</p>
-              <p className="text-sm">تعليم الاعراب </p>
-              <p className="text-sm">تعليم القراءات</p>
-              <p className="text-sm">تعليم المتشابهات</p>
-
+              {translations.services.map((service, index) => (
+                <p className="text-sm" key={index}>{service}</p>
+              ))}
             </div>
           </div>
 
           {/* Social Media Icons */}
           <div className="w-full sm:w-1/3 text-center mb-8">
-          <h4 className="text-2xl font-bold mt-1"> تواصل معنا!  </h4>
-            <div className="flex justify-center gap-6 mt-4">
+          <h4 className="text-2xl font-bold mt-1">{translations.contactTitle}</h4>
+          <div className="flex justify-center gap-6 mt-4">
               <a href="#" className="text-white">
                 <FaFacebook size={24} />
               </a>
@@ -63,7 +60,7 @@ id="contact"
                 <LocationOn size={24} />
               </a>
               <p>
-                زليتن، ليبيا
+              {translations.location}
               </p>
              
             </div>
@@ -71,18 +68,14 @@ id="contact"
             <a href="#" className="text-white">
                 <Phone size={24} />
               </a>
-              <p>
-                218-2100000+
-              </p>
+              <p>{translations.phone}</p>
              
             </div>
             <div className="flex justify-center gap-6 mt-4">
             <a href="#" className="text-white">
                 <MailOutline size={24} />
               </a>
-              <p>
-                info@hqcl.gov.ly
-              </p>
+              <p>{translations.email}</p>
              
             </div>
             
@@ -97,10 +90,12 @@ id="contact"
         {/* Privacy Policy and Copyright */}
         <div className="text-center font-bold">
           <div className="flex justify-center space-x-6 mb-2">
-            <p className="text-sm"> جميع الحقوق محفوظة | <Copyright className='ml-2 '/> </p>
-            <p className="text-sm"> مجمع القرآن الكريم </p>
+          <p className="text-sm">
+              {translations.copyright} | <Copyright className="ml-2" />
+            </p>
+            <p className="text-sm">{translations.complexName}</p>
           </div>
-          <p className="text-sm">2025</p>
+          <p className="text-sm">{translations.year}</p>
         </div>
       </div>
     </div> 
