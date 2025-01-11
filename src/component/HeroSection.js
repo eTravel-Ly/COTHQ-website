@@ -75,15 +75,21 @@ const HeroSection = () => {
 
         {/* النص */}
         <p
-          ref={textRef}
-          className="text-gray-200 text-sm sm:text-base md:text-lg mb-6 line-clamp-2"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
-        >
-          هو مؤسسة حكومية تُعنى بالقرآن الكريم وعلومه تعليما وتأليفا وتحقيقاً
-          ونشراً، وتُحافظ على الهُويّة الإسلامية، <br />
-          وترتقي بالمجتمع المسلم عبر وسائل نُزاوج بين ثوابت الأصالة ومقتضيات
-          التقنية المعاصرة
-        </p>
+  ref={textRef}
+  className="text-gray-200 text-sm sm:text-base md:text-lg mb-6"
+  style={{
+    fontFamily: "Tajwal, sans-serif",
+    whiteSpace: "normal",
+    wordBreak: "break-word", // يسمح بكسر الكلمات الطويلة
+    overflowWrap: "break-word", // يكسر النص إذا كان ضروريًا
+  }}
+>
+  {translations.Description.slice(0, translations.Description.length / 2)}
+  <br />
+  {translations.Description.slice(translations.Description.length / 2)}
+</p>
+
+
 
         {/* الأزرار */}
         <div
@@ -95,8 +101,8 @@ const HeroSection = () => {
             className="py-1 px-2 sm:py-2 sm:px-4 rounded-full flex items-center text-sm sm:text-base border-2 border-white text-white hover:bg-white hover:text-black transition duration-300"
             style={{ fontFamily: "Tajwal, sans-serif", background: "transparent" }}
           >
-            <IoIosLogIn className="mr-1 sm:mr-2" />
-            سجل معنا الآن
+            <IoIosLogIn className="mr-1 ml-2 sm:mr-2" />
+            {translations.registernow}
           </button>
         </div>
       </div>

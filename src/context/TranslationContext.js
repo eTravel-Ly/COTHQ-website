@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from "react";
 import homeTranslations from "./Navbarlang"
+import SecondTranslations from "./SecondSectionlang"
 
 
 const TranslationContext = createContext();
@@ -7,9 +8,11 @@ const TranslationContext = createContext();
 const combinedTranslations = {
   en: {
     ...homeTranslations.en,
+    ...SecondTranslations.en
   },
   ar: {
     ...homeTranslations.ar,
+    ...SecondTranslations.ar
   },
 };
 

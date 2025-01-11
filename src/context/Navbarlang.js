@@ -12,6 +12,8 @@
       home: "Home",
       quranComplex: "Holy Quran Complex",
       quranComplexlibya:"Holy Quran Complex libya",
+      Description:"The Holy Quran Complex is a government institution dedicated to the Quran and its sciences, focusing on education, authorship, authentication, and publication. It preserves Islamic identity and uplifts the Muslim community by combining the principles of tradition with the requirements of modern technology.",
+      registernow:"Register Now"
       
     },
     ar: {
@@ -24,7 +26,9 @@
       services: "خدماتنا",
       home: "الصفحة الرئيسية",
       quranComplex: "مجمع القرآن الكريم",
-      quranComplexlibya:"مجمع القرآن الكريم في ليبيا"
+      quranComplexlibya:"مجمع القرآن الكريم في ليبيا",
+      Description:"هو مؤسسة حكومية تُعنى بالقرآن الكريم وعلومه تعليما وتأليفا وتحقيقاً ونشراً، وتُحافظ على الهُويّة الإسلامية،  وترتقي بالمجتمع المسلم عبر وسائل نُزاوج بين ثوابت الأصالة ومقتضيات التقنية المعاصرة",
+      registernow:"سجل معنا الان"
     },
   };
   
