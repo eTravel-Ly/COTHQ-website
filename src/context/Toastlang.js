@@ -8,6 +8,7 @@ const Toastlang = {
         userAlreadyExists: 'هذا المستخدم مسجل بالفعل في النظام.',
         invalidOtp: 'الرمز انتهت صلاحيته قم بالضغط على زر اعادة ارسال',
         genericError: 'حدث خطأ أثناء العملية. الرجاء المحاولة مرة أخرى.',
+        doneotp : 'تم ارسال الرمز بنجاح',
       },
       en: {
         welcome: 'Welcome',
@@ -18,6 +19,7 @@ const Toastlang = {
         userAlreadyExists: 'This user is already registered in the system.',
         invalidOtp: 'The OTP has expired. Please click the resend button.',
         genericError: 'An error occurred during the process. Please try again.',
+        doneotp : 'otp has been sent successfully',
       },
     };
     

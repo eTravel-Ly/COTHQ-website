@@ -44,11 +44,11 @@ const LoginRegister = () => {
       });
       if (response.status === 201 ) {
         setShowOTP(true);
-        toast.success('تم ارسال رمز التحقق بنجاح');
+        toast.success(translations.doneotp );
       
       }
     } catch (error) {
-        toast.error('حدث خطأ أثناء الادخال. الرجاء المحاولة مرة أخرى.');
+        toast.error(translations.genericError );
       
     }
   };
@@ -99,13 +99,13 @@ const LoginRegister = () => {
         // التعامل مع الأخطاء المحددة
         if (errorMessage === 'OTP_ALREADY_USED') {
           setOtpError(true); // إظهار زر إعادة الإرسال
-          toast.error('الرمز مستخدم بالفعل قم بالضغط على زر اعادة ارسال');
+          toast.error(translations.otpAlreadyUsed);
 
         } else if (errorMessage === 'Login name already used!') {
-          toast.error('هذا المستخدم مسجل بالفعل في النظام.');
+          toast.error(translations.userAlreadyExists)  ;
         } else if(errorMessage === 'INVALID_OTP') {
           setOtpError(true); // إظهار زر إعادة الإرسال
-          toast.error('الرمز   انتهت صلاحيته قم بالضغط على زر اعادة ارسال');
+          toast.error(translations.invalidOtp  );
         }else {
           toast.error(errorMessage);
 
