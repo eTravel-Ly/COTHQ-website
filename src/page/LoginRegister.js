@@ -164,65 +164,59 @@ const LoginRegister = () => {
   const otpRegex = /^\d{6}$/; 
 
     if (!values.email) {
-      newErrors.email = 'الرجاء إدخال البريد الإلكتروني';
+      newErrors.email = translations.emailError1;
       valid = false;
     } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      newErrors.email = 'صيغة البريد الإلكتروني غير صحيحة';
+      newErrors.email = translations.emailError;
       valid = false;
     }
     if (!values.firstName) {
-      newErrors.firstName = 'الرجاء إدخال الاسم';
+      newErrors.firstName = translations.firstNameError;
       valid = false;
     } else if (!nameRegex.test(values.firstName)) {
-      newErrors.firstName = 'الاسم يجب أن يحتوي على حروف فقط';
+      newErrors.firstName = translations.firstNamevalid ;
       valid = false;
     }
     if (!values.lastName) {
-      newErrors.lastName = 'الرجاء إدخال اللقب';
+      newErrors.lastName = translations.lastNameError;
       valid = false;
     } else if (!nameRegex.test(values.lastName)) {
-      newErrors.lastName = 'اللقب يجب أن يحتوي على حروف فقط';
+      newErrors.lastName = translations.lastNamevalid;
       valid = false;
     }
 
     if (!values.birthYear) {
-      newErrors.birthYear = 'الرجاء إدخال تاريخ الميلاد';
+      newErrors.birthYear = translations.birthYearError;
       valid = false;
     } 
 
     if (!values.learnerType) {
-      newErrors.learnerType = 'الرجاء اختيار نوع الحساب  ';
+      newErrors.learnerType = translations.learnerTypeError; 
       valid = false;
     } 
-   /* if (!values.studentId) {
-      newErrors.studentId = 'الرجاء إدخال رقم الطالب';
-      valid = false;
-    } else if (!idRegex.test(values.studentId)) {
-      newErrors.studentId = 'رقم الطالب يجب أن يحتوي على أرقام فقط';
-      valid = false;
-    }*/
+  
 
     if (!values.password) {
-      newErrors.password = 'الرجاء إدخال كلمة المرور';
+      newErrors.password = translations.passwordError  ;
       valid = false;
     } else if (values.password.length < 4) {
-      newErrors.password = 'يجب أن تكون كلمة المرور على الأقل 6 أحرف';
+      newErrors.password = translations.passwordLengthError   ;
       valid = false;
     }
 
     if (!values.mobileNo) {
-      newErrors.mobileNo = 'الرجاء إدخال رقم الهاتف';
+      newErrors.mobileNo = translations.mobileNoError    ;
       valid = false;
     } else if (!mobileRegex.test(values.mobileNo)) {
-      newErrors.mobileNo = 'رقم الهاتف غير صحيح ';
+      newErrors.mobileNo =  translations.mobileNoError ;
       valid = false;
     }
 
     if (!values.otp) {
-      newErrors.otp = 'الرجاء إدخال OTP';
+      newErrors.otp = translations.otpenter   ;
       valid = false;
     } else if (!otpRegex.test(values.otp)) {
-      newErrors.otp = 'OTP يجب أن يتكون من 6 أرقام';
+      newErrors.otp = translations.otpError     ;
       valid = false;
     }
 
