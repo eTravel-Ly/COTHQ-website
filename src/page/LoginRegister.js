@@ -7,8 +7,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa';
+import { useTranslation } from "../context/TranslationContext"; 
 
 const LoginRegister = () => {
+    const { translations,  language, } = useTranslation(); 
+    const isRtl = language === "ar";
+
   const navigate = useNavigate();
   const [values, setValues] = useState({
     firstName: '',
@@ -243,60 +247,61 @@ const LoginRegister = () => {
   const mobileRegex = /^(091|092|093|094|095)\d{7}$/; 
   const otpRegex = /^\d{6}$/; 
 
-    if (!values.email) {
-      newErrors.email = 'الرجاء إدخال البريد الإلكتروني';
-      valid = false;
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      newErrors.email = 'صيغة البريد الإلكتروني غير صحيحة';
-      valid = false;
-    }
-    if (!values.firstName) {
-      newErrors.firstName = 'الرجاء إدخال الاسم';
-      valid = false;
-    } else if (!nameRegex.test(values.firstName)) {
-      newErrors.firstName = 'الاسم يجب أن يحتوي على حروف فقط';
-      valid = false;
-    }
-    if (!values.lastName) {
-      newErrors.lastName = 'الرجاء إدخال اللقب';
-      valid = false;
-    } else if (!nameRegex.test(values.lastName)) {
-      newErrors.lastName = 'اللقب يجب أن يحتوي على حروف فقط';
-      valid = false;
-    }
+  if (!values.email) {
+    newErrors.email = translations.emailError;
+    valid = false;
+  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+    newErrors.email = translations.emailError;
+    valid = false;
+  }
 
-    if (!values.birthYear) {
-      newErrors.birthYear = 'الرجاء إدخال تاريخ الميلاد';
-      valid = false;
-    } 
+  // First Name validation
+  if (!values.firstName) {
+    newErrors.firstName = translations.firstNameError;
+    valid = false;
+  } else if (!nameRegex.test(values.firstName)) {
+    newErrors.firstName = translations.firstNameError;
+    valid = false;
+  }
 
-    if (!values.learnerType) {
-      newErrors.learnerType = 'الرجاء اختيار نوع الحساب  ';
-      valid = false;
-    } 
-/*    if (!values.studentId) {
-      newErrors.studentId = 'الرجاء إدخال رقم الطالب';
-      valid = false;
-    } else if (!idRegex.test(values.studentId)) {
-      newErrors.studentId = 'رقم الطالب يجب أن يحتوي على أرقام فقط';
-      valid = false;
-    }*/
+  // Last Name validation
+  if (!values.lastName) {
+    newErrors.lastName = translations.lastNameError;
+    valid = false;
+  } else if (!nameRegex.test(values.lastName)) {
+    newErrors.lastName = translations.lastNameError;
+    valid = false;
+  }
 
-    if (!values.password) {
-      newErrors.password = 'الرجاء إدخال كلمة المرور';
-      valid = false;
-    } else if (values.password.length < 4) {
-      newErrors.password = 'يجب أن تكون كلمة المرور على الأقل 6 أحرف';
-      valid = false;
-    }
+  // Birth Year validation
+  if (!values.birthYear) {
+    newErrors.birthYear = translations.birthYearError;
+    valid = false;
+  }
 
-    if (!values.mobileNo) {
-      newErrors.mobileNo = 'الرجاء إدخال رقم الهاتف';
-      valid = false;
-    } else if (!mobileRegex.test(values.mobileNo)) {
-      newErrors.mobileNo = 'رقم الهاتف غير صحيح ';
-      valid = false;
-    }
+  // Account Type validation
+  if (!values.learnerType) {
+    newErrors.learnerType = translations.learnerTypeError;
+    valid = false;
+  }
+
+  // Password validation
+  if (!values.password) {
+    newErrors.password = translations.passwordError;
+    valid = false;
+  } else if (values.password.length < 6) {
+    newErrors.password = translations.passwordLengthError;
+    valid = false;
+  }
+
+  // Mobile Number validation
+  if (!values.mobileNo) {
+    newErrors.mobileNo = translations.mobileNoError;
+    valid = false;
+  } else if (!mobileRegex.test(values.mobileNo)) {
+    newErrors.mobileNo = translations.mobileNoError;
+    valid = false;
+  }
 
   
     setErrors(newErrors);
@@ -305,7 +310,7 @@ const LoginRegister = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === 'mobileNo' && !/^\d*$/.test(value) || name === 'otp' && !/^\d*$/.test(value)  ) {
-      return; // Prevent non-numeric input  || name === 'studentId' && !/^\d*$/.test(value)
+      return; 
     }
 
     setValues((prevValues) => ({
@@ -331,195 +336,234 @@ const LoginRegister = () => {
 
 
 
-    <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-4">
-      <div className="w-full md:w-2/3 flex flex-col justify-center items-center md:mr-14">
-        {/* شعار */}
-        <div className="w-full flex justify-center md:justify-end">
-          <img src={logo} alt="Logo" className="mb-2 w-[20%] md:w-[20%]" />
+    <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-4 ">
+  <div className={`w-full md:w-2/3 flex flex-col justify-center items-center ${isRtl ? 'md:ml-14' : 'md:mr-14'}`}>
+    {/* شعار */}
+    <div className={`w-full flex justify-center ${isRtl ? 'md:justify-end' : 'md:justify-start '}`}>
+      <img src={logo} alt="Logo" className="mb-2 w-[20%] md:w-[20%]" />
+    </div>
+
+    <div className={`w-full ${isRtl ? 'text-right' : 'text-left'} mb-5`}>
+      <h2 className="text-2xl font-bold font-tajwal mb-2">
+        <span role="img" aria-label="wave" className={isRtl ? 'mr-2' : 'ml-2'}></span>
+        {translations.platformWelcome}
+      </h2>
+      <p className="text-gray-500 font-tajwal">
+        {translations.continueWatching}
+      </p>
+    </div>
+
+    <form className="w-full max-w-2xl">
+      <div className="flex flex-wrap">
+        {/* Last Name */}
+        <div className={`w-full md:w-1/2 px-4 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <label
+            className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+            htmlFor="lastName"
+          >
+            {translations.lastName}
+          </label>
+          <input
+            id="lastName"
+            type="text"
+            name="lastName"
+            value={values.lastName}
+            onChange={handleChange}
+            className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            placeholder={translations.lastName}
+          />
+          {errors.lastName && (
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+              {errors.lastName}
+            </p>
+          )}
         </div>
 
-
-          <div className="w-full text-right mb-5">
-            <h2 className="text-2xl font-bold font-tajwal mb-2">
-              <span role="img" aria-label="wave" className="ml-2">
-
-              </span>
-              مرحبًا بك في المنصة التعليمية
-            </h2>
-            <p className="text-gray-500 font-tajwal">
-              .استمر في مشاهدة الدورات التدريبية التي بدأت مشاهدتها بالفعل
+        {/* First Name */}
+        <div className={`w-full md:w-1/2 px-4 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <label
+            className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+            htmlFor="firstName"
+          >
+            {translations.firstName}
+          </label>
+          <input
+            id="firstName"
+            type="text"
+            name="firstName"
+            value={values.firstName}
+            onChange={handleChange}
+            className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            placeholder={translations.firstName}
+          />
+          {errors.firstName && (
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+              {errors.firstName}
             </p>
-          </div>
+          )}
+        </div>
 
-          <form className="w-full max-w-2xl" >
-            <div className="flex flex-wrap">
-              <div className="w-full md:w-1/2 px-4 mb-4">
-                <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="lastName"
-                >
-                  اللقب
-                </label>
-                <input
-                     id="lastName"
-                     type="text"
-                     name="lastName"
-                     value={values.lastName}
-                   onChange={handleChange}
-                  className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="اللقب"
-                />
-                {errors.lastName && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.lastName}</p>}
+        {/* Account Type */}
+        <div className={`w-full md:w-1/2 px-4 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <label
+            className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+            htmlFor="accountType"
+          >
+            {translations.accountType}
+          </label>
+          <select
+            id="accountType"
+            name="learnerType"
+            value={values.learnerType}
+            onChange={handleChange}
+            className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+          >
+            <option value="">{translations.accountType}</option>
+            <option value="INTERNAL_STUDENT">{translations.internalStudent}</option>
+            <option value="EXTERNAL_STUDENT">{translations.externalStudent}</option>
+            <option value="PUBLIC">{translations.public}</option>
+            <option value="INSTRUCTOR">{translations.instructor}</option>
+          </select>
+          {errors.learnerType && (
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+              {errors.learnerType}
+            </p>
+          )}
+        </div>
 
-              </div>
-              <div className="w-full md:w-1/2 px-4 mb-4">
-                <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="firstName"
-                >
-                  الاسم
-                </label>
-                <input
-                  id="firstName"
-                  type="text"
-                  name="firstName"
-                  value={values.firstName}
-                  onChange={handleChange}
-                  className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="الاسم"
-                />
-              {errors.firstName && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.firstName}</p>}
+        {/* Birth Year */}
+        <div className={`w-full md:w-1/2 px-4 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <label
+            className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+            htmlFor="birthYear"
+          >
+            {translations.birthYear}
+          </label>
+          <input
+            id="birthYear"
+            name="birthYear"
+            value={values.birthYear}
+            onChange={handleChange}
+            type="date"
+            className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+          />
+          {errors.birthYear && (
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+              {errors.birthYear}
+            </p>
+          )}
+        </div>
 
-              </div>
-              <div className="w-full md:w-1/2 px-4 mb-4">
-                <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="accountType"
-                >
-                  نوع الحساب
-                </label>
-                <select
-                  id="accountType"
-                  name="learnerType"
-                  value={values.learnerType}
-                  onChange={handleChange}
-                  className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                >
-                  <option value=""> اختر نوع الحساب </option>
-                  <option value="INTERNAL_STUDENT">طالب داخلي</option>
-                  <option value="EXTERNAL_STUDENT">طالب خارجي</option>
-                  <option value="PUBLIC">عام</option>
-                  <option value="INSTRUCTOR">مدرب</option>
-                </select>
-                {errors.learnerType && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.learnerType}</p>}
-              </div>
-              <div className="w-full md:w-1/2 px-4 mb-4">
-                <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="birthYear"
-                >
-                  تاريخ الميلاد
-                </label>
-                <input
-                  id="birthYear"
-                  name="birthYear"
-                  value={values.birthYear}
-                  onChange={handleChange}
-                  type="date"
-                  className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-               {errors.birthYear && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.birthYear}</p>}
+        {/* Mobile No */}
+        <div className={`w-full md:w-1/2 px-4 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <label
+            className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+            htmlFor="mobileNo"
+          >
+            {translations.mobileNo}
+          </label>
+          <input
+            id="mobileNo"
+            type="text"
+            name="mobileNo"
+            value={values.mobileNo}
+            onChange={handleChange}
+            className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            placeholder={translations.placeholderPhone}
+          />
+          {errors.mobileNo && (
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+              {errors.mobileNo}
+            </p>
+          )}
+        </div>
 
-              </div>
+        {/* Student ID */}
+        <div className={`w-full md:w-1/2 px-4 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <label
+            className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+            htmlFor="studentId"
+          >
+            {translations.studentId}
+          </label>
+          <input
+            id="studentId"
+            type="text"
+            name="studentId"
+            value={values.studentId}
+            onChange={handleChange}
+            className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            placeholder={translations.studentId}
+          />
+          {errors.studentId && (
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+              {errors.studentId}
+            </p>
+          )}
+        </div>
 
-              <div className="w-full md:w-1/2 px-4 mb-4">
-                <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="mobileNo"
-                >
-                  رقم الهاتف
-                </label>
-                <input
-                  id="mobileNo"
-                  type="text"
-                  name="mobileNo"
-                  value={values.mobileNo}
-                  onChange={handleChange}
-                  className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="رقم الهاتف"
-                />
-               {errors.mobileNo && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.mobileNo}</p>}
+        {/* Password */}
+        <div className={`w-full md:w-1/2 px-4 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <label
+            className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+            htmlFor="password"
+          >
+            {translations.password}
+          </label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            value={values.password}
+            onChange={handleChange}
+            className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            placeholder={translations.placeholderPassword}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+              {errors.password}
+            </p>
+          )}
+        </div>
 
-              </div>
-              <div className="w-full md:w-1/2 px-4 mb-4">
-                <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="studentId"
-                >
-                  رقم القيد
-                </label>
-                <input
-                  id="registrationNumber"
-                  type="text"
-                  name="studentId"
-                  value={values.studentId}
-                  onChange={handleChange}
-                  className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="رقم القيد"
-                />
-               {errors.studentId && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.studentId}</p>}
-
-              </div>
-              <div className="w-full md:w-1/2 px-4 mb-4">
-                <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="password"
-                >
-                  كلمة المرور
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  value={values.password}
-                  onChange={handleChange}
-                  className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="********"
-                />
-                {errors.password && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.password}</p>}
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <label
-                  className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-                  htmlFor="email"
-                >
-                  عنوان البريد الإلكتروني
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  value={values.email}
-                  onChange={handleChange}
-                  className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="email@example.com"
-                />
-                {errors.email && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.email}</p>}
-              </div>
-            </div>
-            {!showOTP ? (
+        {/* Email */}
+        <div className={`w-full md:w-1/2 px-2 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <label
+            className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+            htmlFor="email"
+          >
+            {translations.email}
+          </label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+            className={`shadow appearance-none font-tajwal ${isRtl ? 'text-right' : 'text-left'} border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            placeholder={translations.placeholderEmail}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-xs mx-1 mt-1 ml-10">
+              {errors.email}
+            </p>
+          )}
+        </div>
+  
+      </div>
+      {!showOTP ? (
         <button
           type="button"
-          disabled={loading} // Disable button while loading
+          disabled={loading} 
           className="bg-custom-orange w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
           onClick={handleVerifyClick}
         >
             {loading ? (
                    <div className="flex justify-center items-center">
-                   <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* أيقونة التحميل */}
+                   <FaSpinner className="w-5 h-5 text-white animate-spin" /> 
                  </div>
                 ) : (
-                  'تحقق'
+                  translations.verifyButton
                 )}
         </button>
       ) : (
@@ -529,7 +573,7 @@ const LoginRegister = () => {
             className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
             htmlFor="otp"
           >
-            رمز التحقق
+           {translations.otpLabel}
           </label>
           <div className="flex items-center">
             <input
@@ -538,7 +582,7 @@ const LoginRegister = () => {
               value={values.otp}
               onChange={handleChange}
               className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="قم بأدخال رمز التحقق الخاص بك"
+              placeholder={translations.placeholderotpLabel}
             />
             {errors.otp && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.otp}</p>}
 
@@ -550,10 +594,10 @@ const LoginRegister = () => {
               >
               {loading ? (
               <div className="flex justify-center items-center">
-                <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* أيقونة التحميل */}
+                <FaSpinner className="w-5 h-5 text-white animate-spin" /> 
               </div>
             ) : (
-              '  إعادة إرسال'
+              translations.resendButton
             )}
               
               </button>
@@ -563,31 +607,25 @@ const LoginRegister = () => {
 
           <button
             type="submit"
-            disabled={loading} // تعطيل الزر أثناء التحميل
+            disabled={loading} 
             className="bg-custom-orange mt-4 w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
             onClick={handleSubmit}
           >
             {loading ? (
               <div className="flex justify-center items-center">
-                <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* أيقونة التحميل */}
+                <FaSpinner className="w-5 h-5 text-white animate-spin" /> 
               </div>
             ) : (
-              'تسجيل'
+              translations.submitButton
             )}
           </button>
 
         </div>
       )}
-          </form>
+    </form>
+  </div>
+</div>
 
-          <p className="mt-4 font-tajwal">
-            لديك حساب؟{" "}
-            <a href="#Login" className="text-custom-orange font-tajwal">
-              قم بتسجيل الدخول الآن
-            </a>
-          </p>
-        </div>
-      </div>
       <ToastContainer />
 
     </div>
