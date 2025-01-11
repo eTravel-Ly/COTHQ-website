@@ -17,6 +17,8 @@ const LoginRegisterlang = {
       resend: 'Resend',
       register: 'Register',
       loginPrompt: 'Already have an account? Log in now',
+      loginPrompt1: 'Already have an account?',
+      loginnow:"Log in now",
       internalStudent: 'Internal Student',
       externalStudent: 'External Student',
       public: 'Public',
@@ -41,6 +43,9 @@ const LoginRegisterlang = {
       resend: 'إعادة إرسال',
       register: 'تسجيل',
       loginPrompt: 'لديك حساب؟ قم بتسجيل الدخول الآن',
+      loginPrompt1: 'هل لديك حساب؟',
+loginnow: 'قم بتسجيل الآن',
+
       internalStudent: 'طالب داخلي',
       externalStudent: 'طالب خارجي',
       public: 'عام',

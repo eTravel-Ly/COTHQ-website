@@ -7,8 +7,11 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaSpinner } from 'react-icons/fa'; // Import the spinner icon
+import { useTranslation } from "../context/TranslationContext"; // استيراد هوك الترجمة
 
 const Login = () => {
+        const { translations,  language } = useTranslation(); // استخدام الترجمة
+  
   const navigate = useNavigate();
   const [values, setValues] = useState({
     username: '',
@@ -110,7 +113,7 @@ const Login = () => {
       </div>
 
       {/* Right side form */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-4">
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-4" >
       <div className="w-full md:w-2/3 flex flex-col justify-center items-center md:mr-14">
           <div className="w-full flex justify-end">
             <img src={logo} alt="Logo" className="mb-5 w-[20%]" />
@@ -121,10 +124,12 @@ const Login = () => {
               <span role="img" aria-label="wave" className="ml-2">
                 👋
               </span>
-              مرحبًا بك في المنصة التعليمية
+              {translations.platformWelcome}
+
             </h2>
             <p className="text-gray-500 font-tajwal">
-              .استمر في مشاهدة الدورات التدريبية التي بدأت مشاهدتها بالفعل
+            {translations.continueWatching}
+
             </p>
           </div>
           <form className="w-full max-w-sm mx-auto md:ml-28">
@@ -133,8 +138,8 @@ const Login = () => {
       className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
       htmlFor="username"
     >
-      عنوان البريد الإلكتروني
-    </label>
+            {translations.email}
+            </label>
     <input
       id="username"
       name="username"
@@ -158,7 +163,8 @@ const Login = () => {
       className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
       htmlFor="password"
     >
-      كلمة المرور
+                 {translations.password}
+
     </label>
     <input
       id="password"
@@ -191,7 +197,7 @@ const Login = () => {
           <FaSpinner className="w-5 h-5 text-white animate-spin" /> {/* Spinner icon */}
         </div>
       ) : (
-        "تسجيل"
+        `${translations.register}`
       )}
     </button>
     <p className="text-custom-orange text-center mt-2 font-tajwal">
@@ -202,9 +208,9 @@ const Login = () => {
 </form>
 
           <p className="mt-4 ml-16 font-tajwal">
-            لديك حساب؟{" "}
-            <a href="#LoginRegister" className="text-custom-orange ml-16 font-tajwal" onClick={handleRegisterRedirect}>
-              قم بتسجيل الآن
+          {translations.loginPrompt1}{" "}
+            <a href="#LoginRegister" className="text-custom-orange  font-tajwal" onClick={handleRegisterRedirect}>
+            {translations.loginnow}
             </a>
           </p>
         </div>
