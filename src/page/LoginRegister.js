@@ -71,7 +71,7 @@ const LoginRegister = () => {
     try {
       const response = await axios.post(baseurl + 'public/learner/register', dataToSend);
       if (response.status === 201) {
-        toast.success('تم تسجيلك بنجاح يمكنك الدخول للنظام الآن.');
+        toast.success(translations.registrationSuccess);
   
         // تفريغ القيم بعد التسجيل الناجح
         setValues({
@@ -104,6 +104,7 @@ const LoginRegister = () => {
         } else if (errorMessage === 'Login name already used!') {
           toast.error(translations.userAlreadyExists)  ;
         } else if(errorMessage === 'INVALID_OTP') {
+           values.otp=''
           setOtpError(true); // إظهار زر إعادة الإرسال
           toast.error(translations.invalidOtp  );
         }else {
@@ -575,58 +576,74 @@ const LoginRegister = () => {
       ) : (
        
         <div>
-           <label
-            className="block text-gray-700 font-tajwal text-lg font-bold mb-2 text-right"
-            htmlFor="otp"
-          >
-           {translations.otpLabel}
-          </label>
-          <div className="flex items-center">
-            <input
-              type="text"
-              name="otp"
-              value={values.otp}
-              onChange={handleChange}
-              className="shadow appearance-none font-tajwal text-right border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder={translations.placeholderotpLabel}
-            />
-            {errors.otp && <p className="text-red-500 text-xs mx-1 mt-1 ml-10 text-right" style={{ fontFamily: 'Tajwal, sans-serif' }}>{errors.otp}</p>}
+        <label
+          className={`block text-gray-700 font-tajwal text-lg font-bold mb-2 ${isRtl ? 'text-right' : 'text-left'}`}
+          htmlFor="otp"
+        >
+          {translations.otpLabel}
+        </label>
+        <div className="flex items-center">
+  <input
+    type="text"
+    name="otp"
+    value={values.otp}
+    onChange={handleChange}
+    className={`shadow appearance-none font-tajwal ${
+      isRtl ? 'text-right' : 'text-left'
+    } border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+    placeholder={translations.placeholderotpLabel}
+  />
 
-            {otpError && (
-              <button
-                onClick={handleVerifyClick}
-                className="ml-2 bg-custom-green text-white font-bold py-1 px-3 rounded text-sm"
-                style={{ fontFamily: 'Tajwal, sans-serif' }}
-              >
-              {loading ? (
-              <div className="flex justify-center items-center">
-                <FaSpinner className="w-5 h-5 text-white animate-spin" /> 
-              </div>
-            ) : (
-              translations.resendButton
-            )}
-              
-              </button>
-            )}
-          </div>
-
-
-          <button
-            type="submit"
-            disabled={loading} 
-            className="bg-custom-orange mt-4 w-full text-lg font-tajwal text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
-            onClick={handleSubmit}
-          >
-            {loading ? (
-              <div className="flex justify-center items-center">
-                <FaSpinner className="w-5 h-5 text-white animate-spin" /> 
-              </div>
-            ) : (
-              translations.submitButton
-            )}
-          </button>
-
+  {otpError && (
+    <button
+      onClick={handleVerifyClick}
+      className="ml-2 bg-custom-green text-white font-bold py-1 px-3 rounded text-sm"
+      style={{ fontFamily: 'Tajwal, sans-serif' }}
+    >
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <FaSpinner className="w-5 h-5 text-white animate-spin" />
         </div>
+      ) : (
+        translations.resendButton
+      )}
+    </button>
+  )}
+</div>
+
+{errors.otp && (
+  <p
+    className={`text-red-500 text-xs mt-1 ${
+      isRtl ? 'text-right' : 'text-left'
+    }`}
+    style={{ fontFamily: 'Tajwal, sans-serif' }}
+  >
+    {errors.otp}
+  </p>
+)}
+
+
+      
+        <button
+          type="submit"
+          disabled={!values.otp || loading} // إضافة الشرط هنا
+          className={`mt-4 w-full text-lg font-tajwal font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline ${
+            !values.otp || loading
+              ? 'bg-gray-200 text-gray-700 cursor-not-allowed'
+              : 'bg-custom-orange text-white'
+          }`}
+          onClick={handleSubmit}
+        >
+          {loading ? (
+            <div className="flex justify-center items-center">
+              <FaSpinner className="w-5 h-5 text-white animate-spin" />
+            </div>
+          ) : (
+            translations.submitButton
+          )}
+        </button>
+      </div>
+      
       )}
     </form>
   </div>
