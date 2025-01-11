@@ -88,6 +88,7 @@ const Navbar = () => {
 
   return (
     <nav
+    dir={language === "ar" ? "ltr" : "rtl"} // تغيير الاتجاه
     ref={navRef}
       className={`fixed top-0 left-0 w-full z-50  flex items-center px-4 h-14 sm:h-16 md:h-20 transition-all duration-300 ${
         scrolled ? "bg-white text-black" : "bg-transparent text-white"
@@ -146,7 +147,7 @@ const Navbar = () => {
                 href="#"
                 ref={(el) => (linksRef.current[1] = el)}
                 style={{ fontFamily: "Tajwal, sans-serif" }}
-                className={`py-2 px-3 border rounded-full ${
+                className={`py-2 px-3 border rounded-full   ml-3   ${
                   scrolled
                     ? "border-black text-black"
                     : "border-white text-white"
@@ -159,7 +160,7 @@ const Navbar = () => {
                 href="#"
                 ref={(el) => (linksRef.current[2] = el)}
                 style={{ fontFamily: "Tajwal, sans-serif" }}
-                className={`py-2 px-3 border rounded-full ${
+                className={`py-2 px-3 border rounded-full ml-3  ${
                   scrolled
                     ? "border-black text-black"
                     : "border-white text-white"
@@ -219,7 +220,7 @@ const Navbar = () => {
         {/* الصورة والنص في اليمين */}
         <div className="flex items-center space-x-2">
           <span
-            className={`text-lg sm:text-sm md:text-lg lg:text-xl font-bold font-tajwal ${
+            className={`text-lg sm:text-sm md:text-lg lg:text-xl font-bold font-tajwal ml-7 mr-7 ${
               scrolled ? "text-black" : "text-white"
             }`}
           >
@@ -238,7 +239,7 @@ const Navbar = () => {
        
     {/* القائمة الجانبية (Mobile Dropdown) */}
     {isOpen && (
-      <div className="absolute top-14 sm:top-16 md:top-20 left-0 w-full bg-white shadow-md flex flex-col space-y-2 px-4 py-2 text-xs sm:text-sm">
+      <div className="absolute top-14 sm:top-16 md:top-20 left-0 w-full bg-white shadow-md flex flex-col space-y-2 px-4 py-2 text-xs sm:text-sm" >
         <a
           href="#hero"
           style={{ fontFamily: "Tajwal, sans-serif" }}
