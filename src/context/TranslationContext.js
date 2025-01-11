@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext } from "react";
 import homeTranslations from "./Navbarlang";
 import SecondTranslations from "./SecondSectionlang";
 import ThirdTranslations from "./ThirdSectionlang";
@@ -45,15 +45,13 @@ const combinedTranslations = {
 export const TranslationProvider = ({ children }) => {
   // استرداد اللغة المخزنة أو تعيين اللغة الافتراضية
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem("language") || "ar"; // اللغة الافتراضية هي العربية
+    return sessionStorage.getItem("language") || "ar"; // اللغة الافتراضية هي العربية
   });
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
-    localStorage.setItem("language", lang); // تخزين اللغة في localStorage
+    sessionStorage.setItem("language", lang); // تخزين اللغة في sessionStorage
   };
-
-
 
   return (
     <TranslationContext.Provider
