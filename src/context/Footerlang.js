@@ -4,7 +4,7 @@ const Footerlang = {
       logoDescription: 
         "A complex dedicated to supervising the teaching of the Quran, studying its sciences, conducting in-depth studies about it, showcasing its purposes, achieving its objectives, and highlighting its knowledge and guidance.",
       servicesTitle: "Our Online Services",
-      services: [
+      services1: [
         "Teaching recitation and tajweed",
         "Teaching memorization",
         "Teaching tafsir",
