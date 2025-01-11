@@ -1,7 +1,7 @@
 const Toastlang = {
     ar: {
         welcome: 'مرحبا',
-        passwordError: 'كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.',
+        passwordErrortoast: 'كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.',
         inputError: 'حدث خطأ أثناء الإدخال. الرجاء المحاولة مرة أخرى.',
         registrationSuccess: 'تم تسجيلك بنجاح يمكنك الدخول للنظام الآن.',
         otpAlreadyUsed: 'الرمز مستخدم بالفعل قم بالضغط على زر اعادة ارسال',
@@ -11,7 +11,7 @@ const Toastlang = {
       },
       en: {
         welcome: 'Welcome',
-        passwordError: 'The password is incorrect. Please try again.',
+        passwordErrortoast: 'The password is incorrect. Please try again.',
         inputError: 'An error occurred during input. Please try again.',
         registrationSuccess: 'Registration successful! You can now log in.',
         otpAlreadyUsed: 'The OTP has already been used. Please click the resend button.',

@@ -43,13 +43,13 @@ const handleLanguageChange = () => {
       if (response.status === 200 && response.data.id_token) {
         localStorage.setItem('token', response.data.id_token);
         navigate('/HomeAfterLogin');
-        toast.success('مرحبا');
+        toast.success(translations.welcome);
       }
     } catch (error) {
       if (error.response.status === 401) {
-        toast.warning('كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.');
+        toast.warning(translations.passwordErrortoast);
       } else {
-        toast.error('حدث خطأ أثناء الادخال. الرجاء المحاولة مرة أخرى.');
+        toast.error(translations.inputError);
       }
     } finally {
       setLoading(false); // Set loading to false after request completes
@@ -224,7 +224,7 @@ const handleLanguageChange = () => {
 
           <p className="mt-4  font-tajwal text-center">
           {translations.loginPrompt1}{" "}
-            <a className="text-custom-orange  font-tajwal" onClick={handleRegisterRedirect}>
+            <a  className="text-custom-orange  font-tajwal" onClick={handleRegisterRedirect}>
             {translations.loginnow}
             </a>
           </p>

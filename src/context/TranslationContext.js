@@ -9,6 +9,7 @@ import NumSectionTranslations from "./NumSectionlang";
 import FAQSectionTranslations from "./FAQSectionlang";
 import FooterTranslations from "./Footerlang";
 import LoginRegisterlang from "./LoginRegisterlang";
+import Toastlang from "./Toastlang";
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -22,7 +23,8 @@ const combinedTranslations = {
     ...NumSectionTranslations.en,
     ...FAQSectionTranslations.en,
     ...FooterTranslations.en,
-    ...LoginRegisterlang.en
+    ...LoginRegisterlang.en,
+    ...Toastlang.en
 
   
   },
@@ -36,7 +38,9 @@ const combinedTranslations = {
     ...NumSectionTranslations.ar,
     ...FAQSectionTranslations.ar,
     ...FooterTranslations.ar,
-    ...LoginRegisterlang.ar
+    ...LoginRegisterlang.ar,
+    ...Toastlang.ar
+
   },
 };
 
