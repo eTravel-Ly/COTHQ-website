@@ -20,7 +20,7 @@ export default function Footer() {
       }}
     >
       <div className="container mx-auto px-4">
-        <div className={`flex flex-wrap justify-center ${isRtl ? "text-right" : "text-left"}`}>
+      <div className="flex flex-wrap justify-center ">
           {/* Logo Section */}
           <div className="w-full sm:w-1/3 text-center mb-8">
             <div className="flex flex-col items-center justify-center">
@@ -31,7 +31,7 @@ export default function Footer() {
           </div>
 
           {/* Footer Links */}
-          <div className="w-full sm:w-1/2 md:w-1/3 mb-8">
+          <div className="w-full sm:w-1/2 md:w-1/3 mb-8 text-center  ">
             <h4 className="text-2xl font-bold mt-1">{translations.servicesTitle}</h4>
             <div className="space-y-2 mt-4">
               {translations.services1.map((service, index) => (
@@ -43,9 +43,9 @@ export default function Footer() {
           </div>
 
           {/* Social Media Icons */}
-          <div className="w-full sm:w-1/3 mb-8">
-            <h4 className="text-2xl font-bold mt-1">{translations.contactTitle}</h4>
-            <div className={`flex ${isRtl ? "justify-end" : "justify-start"} gap-6 mt-4`}>
+          <div className="w-full sm:w-1/3 text-center mb-8">
+          <h4 className="text-2xl font-bold mt-1">{translations.contactTitle}</h4>
+          <div className="flex justify-center gap-6 mt-4">
               <a href="#" className="text-white">
                 <FaFacebook size={24} />
               </a>
@@ -57,26 +57,30 @@ export default function Footer() {
               </a>
             </div>
 
-            <div className={`flex ${isRtl ? "justify-end" : "justify-start"} gap-6 mt-4`}>
-              <a href="#" className="text-white">
-                <LocationOn size={24} />
-              </a>
-              <p>{translations.location}</p>
-            </div>
+            <div className={`flex ${language === "en" ? "flex-row-reverse" : ""} justify-center gap-6 mt-4`}>
+  <a href="#" className="text-white">
+    <LocationOn size={24} />
+  </a>
+  <p>
+    {translations.location}
+  </p>
+</div>
+<div className={`flex ${language === "en" ? "flex-row-reverse" : ""} justify-center gap-6 mt-4`}>
+  <a href="#" className="text-white">
+    <Phone size={24} />
+  </a>
+  <p>{translations.phone}</p>
+</div>
 
-            <div className={`flex ${isRtl ? "justify-end" : "justify-start"} gap-6 mt-4`}>
-              <a href="#" className="text-white">
-                <Phone size={24} />
-              </a>
-              <p>{translations.phone}</p>
-            </div>
-
-            <div className={`flex ${isRtl ? "justify-end" : "justify-start"} gap-6 mt-4`}>
-              <a href="#" className="text-white">
-                <MailOutline size={24} />
-              </a>
-              <p>{translations.email}</p>
-            </div>
+<div className={`flex ${language === "en" ? "flex-row-reverse" : ""} justify-center gap-6 mt-4`}>
+  <a href="#" className="text-white">
+    <MailOutline size={24} />
+  </a>
+  <p>{translations.email}</p>
+</div>
+            
+          
+            
           </div>
         </div>
 
