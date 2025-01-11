@@ -150,7 +150,6 @@ const handleLanguageChange = () => {
           ) : (
             <>
               <a
-                href=""
                 ref={(el) => (linksRef.current[1] = el)}
                 style={{ fontFamily: "Tajwal, sans-serif" }}
                 className={`py-2 px-3 border rounded-full   ml-3   ${
@@ -163,7 +162,6 @@ const handleLanguageChange = () => {
                    {translations.register}
               </a>
               <a
-                href=""
                 ref={(el) => (linksRef.current[2] = el)}
                 style={{ fontFamily: "Tajwal, sans-serif" }}
                 className={`py-2 px-3 border rounded-full ml-3  ${

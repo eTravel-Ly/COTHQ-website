@@ -53,13 +53,7 @@ export const TranslationProvider = ({ children }) => {
     localStorage.setItem("language", lang); // تخزين اللغة في localStorage
   };
 
-  // تحديث اللغة عند تحميل الصفحة
-  useEffect(() => {
-    const storedLanguage = localStorage.getItem("language");
-    if (storedLanguage) {
-      setLanguage(storedLanguage);
-    }
-  }, []);
+
 
   return (
     <TranslationContext.Provider
