@@ -1,42 +1,33 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from "react";
+import homeTranslations from "./Navbarlang"
+
 
 const TranslationContext = createContext();
 
-const translations = {
-    en: {
-      welcome: "Welcome",
-      account: "Account",
-      register: "Register",
-      login: "Login",
-      contactUs: "Contact Us",
-      sheikhs: "Sheikhs",
-      services: "Our Services",
-      home: "Home",
-      quranComplex: "Holy Quran Complex",
-    },
-    ar: {
-      welcome: "مرحبًا",
-      account: "حسابي",
-      register: "الاشتراك",
-      login: "تسجيل الدخول",
-      contactUs: "اتصل بنا",
-      sheikhs: "المشايخ",
-      services: "خدماتنا",
-      home: "الصفحة الرئيسية",
-      quranComplex: "مجمع القرآن الكريم",
-    },
-  };
-  
+const combinedTranslations = {
+  en: {
+    ...homeTranslations.en,
+  },
+  ar: {
+    ...homeTranslations.ar,
+  },
+};
 
 export const TranslationProvider = ({ children }) => {
-  const [language, setLanguage] = useState('ar');
+  const [language, setLanguage] = useState("ar");
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
   };
 
   return (
-    <TranslationContext.Provider value={{ language, translations: translations[language], changeLanguage }}>
+    <TranslationContext.Provider
+      value={{
+        language,
+        translations: combinedTranslations[language],
+        changeLanguage,
+      }}
+    >
       {children}
     </TranslationContext.Provider>
   );

@@ -3,11 +3,15 @@ import { IoIosLogIn } from "react-icons/io";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "../context/TranslationContext"; // استيراد هوك الترجمة
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HeroSection = () => {
   const navigate = useNavigate();
+
+    const { translations,  language } = useTranslation(); // استخدام الترجمة
+  
 
   // مراجع النصوص والأزرار
   const titleRef = useRef(null);
@@ -48,6 +52,7 @@ const HeroSection = () => {
 
   return (
     <section
+    dir={language === "ar" ? "ltr" : "rtl"} // تغيير الاتجاه
       id="hero"
       className="text-center py-72 flex flex-col items-center relative"
       style={{
@@ -65,7 +70,7 @@ const HeroSection = () => {
           className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-9 text-white"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
-          مجمع القرآن الكريم في ليبيا
+   {translations.quranComplexlibya}
         </h1>
 
         {/* النص */}
