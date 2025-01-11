@@ -24,6 +24,11 @@ const LoginRegisterlang = {
       placeholderEmail: 'email@example.com',
       placeholderPhone: 'Phone Number',
       placeholderPassword: '********',
+      otpLabel: 'Verification Code',
+      placeholderotpLabel: 'add verification code',
+    resendButton: 'Resend',
+    submitButton: 'Submit',
+    verifyButton: 'Verify',
     },
     ar: {
       platformWelcome: 'مرحبًا بك في المنصة التعليمية',
@@ -48,6 +53,11 @@ const LoginRegisterlang = {
       placeholderEmail: 'email@example.com',
       placeholderPhone: 'رقم الهاتف',
       placeholderPassword: '********',
+      otpLabel: 'رمز التحقق',
+      placeholderotpLabel: 'قم بادخال رمز التحقق',
+      resendButton: 'إعادة إرسال',
+      submitButton: 'تسجيل',
+      verifyButton: 'تحقق',
     },
   };
   export default LoginRegisterlang
