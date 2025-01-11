@@ -7,8 +7,8 @@ import SectionFiveTranslations from "./SectionFivelang";
 import ShiekhsListTranslations from "./ShiekhsListlang";
 import NumSectionTranslations from "./NumSectionlang";
 import FAQSectionTranslations from "./FAQSectionlang";
-import FooterTranslations from "./Footerlang"
-
+import FooterTranslations from "./Footerlang";
+import LoginRegisterlang from "./LoginRegisterlang";
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -21,7 +21,10 @@ const combinedTranslations = {
     ...ShiekhsListTranslations.en,
     ...NumSectionTranslations.en,
     ...FAQSectionTranslations.en,
-    ...FooterTranslations.en
+    ...FooterTranslations.en,
+    ...LoginRegisterlang.en
+
+  
   },
   ar: {
     ...homeTranslations.ar,
@@ -32,7 +35,8 @@ const combinedTranslations = {
     ...ShiekhsListTranslations.ar,
     ...NumSectionTranslations.ar,
     ...FAQSectionTranslations.ar,
-    ...FooterTranslations.ar
+    ...FooterTranslations.ar,
+    ...LoginRegisterlang.ar
   },
 };
 
