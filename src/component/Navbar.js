@@ -4,27 +4,25 @@ import logo1 from "../assets/images/logo.png";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import { IoLanguageOutline } from "react-icons/io5";
-import { useTranslation } from "../context/TranslationContext"; // استيراد هوك الترجمة
+import { useTranslation } from "../context/TranslationContext"; 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
-  // Refs for animation
   const navRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const linksRef = useRef([]);
-  const { translations,  language, changeLanguage } = useTranslation(); // استخدام الترجمة
+  const { translations,  language, changeLanguage } = useTranslation(); 
   
   useEffect(() => {
-    // تحقق من وجود قيمة في localStorage لتحديد حالة تسجيل الدخول
+    
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); // تعيين الحالة بناءً على وجود التوكن
+    setIsLoggedIn(!!token); 
   }, []);
 
   useEffect(() => {
-    // وظيفة لتغيير الحالة عند التمرير
     const handleScroll = () => {
       if (window.scrollY > 10) {
         setScrolled(true);
@@ -37,7 +35,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   useEffect(() => {
-    // Animate navbar on load
     gsap.fromTo(
       navRef.current,
       { y: -50, opacity: 0 },
@@ -49,7 +46,6 @@ const Navbar = () => {
       { y: 0, opacity: 1, duration: 2, ease: "power3.out" }
     );
     
-    // Animate links individually
     gsap.fromTo(
       linksRef.current,
       { opacity: 0, y: 20 },
@@ -76,25 +72,25 @@ const Navbar = () => {
   };
 
   const handleAccount = () => {
-    navigate("/HomeAfterLogin"); // أو أي مسار لحساب المستخدم
+    navigate("/HomeAfterLogin"); 
   };
 
 
   useEffect(() => {
-    const storedLanguage = sessionStorage.getItem('language') || 'ar'; // اللغة الافتراضية "ar"
-    changeLanguage(storedLanguage); // تغيير اللغة عند بدء التطبيق
+    const storedLanguage = sessionStorage.getItem('language') || 'ar'; 
+    changeLanguage(storedLanguage); 
   }, []);
   
   // التبديل بين العربية والإنجليزية
   const handleLanguageChange = () => {
-    const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
-    changeLanguage(newLanguage); // تغيير اللغة
-    sessionStorage.setItem('language', newLanguage); // تخزين اللغة الجديدة في sessionStorage
+    const newLanguage = language === 'ar' ? 'en' : 'ar';
+    changeLanguage(newLanguage); 
+    sessionStorage.setItem('language', newLanguage); 
   };
   
   return (
     <nav
-    dir={language === "ar" ? "ltr" : "rtl"} // تغيير الاتجاه
+    dir={language === "ar" ? "ltr" : "rtl"} 
     ref={navRef}
       className={`fixed top-0 left-0 w-full z-50  flex items-center px-4 h-14 sm:h-16 md:h-20 transition-all duration-300 ${
         scrolled ? "bg-white text-black" : "bg-transparent text-white"
@@ -150,6 +146,7 @@ const Navbar = () => {
           ) : (
             <>
               <a
+              href="/LoginRegister"
                 ref={(el) => (linksRef.current[1] = el)}
                 style={{ fontFamily: "Tajwal, sans-serif" }}
                 className={`py-2 px-3 border rounded-full   ml-3   ${
@@ -162,6 +159,7 @@ const Navbar = () => {
                    {translations.register}
               </a>
               <a
+                 href="/Login"
                 ref={(el) => (linksRef.current[2] = el)}
                 style={{ fontFamily: "Tajwal, sans-serif" }}
                 className={`py-2 px-3 border rounded-full ml-3  ${
@@ -289,7 +287,7 @@ const Navbar = () => {
         ) : (
           <>
             <a
-              href="#"
+              href="#LoginRegister"
               style={{ fontFamily: "Tajwal, sans-serif" }}
               className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
               onClick={() => {
@@ -300,7 +298,7 @@ const Navbar = () => {
                {translations.register}
             </a>
             <a
-              href="#"
+              href="#Login"
               style={{ fontFamily: "Tajwal, sans-serif" }}
               className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
               onClick={() => {

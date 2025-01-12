@@ -32,7 +32,6 @@ import {
   Paytheorder,
   Paynow,
   HelpCenter,
-  ShiekSection,
 } from "./page/index";
 
 import { TranslationProvider, useTranslation } from './context/TranslationContext';
@@ -45,7 +44,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/Login" element={<Login/>} />
           <Route path="/LoginRegister" element={<LoginRegister />} />
           <Route path="/HomeAfterLogin" element={<HomeAfterLogin />} />
           <Route path="/NavbarLogin" element={<NavbarLogin />} />

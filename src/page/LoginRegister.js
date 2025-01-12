@@ -135,7 +135,7 @@ const LoginRegister = () => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      handleSubmit(event); // تمرير الحدث إلى handleClick
+      handleSubmit(event); 
     }
   };
 
@@ -320,15 +320,15 @@ const LoginRegister = () => {
   };
 
   useEffect(() => {
-    const storedLanguage = sessionStorage.getItem('language') || 'ar'; // اللغة الافتراضية "ar"
-    changeLanguage(storedLanguage); // تغيير اللغة عند بدء التطبيق
+    const storedLanguage = sessionStorage.getItem('language') || 'ar'; 
+    changeLanguage(storedLanguage); 
   }, []);
   
   // التبديل بين العربية والإنجليزية
   const handleLanguageChange = () => {
-    const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
-    changeLanguage(newLanguage); // تغيير اللغة
-    sessionStorage.setItem('language', newLanguage); // تخزين اللغة الجديدة في sessionStorage
+    const newLanguage = language === 'ar' ? 'en' : 'ar'; 
+    changeLanguage(newLanguage); 
+    sessionStorage.setItem('language', newLanguage); 
   };
   
   return (

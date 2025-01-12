@@ -43,14 +43,13 @@ const combinedTranslations = {
 };
 
 export const TranslationProvider = ({ children }) => {
-  // استرداد اللغة المخزنة أو تعيين اللغة الافتراضية
   const [language, setLanguage] = useState(() => {
-    return sessionStorage.getItem("language") || "ar"; // اللغة الافتراضية هي العربية
+    return sessionStorage.getItem("language") || "ar"; 
   });
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
-    sessionStorage.setItem("language", lang); // تخزين اللغة في sessionStorage
+    sessionStorage.setItem("language", lang); 
   };
 
   return (
