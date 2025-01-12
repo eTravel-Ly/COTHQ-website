@@ -14,18 +14,6 @@ const Login = () => {
         const { translations,  language , changeLanguage } = useTranslation(); // استخدام الترجمة
         const isRtl = language === "ar";
 
-        useEffect(() => {
-          const storedLanguage = sessionStorage.getItem('language') || 'ar'; // اللغة الافتراضية "ar"
-          changeLanguage(storedLanguage); // تغيير اللغة عند بدء التطبيق
-        }, []);
-        
-        // التبديل بين العربية والإنجليزية
-        const handleLanguageChange = () => {
-          const newLanguage = language === 'ar' ? 'en' : 'ar'; // التبديل بين اللغتين
-          changeLanguage(newLanguage); // تغيير اللغة
-          sessionStorage.setItem('language', newLanguage); // تخزين اللغة الجديدة في sessionStorage
-        };
-        
   const navigate = useNavigate();
   const [values, setValues] = useState({
     username: '',
@@ -35,15 +23,15 @@ const Login = () => {
     username: '',
     password: ''
   });
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false); 
 
   const handleClick = async (event) => {
-    event.preventDefault(); // Prevent page reload
+    event.preventDefault(); 
     if (!validate()) {
       return;
     }
 
-    setLoading(true); // Set loading to true when request starts
+    setLoading(true); 
     try {
       const response = await axios.post(baseurl + 'authenticate', values);
       if (response.status === 200 && response.data.id_token) {
@@ -99,7 +87,7 @@ const Login = () => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      handleClick(event); // Pass event to handleClick
+      handleClick(event);
     }
   };
 
@@ -118,11 +106,7 @@ const Login = () => {
     
   return (
     <div className="flex h-screen" id="Login">
-<IoLanguageOutline
-    size={22}
-    className="absolute top-3 right-0 m-4 cursor-pointer"
-    onClick={handleLanguageChange}
-  />
+
       {/* Left side image */}
       <div className="hidden md:block w-1/2 h-full">
         <img

@@ -319,25 +319,11 @@ const LoginRegister = () => {
     }));
   };
 
-  useEffect(() => {
-    const storedLanguage = sessionStorage.getItem('language') || 'ar'; 
-    changeLanguage(storedLanguage); 
-  }, []);
-  
-  // التبديل بين العربية والإنجليزية
-  const handleLanguageChange = () => {
-    const newLanguage = language === 'ar' ? 'en' : 'ar'; 
-    changeLanguage(newLanguage); 
-    sessionStorage.setItem('language', newLanguage); 
-  };
+
   
   return (
-    <div className="flex  h-full " id="LoginRegister">
-      <IoLanguageOutline
-          size={22}
-          className="absolute top-3 right-0 m-4 cursor-pointer"
-          onClick={handleLanguageChange}
-        />
+    <div className="flex  h-full ">
+      
        {/* صورة جانبية */}
        <div className="hidden md:block w-1/2 h-full">
       <img

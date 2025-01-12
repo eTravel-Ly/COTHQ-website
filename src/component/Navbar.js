@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import logo from "../assets/images/logo.svg";
 import logo1 from "../assets/images/logo.png";
 import { gsap } from "gsap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { IoLanguageOutline } from "react-icons/io5";
 import { useTranslation } from "../context/TranslationContext"; 
 
@@ -85,7 +85,7 @@ const Navbar = () => {
   const handleLanguageChange = () => {
     const newLanguage = language === 'ar' ? 'en' : 'ar';
     changeLanguage(newLanguage); 
-    sessionStorage.setItem('language', newLanguage); 
+    // sessionStorage.setItem('language', newLanguage); 
   };
   
   return (
@@ -130,50 +130,39 @@ const Navbar = () => {
             scrolled ? "text-black" : "text-white"
           }`}
         >
-          {isLoggedIn ? (
-            <a
-              href="#"
-              ref={(el) => (linksRef.current[0] = el)}
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-              className={`py-2 px-3 rounded-full ${
-                scrolled ? "bg-custom-orange text-white" : "border border-white"
-              }`}
-              onClick={handleAccount}
-            >
-                          {translations.account}
+         {isLoggedIn ? (
+  <button
+    style={{ fontFamily: "Tajwal, sans-serif" }}
+    className={`py-2 px-3 rounded-full ${
+      scrolled ? "bg-custom-orange text-white" : "border border-white"
+    }`}
+    onClick={handleAccount}
+  >
+    {translations.account}
+  </button>
+) : (
+  <>
+    <button
+      onClick={handleRegisterRedirect}
+   style={{ fontFamily: "Tajwal, sans-serif" }}
+      className={`py-2 px-3 border rounded-full ml-3 ${
+        scrolled ? "border-black text-black" : "border-white text-white"
+      }`}
+    >
+      {translations.register}
+    </button>
+    <button
+      onClick={handleLogin}
+      style={{ fontFamily: "Tajwal, sans-serif" }}
+      className={`py-2 px-3 border rounded-full ml-3 ${
+        scrolled ? "border-black text-black" : "border-white text-white"
+      }`}
+    >
+      {translations.login}
+    </button>
+  </>
+)}
 
-            </a>
-          ) : (
-            <>
-              <a
-              href="/LoginRegister"
-                ref={(el) => (linksRef.current[1] = el)}
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-                className={`py-2 px-3 border rounded-full   ml-3   ${
-                  scrolled
-                    ? "border-black text-black"
-                    : "border-white text-white"
-                }`}
-                onClick={handleRegisterRedirect}
-              >
-                   {translations.register}
-              </a>
-              <a
-                 href="/Login"
-                ref={(el) => (linksRef.current[2] = el)}
-                style={{ fontFamily: "Tajwal, sans-serif" }}
-                className={`py-2 px-3 border rounded-full ml-3  ${
-                  scrolled
-                    ? "border-black text-black"
-                    : "border-white text-white"
-                }`}
-                onClick={handleLogin}
-              >
-                                 {translations.login}
-
-              </a>
-            </>
-          )}
           <IoLanguageOutline size={22} className="ml-2 cursor-pointer" onClick={handleLanguageChange} />
           <a
             href="#contact"
@@ -241,77 +230,68 @@ const Navbar = () => {
        
     {/* القائمة الجانبية (Mobile Dropdown) */}
     {isOpen && (
-      <div className="absolute top-14 sm:top-16 md:top-20 left-0 w-full bg-white shadow-md flex flex-col space-y-2 px-4 py-2 text-xs sm:text-sm" >
-        <a
-          href="#hero"
+  <div className="absolute top-14 sm:top-16 md:top-20 left-0 w-full bg-white shadow-md flex flex-col space-y-2 px-4 py-2 text-xs sm:text-sm">
+    <a
+      href="#hero"
+      style={{ fontFamily: "Tajwal, sans-serif" }}
+      className="block py-2 text-gray-700 hover:bg-gray-100 rounded flex justify-center items-center"
+      onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+    >
+      {translations.home}
+    </a>
+    <a
+      href="#PartnerSection"
+      style={{ fontFamily: "Tajwal, sans-serif" }}
+      className=" py-2 text-gray-700 hover:bg-gray-100 rounded flex justify-center items-center"
+      onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+    >
+      {translations.services}
+    </a>
+    <a
+      href="#ShiekhsList"
+      style={{ fontFamily: "Tajwal, sans-serif" }}
+      className=" py-2 text-gray-700 hover:bg-gray-100 rounded flex justify-center items-center"
+      onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+    >
+      {translations.sheikhs}
+    </a>
+    <a
+      href="#contact"
+      style={{ fontFamily: "Tajwal, sans-serif" }}
+      className=" py-2 text-gray-700 hover:bg-gray-100 rounded flex justify-center items-center"
+      onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+    >
+      {translations.contactUs}
+    </a>
+    {isLoggedIn ? (
+      <button
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+        className=" py-2 text-gray-700 hover:bg-gray-100 rounded flex justify-center items-center"
+        onClick={handleAccount}
+      >
+        {translations.account}
+      </button>
+    ) : (
+      <>
+        <button
+          onClick={handleRegisterRedirect}
           style={{ fontFamily: "Tajwal, sans-serif" }}
-          className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
-          onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+          className=" py-2 text-gray-700 hover:bg-gray-100 rounded flex justify-center items-center"
         >
-            {translations.home}
-            </a>
-        <a
-            href="#PartnerSection"
-            style={{ fontFamily: "Tajwal, sans-serif" }}
-          className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
-          onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
-        >
-                      {translations.services}
-        </a>
-        <a
-          href="#ShiekhsList"
+          {translations.register}
+        </button>
+        <button
+          onClick={handleLogin}
           style={{ fontFamily: "Tajwal, sans-serif" }}
-          className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
-          onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
+          className=" py-2 text-gray-700 hover:bg-gray-100 rounded flex justify-center items-center"
         >
-           {translations.sheikhs}
-        </a>
-        <a
-          href="#contact"
-          style={{ fontFamily: "Tajwal, sans-serif" }}
-          className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
-          onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
-        >
-           {translations.contactUs}
-        </a>
-        {isLoggedIn ? (
-          <a
-            href="#"
-            style={{ fontFamily: "Tajwal, sans-serif" }}
-            className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
-            onClick={() => setIsOpen(false)} // إغلاق القائمة عند الضغط
-          >
-                       {translations.account}
-
-          </a>
-        ) : (
-          <>
-            <a
-              href="#LoginRegister"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-              className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
-              onClick={() => {
-                handleRegisterRedirect();
-                setIsOpen(false); // إغلاق القائمة عند الضغط
-              }}
-            >
-               {translations.register}
-            </a>
-            <a
-              href="#Login"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-              className="block py-2 text-gray-700 hover:bg-gray-100 rounded"
-              onClick={() => {
-                handleLogin();
-                setIsOpen(false); // إغلاق القائمة عند الضغط
-              }}
-            >
-               {translations.login}
-            </a>
-          </>
-        )}
-      </div>
+          {translations.login}
+        </button>
+      </>
     )}
+  </div>
+)}
+
     </nav>
   );
 };
