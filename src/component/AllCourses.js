@@ -147,7 +147,7 @@ export default function AllCourses() {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col items-center p-4">
+        <div className="flex flex-col p-4">
           {/* Search and Sort Controls */}
           <div className="flex items-center mb-4 w-full">
             <input
@@ -169,10 +169,10 @@ export default function AllCourses() {
           </div>
 
           {/* Courses Grid */}
-          <div className="flex flex-wrap w-full ">
+          <div className="flex flex-wrap mx-2">
             {currentCourses.map((course, idx) => (
-              <div key={idx} className="w-full sm:w-1/3 p-2">
-                <div className="bg-white rounded-lg shadow-md p-3 flex flex-col w-72 justify-between">
+              <div key={idx} className="w-full sm:w-1/4 p-2">
+                <div className="bg-white rounded-lg shadow-md p-3 flex flex-col  justify-between">
                   {/* Course Image */}
                   <img
                     src={course.imageUrl || CourseImage}

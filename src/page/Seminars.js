@@ -1,39 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import SeminarsAll from "../component/SeminarsAll";
 import ConferencesAll from "../component/ConferencesAll";
+
 const Seminars = () => {
   const [selectedSection, setSelectedSection] = useState("allSeminars");
-   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const showSeminars = () => setSelectedSection("allSeminars");
   const showConferences = () => setSelectedSection("allConferences");
- 
+
+  const [language, setLanguage] = useState("ar");
+  const isArabic = language === "ar";
+
+  useEffect(() => {
+    const savedLanguage = sessionStorage.getItem('language');
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
+  }, []);
 
   return (
     <>
-      <div
-        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
-      >
-        <NavbarLogin
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-      </div>
-      <div className="flex flex-col md:flex-row pt-16 w-full">
-        {" "}
+      <div className={`flex ${isArabic ? 'flex-col md:flex-row' : 'flex-col-reverse md:flex-row-reverse '} pt-16 w-full`}>
+        <div className={`fixed top-0 z-10 transition-all duration-300 w-full lg:w-[calc(100%-20%)]`}>
+          <NavbarLogin
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
+        <div className="border-t"></div>
+
+
         <div
           className="p-4 flex-1"
           style={{
             fontFamily: "Tajwal, sans-serif",
-            direction: "rtl",
-            textAlign: "right",
+            direction: isArabic ? "rtl" : "ltr",
+            textAlign: isArabic ? "right" : "left",
           }}
         >
-          <h2 className="text-xl font-bold mb-1">الندوات والمؤتمرات</h2>
+          <h2 className="text-xl font-bold mb-1">{isArabic ? "الندوات والمؤتمرات" : "Seminars & Conferences"}</h2>
           <h4 className="text-l font-bold text-gray-500">
-            مواصلة مشاهدة الندوات والمؤتمرات
+            {isArabic ? "مواصلة مشاهدة الندوات والمؤتمرات" : "Continue watching seminars and conferences"}
           </h4>
 
           <div className="flex flex-wrap justify-center md:justify-start mt-4 gap-2">
@@ -45,7 +55,7 @@ const Seminars = () => {
               }`}
               onClick={showSeminars}
             >
-              عرض جميع الندوات
+              {isArabic ? "عرض جميع الندوات" : "View All Seminars"}
             </button>
 
             <button
@@ -56,18 +66,20 @@ const Seminars = () => {
               }`}
               onClick={showConferences}
             >
-              عرض جميع المؤتمرات
+              {isArabic ? "عرض جميع المؤتمرات" : "View All Conferences"}
             </button>
           </div>
+
           <div className="mt-4">
             {selectedSection === "allSeminars" && <SeminarsAll />}
             {selectedSection === "allConferences" && <ConferencesAll />}
           </div>
         </div>
+
         <div
           className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
-          } md:w-[20%] h-full`}
+            isSidebarOpen ? "w-1/4" : "w-0"
+          } ${isArabic ? "md:w-[20%] mr-auto" : "md:w-[20%] ml-auto"} h-full`}
         >
           <Sidebar
             isSidebarOpen={isSidebarOpen}
@@ -80,6 +92,7 @@ const Seminars = () => {
 };
 
 export default Seminars;
+
 /*
 
      <Modal

@@ -30,6 +30,10 @@ const showpiccourses = (fileName) => {
 };
 
 function ShoppingCart() {
+    const [language, setLanguage] = useState(sessionStorage.getItem("language"));
+  
+    const isArabic = language === "ar";
+
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false); // Added for checkout loading
   const [cartItems, setCartItems] = useState([]);
@@ -216,6 +220,13 @@ function ShoppingCart() {
   return (
     <>
       <div
+        className={`flex ${
+          isArabic
+            ? "flex-col md:flex-row"
+            : "flex-col-reverse md:flex-row-reverse "
+        } pt-16 w-full`}
+      >
+<div
         className={`fixed top-0 z-10 transition-all duration-300 w-full lg:w-[calc(100%-20%)]`}
       >
         <NavbarLogin
@@ -224,7 +235,6 @@ function ShoppingCart() {
         />
       </div>
 
-      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="border-t"></div>
         <div className="flex flex-col lg:flex-row justify-between container mx-auto mt-10 rtl">
           <div className="lg:w-1/3 rounded-lg p-6 mt-6 lg:mt-0">
@@ -318,7 +328,9 @@ function ShoppingCart() {
             setIsSidebarOpen={setIsSidebarOpen}
           />
         </div>
+
       </div>
+      
       <ToastContainer />
     </>
   );

@@ -74,6 +74,12 @@ const ContinueWatchingSection = () => {
     navigate(`/Showcourse/${courseId}`);
   };
 
+  // Get the current language (default to 'ar' if not set)
+  const language = sessionStorage.getItem("language") || "ar"; // Default to 'ar'
+
+  // Set the direction based on the language
+  const direction = language === "en" ? "ltr" : "rtl";
+
   if (loading) {
     return (
       <div className="flex items-center justify-center w-full h-64">
@@ -83,35 +89,36 @@ const ContinueWatchingSection = () => {
   }
 
   return (
-    <div className="p-4" style={{ direction: "rtl" }}>
+    <div className="p-4" style={{ direction: direction }}>
       <div className="flex justify-between items-center mb-4">
         <h2
           className="text-xl font-bold"
           style={{
             fontFamily: "Tajwal, sans-serif",
-            textAlign: "right",
+            textAlign: language === "en" ? "left" : "right",
           }}
         >
-          الاستمرار في المشاهدة
+          {language === "en" ? "Continue Watching" : "الاستمرار في المشاهدة"}
         </h2>
         <Link
           to="/MyCourses"
           className="text-blue-500 underline"
           style={{
             fontFamily: "Tajwal, sans-serif",
+            textAlign: language === "en" ? "left" : "right",
           }}
         >
-          مشاهدة جميع الدورات
+          {language === "en" ? "View All Courses" : "مشاهدة جميع الدورات"}
         </Link>
       </div>
       <h4
         className="text-l font-bold text-gray-400 mb-4"
         style={{
           fontFamily: "Tajwal, sans-serif",
-          textAlign: "right",
+          textAlign: language === "en" ? "left" : "right",
         }}
       >
-        استمر في مشاهدة الدورات التي بدأت مشاهدتها بالفعل
+        {language === "en" ? "Continue watching the courses you've already started" : "استمر في مشاهدة الدورات التي بدأت مشاهدتها بالفعل"}
       </h4>
       <div
         ref={scrollContainerRef}
@@ -122,14 +129,15 @@ const ContinueWatchingSection = () => {
           <div className="flex flex-col items-center justify-center w-full text-center p-4 mt-0">
             <img
               src={noCoursesImage}
-              alt="No courses available"
+              alt={language === "en" ? "No courses available" : "لا يوجد دورات قمت بشراءها"}
               className="w-48 h-48 object-cover"
             />
             <p className="text-lg text-gray-700" 
                style={{
                 fontFamily: "Tajwal, sans-serif",
+                textAlign: language === "en" ? "left" : "right",
               }}>
-              لا يوجد دورات قمت بشراءها .. قم بالشراء الآن
+              {language === "en" ? "No courses purchased yet. Buy now!" : "لا يوجد دورات قمت بشراءها .. قم بالشراء الآن"}
             </p>
           </div>
         ) : (
@@ -160,7 +168,7 @@ const ContinueWatchingSection = () => {
                   className="text-gray-600 text-xs"
                   style={{
                     fontFamily: "Tajwal, sans-serif",
-                    textAlign: "justify",
+                    textAlign: language === "en" ? "left" : "justify",
                     lineHeight: "1.5",
                     marginBottom: "8px",
                     wordWrap: "break-word",
@@ -184,13 +192,13 @@ const ContinueWatchingSection = () => {
                     className="absolute left-0 text-xs text-gray-700"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
-                    تقدم الدورة
+                    {language === "en" ? "Course Progress" : "تقدم الدورة"}
                   </div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mt-6">
                   <div
                     className="bg-custom-orange h-2 rounded-full"
-                    style={{ width: `${course.progressPercentage ||0}%` }}
+                    style={{ width: `${course.progressPercentage || 0}%` }}
                   ></div>
                 </div>
               </div>

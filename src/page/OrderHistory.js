@@ -9,8 +9,18 @@ import noCoursesImage from "../assets/images/Search.png"; // صورة تعبير
 function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const [language, setLanguage] = useState("ar");
+  const isArabic = language === "ar";
+
+  useEffect(() => {
+    const savedLanguage = sessionStorage.getItem('language');
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
+  }, []);
+  
   useEffect(() => {
     axios
       .get(baseurl + "my-orders", {
@@ -53,23 +63,53 @@ function OrderHistory() {
     }
   };
 
+  const getTranslation = (key) => {
+    const translations = {
+      ar: {
+        title: "قائمة طلباتي",
+        noOrders: "لا يوجد طلبات في الوقت الحالي ..",
+        orderNumber: "طلب رقم",
+        totalOrder: "اجمالي الطلب",
+        paymentType: "نوع الدفع",
+        discount: "الخصم",
+        dinar: "دينار",
+      },
+      en: {
+        title: "My Orders",
+        noOrders: "No orders available at the moment..",
+        orderNumber: "Order No",
+        totalOrder: "Total Order",
+        paymentType: "Payment Type",
+        discount: "Discount",
+        dinar: "Dinar",
+      }
+    };
+
+    return translations[language][key] || key;
+  };
+
   return (
     <>
-      <div
-        className={`fixed top-0 z-10 transition-all duration-300 w-full lg:w-[calc(100%-20%)]`}
-      >
-        <NavbarLogin
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-      </div>
-      <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
-        <div className="container mx-auto p-4" dir="rtl">
-          <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
-            قائمة طلباتي
+      <div className={`flex ${isArabic ? 'flex-col md:flex-row' : 'flex-col-reverse md:flex-row-reverse '} pt-16 w-full`}>
+        <div
+          className={`fixed top-0 z-10 transition-all duration-300 w-full lg:w-[calc(100%-20%)]`}
+        >
+          <NavbarLogin
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
+
+        <div className="p-4 flex-1"
+          style={{
+            fontFamily: "Tajwal, sans-serif",
+            direction: isArabic ? "rtl" : "ltr",
+            textAlign: isArabic ? "right" : "left",
+          }}>
+          <h1 className="text-3xl font-bold mb-4  font-tajwal">
+            {getTranslation('title')}
           </h1>
           {orders.length === 0 ? (
-            // عرض رسالة "لا يوجد طلبات" ضمن محتوى الصفحة
             <div className="flex flex-col items-center justify-center h-screen text-center p-4 mt-[-5%]">
               <img
                 src={noCoursesImage}
@@ -77,15 +117,14 @@ function OrderHistory() {
                 className="w-60 h-60 object-cover"
               />
               <p className="text-lg text-gray-700 mt-4">
-                لا يوجد طلبات في الوقت الحالي ..
+                {getTranslation('noOrders')}
               </p>
             </div>
           ) : (
-            // عرض قائمة الطلبات إذا كانت موجودة
             orders.map((order, index) => (
               <div key={index} className="border rounded-md p-4 mb-4">
                 <div className="flex justify-between items-center mb-2">
-                  <h2 className="text-lg font-bold">طلب رقم {order.orderNo}</h2>
+                  <h2 className="text-lg font-bold">{getTranslation('orderNumber')} {order.orderNo}</h2>
                   <span className="text-gray-600">
                     {new Date(order.createdDate).toLocaleDateString()}
                   </span>
@@ -99,14 +138,15 @@ function OrderHistory() {
                     {order.orderStatus}
                   </span>
                   <span className="text-gray-600">
-                    اجمالي الطلب: {order.total} دينار
+                  {getTranslation('totalOrder')}: {order.total} {getTranslation('dinar')}
                   </span>
                 </div>
                 <div className="space-y-2">
                   <p className="font-semibold">
-                    نوع الدفع: {order.paymentType}
+                    {getTranslation('paymentType')}: {order.paymentType}
                   </p>
-                  <p className="font-semibold">الخصم: {order.discount} دينار</p>
+                  <p className="font-semibold">  {getTranslation('discount')}: {order.discount} {getTranslation('dinar')}
+                  </p>
                 </div>
               </div>
             ))
@@ -114,8 +154,8 @@ function OrderHistory() {
         </div>
         <div
           className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
-          } md:w-[20%] h-full`}
+            isSidebarOpen ? "w-1/4" : "w-0"
+          } ${isArabic ? "md:w-[20%] mr-auto" : "md:w-[20%] ml-auto"} h-full`}
         >
           <Sidebar
             isSidebarOpen={isSidebarOpen}

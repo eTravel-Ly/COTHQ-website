@@ -11,12 +11,18 @@ import { CiViewList } from "react-icons/ci";
 import { baseurl } from "../helper/Baseurl";
 import { useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useTranslation } from "../context/TranslationContext"; 
+
 const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
+    const { translations, language } = useTranslation(); // Translations and language from context
+  
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0); // State for unread notifications count
   const navigate = useNavigate();
+  
+  const sessionLanguage = sessionStorage.getItem('language') || 'ar'; // Get language from sessionStorage
 
   useEffect(() => {
     const fetchCartItemCount = async () => {
@@ -70,7 +76,10 @@ const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
   };
 
   return (
-    <div className="flex items-center justify-between bg-white p-4 ">
+    <div
+      className="flex items-center justify-between bg-white p-4"
+      style={{ direction: sessionLanguage === 'ar' ? 'ltr' : 'rtl' }} // Apply RTL or LTR based on language
+    >
       <div className="flex items-center">
         <button
           onClick={() => setShowNotifications(!showNotifications)}
@@ -104,7 +113,7 @@ const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 className=" px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                <span>الإعدادات</span>
+                <span> {translations.settings}</span>
                 <CiSettings className="ml-2" />
               </Link>
               <Link
@@ -112,7 +121,7 @@ const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 className=" px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                <span>الملف الشخصي</span>
+               <span> {translations.profile}</span>
                 <FiUser className="ml-2" />
               </Link>
               <Link
@@ -120,32 +129,32 @@ const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 className=" px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                <span>قائمة الطلبات</span>
-                <GrUnorderedList className="ml-2" />
+               <span> {translations.order_history}</span>
+               <GrUnorderedList className="ml-2" />
               </Link>
               <Link
                 to="/borrowsHistory"
                 className=" px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                <span>طلبات الاستعارة</span>
-                <CiViewList className="ml-2" />
+               <span> {translations.borrows_history}</span>
+               <CiViewList className="ml-2" />
               </Link>
               <button
                 className=" w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center justify-end"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
                 onClick={handleLogout}
               >
-                <span>تسجيل خروج</span>
-                <CiLogout className="ml-2" />
+               <span> {translations.logout}</span>
+               <CiLogout className="ml-2" />
               </button>
             </div>
           )}
         </div>
       </div>
       <div
-        className=" flex items-center mb-1  "
-        style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+        className=" flex items-center mb-1"
+        style={{ fontFamily: "Tajwal, sans-serif", direction: sessionLanguage === 'ar' ? 'rtl' : 'ltr' }} // Apply RTL or LTR based on language
       >
         <button
           className="p-2 bg-blues rounded-full md:block ml-5 lg:hidden"
@@ -155,7 +164,7 @@ const NavbarLogin = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </button>
         <h2 className="text-lg sm:text-xl  font-bold text-custom-orange">
           {" "}
-          مجمع القران الكريم
+          {translations.quranComplex}
         </h2>
       </div>
     </div>

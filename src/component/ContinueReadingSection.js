@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, Link } from 'react-router-dom'; // تعديل هنا
+import { useNavigate, Link } from 'react-router-dom'; 
 import { baseurl } from '../helper/Baseurl';
-import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
+import noCoursesImage from "../assets/images/Search.png"; 
 
 const ContinueReadingSection = () => {
+  
+
   const [mybooks, setMyBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -85,6 +87,9 @@ const ContinueReadingSection = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const language = sessionStorage.getItem("language") || "ar"; 
+  const isRTL = language === "ar";
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -94,16 +99,16 @@ const ContinueReadingSection = () => {
   }
 
   return (
-    <div className="p-4 " style={{ direction: "rtl" }}>
+    <div className="p-4" style={{ direction: isRTL ? "rtl" : "ltr" }}>
       <div className="flex justify-between items-center mb-4">
         <h2
-          className="text-xl font-bold "
+          className="text-xl font-bold"
           style={{
             fontFamily: "Tajwal, sans-serif",
-            textAlign: "right",
+            textAlign: isRTL ? "right" : "left",
           }}
         >
-          الاستمرار في القراءة
+          {language === "ar" ? "الاستمرار في القراءة" : "Continue Reading"}
         </h2>
         <Link
           to="/MyBooks"
@@ -112,7 +117,7 @@ const ContinueReadingSection = () => {
             fontFamily: "Tajwal, sans-serif",
           }}
         >
-          مشاهدة جميع الكتب
+          {language === "ar" ? "مشاهدة جميع الكتب" : "View All Books"}
         </Link>
       </div>
 
@@ -120,10 +125,10 @@ const ContinueReadingSection = () => {
         className="text-l font-bold text-gray-400 mb-4"
         style={{
           fontFamily: "Tajwal, sans-serif",
-          textAlign: "right",
+          textAlign: isRTL ? "right" : "left",
         }}
       >
-        استمر في قراءة الكتب الذي بدأت قرأتها بالفعل
+        {language === "ar" ? "استمر في قراءة الكتب الذي بدأت قرأتها بالفعل" : "Continue reading the books you've already started"}
       </h4>
 
       <div
@@ -144,15 +149,15 @@ const ContinueReadingSection = () => {
                 fontFamily: "Tajwal, sans-serif",
               }}
             >
-              لا يوجد كتب قمت بشراءها .. قم بالاشراء الان
+              {language === "ar" ? "لا يوجد كتب قمت بشراءها .. قم بالاشراء الان" : "No books purchased yet.. Buy now"}
             </p>
           </div>
         ) : (
           mybooks.map((book, index) => (
             <div
               key={index}
-              className="bg-white shadow-lg rounded-lg p-2 w-72 flex-shrink-0 flex items-center text-right mb-4 ml-5"
-              style={{ direction: "rtl" }}
+              className="bg-white shadow-lg rounded-lg p-2 w-72 flex-shrink-0 flex items-center mb-4 ml-5"
+              style={{ direction: isRTL ? "rtl" : "ltr" }}
               onClick={() => openBook(book.id)}
             >
               <img
@@ -185,7 +190,7 @@ const ContinueReadingSection = () => {
                     className="absolute right-0 text-xs text-gray-700"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
-                    تقدم الدورة
+                    {language === "ar" ? "تقدم الدورة" : "Course Progress"}
                   </div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -198,18 +203,6 @@ const ContinueReadingSection = () => {
             </div>
           ))
         )}
-      </div>
-
-      <div className=" bottom-0 left-0 top-10 absolute">
-        <Link
-          to="/MyBooks"
-          className="text-blue-500 underline"
-          style={{
-            fontFamily: "Tajwal, sans-serif",
-          }}
-        >
-          مشاهدة جميع الكتب
-        </Link>
       </div>
     </div>
   );

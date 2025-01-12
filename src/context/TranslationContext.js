@@ -10,7 +10,11 @@ import FAQSectionTranslations from "./FAQSectionlang";
 import FooterTranslations from "./Footerlang";
 import LoginRegisterlang from "./LoginRegisterlang";
 import Toastlang from "./Toastlang";
-
+import Sidebarlang from './Sidebarlang'
+import NavbarLoginTranslations from "./NavbarLoginlang";
+import NewCoursesTranslations from './NewCoursesSectionlang'
+import BorrowsHistoryTranslations from './BorrowsHistorylang'
+import SettingsTranslations from './Settingslang'
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -26,6 +30,11 @@ const combinedTranslations = {
     ...FooterTranslations.en,
     ...LoginRegisterlang.en,
     ...Toastlang.en,
+    ...Sidebarlang.en,
+    ...NavbarLoginTranslations.en,
+    ...NewCoursesTranslations.en,
+    ...BorrowsHistoryTranslations.en,
+    ...SettingsTranslations.en
   },
   ar: {
     ...homeTranslations.ar,
@@ -39,6 +48,11 @@ const combinedTranslations = {
     ...FooterTranslations.ar,
     ...LoginRegisterlang.ar,
     ...Toastlang.ar,
+    ...Sidebarlang.ar,
+    ...NavbarLoginTranslations.ar,
+    ...NewCoursesTranslations.ar,
+    ...BorrowsHistoryTranslations.ar,
+    ...SettingsTranslations.ar
   },
 };
 

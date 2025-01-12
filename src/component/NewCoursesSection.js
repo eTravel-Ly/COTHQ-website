@@ -4,8 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png"; // Replace with the path to your no courses image
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
+import { useTranslation } from "../context/TranslationContext"; 
 
 const NewCoursesSection = () => {
+  const { translations } = useTranslation(); 
+
   const [courses, setCourses] = useState([]);
   const [likedCourses, setLikedCourses] = useState({});
   const [loading, setLoading] = useState(true); // Loading state
@@ -13,6 +16,9 @@ const NewCoursesSection = () => {
   const [totalPages, setTotalPages] = useState(1);
   const coursesPerPage = 4; // Updated to 4
   const navigate = useNavigate();
+
+  // Fetch the language from sessionStorage or localStorage
+  const language = sessionStorage.getItem("language") || "ar"; // Default to Arabic
 
   const fetchCourses = async () => {
     setLoading(true); // Set loading to true before fetching data
@@ -102,26 +108,27 @@ const NewCoursesSection = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4" style={{ direction: language === "ar" ? "rtl" : "ltr" }}>
       <h2
         className="text-xl font-bold mb-4"
         style={{
           fontFamily: "Tajwal, sans-serif",
-          direction: "rtl",
-          textAlign: "right",
+          direction: language === "ar" ? "rtl" : "ltr",
+          textAlign: language === "ar" ? "right" : "left",
         }}
       >
-        الدورات التدريبية الجديدة
+       {translations.title}
       </h2>
       <h4
         className="text-l font-bold text-gray-400 mb-4"
         style={{
           fontFamily: "Tajwal, sans-serif",
-          direction: "rtl",
-          textAlign: "right",
+          direction: language === "ar" ? "rtl" : "ltr",
+          textAlign: language === "ar" ? "right" : "left",
         }}
       >
-        شاهد الدورات التدريبية الجديدة التي تمت إضافتها.
+             {translations.description}
+
       </h4>
       <div className="relative">
         {courses.length === 0 ? (
@@ -135,17 +142,19 @@ const NewCoursesSection = () => {
               className="text-lg text-gray-700"
               style={{
                 fontFamily: "Tajwal, sans-serif",
+                direction: language === "ar" ? "rtl" : "ltr",
+                textAlign: language === "ar" ? "right" : "left",
               }}
             >
-              لا يوجد دورات تدريبية تمت اضافتها ..
-            </p>
+             {translations.noCoursesMessage}
+             </p>
           </div>
         ) : (
           <>
             <div className="flex items-center w-full sm:w-42 justify-center space-x-4 p-2 mb-2 rounded-full bg-white border border-gray-200">
               <button
                 className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white text-custom-orange"
-                style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+                style={{ fontFamily: "Tajwal, sans-serif", direction: language === "ar" ? "rtl" : "ltr" }}
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
@@ -159,7 +168,7 @@ const NewCoursesSection = () => {
                       ? "bg-custom-orange text-white"
                       : "bg-gray-50 text-black"
                   } hover:bg-custom-orange hover:text-white border border-gray-200`}
-                  style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+                  style={{ fontFamily: "Tajwal, sans-serif", direction: language === "ar" ? "rtl" : "ltr" }}
                   onClick={() => handlePageChange(index + 1)}
                 >
                   {index + 1}
@@ -167,7 +176,7 @@ const NewCoursesSection = () => {
               ))}
               <button
                 className="px-4 py-2 bg-white rounded-full relative hover:bg-custom-orange hover:text-white text-custom-orange"
-                style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+                style={{ fontFamily: "Tajwal, sans-serif", direction: language === "ar" ? "rtl" : "ltr" }}
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
@@ -176,13 +185,13 @@ const NewCoursesSection = () => {
             </div>
             <div
               className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-6"
-              style={{ fontFamily: "Tajwal, sans-serif", direction: "rtl" }}
+              style={{ fontFamily: "Tajwal, sans-serif", direction: language === "ar" ? "rtl" : "ltr" }}
             >
               {currentCourses.map((course) => (
                 <div
                   key={course.id}
                   className="bg-white shadow-lg rounded-lg w-full sm:w-42 overflow-hidden p-4"
-                  style={{ direction: "rtl", fontSize: "14px" }} // تصغير الحجم
+                  style={{ direction: language === "ar" ? "rtl" : "ltr", fontSize: "14px" }} // تصغير الحجم
                 >
                   <img
                     src={course.imageUrl}
@@ -207,14 +216,14 @@ const NewCoursesSection = () => {
                         color: "#4A4A4A",
                       }}
                     >
-                      {course.price} دينار
+                      {course.price}  {translations.price}
                     </p>
                   </div>
                   <p
                     className="text-gray-600 text-xs"
                     style={{
                       fontFamily: "Tajwal, sans-serif",
-                      textAlign: "justify",
+                      textAlign: language === "ar" ? "right" : "left",
                       lineHeight: "1.5",
                       marginBottom: "8px",
                       wordWrap: "break-word",
@@ -253,7 +262,7 @@ const NewCoursesSection = () => {
                         fontSize: "14px",
                       }}
                     >
-                      اشتر الآن
+                      {translations.buttonText}
                     </button>
                   </div>
                 </div>

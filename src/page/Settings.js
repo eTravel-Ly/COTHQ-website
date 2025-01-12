@@ -7,10 +7,21 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseurl } from "../helper/Baseurl";
 import { FaSpinner } from "react-icons/fa"; // أيقونة لودينق
+import { useTranslation } from "../context/TranslationContext"; 
 
 const Settings = () => {
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+       const { translations } = useTranslation(); 
+     
+ const [language, setLanguage] = useState("ar");
+  const isArabic = language === "ar";
 
+  useEffect(() => {
+    const savedLanguage = sessionStorage.getItem('language');
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
+  }, []);
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -41,13 +52,13 @@ const Settings = () => {
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
-        toast.error("حدث خطأ أثناء جلب بيانات المستخدم.");
+        toast.error(translations.errorFetchProfile);
       }
     };
     fetchProfile();
   }, []);
   const handleProfileSubmit = async () => {
-    setLoading(true); // بدء عملية التحميل
+    setLoading(true); 
     try {
       const response = await axios.post(
         baseurl + "update-my-profile",
@@ -68,13 +79,13 @@ const Settings = () => {
       );
 
       if (response.status === 201) {
-        toast.success("تم حفظ التغييرات بنجاح.");
+        toast.success(translations.profileUpdatedSuccess);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error("حدث خطأ أثناء حفظ التغييرات.");
+      toast.error(translations.profileUpdateError);
     } finally {
-      setLoading(false); // إيقاف عملية التحميل
+      setLoading(false); 
     }
   };
 
@@ -108,16 +119,16 @@ const Settings = () => {
       !passwords.newPassword ||
       !passwords.confirmPassword
     ) {
-      toast.warning("الرجاء ملء جميع الحقول.");
+      toast.warning(translations.warningFillAllFields);
       return;
     }
 
     if (passwords.newPassword !== passwords.confirmPassword) {
-      toast.warning("كلمة المرور الجديدة وتأكيد كلمة المرور الجديدة غير متطابقين.");
+      toast.warning(translations.warningPasswordsMismatch);
       return;
     }
 
-    setLoading(true); // بدء عملية التحميل
+    setLoading(true); 
     try {
       const response = await axios.post(
         baseurl + "account/change-password",
@@ -133,7 +144,7 @@ const Settings = () => {
       );
 
       if (response.status === 200) {
-        toast.success("تم تغيير كلمة المرور بنجاح.");
+        toast.success(translations.passwordChangedSuccess);
       }
     } catch (error) {
       console.error(error);
@@ -144,7 +155,9 @@ const Settings = () => {
   };
   return (
     <>
-      <div
+     <div className={`flex ${isArabic ? 'flex-col md:flex-row' : 'flex-col-reverse md:flex-row-reverse '} pt-16 w-full`}>
+
+     <div
         className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
       >
         <NavbarLogin
@@ -153,7 +166,6 @@ const Settings = () => {
         />
       </div>
 
-      <div className="flex flex-col md:flex-row pt-16 w-full">
         <div className="flex flex-1">
           <div className="flex-1 p-8">
             <div className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -163,7 +175,7 @@ const Settings = () => {
                     className="text-lg font-semibold mb-4"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
-                    تعديل بيانات المستخدم
+                   {translations.editProfile}
                   </h2>
                   <div className="w-full lg:w-5/6">
                     <div className="flex flex-col mb-3">
@@ -200,7 +212,7 @@ const Settings = () => {
                       <div className="flex justify-between mb-3 mx-10">
                         <input
                           type="text"
-                          placeholder={"ادخل اللقب"}
+                          placeholder=   {translations.enterLastName}
                           name="lastName"
                           value={profileData.lastName}
                           onChange={handleProfileChange}
@@ -212,7 +224,7 @@ const Settings = () => {
                         />
                         <input
                           type="text"
-                          placeholder={"ادخل الاسم الأول"}
+                          placeholder={translations.enterFirstName}
                           name="firstName"
                           value={profileData.firstName}
                           onChange={handleProfileChange}
@@ -225,7 +237,7 @@ const Settings = () => {
                       </div>
                       <input
                         type="text"
-                        placeholder={"ادخل رقم الهاتف"}
+                        placeholder={translations.enterMobileNo}
                         name="mobileNo"
                         value={profileData.mobileNo}
                         onChange={handleProfileChange}
@@ -237,7 +249,7 @@ const Settings = () => {
                       />
                       <input
                         type="text"
-                        placeholder={"رقم القيد "}
+                        placeholder={translations.enterStudentId}
                         name="studentId"
                         value={profileData.studentId}
                         onChange={handleProfileChange}
@@ -249,7 +261,7 @@ const Settings = () => {
                       />
                       <input
                         type="email"
-                        placeholder={"ادخل البريد الالكترونى"}
+                        placeholder={translations.enterEmail}
                         name="email"
                         value={profileData.email}
                         onChange={handleProfileChange}
@@ -279,7 +291,7 @@ const Settings = () => {
                           {loading ? (
                             <FaSpinner className="animate-spin mr-2" />
                           ) : (
-                            "حـــفـــظ"
+                           `${translations.saveChanges}` 
                           )}
                         </button>
                       </div>
@@ -296,7 +308,7 @@ const Settings = () => {
                       direction: "rtl",
                     }}
                   >
-                    تغيير كلمة المرور
+                   {translations.passwordChange}
                   </h2>
                   <div className="w-full lg:w-5/6">
                     <div className="flex flex-col mb-3">
@@ -310,7 +322,7 @@ const Settings = () => {
                       </div>
                       <input
                         type="password"
-                        placeholder={"ادخل كلمة المرور القديمة"}
+                        placeholder={translations.enterCurrentPassword}
                         name="currentPassword"
                         value={passwords.currentPassword}
                         onChange={handleChange}
@@ -322,7 +334,7 @@ const Settings = () => {
                       />
                       <input
                         type="password"
-                        placeholder={"ادخل كلمة المرور الجديدة"}
+                        placeholder={translations.enterNewPassword}
                         name="newPassword"
                         value={passwords.newPassword}
                         onChange={handleChange}
@@ -334,7 +346,7 @@ const Settings = () => {
                       />
                       <input
                         type="password"
-                        placeholder={"ادخل تأكيد كلمة المرور الجديدة"}
+                        placeholder={translations.confirmNewPassword}
                         name="confirmPassword"
                         value={passwords.confirmPassword}
                         onChange={handleChange}
@@ -364,7 +376,7 @@ const Settings = () => {
                           {loading ? (
                             <FaSpinner className="animate-spin mr-2" />
                           ) : (
-                            "حــــــفــــــــظ"
+                            `${translations.saveChanges}` 
                           )}
                         </button>
                       </div>
@@ -386,7 +398,8 @@ const Settings = () => {
             setIsSidebarOpen={setIsSidebarOpen}
           />
         </div>
-      </div>
+     </div>
+ 
     </>
   );
 };

@@ -9,6 +9,10 @@ import axios from "axios";
 import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 
 const Profile = () => {
+    const [language, setLanguage] = useState(sessionStorage.getItem("language"));
+  
+    const isArabic = language === "ar";
+
   const [selectedSection, setSelectedSection] = useState("MyBookButton");
   const [profileData, setProfileData] = useState({
     firstName: "",
@@ -50,6 +54,13 @@ const Profile = () => {
 
   return (
     <>
+     <div
+        className={`flex ${
+          isArabic
+            ? "flex-col md:flex-row"
+            : "flex-col-reverse md:flex-row-reverse "
+        } pt-16 w-full`}
+      >
       <div
         className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
       >
@@ -58,8 +69,11 @@ const Profile = () => {
           setIsSidebarOpen={setIsSidebarOpen}
         />
       </div>
-      <div className="flex flex-col md:flex-row pt-16 w-full">
-        <div className="flex flex-1 flex-col" dir="rtl">
+        <div className="flex flex-1 flex-col" style={{
+            fontFamily: "Tajwal, sans-serif",
+            direction: isArabic ? "rtl" : "ltr",
+            textAlign: isArabic ? "right" : "left",
+          }}>
           <div className="flex flex-col md:flex-row items-center md:items-start justify-between bg-white p-6 shadow-sm rounded-md mb-4">
             <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 md:ml-6">
               <img
@@ -68,7 +82,10 @@ const Profile = () => {
                 alt="User"
               />
             </div>
-            <div className="mt-4 md:mt-0 text-center md:text-right md:mr-6 flex-1">
+            <div className={`mt-4 md:mt-0 flex-1  md:${isArabic ? "text-right" : "text-left ml-6"} md:mr-6 `}
+            style={{
+              direction: isArabic ? "rtl" : "ltr",
+            }}>
               <p
                 className="text-gray-700 font-bold"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
@@ -170,6 +187,7 @@ const Profile = () => {
           />
         </div>
       </div>
+
     </>
   );
 };

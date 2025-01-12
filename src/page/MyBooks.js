@@ -1,14 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import MyBookButton from "../component/MyBookButton";
 import WishlistButton from "../component/WishlistBookButton";
 import ArchiveButton from "../component/ArchiveBookButton";
 
-
 function MyBooks() {
-   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState("myBooks");
+  const [language, setLanguage] = useState(sessionStorage.getItem("language"));
+
+  const isArabic = language === "ar";
+
+  const translations = {
+    ar: {
+      myBooks: "كتبي",
+      wishlist: "قائمة الرغبات",
+      archive: "الأرشيف",
+      libraryTitle: "مكتبتي",
+      continueReading: "مواصلة قراءة الكتب",
+    },
+    en: {
+      myBooks: "My Books",
+      wishlist: "Wishlist",
+      archive: "Archive",
+      libraryTitle: "My Library",
+      continueReading: "Continue Reading Books",
+    },
+  };
+
+  const t = translations[language]; // Helper for getting translated text
+
+  useEffect(() => {
+    const savedLanguage = sessionStorage.getItem("language");
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
+  }, []);
 
   const showMyBooks = () => setSelectedSection("myBooks");
   const showWishlist = () => setSelectedSection("wishlist");
@@ -17,27 +45,32 @@ function MyBooks() {
   return (
     <>
       <div
-        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
+        className={`flex ${
+          isArabic
+            ? "flex-col md:flex-row"
+            : "flex-col-reverse md:flex-row-reverse "
+        } pt-16 w-full`}
       >
-        <NavbarLogin
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-      </div>
+        <div
+          className={`fixed top-0 z-10 transition-all duration-300 w-full lg:w-[calc(100%-20%)]`}
+        >
+          <NavbarLogin
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
 
-      <div className="flex flex-col md:flex-row pt-16 w-full">
-     
         <div
           className="p-4 flex-1"
           style={{
             fontFamily: "Tajwal, sans-serif",
-            direction: "rtl",
-            textAlign: "right",
+            direction: isArabic ? "rtl" : "ltr",
+            textAlign: isArabic ? "right" : "left",
           }}
         >
-          <h2 className="text-xl font-bold mb-1">مكتبتي</h2>
+          <h2 className="text-xl font-bold mb-1">{t.libraryTitle}</h2>
           <h4 className="text-l font-bold text-gray-500">
-            مواصلـــة قراءة الكــتــب
+            {t.continueReading}
           </h4>
 
           <div className="flex flex-wrap justify-center md:justify-start mt-4 gap-2">
@@ -49,7 +82,7 @@ function MyBooks() {
               }`}
               onClick={showMyBooks}
             >
-              كتبي
+              {t.myBooks}
             </button>
             <button
               className={`flex items-center px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -59,7 +92,7 @@ function MyBooks() {
               }`}
               onClick={showWishlist}
             >
-              قائمة الرغبات
+              {t.wishlist}
             </button>
             <button
               className={`flex items-center px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -69,11 +102,10 @@ function MyBooks() {
               }`}
               onClick={showArchive}
             >
-              الأرشيف
+              {t.archive}
             </button>
           </div>
 
-       
           <div className="mt-4">
             {selectedSection === "myBooks" && <MyBookButton />}
             {selectedSection === "wishlist" && <WishlistButton />}
@@ -81,7 +113,6 @@ function MyBooks() {
           </div>
         </div>
 
-     
         <div
           className={`transition-all duration-300 ${
             isSidebarOpen ? "w-full md:w-1/4" : "w-0"

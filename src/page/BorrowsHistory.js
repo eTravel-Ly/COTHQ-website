@@ -5,20 +5,32 @@ import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Modal from 'react-modal'; // استيراد المودال
+import Modal from 'react-modal'; 
 import { useNavigate } from 'react-router-dom';
-import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
-import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
+import noCoursesImage from "../assets/images/Search.png"; 
+import { FaSpinner } from 'react-icons/fa'; 
+import { useTranslation } from "../context/TranslationContext"; 
 
-Modal.setAppElement('#root'); // لتفادي تحذير عند استخدام المودال
+Modal.setAppElement('#root'); 
 
 function BorrowsHistory() {
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { translations } = useTranslation(); 
 
   const [orders, setOrders] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [loading, setLoading] = useState(true);
+
+   const [language, setLanguage] = useState("ar");
+    const isArabic = language === "ar";
+  
+    useEffect(() => {
+      const savedLanguage = sessionStorage.getItem('language');
+      if (savedLanguage) {
+        setLanguage(savedLanguage);
+      }
+    }, []);
 
   const navigate = useNavigate();
 
@@ -30,13 +42,12 @@ function BorrowsHistory() {
         },
       })
       .then((response) => {
-        setOrders(response.data[0]); // Adjusted based on API response structure
-        setLoading(false); // إيقاف اللودينق بعد جلب البيانات
-
+        setOrders(response.data[0]); 
+        setLoading(false); 
       })
       .catch((error) => {
         console.error("Error fetching borrow requests:", error);
-        setLoading(false); // إيقاف اللودينق بعد جلب البيانات
+        setLoading(false);
 
       });
   }, []);
@@ -65,13 +76,13 @@ function BorrowsHistory() {
         },
       })
       .then((response) => {
-        toast.success('تم الغاء طلب الاستعارة بنجاح');
+        toast.success(translations.cancelSuccessMessage);
         setTimeout(() => {
           navigate('/BorrowsHistory');
         }, 3000);
       })
       .catch((error) => {
-        toast.warning('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
+        toast.warning(translations.cancelErrorMessage);
       });
   };
 
@@ -92,7 +103,6 @@ function BorrowsHistory() {
     closeModal();
   };
   if (loading) {
-    // عرض مكون اللودينق في حالة انتظار تحميل البيانات
     return (
       <div className="flex items-center justify-center h-screen">
         <FaSpinner className="text-4xl animate-spin" />
@@ -101,6 +111,8 @@ function BorrowsHistory() {
   }
   return (
     <>
+      <div className={`flex ${isArabic ? 'flex-col md:flex-row' : 'flex-col-reverse md:flex-row-reverse '} pt-16 w-full`}>
+
       <div
         className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
       >
@@ -110,10 +122,15 @@ function BorrowsHistory() {
         />
       </div>
 
-      <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
-        <div className="container mx-auto p-4" dir="rtl">
-          <h1 className="text-xl font-bold mb-4 text-right font-tajwal">
-            قائمة طلبات الاستعارة الخاصة بي
+    
+        <div  className="p-4 flex-1"
+          style={{
+            fontFamily: "Tajwal, sans-serif",
+            direction: isArabic ? "rtl" : "ltr",
+            textAlign: isArabic ? "right" : "left",
+          }}>
+          <h1 className="text-xl font-bold mb-4  font-tajwal">
+          {translations.title}
           </h1>
           {orders.length === 0 ? (
             // عرض رسالة "لا يوجد طلبات" ضمن محتوى الصفحة
@@ -124,14 +141,15 @@ function BorrowsHistory() {
                 className="w-60 h-60 object-cover"
               />
               <p className="text-lg text-gray-700 ">
-                لا يوجد طلبات استعارة في الوقت الحالي ..
+              {translations.noOrdersMessage}
               </p>
             </div>
           ) : (
             orders.map((order) => (
               <div key={order.id} className="border rounded-md p-4 mb-4">
                 <div className="flex justify-between items-center mb-2">
-                  <h2 className="text-lg font-bold">حالة الطلب:</h2>
+                  <h2 className="text-lg font-bold">  {translations.borrowRequestStatus}
+                  </h2>
                   <span
                     className={`text-white px-2 py-1 rounded ${getStatusColor(
                       order.bookBorrowRequestStatus
@@ -142,19 +160,19 @@ function BorrowsHistory() {
                 </div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-gray-600">
-                    اسم الكتاب: {order.book.title}
+                  {translations.bookName} {order.book.title}
                   </span>
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <div className="flex space-x-4 ml-7">
-                    <p className="font-semibold ml-7">
-                      تاريخ الاستعارة: {formatDate(order.requestDate)}
+                  <div className="flex space-x-4 ">
+                    <p className="font-semibold ">
+                    {translations.borrowDate}  {formatDate(order.requestDate)}
                     </p>
                     <p className="font-semibold">
-                      تاريخ الاستلام: {formatDate(order.collectDate)}
+                    {translations.collectDate}  {formatDate(order.collectDate)}
                     </p>
                     <p className="font-semibold">
-                      تاريخ الإرجاع: {formatDate(order.returnDate)}
+                    {translations.returnDate}  {formatDate(order.returnDate)}
                     </p>
                   </div>
                 </div>
@@ -164,7 +182,7 @@ function BorrowsHistory() {
                     onClick={() => openModal(order.id)}
                     className="bg-custom-orange text-white px-2 py-2 text-sm rounded mt-4"
                   >
-                    إلغاء الطلب
+                      {translations.cancelRequest}
                   </button>
                 )}
               </div>
@@ -182,8 +200,10 @@ function BorrowsHistory() {
           />
         </div>
       </div>
+    
 
-      {/* Confirmation Modal */}
+
+
       <Modal
   isOpen={isModalOpen}
   onRequestClose={closeModal}
@@ -217,21 +237,24 @@ function BorrowsHistory() {
   }}
 >
   <div className="p-6 text-center">
-    <h2 className="text-lg font-bold mb-4">
-      هل أنت متأكد من إلغاء طلب الاستعارة؟
+    <h2 className="text-lg font-bold mb-4"
+    >
+    {translations.modalTitle}
     </h2>
     <div className="flex justify-center space-x-4">
       <button
         onClick={confirmCancelOrder}
         className="bg-red-600 text-white px-4 py-2 rounded ml-2"
       >
-        نعم
+            {translations.yes}
+
       </button>
       <button
         onClick={closeModal}
         className="bg-gray-300 text-black px-4 py-2 rounded"
       >
-        لا
+            {translations.no}
+
       </button>
     </div>
   </div>
