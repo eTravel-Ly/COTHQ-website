@@ -15,6 +15,7 @@ import NavbarLoginTranslations from "./NavbarLoginlang";
 import NewCoursesTranslations from './NewCoursesSectionlang'
 import BorrowsHistoryTranslations from './BorrowsHistorylang'
 import SettingsTranslations from './Settingslang'
+
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -57,13 +58,10 @@ const combinedTranslations = {
 };
 
 export const TranslationProvider = ({ children }) => {
-  const [language, setLanguage] = useState(() => {
-    return sessionStorage.getItem("language") || "ar"; 
-  });
+  const [language, setLanguage] = useState("ar"); // اللغة الافتراضية
 
   const changeLanguage = (lang) => {
-    setLanguage(lang);
-    sessionStorage.setItem("language", lang); 
+    setLanguage(lang); // تغيير اللغة فقط بدون تخزينها
   };
 
   return (
