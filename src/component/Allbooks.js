@@ -9,8 +9,12 @@ import { FaSpinner } from 'react-icons/fa'; // تأكد من استيراد أي
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 import { CiHeart } from "react-icons/ci";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { useTranslation } from "../context/TranslationContext"; 
 
 const Allbooks = () => {
+  const { translations , language} = useTranslation(); 
+  const isArabic = language === "ar";
+
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
   const [likedBooks, setLikedBooks] = useState({});
@@ -147,7 +151,7 @@ const Allbooks = () => {
 
   const handleSaveBorrow = () => {
     if (!selectedBook || !borrowDate || !returnDate) {
-      toast.warning('الرجاء ملء جميع الحقول');
+      toast.warning(translations.warningFillAllFields);
       return;
     }
 
@@ -167,14 +171,14 @@ const Allbooks = () => {
         }
       })
       .then((response) => {
-        toast.success('تم إرسال طلب الاستعارة بنجاح');
+        toast.success(translations.borrowRequestSuccess);
         setLoading1(false);
         setTimeout(() => {
           closeModal(); 
         }, 3000);
       })
       .catch((error) => {
-        toast.warning('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
+        toast.warning(translations.borrowRequestError);
         setLoading1(false);
       });
   };
@@ -182,15 +186,15 @@ const Allbooks = () => {
   const getAvailabilityStyle = (availability) => {
     switch (availability) {
       case 'AVAILABLE_BOTH':
-        return { text: 'متاح', bgColor: 'bg-green-600', btnText: 'اشترِ الآن', btnDisabled: false };
+        return { text: translations.available, bgColor: 'bg-green-600', btnText: translations.buy_now, btnDisabled: false };
       case 'AVAILABLE_LIBRARY_ONLY':
-        return { text: 'متوفر في المكتبة فقط', bgColor: 'bg-blue-500', btnText: 'استعر الآن', btnDisabled: false };
+        return { text: translations.available_library_only, bgColor: 'bg-blue-500', btnText:translations.borrow_now, btnDisabled: false };
       case 'AVAILABLE_ONLINE_ONLY':
-        return { text: 'متوفر بالانترنت', bgColor: 'bg-blue-500', btnText: 'اشترِ الآن', btnDisabled: false };
+        return { text: translations.available_online_only, bgColor: 'bg-blue-500', btnText: translations.buy_now, btnDisabled: false };
       case 'RESERVED':
-        return { text: 'محجوز', bgColor: 'bg-yellow-500', btnText: 'استعر الآن', btnDisabled: true };
+        return { text: translations.reserved, bgColor: 'bg-yellow-500', btnText:translations.borrow_now, btnDisabled: true };
       case 'UNAVAILABLE':
-        return { text: 'غير متاح', bgColor: 'bg-red-500', btnText: 'اشترِ الآن', btnDisabled: true };
+        return { text: translations.unavailable, bgColor: 'bg-red-500', btnText: translations.buy_now, btnDisabled: true };
       default:
         return { text: '', bgColor: '', btnText: '', btnDisabled: true };
     }
@@ -213,7 +217,7 @@ const Allbooks = () => {
             className="text-lg text-gray-700"
             style={{ fontFamily: "Tajwal, sans-serif" }}
           >
-            لا توجد كتب متاحة في الوقت الحالي
+           {translations.no_books_message}
           </p>
         </div>
       ) : (
@@ -223,7 +227,7 @@ const Allbooks = () => {
               <div className="flex items-center mb-4 w-full">
                 <input
                   type="text"
-                  placeholder="اكتب العنوان أو دار النشر للبحث عن كتاب .. "
+                  placeholder={translations.search_placeholder}
                   className="p-2 border rounded-md w-full mr-4"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -233,9 +237,9 @@ const Allbooks = () => {
                   value={sortOption}
                   onChange={handleSortChange}
                 >
-                  <option value="فرز حسب">فرز حسب</option>
-                  <option value="الأحدث">الأحدث</option>
-                  <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
+                  <option value="فرز حسب">{translations.sort_by} </option>
+                  <option value="الأحدث">{translations.newest} </option>
+                  <option value="الأعلى تقييمًا"> {translations.top_rated}</option>
                 </select>
               </div>
 
@@ -274,7 +278,7 @@ const Allbooks = () => {
                               {availabilityStyle.text}
                             </div>
                             <div className="text-lg font-bold mb-2">
-                              {book.price} دينار
+                              {book.price} {translations.price} 
                             </div>
                           </div>
                           <div className="flex justify-between items-center mt-4">

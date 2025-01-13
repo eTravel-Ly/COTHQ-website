@@ -3,6 +3,7 @@ import AllContests from "../component/AllContests";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import TrainingCourses from "../component/TrainingCourses";
+import { useTranslation } from "../context/TranslationContext"; 
 
 const Contests = () => {
   const [selectedSection, setSelectedSection] = useState("allContests");
@@ -10,16 +11,10 @@ const Contests = () => {
 
   const showContests = () => setSelectedSection("allContests");
   const showTrainingCourses = () => setSelectedSection("TrainingCourses");
+  const { translations , language} = useTranslation(); 
 
-  const [language, setLanguage] = useState("ar");
-  const isArabic = language === "ar";
+ const isArabic = language === "ar";
 
-  useEffect(() => {
-    const savedLanguage = sessionStorage.getItem('language');
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-    }
-  }, []);
 
   return (
     <>
@@ -47,7 +42,7 @@ const Contests = () => {
                   textAlign: isArabic ? "right" : "left"
                 }}
               >
-                {isArabic ? "المسابقات و الدورات التدريبية" : "Contests and Training Courses"}
+              {translations.contestsAndCourses}
               </h2>
 
             </div>
@@ -58,7 +53,7 @@ const Contests = () => {
                 }`}
                 onClick={showContests}
               >
-                {isArabic ? "جميع المسابقات" : "All Contests"}
+                {translations.allContests}
               </button>
               <button
                 className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -66,7 +61,7 @@ const Contests = () => {
                 }`}
                 onClick={showTrainingCourses}
               >
-                {isArabic ? "الدورات التدريبية" : "Training Courses"}
+                  {translations.trainingCourses}
               </button>
             </div>
             {selectedSection === "allContests" && <AllContests />}

@@ -1,0 +1,50 @@
+const Shoplang = {
+    en: {
+      shop: "Shop",
+      shopDescription: "On this page, you can purchase books and courses",
+      availableBooks: "Available Books",
+      availableCourses: "Available Courses",
+      search_placeholder: "Search by title or publisher...",
+      sort_by: "Sort by",
+      newest: "Newest",
+      top_rated: "Top Rated",
+      no_books_message: "No books available at the moment",
+      borrow_now: "Borrow Now",
+      available: "Available",
+      available_library_only: "Available in library only",
+      available_online_only: "Available online only",
+      reserved: "Reserved",
+      unavailable: "Unavailable",
+      borrow_now: "Borrow Now"  ,
+       borrowRequestSuccess: "The borrow request has been successfully submitted.",
+    borrowRequestError: "An error occurred while submitting the request. Please try again."    ,
+    no_courses_message: "No courses available at the moment"   ,
+    course_search_placeholder: "Enter course title to search..."     
+
+    },
+    ar: {
+      shop: "المتجر",
+      shopDescription: "من خلال هذه الصفحة يمكنك شراء الكتب والدورات",
+      availableBooks: "الكتب المتاحة",
+      availableCourses: "الدورات المتاحة",
+      search_placeholder: "اكتب العنوان أو دار النشر للبحث عن كتاب ..",
+      sort_by: "فرز حسب",
+      newest: "الأحدث",
+      top_rated: "الأعلى تقييمًا",
+      no_books_message: "لا توجد كتب متاحة في الوقت الحالي",
+      borrow_now: "استعر الآن",
+      available: "متاح",
+      available_library_only: "متوفر في المكتبة فقط",
+      available_online_only: "متوفر بالإنترنت",
+      reserved: "محجوز",
+      unavailable: "غير متاح",
+      borrow_now: "استعر الآن"  ,
+     borrowRequestSuccess: "تم إرسال طلب الاستعارة بنجاح",
+    borrowRequestError: "حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.",
+    no_courses_message: "لا توجد دورات تدريبية متاحة في الوقت الحالي" ,
+    course_search_placeholder: "ادخل عنوان الدورة للبحث ..", 
+    },
+  };
+  
+  export default Shoplang;
+  

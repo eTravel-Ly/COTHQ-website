@@ -2,18 +2,20 @@ import React, { useState, useEffect } from "react";
 import cover from "../assets/images/test1.png";
 import { FaRegUserCircle } from "react-icons/fa";
 import { CiCalendarDate } from "react-icons/ci";
-import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
+import noCoursesImage from "../assets/images/Search.png"; 
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
+import { useTranslation } from "../context/TranslationContext"; 
 
 export default function MySeminars() {
+    const { translations , language} = useTranslation(); 
+  
   const [loading, setLoading] = useState(true);
   const [seminarsData, setseminarsData] = useState([]);
 const fetchImageUrl = async (fileName) => {
   try {
     if (!fileName) {
-      // Return a default image path if no fileName is provided
       return cover;
     }
     const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -21,7 +23,6 @@ const fetchImageUrl = async (fileName) => {
     return imageUrl;
   } catch (error) {
     console.error("Error fetching image:", error);
-    // Return a default image path if there is an error fetching the image
     return cover;
   }
 };
@@ -45,8 +46,8 @@ const fetchImageUrl = async (fileName) => {
            contactMobile: seminar.event.contactMobile || "غير محدد",
            contactWhatsApp: seminar.event.contactWhatsApp || "غير محدد",
            startDate: seminar.event.eventStartDate,
-           speaker: seminar.event.contactEmail, // Assuming contactEmail is used as speaker
-           attended: seminar.subscriptionStatus === "ATTENDED", // Adjust as needed
+           speaker: seminar.event.contactEmail, 
+           attended: seminar.subscriptionStatus === "ATTENDED", 
          };
        });
 
@@ -64,7 +65,7 @@ const fetchImageUrl = async (fileName) => {
    }, []);
 
 
-const [currentPage, setCurrentPage] = useState(1); // Current page state
+const [currentPage, setCurrentPage] = useState(1); 
 const coursesPerPage = 8;
 const indexOfLastCourse = currentPage * coursesPerPage;
 const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
@@ -93,7 +94,7 @@ const handlePageChange = (pageNumber) => {
           className="w-60 h-60 object-cover"
         />
         <p className="text-lg text-gray-700 mt-0">
-          لا يوجد ندوات تمت اضافتها في الوقت الحالي..
+        {translations.noSeminarsMessage}
         </p>
       </div>
     );
@@ -114,24 +115,24 @@ const handlePageChange = (pageNumber) => {
             <h3 className="text-lg sm:text-xl font-bold text-center mb-3">
               {item.title}
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full text-right">
-              <p className="text-sm text-gray-700">
-                <strong>المنظم:</strong> {item.organizer}
-              </p>
-              <p className="text-sm text-gray-700">
-                <strong>العنوان:</strong> {item.address}
-              </p>
-            </div>
-            <p className="text-sm text-gray-700 text-right w-full mt-2">
-              <strong>تاريخ البدء:</strong> {item.startDate}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-right w-full">
+            <p className="text-sm text-gray-700">
+            <strong>{translations.organizer}:</strong>  {item.organizer}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 w-full text-right">
-              <p className="text-xs text-gray-500">
-                <strong>الهاتف:</strong> {item.contactMobile}
-              </p>
-              <p className="text-xs text-gray-500">
-                <strong>واتساب:</strong> {item.contactWhatsApp}
-              </p>
+            <p className="text-sm text-gray-700">
+            <strong>{translations.address}:</strong> {item.address}
+            </p>
+          </div>
+          <p className="text-sm text-gray-700 text-right w-full">
+          <strong>{translations.startDate}:</strong> {item.startDate}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 w-full text-right">
+            <p className="text-xs text-gray-500">
+            <strong>{translations.phone}:</strong>  {item.contactMobile}
+            </p>
+            <p className="text-xs text-gray-500">
+            <strong>{translations.whatsapp}:</strong>  {item.contactWhatsApp}
+            </p>
             </div>
           </div>
         ))}

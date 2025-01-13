@@ -13,15 +13,18 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import user from "../assets/images/user.png";
+import { useTranslation } from "../context/TranslationContext"; 
 
 const CoursesDetails = () => {
   const [courseData, setCourseData] = useState(null);
   const [relatedVideos, setRelatedVideos] = useState([]);
   const [quantity, setQuantity] = useState(1);
-   const [likedcourses, setLikedcourse] = useState({});
+  const [likedcourses, setLikedcourse] = useState({});
   const { courseId } = useParams();
-       const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { translations , language} = useTranslation(); 
+  const isArabic = language === "ar";
+      
     const handleLikeClick = async (id) => {
       try {
         const response = await axios.post(
@@ -49,7 +52,7 @@ const CoursesDetails = () => {
         console.error("Error toggling favorite:", error);
       }
     };
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const showpicbooks = (fileName) => {
     try {
       const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -144,7 +147,6 @@ const navigate = useNavigate();
    }, [courseData, courseId]);
 
   if (!courseData) {
-    // Display a loading state or placeholder while fetching data
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
@@ -155,20 +157,29 @@ const navigate = useNavigate();
   const originalPrice = courseData.price;
   const studentPrice = courseData.studentsPrice;
   const discountPercentage =
-    ((originalPrice - studentPrice) / originalPrice) * 100;
+  ((originalPrice - studentPrice) / originalPrice) * 100;
 
   return (
     <>
-      <div
-        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
-      >
-        <NavbarLogin
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-      </div>
-      <div className="flex flex-col md:flex-row pt-16 w-full">
-        <div className="container mx-auto p-4" dir="rtl">
+          <div className={`flex ${isArabic ? 'flex-col md:flex-row' : 'flex-col-reverse md:flex-row-reverse '} pt-16 w-full`}>
+
+          <div
+          className={`fixed top-0 z-10 transition-all duration-300 w-full lg:w-[calc(100%-20%)]`}
+        >
+          <NavbarLogin
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
+
+        <div
+          className="p-4 flex-1"
+          style={{
+            fontFamily: "Tajwal, sans-serif",
+            direction: isArabic ? "rtl" : "ltr",
+            textAlign: isArabic ? "right" : "left",
+          }}
+        >
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
             {/* Course Image */}
             <div className="md:w-1/4 p-4 relative">
@@ -209,13 +220,13 @@ const navigate = useNavigate();
               <div className="mb-4">
                 <div className="flex justify-between text-gray-700">
                   <span className="flex items-center font-bold font-tajwal">
-                    <FaRegUserCircle className="ml-1" /> يعطي بواسطة
+                    <FaRegUserCircle className={`${isArabic ? 'ml-1' : 'mr-2 '}`} /> {translations.instructor}
                   </span>
                   <span className="flex items-center font-bold font-tajwal">
-                    عدد الساعات
+                  {translations.hours_count}
                   </span>
                   <span className="flex items-center font-bold font-tajwal">
-                    عدد الفيديوات
+                  {translations.videos_count}
                   </span>
                 </div>
                 <div className="flex justify-between text-gray-700 mt-1">
@@ -227,7 +238,7 @@ const navigate = useNavigate();
                     {courseData.comments[0]?.course.durationInSeconds / 3600}{" "}
                   </span>
                   <span className="flex items-center font-tajwal">
-                    {courseData.videos.length} فيديو
+                    {courseData.videos.length}  {translations.videos}
                   </span>
                 </div>
               </div>
@@ -247,13 +258,13 @@ const navigate = useNavigate();
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center">
                   <span className="text-xl text-red_aa font-tajwal">
-                    {studentPrice} دينار
+                    {studentPrice}   {translations.price}
                   </span>
                   <span className="line-through text-gray-500 ml-3 mr-3 font-tajwal">
-                    {originalPrice} دينار
+                    {originalPrice}   {translations.old_price}
                   </span>
                   <span className="ml-2 bg-red_aa text-white px-2 py-1 text-sm rounded font-tajwal">
-                    خصم {discountPercentage.toFixed(0)}%
+                  {translations.discount} {discountPercentage.toFixed(0)}%
                   </span>
                 </div>
 
@@ -270,8 +281,8 @@ const navigate = useNavigate();
                     className="bg-custom-orange text-white mr-2 font-tajwal px-4 py-2 rounded ml-4 flex items-center"
                     onClick={handleAddToCart}
                   >
-                    <CiShoppingCart className="mr-2 ml-3" />
-                    أضف إلى سلة التسوق
+                    {/* <CiShoppingCart className="mr-2 ml-3" /> */}
+                    {translations.add_to_cart} 
                   </button>
 
                   <button
@@ -295,19 +306,19 @@ const navigate = useNavigate();
                 <tbody className="space-y-2">
                   <tr className="border-t border-b">
                     <td className="p-4 font-tajwal font-bold">
-                      عنوان الدورة التدريبية
+                    {translations.course_title}
                     </td>
                     <td className="p-4 font-tajwal">{courseData.title}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">الاستاذ</td>
+                    <td className="p-4 font-tajwal font-bold">{translations.instructor}</td>
                     <td className="p-4 font-tajwal">
                       {courseData.comments[0]?.learner.firstName}{" "}
                       {courseData.comments[0]?.learner.lastName}
                     </td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">عدد الساعات</td>
+                    <td className="p-4 font-tajwal font-bold">{translations.hours_count} </td>
                     <td className="p-4 font-tajwal">
                       {courseData.comments[0]?.course.durationInSeconds / 3600}{" "}
                       ساعة
@@ -315,10 +326,10 @@ const navigate = useNavigate();
                   </tr>
                   <tr className="border-b">
                     <td className="p-4 font-tajwal font-bold">
-                      عدد الفيديوهات
+                    {translations.videos_count}
                     </td>
                     <td className="p-4 font-tajwal">
-                      {courseData.videos.length} فيديو
+                      {courseData.videos.length}  {translations.videos}
                     </td>
                   </tr>
                 </tbody>
@@ -332,7 +343,7 @@ const navigate = useNavigate();
                         className="text-gray-700 font-semibold"
                         style={{ fontFamily: "Tajwal, sans-serif" }}
                       >
-                        المراجعات ({courseData.comments.length})
+                         {translations.Buttons.reviews}  ({courseData.comments.length})
                       </span>
                       <div className="flex items-center ml-4">
                         <span className="text-yellow-500">⭐</span>
@@ -363,7 +374,7 @@ const navigate = useNavigate();
                             alt="User"
                             className="w-12 h-12 rounded-full mr-4"
                           />
-                          <div className="flex-1">
+                          <div >
                             <div className="flex items-center mb-2">
                               <span className="font-semibold mr-2">
                                 {comment.learner.firstName}{" "}
@@ -377,14 +388,7 @@ const navigate = useNavigate();
                               </div>
                             </div>
                             <p className="text-gray-700">{comment.details}</p>
-                            {/*
-                            <div className="flex items-center mt-2 text-gray-600">
-                              <span className="mr-2">
-                                👍 {comment.likesCount}
-                              </span>
-                              <span>👎 {comment.dislikesCount}</span>
-                            </div>
-                           */}
+                        
                           </div>
                         </div>
                       ))
@@ -392,9 +396,11 @@ const navigate = useNavigate();
                       <div
                         className="text-gray-700"
                         style={{ fontFamily: "Tajwal, sans-serif" }}
+                        dir={isArabic ? 'ltr' : 'rtl'} // dynamically set direction based on the language
                       >
-                        <p>لا توجد مراجعات متاحة</p>
+                        <p>{translations.Reviews.noReviews}</p>
                       </div>
+
                     )}
                   </div>
                 </div>
@@ -404,7 +410,7 @@ const navigate = useNavigate();
             {/* Related Videos */}
             <div className="md:w-1/3">
               <h2 className="text-xl font-bold mb-2 font-tajwal">
-                الفيديوهات ذات الصلة
+              {translations.related_videos_section}
               </h2>
               <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
                 {relatedVideos.map((video) => (
@@ -416,7 +422,7 @@ const navigate = useNavigate();
                     />
                     <div className="ml-4">
                       <h3 className="font-bold font-tajwal">{video.title}</h3>
-                      <p className="font-tajwal">{video.price} دينار</p>
+                      <p className="font-tajwal">{video.price} {translations.price}</p>
                       <button
                         className="bg-white text-black px-2 py-1 flex rounded mt-2 font-tajwal border border-custom-orange"
                         onClick={() => openCoursesDetails(video.id)}
@@ -426,7 +432,7 @@ const navigate = useNavigate();
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          اشتري الان{" "}
+                          {translations.buy_now}{" "}
                         </a>
                         <CiShoppingCart className="mr-2 ml-3" />
                       </button>
@@ -448,6 +454,7 @@ const navigate = useNavigate();
           />
         </div>
       </div>
+      
       <ToastContainer position="bottom-left" />
     </>
   );

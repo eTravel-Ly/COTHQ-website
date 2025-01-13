@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { CiCalendarDate } from "react-icons/ci";
-import noCoursesImage from "../assets/images/Search.png"; // Image for no conferences
+import noCoursesImage from "../assets/images/Search.png"; 
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
 import cover1 from "../assets/images/test2.png";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
-
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
+import { useTranslation } from "../context/TranslationContext"; 
 export default function Myconferences() {
+
+  const { translations , language} = useTranslation(); 
+
   const [loading, setLoading] = useState(true);
   const [conferences, setConferences] = useState([]);
 const fetchImageUrl = async (fileName) => {
   try {
     if (!fileName) {
-      // Return a default image path if no fileName is provided
       return cover1;
     }
     const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -21,7 +23,6 @@ const fetchImageUrl = async (fileName) => {
     return imageUrl;
   } catch (error) {
     console.error("Error fetching image:", error);
-    // Return a default image path if there is an error fetching the image
     return cover1;
   }
 };
@@ -37,12 +38,10 @@ useEffect(() => {
       const data = await Promise.all(
         response.data.CONFERENCE.map(async (conference) => {
           const event = conference.event;
-
-          // Check if the event and coverImageUrl exist before fetching the image
           const imageUrl =
             event && event.coverImageUrl
               ? await fetchImageUrl(event.coverImageUrl)
-              : cover1; // Use a default image if coverImageUrl is not provided
+              : cover1; 
 
           return {
             id: conference.id,
@@ -83,7 +82,7 @@ useEffect(() => {
   fetchData();
 }, []);
 
-   const [currentPage, setCurrentPage] = useState(1); // Current page state
+   const [currentPage, setCurrentPage] = useState(1); 
    const coursesPerPage = 8;
    const indexOfLastCourse = currentPage * coursesPerPage;
    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
@@ -113,7 +112,7 @@ useEffect(() => {
           className="w-60 h-60 object-cover"
         />
         <p className="text-lg text-gray-700 mt-4">
-          لا يوجد مؤتمرات قمت بالتسجيل فيها .. سجل الان
+        {translations.noConferencesMessage}
         </p>
       </div>
     );
@@ -136,21 +135,21 @@ return (
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-right w-full">
             <p className="text-sm text-gray-700">
-              <strong>المنظم:</strong> {item.organizer}
+            <strong>{translations.organizer}:</strong>  {item.organizer}
             </p>
             <p className="text-sm text-gray-700">
-              <strong>العنوان:</strong> {item.address}
+            <strong>{translations.address}:</strong> {item.address}
             </p>
           </div>
           <p className="text-sm text-gray-700 text-right w-full">
-            <strong>تاريخ البدء:</strong> {item.startDate}
+          <strong>{translations.startDate}:</strong> {item.startDate}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 w-full text-right">
             <p className="text-xs text-gray-500">
-              <strong>الهاتف:</strong> {item.contactMobile}
+            <strong>{translations.phone}:</strong>  {item.contactMobile}
             </p>
             <p className="text-xs text-gray-500">
-              <strong>واتساب:</strong> {item.contactWhatsApp}
+            <strong>{translations.whatsapp}:</strong>  {item.contactWhatsApp}
             </p>
           </div>
         </div>

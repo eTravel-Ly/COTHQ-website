@@ -6,25 +6,33 @@ import allContests from "../assets/images/allContests.jpg";
 import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
-import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { FaSpinner } from 'react-icons/fa'; 
+import noCoursesImage from "../assets/images/Search.png"; 
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
+import { useTranslation } from "../context/TranslationContext"; 
 
 Modal.setAppElement("#root");
 
 const AllContests = () => {
+    
+  const { translations , language} = useTranslation(); 
+
+ const isArabic = language === "ar";
+
   const navigate = useNavigate();
   const [contests, setContests] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedContest, setSelectedContest] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const [currentPage, setCurrentPage] = useState(1); 
   const coursesPerPage = 6;
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
   const hasData = contests.length > 0;
   const currentCourses = hasData ? contests.slice(indexOfFirstCourse, indexOfLastCourse) : [];
- // const currentCourses = contests.slice(indexOfFirstCourse, indexOfLastCourse);
   const totalPages = Math.ceil(contests.length / coursesPerPage);
+
+
+
 
   
   const handlePageChange = (pageNumber) => {
@@ -43,8 +51,8 @@ const AllContests = () => {
     attachmentFile: null,
     eventId: 0,
   });
-  const [loading, setLoading] = useState(false); // حالة التحميل
-  const [loading1, setLoading1] = useState(true); // حالة تحميل جديدة
+  const [loading, setLoading] = useState(false); 
+  const [loading1, setLoading1] = useState(true); 
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -55,14 +63,14 @@ const AllContests = () => {
           title: contest.title,
           description: contest.description,
           date: contest.eventStartDate,
-          image: contest.coverImageUrl, // Placeholder image for all contests
+          image: contest.coverImageUrl, 
         }));
         setContests(competitions);
       } catch (error) {
         console.error("Error fetching contests:", error);
-        toast.error("حدث خطأ أثناء جلب بيانات المسابقات."); // عرض رسالة خطأ باستخدام التوست
+        toast.error(translations.errorFetchingContests); 
       } finally {
-        setLoading1(false); // تعيين حالة التحميل إلى false بعد الانتهاء
+        setLoading1(false); 
       }
     };
 
@@ -108,10 +116,10 @@ const AllContests = () => {
     e.preventDefault();
     setLoading(true);
     
-    // Create an object to send in JSON format
+   
     const dataToSend = { ...formData };
     if (dataToSend.attachmentFile) {
-      // Convert file to base64 if needed for JSON
+     
       const reader = new FileReader();
       reader.readAsDataURL(dataToSend.attachmentFile);
       reader.onloadend = async () => {
@@ -120,11 +128,11 @@ const AllContests = () => {
           await axios.post(baseurl + 'public/event/register', dataToSend, {
             headers: {
               'accept': 'application/json',
-              'Content-Type': 'application/json', // Use application/json
+              'Content-Type': 'application/json', 
             },
           });
-          toast.success('تم التسجيل بنجاح!');
-          setFormData(initialFormData); // Reset the form data
+          toast.success(translations.registrationSuccess);
+          setFormData(initialFormData);
           closeModal();
         } catch (error) {
           handleErrorResponse(error);
@@ -141,8 +149,8 @@ const AllContests = () => {
             'Content-Type': 'application/json',
           },
         });
-        toast.success('تم التسجيل بنجاح!');
-        setFormData(initialFormData); // Reset the form data
+        toast.success(translations.registrationSuccess);
+        setFormData(initialFormData); 
         closeModal();
       } catch (error) {
         handleErrorResponse(error);
@@ -155,13 +163,12 @@ const AllContests = () => {
   const handleErrorResponse = (error) => {
     if (error.response && error.response.data && error.response.data.message) {
       if (error.response.data.message === "Learner has already registered for this event.") {
-        toast.warning('لقد قمت بالتسجيل مسبقًا!');
+        toast.warning(translations.alreadyRegistered);
       } else {
-        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+        toast.warning(translations.registrationFailed);
       }
     } else {
-      console.error('Error submitting form:', error);
-      toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      toast.warning(translations.registrationFailed);
     }
   };
   
@@ -187,7 +194,7 @@ const AllContests = () => {
           className="w-60 h-60 object-cover "
         />
         <p className="text-lg text-gray-700 mt-0">
-          لا يوجد مسابقات تمت اضافتها في الوقت الحالى ..
+         {translations.noContestsAvailable}
         </p>
       </div>
     );
@@ -218,28 +225,28 @@ const AllContests = () => {
                     marginBottom: "8px",
                     wordWrap: "break-word",
                     whiteSpace: "normal",
-                    overflow: "hidden", // إخفاء النص الزائد
-                    display: "-webkit-box", // استخدام box للنص
-                    WebkitBoxOrient: "vertical", // اتجاه الصندوق عموديًا
-                    WebkitLineClamp: 3, // عرض 3 أسطر فقط
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical", 
+                    WebkitLineClamp: 3,
                   }}
                 >
                   {contest.description}
                 </p>
-                <p className="text-sm text-gray-500 mb-4">تاريخ المسابقة: {contest.date}</p>
+                <p className="text-sm text-gray-500 mb-4">     {translations.contestDate} {contest.date}</p>
               </div>
               <div className="flex justify-between items-center  text-gray-600 space-x-4 space-x-reverse text-xs sm:text-base">
                 <button
                   onClick={() => openModal(contest)}
                   className="bg-custom-orange text-white py-2 px-4 rounded w-full sm:w-auto"
                 >
-                سجل الان
+               {translations.registerNow}
                 </button>
                 <button
                     onClick={() => openContestsDetails(contest.id)}
                     className="bg-custom-orange text-white py-2 px-4 rounded w-full sm:w-auto text-xs sm:text-base"
                   >
-                    تفاصيل المسابقة
+                  {translations.contestDetails}
                   </button>
 
               </div>
@@ -286,178 +293,190 @@ const AllContests = () => {
     <ToastContainer />
   
     <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      className="bg-white rounded-lg p-4 w-[98vw] max-w-xl mx-auto"
-      overlayClassName="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
-      style={{ direction: "rtl", fontFamily: "Tajwal, sans-serif" }}
-    >
-      <h2 className="text-xl font-bold mb-6 text-center" style={{ fontFamily: "Tajwal, sans-serif" }}>
-        تسجيل في المسابقة
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex flex-wrap -mx-2 justify-end items-end">
-          <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
-            <label htmlFor="fullName" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              الاسم الكامل
-            </label>
-            <input
-              type="text"
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              required
-              className="block w-full p-1.5 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
-            <label htmlFor="nationalityCode" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              الرقم الوطني
-            </label>
-            <input
-              type="text"
-              id="nationalityCode"
-              name="nationalityCode"
-              value={formData.nationalityCode}
-              onChange={handleChange}
-              required
-              className="block w-full p-1.5 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
-            <label htmlFor="gender" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              الجنس
-            </label>
-            <select
-              id="gender"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              required
-              className="block w-full p-1.5 border border-gray-300 rounded"
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-            >
-              <option value="">اختر</option>
-              <option value="MALE">ذكر</option>
-              <option value="FEMALE">أنثى</option>
-            </select>
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
-            <label htmlFor="birthDate" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              تاريخ الميلاد
-            </label>
-            <input
-              type="date"
-              id="birthDate"
-              name="birthDate"
-              value={formData.birthDate}
-              onChange={handleChange}
-              style={{ fontFamily: "Tajwal, sans-serif" }}
-              required
-              className="block w-full p-1.5 border border-gray-300 rounded"
-            />
-          </div>
-  
-          <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
-            <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              البريد الإلكتروني
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="block w-full p-1.5 border border-gray-300 rounded"
-            />
-          </div>
-  
-          <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
-            <label htmlFor="mobileNo" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              رقم الهاتف
-            </label>
-            <input
-              type="text"
-              id="mobileNo"
-              name="mobileNo"
-              value={formData.mobileNo}
-              onChange={handleChange}
-              required
-              className="block w-full p-1.5 border border-gray-300 rounded"
-            />
-          </div>
-  
-          <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
-            <label htmlFor="attachmentFile" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              ملف مرفق
-            </label>
-            <input
-              type="file"
-              id="attachmentFile"
-              name="attachmentFile"
-              onChange={handleChange}
-              className="block w-full p-1 border border-gray-300 rounded cursor-pointer file:cursor-pointer file:bg-custom-green file:text-white file:px-2 file:py-1 file:border-0 file:mr-2 file:rounded file:text-sm"
-            />
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
-            <label htmlFor="city" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              المدينة
-            </label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-              className="block w-full p-1.5 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="w-full px-2 mb-4 text-right">
-            <label htmlFor="subscriberNotes" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              ملاحظات المشترك
-            </label>
-            <textarea
-              id="subscriberNotes"
-              name="subscriberNotes"
-              value={formData.subscriberNotes}
-              onChange={handleChange}
-              className="block w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-        </div>
-  
-        <div className="flex justify-center sm:justify-between sm:space-x-4">
-  <button
-    type="submit"
-    className="bg-custom-green text-white py-2 px-4 rounded w-full sm:w-auto flex items-center justify-center"
-    disabled={loading}
-    style={{ fontFamily: "Tajwal, sans-serif" }}
-  >
-    {loading ? <FaSpinner className="animate-spin text-lg" /> : "تسجيل"}
-  </button>
+  isOpen={modalIsOpen}
+  onRequestClose={closeModal}
+  className="bg-white rounded-lg p-4 w-[98vw] max-w-xl mx-auto"
+  overlayClassName="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
+  style={{
+    direction: language === 'ar' ? 'rtl' : 'ltr',
+    fontFamily: "Tajwal, sans-serif"
+  }}
+>
+  <h2 className="text-xl font-bold mb-6 text-center" style={{ fontFamily: "Tajwal, sans-serif" }}>
+    {translations.modalTitle}
+  </h2>
+  <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex flex-wrap -mx-2 justify-end items-end">
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <label htmlFor="fullName" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.fullName}
+        </label>
+        <input
+          type="text"
+          id="fullName"
+          name="fullName"
+          value={formData.fullName}
+          onChange={handleChange}
+          required
+          className="block w-full p-1.5 border border-gray-300 rounded"
+        />
+      </div>
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <label htmlFor="nationalityCode" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.nationalityCode}
+        </label>
+        <input
+          type="text"
+          id="nationalityCode"
+          name="nationalityCode"
+          value={formData.nationalityCode}
+          onChange={handleChange}
+          required
+          className="block w-full p-1.5 border border-gray-300 rounded"
+        />
+      </div>
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <label htmlFor="gender" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.gender}
+        </label>
+        <select
+          id="gender"
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+          required
+          className="block w-full p-1.5 border border-gray-300 rounded"
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+        >
+      {language === 'ar' ? (
+      <>
+        <option value="MALE">ذكر</option>
+        <option value="FEMALE">أنثى</option>
+      </>
+    ) : (
+      <>
+        <option value="MALE">Male</option>
+        <option value="FEMALE">Female</option>
+      </>
+    )}
+        </select>
+      </div>
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <label htmlFor="birthDate" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.birthDate}
+        </label>
+        <input
+          type="date"
+          id="birthDate"
+          name="birthDate"
+          value={formData.birthDate}
+          onChange={handleChange}
+          style={{ fontFamily: "Tajwal, sans-serif" }}
+          required
+          className="block w-full p-1.5 border border-gray-300 rounded"
+        />
+      </div>
 
-  {/* زر إغلاق يظهر فقط على الشاشات الصغيرة */}
-  <button
-    onClick={closeModal}
-    className="bg-red_aa text-white py-2 px-4 rounded w-full sm:w-auto flex items-center justify-center sm:hidden"
-    style={{ fontFamily: "Tajwal, sans-serif" }}
-  >
-    إغلاق
-  </button>
-</div>
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.email}
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className="block w-full p-1.5 border border-gray-300 rounded"
+        />
+      </div>
 
-      </form>
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <label htmlFor="mobileNo" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.mobileNo}
+        </label>
+        <input
+          type="text"
+          id="mobileNo"
+          name="mobileNo"
+          value={formData.mobileNo}
+          onChange={handleChange}
+          required
+          className="block w-full p-1.5 border border-gray-300 rounded"
+        />
+      </div>
+
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <label htmlFor="attachmentFile" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.attachmentFile}
+        </label>
+        <input
+          type="file"
+          id="attachmentFile"
+          name="attachmentFile"
+          onChange={handleChange}
+          className="block w-full p-1 border border-gray-300 rounded cursor-pointer file:cursor-pointer file:bg-custom-green file:text-white file:px-2 file:py-1 file:border-0 file:mr-2 file:rounded file:text-sm"
+        />
+      </div>
+      <div className="w-full sm:w-1/2 px-2 mb-4">
+        <label htmlFor="city" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.city}
+        </label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          value={formData.city}
+          onChange={handleChange}
+          required
+          className="block w-full p-1.5 border border-gray-300 rounded"
+        />
+      </div>
+      <div className="w-full px-2 mb-4">
+        <label htmlFor="subscriberNotes" className="block text-sm font-medium mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
+          {translations.subscriberNotes}
+        </label>
+        <textarea
+          id="subscriberNotes"
+          name="subscriberNotes"
+          value={formData.subscriberNotes}
+          onChange={handleChange}
+          className="block w-full p-2 border border-gray-300 rounded"
+        />
+      </div>
+    </div>
+
+    <div className="flex justify-center sm:justify-between sm:space-x-4">
       <button
-        onClick={closeModal}
-        className="absolute top-2 left-2 text-white"
+        type="submit"
+        className="bg-custom-green text-white py-2 px-4 rounded w-full sm:w-auto flex items-center justify-center"
+        disabled={loading}
         style={{ fontFamily: "Tajwal, sans-serif" }}
       >
-        إغلاق
+        {loading ? <FaSpinner className="animate-spin text-lg" /> : `${translations.registerButton}`}
       </button>
-    </Modal>
+
+      {/* Close button visible only on small screens */}
+      <button
+        onClick={closeModal}
+        className="bg-red_aa text-white py-2 px-4 rounded w-full sm:w-auto flex items-center justify-center sm:hidden"
+        style={{ fontFamily: "Tajwal, sans-serif" }}
+      >
+        {translations.closeButton}
+      </button>
+    </div>
+
+  </form>
+  <button
+    onClick={closeModal}
+    className="absolute top-2 left-2 text-white"
+    style={{ fontFamily: "Tajwal, sans-serif" }}
+  >
+    {translations.closeButton}
+  </button>
+</Modal>
+
   </div>
   
   );

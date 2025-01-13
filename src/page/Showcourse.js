@@ -12,9 +12,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useMediaQuery } from "react-responsive"; // استيراد مكتبة react-responsive
+import { useTranslation } from "../context/TranslationContext"; 
+import { IoIosArrowBack } from "react-icons/io";
 
 const Showcourse = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // حالة المودال
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [course, setCourse] = useState(null);
   const [activeButton, setActiveButton] = useState("نظرة عامة");
   const { courseId } = useParams();
@@ -22,13 +24,12 @@ const Showcourse = () => {
   const [sortOption, setSortOption] = useState("الأحدث");
   const [filterOption, setFilterOption] = useState("تصفية حسب");
   const [note, setNote] = useState("");
-  const [stars, setStars] = useState(3); // Default to 5 stars
+  const [stars, setStars] = useState(3); 
   const [error, setError] = useState("");
   const [hoveredStar, setHoveredStar] = useState(0);
-
+   const { translations , language} = useTranslation(); 
+         const isArabic = language === "ar";
   const isMobile = useMediaQuery({ maxWidth: 768 });
-
-
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -61,16 +62,10 @@ const Showcourse = () => {
       console.error(error);
     }
   };
-
-
-
  const handleSortChange = (e) => {
    setSortOption(e.target.value);
  };
-
  const sortedComments = course?.comments ? [...course.comments] : [];
-
- // قم بإجراء التحقق قبل محاولة الوصول إلى comments
  if (sortedComments.length > 0) {
    if (sortOption === "الأحدث") {
      sortedComments.sort(
@@ -82,9 +77,6 @@ const Showcourse = () => {
  } else {
    console.log("No comments available for sorting.");
  }
-
-
-
   const handleTogglePopup = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -98,9 +90,9 @@ const Showcourse = () => {
       const response = await axios.post(
         baseurl + "update-progress",
         {
-          id: Number(courseId), // تأكد من أن bookId يتم تمريره كرقم
-          type: "COURSE", // النوع دائمًا "BOOK"
-          progressStep: Number(100), // دائمًا 100 كعدد وليس نصًا
+          id: Number(courseId), 
+          type: "COURSE",
+          progressStep: Number(100), 
         },
         {
           headers: {
@@ -154,7 +146,7 @@ const Showcourse = () => {
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
     if (buttonName === "مراجعات") {
-      fetchCourse(); // Re-fetch course data when "مراجعات" button is clicked
+      fetchCourse(); 
     }
   };
 
@@ -183,16 +175,16 @@ const Showcourse = () => {
     );
   }
   return (
-    <div className="bg-white font-tajwal min-h-screen" dir="rtl">
+    <div className={`bg-white font-tajwal min-h-screen ${isArabic ? "rtl" : "ltr"}`}>
       {/* Navbar */}
       <nav className="bg-white shadow-md p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-10">
         {/* Right side: Arrow and Home Text */}
-        <div className="flex items-center">
+        <div className={`flex items-center ${isArabic ? "ml-auto" : "mr-auto"}`}>
           <button
             className="text-gray-700 hover:text-gray-900"
             onClick={backpage}
           >
-            <IoIosArrowForward className="w-6 h-6" />
+            {isArabic ?  <IoIosArrowForward className="w-6 h-6" /> :  <IoIosArrowBack className="w-6 h-6" />}
           </button>
           <span className="mr-2 text-gray-700" onClick={backpage}>
           </span>
@@ -200,7 +192,7 @@ const Showcourse = () => {
 
         {/* Left side: Progress Bar */}
         <div className="flex items-center">
-          <span className="text-gray-700 ml-2">تقدم الدورة</span>
+          <span className="text-gray-700 ml-2">{translations.Navbar.readingProgress}  </span>
           <div className="w-48 bg-gray-200 rounded-full h-2 relative">
             <div
               className="bg-custom-orange h-full rounded-full"
@@ -222,7 +214,7 @@ const Showcourse = () => {
       <div className="relative">
         <video controls className="w-full rounded-lg">
           <source src={videoUrl} type="video/mp4" />
-          نعتذر منك الفيديو غير متاح
+          {translations.error} 
         </video>
       </div>
 
@@ -239,7 +231,7 @@ const Showcourse = () => {
       }`}
       onClick={() => setActiveButton("نظرة عامة")}
     >
-      نظرة عامة
+{translations.Buttons.overview} 
     </button>
     <button
       className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
@@ -249,7 +241,7 @@ const Showcourse = () => {
       }`}
       onClick={() => handleButtonClick("مراجعات")}
     >
-      مراجعات
+   {translations.Buttons.reviews} 
     </button>
     <button
       className={`mx-1 px-4 py-2 rounded-3xl text-lg text-gray-900 focus:outline-none ${
@@ -259,7 +251,7 @@ const Showcourse = () => {
       }`}
       onClick={() => setActiveButton("ملاحظات")}
     >
-      ملاحظات
+      {translations.Buttons.notes}
     </button>
   </div>
 
@@ -270,9 +262,9 @@ const Showcourse = () => {
       value={activeButton}
       onChange={(e) => setActiveButton(e.target.value)}
     >
-      <option value="نظرة عامة">نظرة عامة</option>
-      <option value="مراجعات">مراجعات</option>
-      <option value="ملاحظات">ملاحظات</option>
+      <option value="نظرة عامة">{translations.Buttons.overview}       </option>
+      <option value="مراجعات">   {translations.Buttons.reviews} </option>
+      <option value="ملاحظات">      {translations.Buttons.notes}      </option>
     </select>
   </div>
 </div>
@@ -285,7 +277,7 @@ const Showcourse = () => {
             className="bg-white text-gray-400 px-4 py-2 rounded flex items-center"
           >
             <FaCheck className="w-5 h-5 ml-2 text-gray-400" />
-            ضع علامة على أنها تمت قراءة
+            {translations.Buttons.markAsRead}
           </button>
         </div>
       </div>
@@ -316,7 +308,7 @@ const Showcourse = () => {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <span className="text-gray-700 font-semibold">
-                  المراجعات ({course.comments.length})
+                {translations.Buttons.reviews} ({course.comments.length})
                 </span>
                 <div className="flex items-center ml-4">
                   <span className="text-yellow-500">⭐</span>
@@ -333,7 +325,7 @@ const Showcourse = () => {
             </div>
 
             {/* Input and Select Elements */}
-            <div className="flex items-center mb-4 ">
+            {/* <div className="flex items-center mb-4 ">
               <input
                 type="text"
                 placeholder="ابحث عن مراجعة"
@@ -348,7 +340,7 @@ const Showcourse = () => {
                 <option value="الأحدث">الأحدث</option>
                 <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
               </select>
-            </div>
+            </div> */}
 
             {/* Comments Container */}
             <div className="max-h-60 overflow-y-auto">
@@ -357,7 +349,7 @@ const Showcourse = () => {
                   <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
                 </div>
               ) : sortedComments.length === 0 ? (
-                <p className="text-gray-700">لا توجد مراجعات متاحة، قم بإضافة تعليقك!</p>
+                <p className="text-gray-700">  {translations.Reviews.noReviews}</p>
               ) : (
                 sortedComments.map((comment) => (
                   <div key={comment.id} className="flex items-start mb-4 p-4 border-b">
@@ -391,7 +383,7 @@ const Showcourse = () => {
       {activeButton === "ملاحظات" && (
         <>
           <div className="flex items-center mb-4 mt-5">
-            <h3 className="text-lg font-semibold mr-4">صوت واكتب ملاحظاتك :</h3>
+            <h3 className="text-lg font-semibold mr-4"> {translations.Notes.title} </h3>
             <div className="flex items-center">
               {[1, 2, 3, 4, 5].map((star) => (
                 <svg
@@ -420,14 +412,14 @@ const Showcourse = () => {
             onChange={(e) => setNote(e.target.value)}
             rows="4"
             className="w-full p-2 border rounded-md mb-4 border-custom-orange bg-gray-100"
-            placeholder="اكتب ملاحظاتك هنا..."
+            placeholder=   {translations.Notes.placeholder}
           />
           <div className="flex justify-end">
             <button
               onClick={handleSave}
               className="px-4 py-2 bg-custom-orange text-white rounded-md"
             >
-              حفظ ملاحظة
+          {translations.Notes.save}
             </button>
           </div>
           {error && <p className="text-red-500 mt-2">{error}</p>}
@@ -437,7 +429,7 @@ const Showcourse = () => {
 
     {/* Sidebar */}
     <div className={`${isMobile ? "w-full mt-4" : "w-1/4"} border rounded-2xl p-4 max-h-screen overflow-y-auto`}>
-      <h2 className="text-lg font-bold mb-4">محتوى الدورة</h2>
+      <h2 className="text-lg font-bold mb-4"> {translations.course_content}</h2>
       <ul>
         {course.videos.map((video, index) => (
           <li key={video.id} className="mb-4 p-4 border rounded-md flex justify-between items-center">

@@ -9,8 +9,11 @@ import { baseurl } from '../helper/Baseurl';
 import { ToastContainer, toast } from 'react-toastify';
 import noCoursesImage from "../assets/images/search2.png"; // Image for no seminars
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from "../context/TranslationContext"; 
 
 const SeminarsAll = () => {
+  const { translations , language} = useTranslation(); 
+  const isArabic = language === "ar";
   const navigate = useNavigate();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedSeminar, setSelectedSeminar] = useState(null);
@@ -126,7 +129,7 @@ const SeminarsAll = () => {
               'Content-Type': 'application/json', // Use application/json
             },
           });
-          toast.success('تم التسجيل بنجاح!');
+          toast.success(translations.registrationSuccess);
           setFormData(initialFormData); // Reset the form data
           closeModal();
         } catch (error) {
@@ -144,7 +147,7 @@ const SeminarsAll = () => {
             'Content-Type': 'application/json',
           },
         });
-        toast.success('تم التسجيل بنجاح!');
+        toast.success(translations.registrationSuccess);
         setFormData(initialFormData); // Reset the form data
         closeModal();
       } catch (error) {
@@ -158,13 +161,13 @@ const SeminarsAll = () => {
   const handleErrorResponse = (error) => {
     if (error.response && error.response.data && error.response.data.message) {
       if (error.response.data.message === "Learner has already registered for this event.") {
-        toast.warning('لقد قمت بالتسجيل مسبقًا!');
+        toast.warning(translations.alreadyRegistered);
       } else {
-        toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+        toast.warning(translations.registrationFailed);
       }
     } else {
       console.error('Error submitting form:', error);
-      toast.warning('فشل التسجيل. يرجى المحاولة مرة أخرى.');
+      toast.warning(translations.registrationFailed);
     }
   };
   
@@ -186,7 +189,8 @@ const SeminarsAll = () => {
           className="w-60 h-60 object-cover"
         />
         <p className="text-lg text-gray-700 mt-0">
-          لا يوجد ندوات تمت اضافتها في الوقت الحالي..
+        {translations.noSeminarsAdded}
+      
         </p>
       </div>
     );
@@ -223,7 +227,7 @@ const SeminarsAll = () => {
                     marginBottom: "8px",
                   }}
                 >
-                  تاريخ بدء: {item.eventStartDate}
+                    {translations.seminarStartDate} {item.eventStartDate}
                 </p>
               </div>
               <div className="flex items-center mb-2">
@@ -232,21 +236,21 @@ const SeminarsAll = () => {
                   className="text-xs text-gray-600 text-right"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
-                  المنظم: {item.organizer}
+                   {translations.organizer} {item.organizer}
                 </p>
               </div>
               <div className="flex justify-center items-center text-sm text-gray-600 space-x-4 space-x-reverse">
                 <button
-                  className="bg-custom-green text-white py-2 px-4 rounded"
+                  className="bg-custom-green text-white py-2 px-4 rounded mr-4"
                   onClick={() => openSeminarsDetails(item.id)}
                 >
-                  تفاصيل الندوة
+                    {translations.seminarDetails}
                 </button>
                 <button
                   className="bg-custom-green text-white py-2 px-4 rounded"
                   onClick={() => openModal(item)}
                 >
-                  سجل الان
+                 {translations.registerNow}
                 </button>
               </div>
             </div>
@@ -300,24 +304,27 @@ const SeminarsAll = () => {
         onRequestClose={closeModal}
         className="bg-white rounded-lg p-4 w-[98vw] max-w-xl mx-auto"
         overlayClassName="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
-        style={{ direction: "rtl", fontFamily: "Tajwal, sans-serif" }}
+        style={{
+          direction: language === 'ar' ? 'rtl' : 'ltr',
+          fontFamily: "Tajwal, sans-serif"
+        }}
       >
         <h2
           className="text-xl font-bold mb-6 text-center"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
-          تسجيل في الندوة
+           {translations.registerForSeminar}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-wrap -mx-2 justify-end items-end">
           <div className="flex flex-wrap -mx-2 justify-end items-end">
-            <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
+            <div className="w-full sm:w-1/2 px-2 mb-4 ">
               <label
                 htmlFor="fullName"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                الاسم الكامل
+                {translations.fullName}
               </label>
               <input
                 type="text"
@@ -329,13 +336,13 @@ const SeminarsAll = () => {
                className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
-            <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
+            <div className="w-full sm:w-1/2 px-2 mb-4 ">
               <label
                 htmlFor="nationalityCode"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                الرقم الوطني
+                  {translations.nationalityCode}
               </label>
               <input
                 type="text"
@@ -347,13 +354,13 @@ const SeminarsAll = () => {
               className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
-            <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
+            <div className="w-full sm:w-1/2 px-2 mb-4 ">
               <label
                 htmlFor="gender"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                الجنس
+                  {translations.gender}
               </label>
               <select
                 id="gender"
@@ -364,18 +371,26 @@ const SeminarsAll = () => {
                   className="block w-full p-1.5 border border-gray-300 rounded"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
-                  <option value="">اختر</option>
-                  <option value="MALE">ذكر</option>
-                  <option value="FEMALE">أنثى</option>
+                    {language === 'ar' ? (
+                    <>
+                      <option value="MALE">ذكر</option>
+                      <option value="FEMALE">أنثى</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="MALE">Male</option>
+                      <option value="FEMALE">Female</option>
+                    </>
+                  )}
               </select>
             </div>
-            <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
+            <div className="w-full sm:w-1/2 px-2 mb-4 ">
               <label
                 htmlFor="birthDate"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                تاريخ الميلاد
+                 {translations.birthDate}
               </label>
               <input
                   type="date"
@@ -389,13 +404,13 @@ const SeminarsAll = () => {
               />
             </div>
 
-            <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
+            <div className="w-full sm:w-1/2 px-2 mb-4 ">
               <label
                 htmlFor="email"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                البريد الإلكتروني
+                   {translations.email}
               </label>
               <input
                 type="email"
@@ -408,13 +423,13 @@ const SeminarsAll = () => {
               />
             </div>
 
-            <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
+            <div className="w-full sm:w-1/2 px-2 mb-4 ">
               <label
                 htmlFor="mobileNo"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                رقم الهاتف
+                {translations.mobileNo}
               </label>
               <input
                 type="text"
@@ -427,13 +442,13 @@ const SeminarsAll = () => {
               />
             </div>
 
-            <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
+            <div className="w-full sm:w-1/2 px-2 mb-4 ">
               <label
                 htmlFor="attachmentFile"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                ملف مرفق
+                {translations.attachmentFile}
               </label>
               <input
                 type="file"
@@ -443,13 +458,13 @@ const SeminarsAll = () => {
                 className="block w-full p-1 border border-gray-300 rounded cursor-pointer file:cursor-pointer file:bg-custom-green file:text-white file:px-2 file:py-1 file:border-0 file:mr-2 file:rounded file:text-sm"
                 />
             </div>
-            <div className="w-full sm:w-1/2 px-2 mb-4 text-right">
+            <div className="w-full sm:w-1/2 px-2 mb-4 ">
               <label
                 htmlFor="city"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                المدينة
+                  {translations.city}
               </label>
               <input
                 type="text"
@@ -461,13 +476,13 @@ const SeminarsAll = () => {
                 className="block w-full p-1.5 border border-gray-300 rounded"
               />
             </div>
-            <div className="w-full px-2 mb-4 text-right">
+            <div className="w-full px-2 mb-4">
               <label
                 htmlFor="subscriberNotes"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                ملاحظات المشترك
+                 {translations.subscriberNotes}
               </label>
               <textarea
                 id="subscriberNotes"
@@ -502,7 +517,7 @@ const SeminarsAll = () => {
           disabled={loading}
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
-          {loading ? <FaSpinner className="animate-spin text-lg" /> : "تسجيل"}
+          {loading ? <FaSpinner className="animate-spin text-lg" /> : `${translations.registerButton}`}
         </button>
 
         {/* زر إغلاق يظهر فقط على الشاشات الصغيرة */}
@@ -511,7 +526,7 @@ const SeminarsAll = () => {
           className="bg-red_aa text-white py-2 px-4 rounded w-full sm:w-auto flex items-center justify-center sm:hidden"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
-          إغلاق
+         {translations.closeButton}
         </button>
       </div>
         </form>
@@ -520,7 +535,7 @@ const SeminarsAll = () => {
         className="absolute top-2 left-2 text-white"
         style={{ fontFamily: "Tajwal, sans-serif" }}
       >
-        إغلاق
+       {translations.closeButton}
       </button>
       </Modal>
       <ToastContainer />

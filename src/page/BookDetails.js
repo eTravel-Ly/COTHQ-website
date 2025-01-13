@@ -9,10 +9,14 @@ import { FaRegHeart, FaPlus, FaMinus } from "react-icons/fa6";
 import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import user from "../assets/images/user.png";
+import { useTranslation } from "../context/TranslationContext"; 
 
 import "react-toastify/dist/ReactToastify.css";
 
 const BookDetails = () => {
+    const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+
   const { bookId } = useParams();
   const [bookData, setBookData] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -57,11 +61,11 @@ const BookDetails = () => {
       );
       if (response.status === 201) {
         window.dispatchEvent(new Event("cartUpdated"));
-        toast.success("تم إضافة الكتاب إلى سلة التسوق بنجاح");
+        toast.success(translations.add_to_cart_success);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
-      toast.warning("حدث خطأ أثناء إضافة الكتاب إلى السلة. حاول مرة أخرى.");
+      toast.warning(translations.add_to_cart_error);
     }
   };
 
@@ -164,16 +168,26 @@ const relatedBooks = books
   };
   return (
     <>
-      <div
-        className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
-      >
-        <NavbarLogin
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-      </div>
+       
+        <div className={`flex ${isArabic ? 'flex-col md:flex-row' : 'flex-col-reverse md:flex-row-reverse '} pt-16 w-full`}>
+       
+        <div
+          className={`fixed top-0 z-10 transition-all duration-300 w-full lg:w-[calc(100%-20%)]`}
+        >
+          <NavbarLogin
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
       <div className="flex flex-col md:flex-row pt-16 w-full">
-        <div className="container  p-4" dir="rtl">
+      <div
+          className="p-4 flex-1"
+          style={{
+            fontFamily: "Tajwal, sans-serif",
+            direction: isArabic ? "rtl" : "ltr",
+            textAlign: isArabic ? "right" : "left",
+          }}
+        >
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
             <div className="w-full sm:w-1/3 p-2">
               <img src={bookData.coverImageUrl} alt="Book" className="w-60" />
@@ -207,13 +221,13 @@ const relatedBooks = books
               <div className="mb-4">
                 <div className="flex justify-between text-gray-700">
                   <span className="flex items-center font-bold font-tajwal">
-                    <FaRegUserCircle className="ml-1" /> كتب بواسطة
+                    <FaRegUserCircle className={`${isArabic ? 'ml-1' : 'mr-2 '}`} /> {translations.instructorbook}
                   </span>
                   <span className="flex items-center font-bold font-tajwal">
-                    دار النشر
+                  {translations.publisher}
                   </span>
                   <span className="flex items-center font-bold font-tajwal">
-                    تاريخ النشر
+                  {translations.publish_date}
                   </span>
                 </div>
                 <div className="flex justify-between text-gray-700 mt-1">
@@ -224,7 +238,7 @@ const relatedBooks = books
                     {bookData.publisher}
                   </span>
                   <span className="flex items-center font-tajwal">
-                    {bookData.publicationDate}
+                    {bookData.publish_date}
                   </span>
                 </div>
               </div>
@@ -244,13 +258,13 @@ const relatedBooks = books
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center">
                   <span className="text-xl text-red_aa font-tajwal">
-                    {bookData.studentsPrice} دينار
+                    {bookData.studentsPrice} {translations.price}
                   </span>
                   <span className="line-through text-gray-500 ml-2 font-tajwal">
-                    {bookData.price} دينار
+                    {bookData.price} {translations.price}
                   </span>
                   <span className="ml-2 bg-red_aa text-white px-2 py-1 text-sm rounded font-tajwal">
-                    خصم{" "}
+                  {translations.discount}
                     {Math.round(
                       ((bookData.price - bookData.studentsPrice) /
                         bookData.price) *
@@ -273,8 +287,7 @@ const relatedBooks = books
                     onClick={handleAddToCart}
                     className="bg-custom-orange text-white mr-2 font-tajwal px-4 py-2 rounded ml-4 flex items-center"
                   >
-                    <CiShoppingCart className="mr-2 ml-3" />
-                    أضف إلى سلة التسوق
+                    {translations.add_to_cart} 
                   </button>
                   <button
                     onClick={() => handleLikeClick(bookId)}
@@ -291,16 +304,16 @@ const relatedBooks = books
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
             <div className="md:w-2/3">
               <h2 className="text-xl font-bold mb-2 font-tajwal">
-                تفاصيل المنتج
+              {translations.product_details}
               </h2>
               <table className="w-full text-right">
                 <tbody className="space-y-2">
                   <tr className="border-t border-b">
-                    <td className="p-4 font-tajwal font-bold">عنوان الكتاب</td>
+                    <td className="p-4 font-tajwal font-bold">{translations.book_title} </td>
                     <td className="p-4 font-tajwal">{bookData.title}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">المؤلف</td>
+                    <td className="p-4 font-tajwal font-bold">{translations.author} </td>
                     <td className="p-4 font-tajwal">{bookData.author}</td>
                   </tr>
                   <tr className="border-b">
@@ -308,11 +321,11 @@ const relatedBooks = books
                     <td className="p-4 font-tajwal">{bookData.isbn}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">الناشر</td>
+                    <td className="p-4 font-tajwal font-bold">{translations.publisher_name}</td>
                     <td className="p-4 font-tajwal">{bookData.publisher}</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-tajwal font-bold">تاريخ النشر</td>
+                    <td className="p-4 font-tajwal font-bold"> {translations.publish_date} </td>
                     <td className="p-4 font-tajwal">
                       {bookData.publicationDate}
                     </td>
@@ -328,7 +341,7 @@ const relatedBooks = books
                         className="text-gray-700 font-semibold"
                         style={{ fontFamily: "Tajwal, sans-serif" }}
                       >
-                        المراجعات ({bookData.comments.length})
+                            {translations.Buttons.reviews}  ({bookData.comments.length})
                       </span>
                       <div className="flex items-center ml-4">
                         <span className="text-yellow-500">⭐</span>
@@ -380,8 +393,9 @@ const relatedBooks = books
                       <div
                         className="text-gray-700"
                         style={{ fontFamily: "Tajwal, sans-serif" }}
+                        dir={isArabic ? 'ltr' : 'rtl'} // dynamically set direction based on the language
                       >
-                        <p>لا توجد مراجعات متاحة</p>
+                      <p>{translations.Reviews.noReviews}</p>
                       </div>
                     )}
                   </div>
@@ -391,7 +405,7 @@ const relatedBooks = books
             <div className="md:w-1/3">
               <div>
                 <h2 className="text-xl font-bold mb-2 font-tajwal">
-                  الكتب ذات الصلة
+                {translations.related_books}
                 </h2>
                 <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
                   {relatedBooks.map((book) => (
@@ -410,14 +424,17 @@ const relatedBooks = books
                           className="bg-white text-black px-2 py-1 flex rounded mt-2 font-tajwal border border-custom-orange"
                           onClick={() => openBookDetails(book.id)}
                         >
-                          تـــفــاصـــيــل الكــتاب
+                         {translations.book_details}
                           <CiShoppingCart className="mr-2 ml-3" />
                         </button>
                       </div>
                     </div>
                   ))}
                   {relatedBooks.length === 0 && (
-                    <p className="font-tajwal">لا توجد كتب ذات صلة متاحة.</p>
+                    <p className="font-tajwal">
+                     {translations.no_related_books}
+
+                    </p>
                   )}
                 </div>
               </div>
@@ -435,6 +452,8 @@ const relatedBooks = books
           setIsSidebarOpen={setIsSidebarOpen}
         />
       </div>
+       </div>
+   
       <ToastContainer />
     </>
   );

@@ -15,6 +15,11 @@ import NavbarLoginTranslations from "./NavbarLoginlang";
 import NewCoursesTranslations from './NewCoursesSectionlang'
 import BorrowsHistoryTranslations from './BorrowsHistorylang'
 import SettingsTranslations from './Settingslang'
+import ReadBooksTranslations  from './ReadBookslang'
+import MyActivitylang from './MyActivitylang'
+import Contestslang from './Contestslang'
+import Seminarslang from './Seminarslang'
+import Shoplang from './Shoplang'
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -34,7 +39,12 @@ const combinedTranslations = {
     ...NavbarLoginTranslations.en,
     ...NewCoursesTranslations.en,
     ...BorrowsHistoryTranslations.en,
-    ...SettingsTranslations.en
+    ...SettingsTranslations.en,
+    ...ReadBooksTranslations.en,
+    ...MyActivitylang.en,
+    ...Contestslang.en,
+    ...Seminarslang.en,
+    ...Shoplang.en
   },
   ar: {
     ...homeTranslations.ar,
@@ -52,7 +62,12 @@ const combinedTranslations = {
     ...NavbarLoginTranslations.ar,
     ...NewCoursesTranslations.ar,
     ...BorrowsHistoryTranslations.ar,
-    ...SettingsTranslations.ar
+    ...SettingsTranslations.ar,
+    ...ReadBooksTranslations.ar,
+    ...MyActivitylang.ar,
+    ...Contestslang.ar,
+    ...Seminarslang.ar,
+    ...Shoplang.ar
   },
 };
 

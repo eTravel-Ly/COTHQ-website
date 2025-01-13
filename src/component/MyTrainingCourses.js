@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import cover from "../assets/images/cover.png";
-import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
+import noCoursesImage from "../assets/images/Search.png"; 
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
+import { useTranslation } from "../context/TranslationContext"; 
 
 const MyTrainingCourses = () => {
   const [loading, setLoading] = useState(true);
   const [courses, setcourses] = useState([]);
+
+  const { translations , language} = useTranslation(); 
+  
   const fetchImageUrl = async (fileName) => {
     try {
       if (!fileName) {
@@ -18,7 +22,7 @@ const MyTrainingCourses = () => {
       return imageUrl;
     } catch (error) {
       console.error("Error fetching image:", error);
-      // Return a default image path if there is an error fetching the image
+   
       return cover;
     }
   };
@@ -88,7 +92,7 @@ const MyTrainingCourses = () => {
           className="w-60 h-60 object-cover "
         />
         <p className="text-lg text-gray-700 mt-0">
-          لا يوجد دورات تدريبية تمت اضافتها في الوقت الحالى ..
+        {translations.noTrainingCoursesMessage}
         </p>
       </div>
     );
@@ -112,7 +116,7 @@ const MyTrainingCourses = () => {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-right">
                 <p className="text-sm text-gray-700">
-                  <strong>المنظم:</strong> {course.organizer}
+                <strong>{translations.organizer}:</strong> {course.organizer}
                 </p>
                 <p
                   className="text-sm text-gray-700"
@@ -126,22 +130,22 @@ const MyTrainingCourses = () => {
                     WebkitLineClamp: 1,
                   }}
                 >
-                  <strong>الوصف:</strong> {course.description}
+                <strong>{translations.description}:</strong> {course.description}
                 </p>
                 <p className="text-sm text-gray-700">
-                  <strong>تاريخ البدء:</strong> {course.eventStartDate}
+                <strong>{translations.startDate}:</strong>  {course.eventStartDate}
                 </p>
                 <p className="text-sm text-gray-700">
-                  <strong>تاريخ الانتهاء:</strong> {course.eventEndDate}
+                <strong>{translations.endDate}:</strong> {course.eventEndDate}
                 </p>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 text-right">
               <p className="text-xs text-gray-500">
-                <strong>الهاتف:</strong> {course.contactMobile}
+              <strong>{translations.phone}:</strong> {course.contactMobile}
               </p>
               <p className="text-xs text-gray-500">
-                <strong>واتساب:</strong> {course.contactWhatsApp}
+              <strong>{translations.whatsapp}:</strong> {course.contactWhatsApp}
               </p>
             </div>
           </div>

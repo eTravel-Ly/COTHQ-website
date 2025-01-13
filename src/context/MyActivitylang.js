@@ -1,0 +1,67 @@
+const MyActivitylang = {
+    ar: {
+      titleActivity: "نشاطاتي",
+      descriptionActivity: "من خلال هذه الصفحة يمكنك عرض جميع النشاطات الخاصة بك",
+      contestsButton: "المسابقات",
+      trainingCoursesButton: "الدورات التدريبية",
+      conferencesButton: "المؤتمرات",
+      seminarsButton: "الندوات",
+      organizer: "المنظم",
+      address: "العنوان",
+      startDate: "تاريخ البدء",
+      endDate: "تاريخ الانتهاء",
+      participationType: "نوع المشاركة",
+      description: "الوصف",
+      phone: "الهاتف",
+      whatsapp: "واتساب",
+      subscriptionStatus: "حالة الاشتراك",
+      result: "النتيجة",
+      certified: "معتمد",
+      rejected: "مرفوض",
+      accepted: "مقبول",
+      pending: "قيد الانتظار",
+      withdrawn: "منسحب",
+      archived: "مؤرشف",
+      noContestsMessage: "لا يوجد مسابقات تمت اضافتها في الوقت الحالى ..",
+      noTrainingCoursesMessage: "لا يوجد دورات تدريبية تمت اضافتها في الوقت الحالى ..",
+      phone:"الهاتف",
+      whatsapp:"واتساب",
+      noConferencesMessage: "لا يوجد مؤتمرات قمت بالتسجيل فيها .. سجل الان",
+    noSeminarsMessage: "لا يوجد ندوات تمت اضافتها في الوقت الحالي.."
+
+
+    },
+    en: {
+      titleActivity: "My Activity",
+      descriptionActivity: "Through this page, you can view all your activities",
+      contestsButton: "Contests",
+      trainingCoursesButton: "Training Courses",
+      conferencesButton: "Conferences",
+      seminarsButton: "Seminars",
+      organizer: "Organizer",
+      address: "Address",
+      startDate: "Start Date",
+      endDate: "End Date",
+      participationType: "Participation Type",
+      description: "Description",
+      phone: "Phone",
+      whatsapp: "WhatsApp",
+      subscriptionStatus: "Subscription Status",
+      result: "Result",
+      certified: "Certified",
+      rejected: "Rejected",
+      accepted: "Accepted",
+      pending: "Pending",
+      withdrawn: "Withdrawn",
+      archived: "Archived",
+      noContestsMessage: "No contests have been added at the moment..",
+      noTrainingCoursesMessage: "No training courses have been added at the moment..",
+      phone:"phone",
+      whatsapp:"whatsapp",
+      noConferencesMessage: "You haven't registered for any conferences.. Register now",
+    noSeminarsMessage: "No seminars have been added at the moment.."
+    }
+  };
+  
+  export default MyActivitylang;
+  

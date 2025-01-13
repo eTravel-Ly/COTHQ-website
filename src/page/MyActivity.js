@@ -5,6 +5,7 @@ import MySeminars from "../component/MySeminars";
 import MyContests from "../component/MyContests";
 import MyTrainingCourses from "../component/MyTrainingCourses";
 import MyConferences from "../component/MyConferences";
+import { useTranslation } from "../context/TranslationContext"; 
 
 export default function MyActivity() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -14,15 +15,8 @@ export default function MyActivity() {
   const showmyConferences = () => setSelectedSection("myConferences");
   const showMySeminars = () => setSelectedSection("mySeminars");
 
-  const [language, setLanguage] = useState("ar");
+  const { translations , language} = useTranslation(); 
   const isArabic = language === "ar";
-
-  useEffect(() => {
-    const savedLanguage = sessionStorage.getItem('language');
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-    }
-  }, []);
 
   return (
     <>
@@ -46,12 +40,10 @@ export default function MyActivity() {
           }}
         >
           <h2 className="text-xl font-bold mb-1">
-            {isArabic ? "نشاطاتي" : "My Activity"}
+          {translations.titleActivity}
           </h2>
           <h4 className="text-l font-bold text-gray-500 mb-4">
-            {isArabic
-              ? "من خلال هذه الصفحة يمكنك عرض جميع النشاطات الخاصة بك"
-              : "Through this page, you can view all your activities"}
+          {translations.descriptionActivity}
           </h4>
           <div className="flex flex-wrap justify-center md:justify-start mt-4 gap-2">
             <button
@@ -60,7 +52,7 @@ export default function MyActivity() {
               }`}
               onClick={showMyContests}
             >
-              {isArabic ? "المسابقات" : "Contests"}
+             {translations.contestsButton}
             </button>
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l  font-bold text-gray-900  hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -68,7 +60,7 @@ export default function MyActivity() {
               }`}
               onClick={showMyTrainingCourses}
             >
-              {isArabic ? "الدورات التدريبية" : "Training Courses"}
+                 {translations.trainingCoursesButton}
             </button>
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l  font-bold text-gray-900  hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -76,7 +68,7 @@ export default function MyActivity() {
               }`}
               onClick={showmyConferences}
             >
-              {isArabic ? "المؤتمرات" : "Conferences"}
+                 {translations.conferencesButton}
             </button>
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l  font-bold text-gray-900  hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -84,7 +76,7 @@ export default function MyActivity() {
               }`}
               onClick={showMySeminars}
             >
-              {isArabic ? "الندوات" : "Seminars"}
+               {translations.seminarsButton}
             </button>
           </div>
           <div className="mt-4">

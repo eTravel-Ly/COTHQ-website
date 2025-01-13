@@ -5,8 +5,13 @@ import { FaRegUserCircle, FaSpinner, FaArrowLeft, FaArrowRight } from "react-ico
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
+import { useTranslation } from "../context/TranslationContext"; 
 
 export default function AllCourses() {
+
+  const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+
   const showPicCourses = async (fileName) => {
     try {
       const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -143,7 +148,7 @@ export default function AllCourses() {
             className="w-60 h-60 object-cover"
           />
           <p className="text-lg text-gray-700 mt-0">
-            لا يوجد دورات تدريبية متاحة في الوقت الحالى ..
+      {translations.no_courses_message}
           </p>
         </div>
       ) : (
@@ -152,7 +157,7 @@ export default function AllCourses() {
           <div className="flex items-center mb-4 w-full">
             <input
               type="text"
-              placeholder=" ادخل عنوان الدورة للبحث .. "
+              placeholder= {translations.course_search_placeholder}
               className="p-2 border rounded-md w-full mr-4"
               value={searchTerm}
               onChange={handleSearchChange}
@@ -162,9 +167,9 @@ export default function AllCourses() {
               value={sortOption}
               onChange={handleSortChange}
             >
-              <option value="فرز حسب">فرز حسب</option>
-              <option value="الأحدث">الأحدث</option>
-              <option value="الأعلى تقييمًا">الأعلى تقييمًا</option>
+              <option value="فرز حسب">{translations.sort_by} </option>
+                  <option value="الأحدث">{translations.newest} </option>
+                  <option value="الأعلى تقييمًا"> {translations.top_rated}</option>
             </select>
           </div>
 
@@ -239,7 +244,7 @@ export default function AllCourses() {
                       style={{ fontFamily: "Tajwal, sans-serif" }}
                       onClick={() => openCoursesDetails(course.id)}
                     >
-                      اشتر الآن
+                     {translations.buy_now}
                     </button>
                   </div>
                 </div>
