@@ -7,23 +7,24 @@ import axios from "axios";
 import logo from "../assets/images/pay.png";
 import otp1 from "../assets/images/otp.png";
 import { useMediaQuery } from 'react-responsive';
-
+import { useTranslation } from "../context/TranslationContext"; 
 function Paynow() {
-  const [currentStep, setCurrentStep] = useState(1); // Track the current step
+  const [currentStep, setCurrentStep] = useState(1); 
   const location = useLocation();
-  const { orderId } = location.state || {}; // جلب الـ orderId من الـ state
+  const { orderId } = location.state || {}; 
   const [loading, setLoading] = useState(true);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [orderData, setOrderData] = useState(null); // لتخزين بيانات الطلب
-  const [birthYear, setBirthYear] = useState(""); // لتخزين سنة الميلاد
-  const [phoneNumber, setPhoneNumber] = useState(""); // لتخزين رقم الهاتف
-  const [errors, setErrors] = useState({}); // لتخزين الأخطاء
+  const [orderData, setOrderData] = useState(null); 
+  const [birthYear, setBirthYear] = useState(""); 
+  const [phoneNumber, setPhoneNumber] = useState(""); 
+  const [errors, setErrors] = useState({});
   const [loading1, setLoading1] = useState(false);
-  const [otpCode, setOtpCode] = useState(""); // لتخزين رمز التأكيد
+  const [otpCode, setOtpCode] = useState("");
   const isSmallScreen = useMediaQuery({ query: '(max-width: 640px)' });
   const isMediumScreen = useMediaQuery({ query: '(max-width: 1024px)' });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+    const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -33,7 +34,7 @@ function Paynow() {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
-          setOrderData(response.data); // تخزين بيانات الطلب
+          setOrderData(response.data); 
         }
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -45,15 +46,15 @@ function Paynow() {
       setPaymentSuccess(true);
     }, 10000);
 
-    return () => clearTimeout(timer); // Cleanup timer on component unmount
+    return () => clearTimeout(timer); 
   }, [orderId]);
 
   const handleNextStep = async () => {
     if (currentStep === 1) {
       const newErrors = {};
 
-      if (!birthYear) newErrors.birthYear = "سنة الميلاد مطلوبة";
-      if (!phoneNumber) newErrors.phoneNumber = "رقم الهاتف مطلوب";
+      if (!birthYear) newErrors.birthYear =  translations.birthYearRequired ;
+      if (!phoneNumber) newErrors.phoneNumber = translations.phoneNumberRequired;
 
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
@@ -63,12 +64,12 @@ function Paynow() {
       try {
         setLoading1(true);
 
-        // إرسال البيانات إلى الـ API
+      
         const response = await axios.post(
            baseurl+"pay-sadad/confirm-payment",
           {
-            birthYear, // سنة الميلاد
-            phoneNumber, // رقم الهاتف
+            birthYear, 
+            phoneNumber, 
           },
           {
             headers: {
@@ -77,7 +78,7 @@ function Paynow() {
           }
         );
 
-        // التحقق من نجاح العملية
+      
         if (response.status === 201) {
           setCurrentStep(currentStep + 1);
 
@@ -96,10 +97,10 @@ function Paynow() {
       try {
         setLoading1(true);
   
-        // إرسال رمز التأكيد إلى الـ API
+       
         const response = await axios.post(
           `${baseurl}pay-sadad/request-otp`,
-          {sadadReference: otpCode }, // رمز التأكيد
+          {sadadReference: otpCode },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -107,9 +108,9 @@ function Paynow() {
           }
         );
   
-        // التحقق من نجاح العملية
+       
         if (response.status === 200) {
-          setCurrentStep(currentStep + 1); // الانتقال إلى الخطوة التالية
+          setCurrentStep(currentStep + 1);
         }
       } catch (error) {
         console.error("Error verifying OTP code:", error);
@@ -119,11 +120,11 @@ function Paynow() {
       setCurrentStep(currentStep + 1);
     } else  if (currentStep === 3) {
       setLoading(true);
-      // Simulate payment processing with a timeout
+     
       setTimeout(() => {
         setLoading(false);
-        setPaymentSuccess(true); // Set payment as successful after loading
-      }, 6000); // 3 seconds delay for simulation
+        setPaymentSuccess(true); 
+      }, 6000); 
     }
   };
 
@@ -133,17 +134,17 @@ function Paynow() {
         return (
           <div className="flex flex-col items-center">
             <img src={logo} alt="Payment Method" className="mb-4 h-42 w-40" />
-            <h3 className="text-lg font-bold mb-2">ادفع طلبك الآن</h3>
+            <h3 className="text-lg font-bold mb-2">{translations.payOrderNow}  </h3>
             <h3 className="text-lg font-bold mb-2 text-custom-green">
-              طريقة الدفع {orderData ? orderData.paymentType : "غير متوفر"}
+            {translations.paymentMethod} {orderData ? orderData.paymentType : "غير متوفر"}
             </h3>
 
             <div className="flex justify-center w-full  px-4">
               <p className="mb-4 ml-10">
-                رقم الطلب: {orderData ? orderData.orderNo : "غير متوفر"}
+              {translations.orderNumber}: {orderData ? orderData.orderNo : "غير متوفر"}
               </p>
               <p className="mb-4">
-                اجمالي الطلب: {orderData ? orderData.total : "غير متوفر"} دينار
+              {translations.totalOrder }: {orderData ? orderData.total : "غير متوفر"}   {translations.dinar }
               </p>
             </div>
 
@@ -153,15 +154,17 @@ function Paynow() {
             </p>
 
             <div className="mb-4 w-3/4">
-            <label>ادخل سنة الميلاد</label>
+            <label> {translations.enterBirthYear}  </label>
             <input
               type="text"
               className="p-2 border rounded-2xl w-full mt-2 bg-gray-100"
-              placeholder="أدخل سنة الميلاد (مثال: 1990)"
+              placeholder={translations.birthYearPlaceholder}
               value={birthYear}
               onChange={(e) => setBirthYear(e.target.value)}
               maxLength="4"
-              pattern="\d{4}" // يتيح فقط 4 أرقام
+              pattern="\d{4}" 
+
+              
             />
             {errors.birthYear && (
               <p className="text-red-500">{errors.birthYear}</p>
@@ -170,11 +173,11 @@ function Paynow() {
 
 
             <div className="mb-4 w-3/4">
-              <label>ادخل رقم الهاتف</label>
+              <label> {translations.enterPhoneNumber} </label>
               <input
                 type="text"
                 className="p-2 border rounded-2xl w-full mt-2 bg-gray-100"
-                placeholder="رقم الهاتف"
+                placeholder={translations.phoneNumberPlaceholder}
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
@@ -189,7 +192,8 @@ function Paynow() {
                 className="bg-custom-orange text-white py-2 w-full px-6 rounded-xl"
                 disabled={loading1}
               >
-                {loading1 ? "جاري الإرسال..." : "ارسال"}
+                {loading1 ? translations.sending : translations.submit}
+
               </button>
             </div>
           </div>
@@ -199,11 +203,11 @@ function Paynow() {
           <div className="flex flex-col items-center">
             <img src={otp1} className="mb-4 h-48 w-48" />
             <div className="mb-4 w-3/4">
-            <label>ادخل رمز التأكيد</label>
+            <label> {translations.enterOtpCode}</label>
             <input
               type="text"
               className="p-2 border rounded-2xl w-full mt-2 bg-gray-100"
-              placeholder="ادخل رمز التأكيد "
+              placeholder={translations.otpCodePlaceholder}
               value={otpCode}
               onChange={(e) => setOtpCode(e.target.value)}
             />
@@ -217,7 +221,7 @@ function Paynow() {
                 onClick={handleNextStep}
                 className="bg-custom-orange text-white py-2 w-full px-6 rounded-xl"
               >
-                {loading1 ? "جاري تأكيد الدفع..." : "تأكيد الدفع"}
+                {loading1 ? translations.confirmingPayment : translations.confirmPayment}
               </button>
             </div>
           </div>
@@ -233,7 +237,7 @@ function Paynow() {
             ) : paymentSuccess ? (
               <div className="flex flex-col items-center">
                 <div className="text-green-500 text-9xl mb-4">✔</div>
-                <p className="text-lg font-bold mb-4">تم دفع الطلب بنجاح!</p>
+                <p className="text-lg font-bold mb-4">{translations.paymentSuccessful}</p>
                 {/*
                 <a href="/order-summary" className="text-blue-500 underline">
                   عرض الطلب
@@ -249,18 +253,26 @@ function Paynow() {
   };
 
   return (
-    <div className="flex h-screen font-tajwal">
-    <Sidebar
-            isSidebarOpen={isSidebarOpen}
-            setIsSidebarOpen={setIsSidebarOpen}
-          />
-    <div className="flex flex-col w-full lg:w-[80%] mt-2 ml-1">
-      <NavbarLogin isSidebarOpen={isSidebarOpen}
+    <>
+        <div
+        className={`flex ${
+          isArabic
+            ? "flex-col md:flex-row"
+            : "flex-col-reverse md:flex-row-reverse "
+        } pt-16 w-full`}
+      >
+<div
+        className={`fixed top-0 z-10 transition-all duration-300 w-full lg:w-[calc(100%-20%)]`}
+      >
+        <NavbarLogin
+          isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
-           />
+        />
+      </div>
+  
       <div
       className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10 rtl"
-      style={{ direction: "rtl" }}
+      style={{ direction: language === "ar" ? "rtl" : "ltr" }}
     >
       {/* Step Progress Indicator */}
       <div className="flex justify-center items-center mb-8">
@@ -293,8 +305,22 @@ function Paynow() {
       {/* Step Form Content */}
       <div className="p-8 rounded-lg shadow">{renderStepContent()}</div>
     </div>
-    </div>
-  </div>
+    <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-full md:w-1/4" : "w-0"
+          } md:w-[20%] h-full`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
+      </div>
+
+
+ 
+  
+  </>
   
   );
 }

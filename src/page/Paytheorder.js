@@ -4,27 +4,28 @@ import NavbarLogin from "../component/NavbarLogin";
 import { useLocation, useNavigate } from "react-router-dom";
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
-
+import { useTranslation } from "../context/TranslationContext"; 
 function Paytheorder() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
-  const [orderData, setOrderData] = useState(null); // لتخزين بيانات الطلب
+  const [orderData, setOrderData] = useState(null); 
   const location = useLocation();
-  const { orderId } = location.state || {}; // جلب الـ orderId من الـ state
+  const { orderId } = location.state || {}; 
 
-  const [isLoading, setIsLoading] = useState(false); // State for loading
-
-  // دالة التنقل للدفع
+  const [isLoading, setIsLoading] = useState(false); 
+    const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+  
   const Paynow = () => {
     if (orderId) {
-      navigate('/Paynow', { state: { orderId } }); // Navigate with order ID in state
+      navigate('/Paynow', { state: { orderId } }); 
     } else {
       console.error('Order ID is not available.');
     }
 
   };
 
-  // جلب معلومات المستخدم
+  
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -41,7 +42,7 @@ function Paytheorder() {
     fetchUserProfile();
   }, []);
 
-  // جلب بيانات الطلب بناءً على orderId
+
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -51,7 +52,7 @@ function Paytheorder() {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
-          setOrderData(response.data); // تخزين بيانات الطلب
+          setOrderData(response.data); 
         }
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -64,7 +65,14 @@ function Paytheorder() {
 
   return (
     <>
-      <div
+         <div
+        className={`flex ${
+          isArabic
+            ? "flex-col md:flex-row"
+            : "flex-col-reverse md:flex-row-reverse "
+        } pt-16 w-full`}
+      >
+  <div
         className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
       >
         <NavbarLogin
@@ -72,25 +80,25 @@ function Paytheorder() {
           setIsSidebarOpen={setIsSidebarOpen}
         />
       </div>
-      <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
+      
         <div
           className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10 rtl"
-          style={{ direction: "rtl" }}
+          style={{ direction: language === "ar" ? "rtl" : "ltr" }}
         >
           {/* عنوان تأكيد الطلب */}
           <div className="text-right border-b pb-4 mb-4">
-            <h2 className="text-lg sm:text-xl font-bold">دفع الطلب</h2>
+            <h2 className="text-lg sm:text-xl font-bold"> {translations.pageTitle}</h2>
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-6">
             <div className="bg-gray-100 p-4 sm:p-6 rounded-lg shadow">
               <h3 className="text-md sm:text-lg font-semibold mb-3 sm:mb-4">
-                ملخص الطلب
+              { translations.orderSummary }
               </h3>
 
               <div className="mb-3 sm:mb-4">
                 <h4 className="font-medium text-gray-600 text-sm sm:text-base">
-                  معلومات المستخدم
+                {translations.userInfo}
                 </h4>
                 <div className="flex justify-between items-center mt-2">
                   <div className="text-sm sm:text-base">
@@ -105,7 +113,7 @@ function Paytheorder() {
                         <p>{userData.mobileNo}</p>
                       </>
                     ) : (
-                      <p>جاري تحميل معلومات التوصيل...</p>
+                      <p> {translations.loadingUserInfo}</p>
                     )}
                   </div>
                 </div>
@@ -120,7 +128,7 @@ function Paytheorder() {
               >
                 <div className="flex justify-between items-center mb-2">
                   <h2 className="text-lg font-bold">
-                    طلب رقم {orderData.orderNo}
+                  {translations.orderNo} {orderData.orderNo}
                   </h2>
                   <span className="text-gray-600">
                     {new Date(orderData.createdDate).toLocaleDateString()}
@@ -131,37 +139,44 @@ function Paytheorder() {
                     {orderData.orderStatus}
                   </span>
                   <span className="text-gray-600">
-                    إجمالي الطلب: {orderData.total} دينار
+                  {translations.totalAmount} {orderData.total} {translations.denar} 
                   </span>
                 </div>
                 <div className="space-y-2">
                   <p className="font-semibold">
-                    نوع الدفع: {orderData.paymentType}
+                  {translations.paymentType} {orderData.paymentType}
                   </p>
                   <p className="font-semibold">
-                    الخصم: {orderData.discount} دينار
+                  {translations.discount} {orderData.discount}  {translations.denar} 
                   </p>
                 </div>
               </div>
             </div>
           ) : (
-            <p>جاري تحميل تفاصيل الطلب...</p>
+            <p>
+            {translations.loadingOrderDetails}
+          </p>
           )}
 
           {/* زر الدفع */}
           <div className="mt-6 text-center">
-            <button
-              onClick={Paynow}
-              className="bg-custom-green  text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-base sm:text-lg w-full md:w-auto"
-            >
-              {isLoading ? (
-                <span>جارٍ ادفع الان ...</span>
-              ) : (
-                <span> ادفع الان </span>
-              )}
-            </button>
+          <button
+      onClick={Paynow}
+      className="bg-custom-green text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-base sm:text-lg w-full md:w-auto"
+    >
+      {isLoading ? (
+        <span>
+          {translations.payingNow}
+        </span>
+      ) : (
+        <span>
+          {translations.payNow}
+        </span>
+      )}
+    </button>
           </div>
         </div>
+
         <div
           className={`transition-all duration-300 ${
             isSidebarOpen ? "w-full md:w-1/4" : "w-0"
@@ -173,6 +188,9 @@ function Paytheorder() {
           />
         </div>
       </div>
+    
+
+     
     </>
   );
 }

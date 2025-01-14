@@ -20,8 +20,15 @@ import MyActivitylang from './MyActivitylang'
 import Contestslang from './Contestslang'
 import Seminarslang from './Seminarslang'
 import Shoplang from './Shoplang'
+<<<<<<< HEAD
 import ContestsDetailslang from './ContestsDetailslang'
 import MyBookslang from './MyBookslang'
+=======
+import Shoppingcartlang from './Shoppingcart'
+import Orderconfirmlang from './Orderconfirm'
+import Paytheorderlang from './Paytheorderlang'
+import Paynowlang from './Paynowlang'
+>>>>>>> 9821728 (edit)
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -47,8 +54,15 @@ const combinedTranslations = {
     ...Contestslang.en,
     ...Seminarslang.en,
     ...Shoplang.en,
+<<<<<<< HEAD
     ...ContestsDetailslang.en,
     ...MyBookslang.en
+=======
+    ...Shoppingcartlang.en,
+    ...Orderconfirmlang.en,
+    ...Paytheorderlang.en,
+    ...Paynowlang.en
+>>>>>>> 9821728 (edit)
   },
   ar: {
     ...homeTranslations.ar,
@@ -72,8 +86,15 @@ const combinedTranslations = {
     ...Contestslang.ar,
     ...Seminarslang.ar,
     ...Shoplang.ar,
+<<<<<<< HEAD
     ...ContestsDetailslang.ar,
     ...MyBookslang.ar
+=======
+    ...Shoppingcartlang.ar,
+    ...Orderconfirmlang.ar,
+    ...Paytheorderlang.ar,
+    ...Paynowlang.ar
+>>>>>>> 9821728 (edit)
   },
 };
 

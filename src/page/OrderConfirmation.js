@@ -7,6 +7,7 @@ import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from "../context/TranslationContext"; 
 function OrderConfirmation() {
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("cash");
@@ -17,7 +18,8 @@ function OrderConfirmation() {
   const location = useLocation();
   const { totalPrice } = location.state || { totalPrice: 0 };
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+  const { translations , language} = useTranslation(); 
+  const isArabic = language === "ar";
   const showPicPayment = async (fileName) => {
     try {
       const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -82,13 +84,15 @@ function OrderConfirmation() {
         }
       );
       
-      const orderId = response.data.id; // Assuming the response contains the order ID
-      toast.success("تم انشاء طلب بنجاح");
-      navigate('/Paytheorder', { state: { orderId } }); // Navigate with order ID in state
+      const orderId = response.data.id; 
+      toast.success(
+        translations.createOrderSuccess 
+      );
+      navigate('/Paytheorder', { state: { orderId } }); 
   
     } catch (error) {
       console.error("Error creating order:", error);
-      toast.warning("Failed to create order");
+      toast.warning(translations.createOrderFailure );
     } finally {
       setIsLoading(false); 
     }
@@ -97,7 +101,14 @@ function OrderConfirmation() {
 
   return (
     <>
-      <div
+ <div
+        className={`flex ${
+          isArabic
+            ? "flex-col md:flex-row "
+            : "flex-col-reverse md:flex-row-reverse  "
+        } pt-16 w-full`}
+      >
+           <div
         className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
       >
         <NavbarLogin
@@ -105,36 +116,40 @@ function OrderConfirmation() {
           setIsSidebarOpen={setIsSidebarOpen}
         />
       </div>
-      <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
+    
         <div
           className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10 rtl"
-          style={{ direction: "rtl" }}
+          style={{ direction: language === "ar" ? "rtl" : "ltr" }}
         >
           {/* Order Confirmation Header */}
           <div className="text-right border-b pb-4 mb-4">
-            <h2 className="text-lg sm:text-xl font-bold">تأكيد الطلب</h2>
+            <h2 className="text-lg sm:text-xl font-bold">     {translations.orderConfirmation}</h2>
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-6">
             {/* Order Summary Section */}
             <div className="bg-gray-100 p-4 sm:p-6 rounded-lg shadow">
               <h3 className="text-md sm:text-lg font-semibold mb-3 sm:mb-4">
-                ملخص الطلب
+              {translations.orderSummary}
               </h3>
               <div className="flex justify-between items-center border-b pb-2 mb-3 sm:mb-4">
                 <span className="text-gray-700 text-sm sm:text-base">
-                  {cartItems === 0
-                    ? "لا يوجد عناصر"
-                    : `${cartItems} ${cartItems === 1 ? "عنصر واحد" : "عناصر"}`}
+                {cartItems === 0
+              ? translations.noItems
+              : `${cartItems} ${
+                  cartItems === 1
+                    ? translations.oneItem
+                    : translations.multipleItems
+                }`}
                 </span>
 
                 <span className="font-bold text-md sm:text-lg">
-                  {totalPrice.toFixed(2)} د.ل
+                  {totalPrice.toFixed(2)}   {translations.denar}
                 </span>
               </div>
               <div className="mb-3 sm:mb-4">
                 <h4 className="font-medium text-gray-600 text-sm sm:text-base">
-                  معلومات التوصيل
+                {translations.deliveryInfo}
                 </h4>
                 <div className="flex justify-between items-center mt-2">
                   <div className="text-sm sm:text-base">
@@ -149,7 +164,7 @@ function OrderConfirmation() {
                         <p>{userData.mobileNo}</p>
                       </>
                     ) : (
-                      <p>جاري تحميل معلومات التوصيل...</p>
+                      <p>{translations.loadingDeliveryInfo}</p>
                     )}
                   </div>
                 </div>
@@ -159,7 +174,7 @@ function OrderConfirmation() {
             {/* Payment Options Section */}
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow">
               <h3 className="text-md sm:text-lg font-semibold mb-3 sm:mb-4">
-                طريقة الدفع
+              {translations.paymentMethod}
               </h3>
               <div className="space-y-3 sm:space-y-4">
                 {paymentMethods.map((method) => (
@@ -209,14 +224,15 @@ function OrderConfirmation() {
                 isLoading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              {isLoading ? (
-                <span>جارٍ إنشاء الطلب...</span>
-              ) : (
-                <span>إنشاء طلب</span>
-              )}
+             {isLoading ? (
+          <span>{translations.creatingOrder}</span>
+        ) : (
+          <span>{translations.createOrder}</span>
+        )}
             </button>
           </div>
         </div>
+
         <div
           className={`transition-all duration-300 ${
             isSidebarOpen ? "w-full md:w-1/4" : "w-0"
@@ -227,7 +243,9 @@ function OrderConfirmation() {
             setIsSidebarOpen={setIsSidebarOpen}
           />
         </div>
+   
       </div>
+   
       <ToastContainer />
     </>
   );

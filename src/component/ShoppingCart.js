@@ -8,8 +8,7 @@ import AddToCartImage from "../assets/images/AddtoCart.png";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Helper function to fetch image URL for books
+import { useTranslation } from "../context/TranslationContext"; 
 const showpicbooks = (fileName) => {
   try {
     const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -19,7 +18,6 @@ const showpicbooks = (fileName) => {
   }
 };
 
-// Helper function to fetch image URL for courses
 const showpiccourses = (fileName) => {
   try {
     const imageUrl = `${baseurl}uploads/file/download/${fileName}`;
@@ -30,12 +28,11 @@ const showpiccourses = (fileName) => {
 };
 
 function ShoppingCart() {
-    const [language, setLanguage] = useState(sessionStorage.getItem("language"));
-  
+    const { translations , language} = useTranslation(); 
     const isArabic = language === "ar";
 
   const [loading, setLoading] = useState(true);
-  const [checkoutLoading, setCheckoutLoading] = useState(false); // Added for checkout loading
+  const [checkoutLoading, setCheckoutLoading] = useState(false); 
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
@@ -158,14 +155,14 @@ function ShoppingCart() {
           </div>
           <div className="flex flex-col items-start mt-4">
             <p className="text-lg font-bold text-custom-orange mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              {item.price} دينار
+            {item.price} {translations.price}
             </p>
             <button
               className="text-red-500"
               style={{ fontFamily: "Tajwal, sans-serif" }}
               onClick={() => removeFromCart(item.id, "COURSE")}
             >
-              إزالة
+           {translations.remove}
             </button>
           </div>
         </div>
@@ -188,13 +185,13 @@ function ShoppingCart() {
             <div className="flex text-gray-700 mt-1 text-sm mb-2">
               <div className="flex items-center font-tajwal">
                 <FaRegUserCircle className="text-gray-600 mr-2" />
-                <span>{item.author}</span>
+                <span>{translations.author}: {item.author}</span>
               </div>
             </div>
             <div className="flex text-gray-700 text-sm mb-2">
               <div className="flex items-center">
                 <span className="font-bold mr-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-                  دار النشر
+                {translations.publisher}
                 </span>
                 <span style={{ fontFamily: "Tajwal, sans-serif" }}>{item.publisher}</span>
               </div>
@@ -202,14 +199,14 @@ function ShoppingCart() {
           </div>
           <div className="flex flex-col items-start mt-4">
             <p className="text-lg font-bold text-custom-orange mb-2" style={{ fontFamily: "Tajwal, sans-serif" }}>
-              {item.price} دينار
+            {item.price} {translations.price}
             </p>
             <button
               className="text-red-500"
               style={{ fontFamily: "Tajwal, sans-serif" }}
               onClick={() => removeFromCart(item.id, "BOOK")}
             >
-              إزالة
+                   {translations.remove}
             </button>
           </div>
         </div>
@@ -242,20 +239,20 @@ function ShoppingCart() {
               className="text-2xl font-bold mb-4 text-right"
               style={{ fontFamily: "Tajwal, sans-serif" }}
             >
-              الإجمالي
+              {translations.total}
             </h2>
             <div className="flex justify-between mb-4">
               <p
                 className="font-bold text-lg"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                {totalPrice.toFixed(2)} دينار
+                {totalPrice.toFixed(2)} {translations.price}
               </p>
               <p
                 className="font-bold text-lg"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                الإجمالي
+                {translations.total}
               </p>
             </div>
             <div className="border-t border-gray-300 mb-4"></div>
@@ -272,22 +269,23 @@ function ShoppingCart() {
               {checkoutLoading ? (
                 <div className="flex justify-center items-center">
                   <FaSpinner className="animate-spin mr-2" />
-                  جاري إتمام الشراء...
+                  {translations.proceedCheckout}
                 </div>
               ) : (
-                "إتمام الشراء"
+                translations.checkout
+
               )}
             </button>
           </div>
           <div className="lg:w-2/3 p-6" >
             <h1 className="text-3xl font-bold mb-4 text-right font-tajwal">
-              عربة الشراء
+            {translations.cart}
             </h1>
             <h6
               className="font-tajwal text-red-500 underline cursor-pointer"
               onClick={clearCart}
             >
-              (حذف كل العناصر)
+               ({translations.clearCart})
             </h6>
             {/*
             {cartItems.map((item) =>
@@ -303,7 +301,7 @@ function ShoppingCart() {
                   className="text-lg font-bold mt-4"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
-                  العــــــربـــــة فـــــارغـــــة
+                  {translations.emptyCart}
                 </p>
               </div>
             ) : (
