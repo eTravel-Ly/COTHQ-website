@@ -20,15 +20,13 @@ import MyActivitylang from './MyActivitylang'
 import Contestslang from './Contestslang'
 import Seminarslang from './Seminarslang'
 import Shoplang from './Shoplang'
-
 import ContestsDetailslang from './ContestsDetailslang'
 import MyBookslang from './MyBookslang'
-
 import Shoppingcartlang from './Shoppingcart'
 import Orderconfirmlang from './Orderconfirm'
 import Paytheorderlang from './Paytheorderlang'
 import Paynowlang from './Paynowlang'
-
+import notificationslang from './notificationslang'
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -54,10 +52,9 @@ const combinedTranslations = {
     ...Contestslang.en,
     ...Seminarslang.en,
     ...Shoplang.en,
-
+    ...notificationslang.en,
     ...ContestsDetailslang.en,
     ...MyBookslang.en,
-
     ...Shoppingcartlang.en,
     ...Orderconfirmlang.en,
     ...Paytheorderlang.en,
@@ -86,14 +83,13 @@ const combinedTranslations = {
     ...Contestslang.ar,
     ...Seminarslang.ar,
     ...Shoplang.ar,
-
     ...ContestsDetailslang.ar,
     ...MyBookslang.ar,
-
     ...Shoppingcartlang.ar,
     ...Orderconfirmlang.ar,
     ...Paytheorderlang.ar,
-    ...Paynowlang.ar
+    ...Paynowlang.ar,
+    ...notificationslang.ar
 
   },
 };

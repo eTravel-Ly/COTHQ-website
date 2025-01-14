@@ -122,7 +122,7 @@ function OrderConfirmation() {
           style={{ direction: language === "ar" ? "rtl" : "ltr" }}
         >
           {/* Order Confirmation Header */}
-          <div className="text-right border-b pb-4 mb-4">
+          <div className=" border-b pb-4 mb-4">
             <h2 className="text-lg sm:text-xl font-bold">     {translations.orderConfirmation}</h2>
           </div>
 

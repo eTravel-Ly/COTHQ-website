@@ -5,8 +5,12 @@ import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
 import noNotificationImage from "../assets/images/New.png"; // تأكد من إضافة صورة "لا يوجد إشعارات"
+import { useTranslation } from "../context/TranslationContext"; 
 
 export default function AllNotify() {
+    const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+
   const [notifications, setNotifications] = useState([]);
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -31,7 +35,7 @@ export default function AllNotify() {
 
   return (
     <>
-      <>
+      <div className={`flex ${isArabic ? 'flex-col md:flex-row' : 'flex-col-reverse md:flex-row-reverse '} pt-16 w-full`}>
         <div
           className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
         >
@@ -40,16 +44,21 @@ export default function AllNotify() {
             setIsSidebarOpen={setIsSidebarOpen}
           />
         </div>
-        <div className="flex flex-col md:flex-row pt-16 w-full">
-          <div className="container mx-auto p-4" dir="rtl">
+     
+          <div  className="p-4 flex-1"
+          style={{
+            fontFamily: "Tajwal, sans-serif",
+            direction: isArabic ? "rtl" : "ltr",
+            textAlign: isArabic ? "right" : "left",
+          }}>
             <h3
-              className="text-lg font-bold mb-4 text-right"
+              className="text-lg font-bold mb-4 "
               style={{ fontFamily: "Tajwal, sans-serif" }}
             >
-              الإشعارات
+               {translations.notifications.title}
             </h3>
 
-            {loading ? ( // إظهار أيقونة اللودينق أثناء التحميل
+            {loading ? ( 
               <div className="flex items-center justify-center h-screen">
                 <FaSpinner className="text-4xl animate-spin" />
               </div>
@@ -64,7 +73,7 @@ export default function AllNotify() {
                   className="text-sm mb-5"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
-                  لا يوجد إشعارات بعد ...
+                 {translations.notifications.noNotifications}
                 </p>
               </div>
             ) : (
@@ -73,7 +82,7 @@ export default function AllNotify() {
                   key={notification.id}
                   className={`flex items-start mb-4 text-right border rounded-sm shadow-md ml-8 ${
                     !notification.isRead ? "bg-blue" : ""
-                  } p-2 rounded-md`} // لون الخلفية بناءً على حالة القراءة
+                  } p-2 rounded-md`} 
                 >
                   {!notification.isRead && (
                     <div className="flex-shrink-0">
@@ -129,8 +138,7 @@ export default function AllNotify() {
               setIsSidebarOpen={setIsSidebarOpen}
             />
           </div>
-        </div>
-      </>
+      </div>
     </>
   );
 }

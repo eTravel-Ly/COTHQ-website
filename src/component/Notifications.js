@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
+import { useTranslation } from "../context/TranslationContext"; 
 
 const Notifications = ({ currentLanguage }) => {
+  const { translations , language} = useTranslation(); 
+  const isArabic = language === "ar";
+
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
 
@@ -28,20 +32,21 @@ const Notifications = ({ currentLanguage }) => {
 
   return (
     <div
-      className={`bg-white border border-gray-200 rounded-md shadow-lg  p-4 w-80 absolute left-4 mt-2`}
+      className={`bg-white border border-gray-200 rounded-md shadow-lg  p-4 w-80 absolute  ${isArabic ? 'left-6' : 'right-8 '} mt-2`}
     >
       <h3
         className="text-lg font-bold mb-4 text-right"
         style={{ fontFamily: "Tajwal, sans-serif" }}
       >
-        الإشعارات
+        {translations.notifications.title}
       </h3>
       {notifications.length === 0 ? (
         <p
           className="text-sm mb-5"
           style={{ fontFamily: "Tajwal, sans-serif" }}
         >
-          لا يوجد إشعارات بعد
+               {translations.notifications.noNotifications}
+
         </p>
       ) : (
         notifications.map((notification) => (
@@ -86,7 +91,7 @@ const Notifications = ({ currentLanguage }) => {
         onClick={() => navigate("/AllNotify")}
         style={{ fontFamily: "Tajwal, sans-serif" }}
       >
-        عرض كل الإشعارات
+        {translations.notifications.viewAll}
       </button>
     </div>
   );
