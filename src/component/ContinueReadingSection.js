@@ -190,7 +190,7 @@ const ContinueReadingSection = () => {
                     className="absolute right-0 text-xs text-gray-700"
                     style={{ fontFamily: "Tajwal, sans-serif" }}
                   >
-                    {language === "ar" ? "تقدم الدورة" : "Course Progress"}
+                    {language === "ar" ? "تقدم القراءة" : "Reading Progress"}
                   </div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">

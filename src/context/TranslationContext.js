@@ -20,6 +20,8 @@ import MyActivitylang from './MyActivitylang'
 import Contestslang from './Contestslang'
 import Seminarslang from './Seminarslang'
 import Shoplang from './Shoplang'
+import ContestsDetailslang from './ContestsDetailslang'
+import MyBookslang from './MyBookslang'
 const TranslationContext = createContext();
 
 const combinedTranslations = {
@@ -44,7 +46,9 @@ const combinedTranslations = {
     ...MyActivitylang.en,
     ...Contestslang.en,
     ...Seminarslang.en,
-    ...Shoplang.en
+    ...Shoplang.en,
+    ...ContestsDetailslang.en,
+    ...MyBookslang.en
   },
   ar: {
     ...homeTranslations.ar,
@@ -67,7 +71,9 @@ const combinedTranslations = {
     ...MyActivitylang.ar,
     ...Contestslang.ar,
     ...Seminarslang.ar,
-    ...Shoplang.ar
+    ...Shoplang.ar,
+    ...ContestsDetailslang.ar,
+    ...MyBookslang.ar
   },
 };
 

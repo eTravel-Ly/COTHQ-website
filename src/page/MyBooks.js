@@ -4,40 +4,13 @@ import NavbarLogin from "../component/NavbarLogin";
 import MyBookButton from "../component/MyBookButton";
 import WishlistButton from "../component/WishlistBookButton";
 import ArchiveButton from "../component/ArchiveBookButton";
+import { useTranslation } from "../context/TranslationContext"; 
 
 function MyBooks() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState("myBooks");
-  const [language, setLanguage] = useState(sessionStorage.getItem("language"));
-
+  const { translations , language} = useTranslation(); 
   const isArabic = language === "ar";
-
-  const translations = {
-    ar: {
-      myBooks: "كتبي",
-      wishlist: "قائمة الرغبات",
-      archive: "الأرشيف",
-      libraryTitle: "مكتبتي",
-      continueReading: "مواصلة قراءة الكتب",
-    },
-    en: {
-      myBooks: "My Books",
-      wishlist: "Wishlist",
-      archive: "Archive",
-      libraryTitle: "My Library",
-      continueReading: "Continue Reading Books",
-    },
-  };
-
-  const t = translations[language]; // Helper for getting translated text
-
-  useEffect(() => {
-    const savedLanguage = sessionStorage.getItem("language");
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-    }
-  }, []);
-
   const showMyBooks = () => setSelectedSection("myBooks");
   const showWishlist = () => setSelectedSection("wishlist");
   const showArchive = () => setSelectedSection("archive");
@@ -68,9 +41,9 @@ function MyBooks() {
             textAlign: isArabic ? "right" : "left",
           }}
         >
-          <h2 className="text-xl font-bold mb-1">{t.libraryTitle}</h2>
+          <h2 className="text-xl font-bold mb-1">{translations.libraryTitle}</h2>
           <h4 className="text-l font-bold text-gray-500">
-            {t.continueReading}
+            {translations.continueReading}
           </h4>
 
           <div className="flex flex-wrap justify-center md:justify-start mt-4 gap-2">
@@ -82,7 +55,7 @@ function MyBooks() {
               }`}
               onClick={showMyBooks}
             >
-              {t.myBooks}
+              {translations.myBooks}
             </button>
             <button
               className={`flex items-center px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -92,7 +65,7 @@ function MyBooks() {
               }`}
               onClick={showWishlist}
             >
-              {t.wishlist}
+              {translations.wishlist}
             </button>
             <button
               className={`flex items-center px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -102,7 +75,7 @@ function MyBooks() {
               }`}
               onClick={showArchive}
             >
-              {t.archive}
+              {translations.archive}
             </button>
           </div>
 

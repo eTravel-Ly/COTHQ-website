@@ -4,10 +4,14 @@ import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import noCoursesImage from "../assets/images/Search.png"; 
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
+import { useTranslation } from "../context/TranslationContext"; 
 
 const MyborrowButton = () => {
+   const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+
   const navigate = useNavigate();
   const [mybooks, setMyBooks] = useState([]);
   const [notificationShown, setNotificationShown] = useState(false);
@@ -89,7 +93,7 @@ const MyborrowButton = () => {
 
   // Notify if return date is past
   const notifyPastReturnDate = () => {
-    toast.warning("لديك كتب مستعارة يجب ارجاعها", {
+    toast.warning(translations.borrowedBooksWarning, {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -136,7 +140,7 @@ const MyborrowButton = () => {
           className="w-60 h-60 object-cover mb-10"
         />
         <p className="text-lg text-gray-700 mt-0">
-لا يوجد كتب قمت بأستعارتها من المكتبة ..
+{translations.noBorrowedBooks}
         </p>
       </div>
     );
@@ -171,7 +175,7 @@ const MyborrowButton = () => {
                         : "text-gray-700"
                     }`}
                   >
-                    تاريخ الإرجاع: {formatDate(book.returnDate)}
+                   {translations.returnDate} {formatDate(book.returnDate)}
                   </p>
                 </div>
               </div>

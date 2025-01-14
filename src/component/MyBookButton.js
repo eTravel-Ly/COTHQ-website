@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { baseurl } from '../helper/Baseurl';
 import axios from 'axios';
 import { FaRegUserCircle, FaSpinner, FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
-
+import { useTranslation } from "../context/TranslationContext"; 
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 
 const MyBookButton = () => {
@@ -17,7 +17,8 @@ const MyBookButton = () => {
   const currentCourses = mybooks.slice(indexOfFirstCourse, indexOfLastCourse);
   const totalPages = Math.ceil(mybooks.length / coursesPerPage);
 
-
+  const { translations , language} = useTranslation(); 
+  const isArabic = language === "ar";
  
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -85,7 +86,6 @@ const MyBookButton = () => {
   }, []);
   
 
-  // تقسيم الكتب إلى صفوف من 4
   const groupedCourses = [];
   for (let i = 0; i < currentCourses.length; i += 3) {
     groupedCourses.push(currentCourses.slice(i, i + 3));
@@ -108,7 +108,7 @@ const MyBookButton = () => {
           className="w-60 h-60 object-cover mb-10"
         />
         <p className="text-lg text-gray-700 mt-0"   style={{ fontFamily: "Tajwal, sans-serif" }}>
-        لا يوجد كتب قمت بشراءها .. قم بالاشراء الان
+      {translations.noPurchasedBooks}
         </p>
       </div>
     );
@@ -137,7 +137,7 @@ const MyBookButton = () => {
                   <p className="text-sm text-gray-500">{book.description}</p>
 
                   <div className="flex justify-between mt-2">
-                    <p className="text-sm text-gray-500">نسبة التقدم</p>
+                    <p className="text-sm text-gray-500">{translations.Navbar.readingProgress} </p>
                     <p className="text-sm text-custom-orange font-bold">
                       {book.progressPercentage || 0}%
                     </p>

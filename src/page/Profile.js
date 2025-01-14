@@ -7,10 +7,12 @@ import MyBookButton from "../component/MyBookButton";
 import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
 import { FaSpinner } from 'react-icons/fa'; // لأيقونة التحميل
+import { useTranslation } from "../context/TranslationContext"; 
+
 
 const Profile = () => {
-    const [language, setLanguage] = useState(sessionStorage.getItem("language"));
   
+   const { translations , language} = useTranslation(); 
     const isArabic = language === "ar";
 
   const [selectedSection, setSelectedSection] = useState("MyBookButton");
@@ -90,7 +92,7 @@ const Profile = () => {
                 className="text-gray-700 font-bold"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                اسم المستخدم
+                {translations.userName}
               </p>
               <p
                 className="text-gray-700"
@@ -103,7 +105,7 @@ const Profile = () => {
                 className="text-gray-700 font-bold"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                البريد الالكتروني
+                 {translations.email}
               </p>
               <p
                 className="text-gray-700"
@@ -116,7 +118,7 @@ const Profile = () => {
                 className="text-gray-700 font-bold"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                رقم الهاتف
+                {translations.phoneNumber}
               </p>
               <p
                 className="text-gray-700"
@@ -129,7 +131,7 @@ const Profile = () => {
                 className="text-gray-700 font-bold"
                 style={{ fontFamily: "Tajwal, sans-serif" }}
               >
-                نوع الحساب
+                {translations.accountType}
               </p>
               <p
                 className="text-gray-700"
@@ -145,7 +147,7 @@ const Profile = () => {
               className="text-gray-700 mb-4 font-bold text-2xl"
               style={{ fontFamily: "Tajwal, sans-serif" }}
             >
-              الكتب والدورات الخاصة بالطالب {profileData.firstName}{" "}
+             {translations.myBooksSection} {profileData.firstName}{" "}
               {profileData.lastName}:
             </p>
             <div className="flex mt-4">
@@ -156,7 +158,7 @@ const Profile = () => {
                 }`}
                 onClick={showbooks}
               >
-                الكتب الخاصة بك
+                {translations.myBooksButton}
               </button>
               <button
                 style={{ fontFamily: "Tajwal, sans-serif" }}
@@ -167,7 +169,7 @@ const Profile = () => {
                 }`}
                 onClick={showallCourses}
               >
-                الكورسات الخاصة بك
+                {translations.myCoursesButton}
               </button>
             </div>
           </div>

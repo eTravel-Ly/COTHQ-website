@@ -6,7 +6,13 @@ import Navbar from "../component/Navbar"; // Import the Navbar component
 import axios from "axios";
 import { baseurl } from "../helper/Baseurl";
 import cover from "../assets/images/cover.png";
+import { useTranslation } from "../context/TranslationContext"; 
+
+
 export default function TrainingCoursesDtails() {
+    const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+
   const [conditions, setConditions] = useState([]);
   const { Id } = useParams();
   const token = localStorage.getItem("token");
@@ -54,7 +60,8 @@ export default function TrainingCoursesDtails() {
     <>
       {token ? (
         <>
-          <div
+                      <div className={`flex ${isArabic ? 'flex-col md:flex-row' : 'flex-col-reverse md:flex-row-reverse '} pt-16 w-full`}>
+                      <div
             className={`fixed top-0 z-10 transition-all duration-300 w-full  lg:w-[calc(100%-20%)]`}
           >
             <NavbarLogin
@@ -62,9 +69,13 @@ export default function TrainingCoursesDtails() {
               setIsSidebarOpen={setIsSidebarOpen}
             />
           </div>
-          <div className="flex flex-col md:flex-row pt-16 w-full font-tajwal">
-            <div className="container mx-auto md:p-14" dir="rtl">
-              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4">
+            <div  className="p-4 flex-1"
+              style={{
+                fontFamily: "Tajwal, sans-serif",
+                direction: isArabic ? "rtl" : "ltr",
+                textAlign: isArabic ? "right" : "left",
+              }}>
+              <div className={`flex flex-col md:flex-row ${isArabic ? "md:space-x-reverse" : ""}  space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4`}>
                 <div className="md:w-1/4 p-4">
                   <img
                     src={trainingCourses.imageUrl}
@@ -84,25 +95,25 @@ export default function TrainingCoursesDtails() {
 
                   <div className="mb-4">
                     <div className="flex text-gray-700">
-                      <span className="flex items-center ml-60 font-bold font-tajwal">
-                        <strong>المنظم:</strong>
+                    <span className={`flex items-center ${isArabic ? "ml-60" : "mr-60"} font-bold font-tajwal`}>
+                    <strong>{translations.organizer}</strong>
+                    </span>
+                    <span className={`flex items-center ${isArabic ? "ml-10" : "mr-10"} font-bold font-tajwal`}>
+                    <strong>{translations.address}</strong>
                       </span>
-                      <span className="flex items-center ml-10 font-bold font-tajwal">
-                        <strong>العنوان:</strong>
-                      </span>
-                      <span className="flex items-center mr-28 font-bold font-tajwal">
-                        <strong>تاريخ بدء التسجيل:</strong>
+                      <span className={`flex items-center ${isArabic ? "mr-28" : "ml-28"} font-bold font-tajwal`}>
+                      <strong>{translations.applyStartDate}</strong>
                       </span>
                     </div>
                     <div className="flex text-gray-700 mt-1">
-                      <span className="flex items-center ml-64 font-tajwal">
-                        {trainingCourses.organizer}
+                    <span className={`flex items-center ${isArabic ? "ml-64" : "mr-64"} font-tajwal`}>
+                    {trainingCourses.organizer}
                       </span>
-                      <span className="flex items-center  ml-14 font-tajwal">
-                        {trainingCourses.address}
+                      <span className={`flex items-center ${isArabic ? "ml-14" : "mr-14"} font-tajwal`}>
+                      {trainingCourses.address}
                       </span>
-                      <span className="flex items-center mr-28 font-tajwal">
-                        {trainingCourses.applyStartDate}
+                      <span className={`flex items-center ${isArabic ? "mr-28" : "ml-28"} font-tajwal`}>
+                      {trainingCourses.applyStartDate}
                       </span>
                     </div>
                   </div>
@@ -122,34 +133,35 @@ export default function TrainingCoursesDtails() {
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center">
                       <span className="text-xl text-red_aa font-tajwal">
-                        تاريخ الانتهاء
+                      {translations.applyEndDate}:
                         {trainingCourses.applyEndDate}
                       </span>
                       <span className=" text-gray-500 mr-7 font-tajwal">
-                        تاريخ مراجعة الاوراق
+                      {translations.papersReplayDate}:
                         {trainingCourses.papersReplayDate}
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-reverse md:space-x-4 mt-4">
-                <div className="md:w-2/3">
+              <div className={`flex flex-col md:flex-row ${isArabic ? "md:space-x-reverse" : ""} space-y-4 md:space-y-0 md:space-x-4 mt-4`}>
+              <div className="md:w-2/3">
                   <h2 className="text-xl font-bold mb-2 font-tajwal">
-                    تفاصيل الدورة التدريبية
+                  {translations.courseDetails}
+
                   </h2>
                   <table className="w-full text-right">
                     <tbody className="space-y-2">
                       <tr className="border-t border-b">
-                        <td className="p-4 font-tajwal font-bold">عنوان </td>
-                        <td className="p-4 font-tajwal">
+                      <td className="p-4 font-tajwal font-bold">  {translations.address}</td>
+                      <td className="p-4 font-tajwal">
                           {" "}
                           {trainingCourses.address}{" "}
                         </td>
                       </tr>
                       <tr className="border-b">
-                        <td className="p-4 font-tajwal font-bold">
-                          تاريخ انتهاء التسجيل
+                      <td className="p-4 font-tajwal font-bold">
+                        {translations.enrollmentEndDate}
                         </td>
                         <td className="p-4 font-tajwal">
                           {" "}
@@ -157,16 +169,14 @@ export default function TrainingCoursesDtails() {
                         </td>
                       </tr>
                       <tr className="border-b">
-                        <td className="p-4 font-tajwal font-bold">
-                          رقم الهاتف
-                        </td>
+                      <td className="p-4 font-tajwal font-bold"> {translations.contactMobile}</td>
                         <td className="p-4 font-tajwal">
                           {trainingCourses.contactMobile}
                         </td>
                       </tr>
                       <tr className="border-b">
-                        <td className="p-4 font-tajwal font-bold">
-                          <strong>البريد الإلكتروني:</strong>{" "}
+                      <td className="p-4 font-tajwal font-bold">
+                        {translations.contactEmail}
                         </td>
                         <td className="p-4 font-tajwal">
                           {" "}
@@ -174,9 +184,7 @@ export default function TrainingCoursesDtails() {
                         </td>
                       </tr>
                       <tr className="border-b">
-                        <td className="p-4 font-tajwal font-bold">
-                          <strong>ملاحظات:</strong>{" "}
-                        </td>
+                      <td className="p-4 font-tajwal font-bold">{translations.notes}</td>
                         <td className="p-4 font-tajwal">
                           {trainingCourses.notes}
                         </td>
@@ -187,7 +195,8 @@ export default function TrainingCoursesDtails() {
                 <div className="md:w-1/3">
                   <div>
                     <h2 className="text-xl font-bold mb-2 font-tajwal">
-                      شروط الدورة التدريبية
+                    {translations.courseConditions}
+
                     </h2>
                     <div className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
                       {conditions.map((condition, index) => {
@@ -227,7 +236,8 @@ export default function TrainingCoursesDtails() {
                 setIsSidebarOpen={setIsSidebarOpen}
               />
             </div>
-          </div>
+</div>
+          
         </>
       ) : (
         <div

@@ -5,9 +5,13 @@ import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "../context/TranslationContext"; 
 
 
 const ArchiveBookButton = () => {
+      const { translations , language} = useTranslation(); 
+      const isArabic = language === "ar";
+
     const navigate = useNavigate();
   const [myBooks, setMyBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -95,7 +99,7 @@ const ArchiveBookButton = () => {
             className="w-60 h-60 object-cover mb-10"
           />
           <p className="text-lg text-gray-700 mt-0">
-            لا يوجد كتب قمت بأكمال قراءتها .. اكمل قراءة كتبك الان
+       {translations.noCompletedBooks}
           </p>
         </div>
       ) : (

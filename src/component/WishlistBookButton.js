@@ -4,8 +4,13 @@ import { baseurl } from "../helper/Baseurl";
 import axios from "axios";
 import noCoursesImage from "../assets/images/favorites.png"; // صورة تعبيرية عند عدم وجود دورات
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { useTranslation } from "../context/TranslationContext"; 
 
 const WishlistBookButton = () => {
+
+    const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+
   const navigate = useNavigate();
   const [mybooks, setMyBooks] = useState([]);
   const [selectedType, setSelectedType] = useState("all");
@@ -149,7 +154,7 @@ const WishlistBookButton = () => {
           className="w-60 h-60 object-cover mb-10"
         />
         <p className="text-lg text-gray-700 mt-0">
-        لا يوجد كتب قمت بالاعجاب بها .. 
+       {translations.noLikedBooks}
         </p>
       </div>
     );
@@ -182,7 +187,7 @@ const WishlistBookButton = () => {
                       {book.author}
                     </div>
                     <div className="text-lg font-bold mb-2">
-                      {book.price} دينار
+                      {book.price}  {translations.price}
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
@@ -191,7 +196,8 @@ const WishlistBookButton = () => {
                       style={{ fontFamily: "Tajwal, sans-serif" }}
                       onClick={() => openBookDetails(book.id)}
                     >
-                      اشترِ الآن
+
+                     {translations.buy_now}
                     </button>
                     <div
                       className="cursor-pointer"

@@ -5,8 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
+import { useTranslation } from "../context/TranslationContext"; 
 
 const MyCoursesButton = () => {
+   const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+  
+
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -81,7 +86,7 @@ const MyCoursesButton = () => {
           className="w-60 h-60 object-cover mb-10"
         />
         <p className="text-lg text-gray-700 mt-0">
-          لا يوجد دورات مسجل بها حاليا. قم بالاشتراك في الدورات
+        {translations.noRegisteredCourses}
         </p>
       </div>
     );
@@ -133,7 +138,7 @@ const MyCoursesButton = () => {
                 </p>
               </div>
               <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
-                <span>تقدم الدورة</span>
+                <span> {translations.CoursesProgress} </span>
                 <span>{course.progressPercentage || 0}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">

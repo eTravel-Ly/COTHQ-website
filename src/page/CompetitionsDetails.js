@@ -5,8 +5,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import cover from "../assets/images/cover.png"; // Update with competition cover image
 import { CiCalendarDate } from "react-icons/ci";
+import { useTranslation } from "../context/TranslationContext"; 
+
 
 const CompetitionsDetails = () => {
+    const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+    
   const [formData, setFormData] = useState({
     name: "",
     phone: "",

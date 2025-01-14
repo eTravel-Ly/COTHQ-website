@@ -5,8 +5,12 @@ import { FcMoneyTransfer } from "react-icons/fc";
 import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/favorites.png";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { useTranslation } from "../context/TranslationContext"; 
 
 const WishlistButton = () => {
+   const { translations , language} = useTranslation(); 
+    const isArabic = language === "ar";
+
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -131,7 +135,7 @@ const WishlistButton = () => {
           className="w-60 h-60 object-cover mb-10"
         />
         <p className="text-lg text-gray-700 mt-0">
-          لا يوجد دورات قمت بالاعجاب بها ..
+{translations.noLikedCourses}
         </p>
       </div>
     );
@@ -172,7 +176,7 @@ const WishlistButton = () => {
                   className="text-xs text-gray-600"
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                 >
-                  {course.price} دينار
+                  {course.price} {translations.price}
                 </p>
               </div>
               <div
@@ -203,7 +207,8 @@ const WishlistButton = () => {
                   style={{ fontFamily: "Tajwal, sans-serif" }}
                   onClick={() => openCoursesDetails(course.id)}
                 >
-                  اشتر الآن
+                                     {translations.buy_now}
+
                 </button>
               </div>
             </div>

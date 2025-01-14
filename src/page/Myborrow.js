@@ -2,30 +2,13 @@ import React, { useState } from "react";
 import Sidebar from "../component/Sidebar";
 import NavbarLogin from "../component/NavbarLogin";
 import MyborrowButton from "../component/MyborrowButton";
+import { useTranslation } from "../context/TranslationContext"; 
 
 function Myborrow() {
   const [selectedSection, setSelectedSection] = useState("myBooks");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [language, setLanguage] = useState(sessionStorage.getItem("language"));
-
+  const { translations , language} = useTranslation(); 
   const isArabic = language === "ar";
-
-  // كائن الترجمة
-  const translations = {
-    ar: {
-      libraryTitle: "مكـــتبــتي",
-      borrowedBooks: "الكــتـب مــحليـــة التى تمت استعارتها",
-      borrowedBooksButton: "كتب المستعارة",
-    },
-    en: {
-      libraryTitle: "My Library",
-      borrowedBooks: "Local books that have been borrowed",
-      borrowedBooksButton: "Borrowed Books",
-    },
-  };
-
-  // اختيار الترجمة الحالية
-  const t = isArabic ? translations.ar : translations.en;
 
   const showMyBooks = () => setSelectedSection("myBooks");
 
@@ -54,8 +37,8 @@ function Myborrow() {
             textAlign: isArabic ? "right" : "left",
           }}
         >
-          <h2 className="text-xl font-bold mb-1">{t.libraryTitle}</h2>
-          <h4 className="text-l font-bold text-gray-500">{t.borrowedBooks}</h4>
+          <h2 className="text-xl font-bold mb-1">{translations.libraryTitle}</h2>
+          <h4 className="text-l font-bold text-gray-500">{translations.borrowedBooks}</h4>
 
           <div className="flex flex-wrap justify-center md:justify-start mt-4 gap-2">
             <button
@@ -64,7 +47,7 @@ function Myborrow() {
               }`}
               onClick={showMyBooks}
             >
-              {t.borrowedBooksButton}
+              {translations.borrowedBooksButton}
             </button>
           </div>
           <div className="mt-4">

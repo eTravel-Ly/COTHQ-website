@@ -4,6 +4,7 @@ import NavbarLogin from "../component/NavbarLogin";
 import MyCoursesButton from "../component/MyCoursesButton";
 import WishlistButton from "../component/WishlistButton";
 import ArchiveButton from "../component/ArchiveButton";
+import { useTranslation } from "../context/TranslationContext"; 
 
 function MyCourses() {
   const [selectedSection, setSelectedSection] = useState("myCourses");
@@ -13,8 +14,7 @@ function MyCourses() {
   const showWishlist = () => setSelectedSection("wishlist");
   const showArchive = () => setSelectedSection("archive");
 
-  const [language, setLanguage] = useState(sessionStorage.getItem("language"));
-
+ const { translations , language} = useTranslation(); 
   const isArabic = language === "ar";
 
   return (
@@ -42,9 +42,9 @@ function MyCourses() {
             textAlign: isArabic ? "right" : "left",
           }}
         >
-          <h2 className="text-xl font-bold mb-1">{isArabic ? "دوراتي" : "My Courses"}</h2>
+          <h2 className="text-xl font-bold mb-1">      {translations.MyCourses}</h2>
           <h4 className="text-l font-bold text-gray-500">
-            {isArabic ? "مواصلة مشاهدة الدورات" : "Continue Watching Courses"}
+          {translations.continueReadingCourses}
           </h4>
 
           <div className="flex flex-wrap justify-center md:justify-start mt-4 gap-2">
@@ -56,7 +56,7 @@ function MyCourses() {
               }`}
               onClick={showMyCourses}
             >
-              {isArabic ? "دوراتي" : "My Courses"}
+              {translations.MyCourses}
             </button>
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -66,7 +66,8 @@ function MyCourses() {
               }`}
               onClick={showWishlist}
             >
-              {isArabic ? "قائمة الرغبات" : "Wishlist"}
+                         {translations.wishlist}
+
             </button>
             <button
               className={`flex items-center mx-1 px-4 py-2 bg-blue rounded-lg text-l font-bold text-gray-900 hover:bg-custom-orange hover:text-blue focus:outline-none ${
@@ -76,7 +77,7 @@ function MyCourses() {
               }`}
               onClick={showArchive}
             >
-              {isArabic ? "الأرشيف" : "Archive"}
+             {translations.archive}
             </button>
           </div>
 
