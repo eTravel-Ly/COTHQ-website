@@ -26,6 +26,7 @@ const MyBookslang = {
         myBooksSection: "الكتب والدورات الخاصة بالطالب:",
         myBooksButton: "الكتب الخاصة بك",
         myCoursesButton: "الكورسات الخاصة بك",
+        ArchiveButtoncourses:"      لا يوجد دورات انهيت مشاهداتها .. شاهد دوراتك الان"
 
 
     },
@@ -56,7 +57,7 @@ const MyBookslang = {
           myBooksSection: "Books and Courses for student",
           myBooksButton: "Your Books",
           myCoursesButton: "Your Courses",
-
+ArchiveButtoncourses: "There are no courses you have finished watching. Start watching your courses now!"
     },
 };
 

@@ -199,7 +199,7 @@ const MyborrowButton = () => {
               }
               disabled={currentPage === 1}
             >
-              <FaArrowRight />
+             {isArabic ?    <FaArrowRight /> :    <FaArrowLeft />}
             </button>
           </li>
           {Array.from({ length: totalPages }, (_, index) => (
@@ -228,7 +228,7 @@ const MyborrowButton = () => {
               }
               disabled={currentPage === totalPages}
             >
-              <FaArrowLeft />
+              {isArabic ?      <FaArrowLeft />  :    <FaArrowRight />}
             </button>
           </li>
         </ul>

@@ -10,7 +10,7 @@ import noCoursesImage from "../assets/images/Search.png"; // صورة تعبير
 import { CiHeart } from "react-icons/ci";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 import { useTranslation } from "../context/TranslationContext"; 
-
+import cover from '../assets/images/3.png'
 const Allbooks = () => {
   const { translations , language} = useTranslation(); 
   const isArabic = language === "ar";
@@ -255,11 +255,12 @@ const Allbooks = () => {
                     >
                       <div className="bg-white shadow-lg rounded-lg flex flex-row text-right">
                         <div className="w-1/3 p-2">
-                          <img
-                            src={book.imageUrl}
-                            alt={book.title}
-                            className="w-full   h-full  object-cover rounded-lg"
-                          />
+                        <img
+                        src={book.imageUrl || cover}
+                        alt={book.title}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+
                         </div>
 
                         {/* النصوص والأزرار */}
@@ -337,7 +338,7 @@ const Allbooks = () => {
                       }
                       disabled={currentPage === 1}
                     >
-                      <FaArrowRight />
+                             {isArabic ?    <FaArrowRight /> :    <FaArrowLeft />}
                     </button>
                   </li>
                   {Array.from({ length: totalPages }, (_, index) => (
@@ -363,7 +364,7 @@ const Allbooks = () => {
                       }
                       disabled={currentPage === totalPages}
                     >
-                      <FaArrowLeft />
+                    {isArabic ?      <FaArrowLeft />  :    <FaArrowRight />}
                     </button>
                   </li>
                 </ul>

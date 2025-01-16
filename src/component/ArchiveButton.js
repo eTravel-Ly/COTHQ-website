@@ -5,8 +5,13 @@ import { baseurl } from "../helper/Baseurl";
 import noCoursesImage from "../assets/images/Search.png"; // صورة تعبيرية عند عدم وجود دورات
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons from react-icons
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "../context/TranslationContext"; 
 
 const ArchiveButton = () => {
+     const { translations , language} = useTranslation(); 
+      const isArabic = language === "ar";
+  
+
     const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +73,8 @@ const ArchiveButton = () => {
           className="w-60 h-60 object-cover mb-10"
         />
         <p className="text-lg text-gray-700 mt-0">
-          لا يوجد دورات انهيت مشاهداتها .. شاهد دوراتك الان
+     
+     {translations.ArchiveButtoncourses}
         </p>
       </div>
     );
@@ -147,7 +153,7 @@ const ArchiveButton = () => {
               }
               disabled={currentPage === 1}
             >
-              <FaArrowRight />
+                  {isArabic ?    <FaArrowRight /> :    <FaArrowLeft />}
             </button>
           </li>
           {Array.from({ length: totalPages }, (_, index) => (
@@ -172,7 +178,7 @@ const ArchiveButton = () => {
               }
               disabled={currentPage === totalPages}
             >
-              <FaArrowLeft />
+                {isArabic ?      <FaArrowLeft />  :    <FaArrowRight />}
             </button>
           </li>
         </ul>

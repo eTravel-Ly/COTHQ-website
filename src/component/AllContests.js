@@ -263,7 +263,8 @@ const AllContests = () => {
             onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            <FaArrowRight />
+            {isArabic ?    <FaArrowRight /> :    <FaArrowLeft />}
+         
           </button>
         </li>
         {Array.from({ length: totalPages }, (_, index) => (
@@ -284,7 +285,9 @@ const AllContests = () => {
             onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
           >
-            <FaArrowLeft />
+                        {isArabic ?      <FaArrowLeft />  :    <FaArrowRight />}
+
+         
           </button>
         </li>
       </ul>

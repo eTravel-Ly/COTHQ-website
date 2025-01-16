@@ -276,7 +276,7 @@ const ConferencesAll = () => {
               onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : currentPage)}
               disabled={currentPage === 1}
             >
-              <FaArrowRight />
+              {isArabic ?    <FaArrowRight /> :    <FaArrowLeft />}
             </button>
           </li>
           {Array.from({ length: totalPages }, (_, index) => (
@@ -297,7 +297,7 @@ const ConferencesAll = () => {
               onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : currentPage)}
               disabled={currentPage === totalPages}
             >
-              <FaArrowLeft />
+              {isArabic ?      <FaArrowLeft />  :    <FaArrowRight />}
             </button>
           </li>
         </ul>

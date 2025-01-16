@@ -191,22 +191,23 @@ export default function AllCourses() {
                       {course.title}
                     </h3>
                     <p
-                      className="text-gray-600 text-xs"
-                      style={{
-                        fontFamily: "Tajwal, sans-serif",
-                        textAlign: "justify",
-                        lineHeight: "1.5",
-                        marginBottom: "8px",
-                        wordWrap: "break-word",
-                        whiteSpace: "normal",
-                        overflow: "hidden",
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 4,
-                      }}
-                    >
-                      {course.description}
-                    </p>
+                    className="text-gray-600 text-xs"
+                    style={{
+                      fontFamily: "Tajwal, sans-serif",
+                      textAlign: "justify",
+                      lineHeight: "1.5",
+                      marginBottom: "8px",
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      overflow: "hidden",
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 2, // عرض أول سطرين فقط
+                    }}
+                  >
+                    {course.description}
+                  </p>
+
                     <div className="flex items-center mt-1 mb-2">
                       <FaRegUserCircle className="text-gray-600" />
                       <p
@@ -263,7 +264,7 @@ export default function AllCourses() {
                   }
                   disabled={currentPage === 1}
                 >
-                  <FaArrowRight />
+                  {isArabic ?    <FaArrowRight /> :    <FaArrowLeft />}
                 </button>
               </li>
               {Array.from({ length: totalPages }).map((_, index) => (
@@ -289,7 +290,7 @@ export default function AllCourses() {
                   }
                   disabled={currentPage === totalPages}
                 >
-                  <FaArrowLeft />
+                    {isArabic ?      <FaArrowLeft />  :    <FaArrowRight />}
                 </button>
               </li>
             </ul>
