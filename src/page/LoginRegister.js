@@ -41,7 +41,11 @@ const LoginRegister = () => {
    
       const response = await axios.post(baseurl + 'public/activation/request-otp',{
         email: values.email 
-      });
+      },
+      {
+       headers: {
+         'Content-Type': 'application/json'
+       }});
       if (response.status === 201 ) {
         setShowOTP(true);
         toast.success(translations.doneotp );
