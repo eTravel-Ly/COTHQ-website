@@ -30,32 +30,32 @@ const LoginRegister = () => {
   const [loading, setLoading] = useState(false); 
 
   const [showOTP, setShowOTP] = useState(false);
-  const handleVerifyClick  = async (event) => {
-
+  const handleVerifyClick = async (event) => {
     event.preventDefault(); 
     const isValid = validate1(); 
     if (!isValid) {
       return;
     }
+  
     try {
-   
-      const response = await axios.post(baseurl + 'public/activation/request-otp',{
+      const response = await axios.post(baseurl + 'public/activation/request-otp', {
         email: values.email 
-      },
-      {
-       headers: {
-         'Content-Type': 'application/json'
-       }});
-      if (response.status === 201 ) {
+      }, {
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        withCredentials: true, 
+      });
+  
+      if (response.status === 201) {
         setShowOTP(true);
-        toast.success(translations.doneotp );
-      
+        toast.success(translations.doneotp);
       }
     } catch (error) {
-        toast.error(translations.genericError );
-      
+      toast.error(translations.genericError);
     }
   };
+  
 
   const [otpError, setOtpError] = useState(false);
 
@@ -63,7 +63,7 @@ const LoginRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validate();
-    if (!isValid) {handleSubmit
+    if (!isValid) {handleSubmit()
       return;
     }
   
