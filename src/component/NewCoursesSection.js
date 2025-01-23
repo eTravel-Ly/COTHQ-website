@@ -117,7 +117,7 @@ const NewCoursesSection = () => {
           textAlign: language === "ar" ? "right" : "left",
         }}
       >
-       {translations.title}
+       {translations.title12}
       </h2>
       <h4
         className="text-l font-bold text-gray-400 mb-4"
@@ -127,7 +127,7 @@ const NewCoursesSection = () => {
           textAlign: language === "ar" ? "right" : "left",
         }}
       >
-             {translations.description}
+             {translations.description12}
 
       </h4>
       <div className="relative">
