@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, BrowserRouter, Routes,HashRouter } from "react-router-dom";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 import {
   Home,
   Login,
@@ -41,7 +41,7 @@ function App() {
     <>
         <TranslationProvider>
 
-      <HashRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Login" element={<Login/>} />
@@ -91,7 +91,7 @@ function App() {
           <Route path="/Paynow" element={<Paynow />} />
           <Route path="/SeminarsDetails/:Id" element={<SeminarsDetails />} />
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
       </TranslationProvider>
     </>
   );
